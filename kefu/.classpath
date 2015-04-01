@@ -86,6 +86,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/supercsv-1.52.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xml-apis-1.0.b2.jar"/>
 	<classpathentry kind="lib" path="D:/tool/apache-tomcat-7.0.55/lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="D:/tool/apache-tomcat-7.0.55/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool-1.5.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jedis-2.0.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

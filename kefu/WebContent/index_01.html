@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="author" content="dobao">
+<title>客服信息管理系统</title>
+<link rel="icon" href="favicon.ico">
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
+<link href="css/app.css" rel="stylesheet" type="text/css">
+</head>
+
+<body scroll="no" class="objbody">
+<div class="navbar navbar-masthead navbar-static-top m-top">
+    <div class="navbar-inner">
+        <a href="#"><img src="img/logo.png" width="192" alt="" /></a>
+        <ul class="nav pull-right">
+            <li class="active"><a href="#"><i class="icon-admin"></i> 欢迎 Dobao</a></li>
+            <li><a href="#"><i class="icon-index"></i> 首页</a></li>
+            <li><a href="#"><i class="icon-logout"></i> 退出</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="m-nav">
+    <ul class="navcen">
+        <li class="nLi on">
+            <h3><a href="#" target="_blank">首页</a></h3>
+        </li>
+        <li class="nLi">
+            <h3><a href="#" target="_blank">产品价格</a></h3>
+        </li>
+        <li class="nLi">
+            <h3><a href="#" target="_blank">产品特性</a></h3>
+        </li>
+        <li class="nLi">
+            <h3><a href="#" target="_blank">客户案例</a></h3>
+        </li>
+        <li class="nLi">
+            <h3><a href="#" target="_blank">文档中心　<em class="png"></em></a></h3>
+            <ul class="sub">
+                <li><a href="#" target="_blank">文档中心</a></li>
+                <li><a href="#" target="_blank">文档中心</a></li>
+                <li><a href="#" target="_blank">文档中心</a></li>
+                <li><a href="#" target="_blank">文档中心</a></li>
+                <li><a href="#" target="_blank">文档中心</a></li>
+                <li><a href="#" target="_blank">文档中心</a></li>
+            </ul>
+        </li>
+        <li class="nLi">
+            <h3><a href="#" target="_blank">关于我们</a></h3>
+        </li>
+    </ul>
+</div>
+
+<div id="content">
+    <div class="col-auto">
+    	<div class="col-1 col-2">
+        	<div class="content" style="position:relative;overflow:hidden;">
+            	<iframe name="rightBody" id="rightBody" src="welcome.html" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="auto" allowtransparency="true"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+
+<!-- demo应用 -->
+<script type="text/javascript" src="js/application.js"></script>
+<script type="text/javascript">
+var getWindowSize = function(){
+return ["Height","Width"].map(function(name){
+  return window["inner"+name] ||
+	document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
+});
+}
+window.onload = function (){
+	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
+	  document.body.onresize = resize;
+	} else { 
+	  window.onresize = resize;
+	}
+	function resize() {
+		wSize();
+		return false;
+	}
+}
+function wSize(){
+	//这是一字符串
+	var str=getWindowSize();
+	var strs= new Array(); //定义一数组
+	strs=str.toString().split(","); //字符分割
+	var heights = strs[0]-145,Body = $('body');$('#rightBody').height(heights-2);
+	$('#rightBody').css("margin-bottom","-6px");
+	//iframe.height = strs[0]-46;
+	if(strs[1]<980){
+		$('#content').css('width',980+'px');
+		Body.attr('scroll','');
+		Body.removeClass('objbody');
+	}else{
+		$('#content').css('width','auto');
+		Body.attr('scroll','no');
+		Body.addClass('objbody');
+	}
+	
+	var openClose = $("#rightBody").height() + 25;
+	$("#openClose").height(openClose);	
+	$("#leftTreeBody").height(openClose);
+}
+wSize();
+//左侧开关
+$("#openClose").click(function(){
+	if($(this).data('clicknum')==1) {
+		$("html").removeClass("on");
+		$(".left_menu").removeClass("left_menu_on");
+		$(this).removeClass("close");
+		$(this).data('clicknum', 0);
+	} else {
+		$(".left_menu").addClass("left_menu_on");
+		$(this).addClass("close");
+		$("html").addClass("on");
+		$(this).data('clicknum', 1);
+	}
+	return false;
+});
+jQuery(".navcen").slide({ type:"menu", titCell:".nLi", targetCell:".sub", effect:"slideDown", delayTime:300, triggerTime:0, defaultPlay:false, returnDefault:true });
+</script>
+</body>
+</html>

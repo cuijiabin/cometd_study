@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 /**
  * 公用Dao类，封装基本的增删改查和条件查询
