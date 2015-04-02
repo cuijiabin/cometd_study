@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>欢迎页--客服信息管理系统</title>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+
+</head>
+<body>
+<a href="javascript:test();">修改编辑</a>
+<a href="javascript:test2();">alert一下</a>
+<a href="javascript:test3();">提示一下并调用函数</a>
+<a href="javascript:test4();">load一个新页面</a>
+<a href="javascript:test5();">右下角</a>
+</body>
+<script>
+function test2(){
+	$.dialog.alert("提示!");
+}
+function test3(){
+	$.dialog.tips("提示2秒!",2,'i.png',returnFunc);
+}
+function test4(){
+	$.dialog('welcome.html');
+}
+function test5(){
+	$.dialog({
+	    id: 'msg',
+	    title: '公告',
+	    content: '欢迎使用lhgdialog窗口!',
+	    width: 200,
+	    height: 100,
+	    left: '100%',
+	    top: '100%',
+	    fixed: true,
+	    drag: false,
+	    resize: false
+	});
+}
+function returnFunc(){
+	$.dialog.alert("提示之后!");
+}
+function test(){
+	$.dialog({
+	    id: 'testID',
+	    content: 'hello world!',
+	    button: [
+	        {
+	            name: '同意',
+	            callback: function () {
+	                this.content('你同意了').time(2);
+	                return false;
+	            },
+	            focus: true
+	        },
+	        {
+	            name: '不同意',
+	            callback: function () {
+	                alert('你不同意')
+	            }
+	        },
+	        {
+	            name: '无效按钮',
+	            disabled: true
+	        },
+	        {
+	            name: '关闭我'
+	        }
+	    ]
+	});
+}
+	
+</script>
+</html>
