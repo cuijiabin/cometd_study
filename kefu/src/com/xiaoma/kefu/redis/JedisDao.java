@@ -83,7 +83,7 @@ public class JedisDao {
 		
 	}
 	
-	public String getValue(String key){
+	public static String getValue(String key){
 		
 		Jedis jedis = getJedis();
 		
@@ -91,7 +91,7 @@ public class JedisDao {
 		
 	}
 	
-	public Object getObject(String key){
+	public static Object getObject(String key){
 		
 		Jedis jedis = getJedis();
 		

@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.redis.JedisDao;
 
 //@Ignore
 @RunWith(SpringJUnit4ClassRunner.class) 
@@ -19,10 +20,25 @@ public class CustomerDaoTest {
 	
 	@Test
 	public void testCRUD(){
-		Customer customer = new Customer();
-		customer.setCustomerName("崔佳彬");
-		customer.setRemark("test添加");
+//		Customer customer = new Customer();
+//		customer.setCustomerName("崔佳彬");
+//		customer.setRemark("test添加");
+//		
+//		customerDao.createNewCustomer(customer);
 		
-		customerDao.createNewCustomer(customer);
+		Customer customer = customerDao.getById(1L);
+		
+		System.out.println(customer.getRemark());
+		
+		JedisDao.setKOT("customer:2", customer, 600);
+	}
+	
+	@Test
+	public void testJedisCRUD(){
+		
+		Customer customer = (Customer) JedisDao.getObject("customer:2");
+		
+		System.out.println(customer.getRemark());
+		
 	}
 }
