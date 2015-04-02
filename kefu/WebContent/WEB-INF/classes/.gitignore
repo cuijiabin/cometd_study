@@ -1,12 +1,1 @@
-/application-context.xml
-/com
-/datasource-context.xml
-/hibernate-context.xml
-/hibernate.cfg.xml
-/log4j.properties
-/mvc-context.xml
-/persistence-context.xml
-/shortmessage-settings.properties
-/spring-quartz.xml
-/system.properties
-/ws-context.xml
+/com/
