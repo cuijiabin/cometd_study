@@ -166,6 +166,18 @@ public class HibBaseDao<T> {
 	}
 	
 	/**
+	 * 根据id查找实体对象
+	 * @param clazz
+	 * @param id Long
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public T findByLongId(Class<T> clazz,Long id){
+		Session session = getSession();
+		return (T) session.get(clazz, id);
+	}
+	
+	/**
 	 * 根据ID查找实体对象(冯榕基)
 	 */
 	@SuppressWarnings("unchecked")
