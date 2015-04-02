@@ -25,5 +25,7 @@ public interface CustomerDao {
 	 * @return
 	 */
 	public Integer createNewCustomer(Customer customer);
+	
+	public boolean updateCustomer(Customer customer);
 
 }
