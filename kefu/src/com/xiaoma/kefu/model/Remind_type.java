@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="Remind_type")
+@Table(name="remind_type")
 public class Remind_type implements Serializable {
 
 	private static final long serialVersionUID = 1L;
