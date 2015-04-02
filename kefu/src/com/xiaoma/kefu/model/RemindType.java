@@ -16,8 +16,9 @@ import javax.persistence.Table;
  *
  */
 @Entity
+
 @Table(name="Remind_type")
-public class RemindType implements Serializable {
+    public class RemindType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -45,7 +46,7 @@ public class RemindType implements Serializable {
 	@Column(name="createEffect")
 	private Integer createEffect;
 	
-	@Column(name="lineEffectUrl")
+	@Column(name="createUrl")
 	private String createUrl;
 	
 	@Column(name="reSoundEffect")
