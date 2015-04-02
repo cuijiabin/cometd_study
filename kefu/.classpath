@@ -84,11 +84,18 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/stax-api-1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/supercsv-1.52.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xml-apis-1.0.b2.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_51"/>
-	<classpathentry kind="lib" path="F:/toos/apache-tomcat-7.0.53/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool-1.5.5.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jedis-2.0.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="F:/gitcode/csms/kefu/WebContent/WEB-INF/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="F:/gitcode/csms/kefu/WebContent/WEB-INF/lib/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="F:/gitcode/csms/kefu/WebContent/WEB-INF/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="F:/gitcode/csms/kefu/WebContent/WEB-INF/lib/websocket-api.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>
