@@ -1,4 +1,4 @@
-package com.kefu.test.dao;
+package com.test;
 
 import org.junit.Ignore;
 import org.junit.Test;
