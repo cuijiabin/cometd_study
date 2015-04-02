@@ -4,3 +4,4 @@
 /kefu/.settings
 /kefu/.externalToolBuilders
 classes
+/kefu/src/log4j.properties
