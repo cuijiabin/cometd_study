@@ -1,5 +1,5 @@
-/kefu/.project
 .classpath
 .project
-/kefu/*
 /kefu/WebContent/WEB-INF/classes
+/kefu/.settings
+/kefu/.externalToolBuilders
