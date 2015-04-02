@@ -2,6 +2,7 @@ package com.xiaoma.kefu.model;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 /**
  * User entity
- * @author hanyu
+ * @author yangxiaofeng
  *
  */
 @Entity
@@ -20,42 +21,40 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	static public final int STATUS_DELETED = 0;
-	static public final int STATUS_ENABLED = 1;
-	static public final int STATUS_LOCKED = 2;
-	static public final int STATUS_DISABLED = 3;
-
-	static public final String ATTRIBUTE_CREDENTIAL_CHANGE = "passwordLastChange";
-	static public final String ATTRIBUTE_LAST_LOGIN = "lastLogin";
-	
 	@Id
 	@GeneratedValue
 	@Column(name="id")
 	private Integer id;
-	@Column(name="loginName",length=64)
+	@Column(name="loginName")
 	private String loginName;
-	@Column(name="userName",length=64)
-	private String userName;
-	@Column(name="status")
-	private Integer status;
-	@Column(name="password",length=64,nullable=false)
+	@Column(name="password")
 	private String password;
-	@Column(name="userRole")
-	private Integer userRole;
-	@Column(name="userType")
-	private Integer userType;
-//	private Map<String, String> attributes;
+	@Column(name="userName")
+	private String userName;
+	@Column(name="cardName")
+	private String cardName;
 	@Column(name="email")
 	private String email;
 	@Column(name="phone")
 	private String phone;
-	@Column(name="leaderId")
-	private Integer leaderId;
-	@Column(name="managerId")
-	private Integer managerId;
-//	private Set<String> roleIdSet;
-//	private String[] roles;
-	
+	@Column(name="birthday")
+	private Date birthday;
+	@Column(name="roleId")
+	private Integer roleId;
+	@Column(name="deptId")
+	private Integer deptId;
+	@Column(name="onLineStatus")
+	private Integer onLineStatus;
+	@Column(name="status")
+	private Integer status;
+	@Column(name="listenLevel")
+	private Integer listenLevel;
+	@Column(name="maxListen")
+	private Integer maxListen;
+	@Column(name="createDate")
+	private Date createDate;
+	@Column(name="endDate")
+	private Date endDate;
 	public Integer getId() {
 		return id;
 	}
@@ -68,41 +67,23 @@ public class User implements Serializable {
 	public void setLoginName(String loginName) {
 		this.loginName = loginName;
 	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Integer getUserRole() {
-		return userRole;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUserRole(Integer userRole) {
-		this.userRole = userRole;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public Integer getUserType() {
-		return userType;
+	public String getCardName() {
+		return cardName;
 	}
-	public void setUserType(Integer userType) {
-		this.userType = userType;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setCardName(String cardName) {
+		this.cardName = cardName;
 	}
 	public String getEmail() {
 		return email;
@@ -110,29 +91,66 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Integer getLeaderId() {
-		return leaderId;
+	public String getPhone() {
+		return phone;
 	}
-	public void setLeaderId(Integer leaderId) {
-		this.leaderId = leaderId;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	
-	public Integer getManagerId() {
-		return managerId;
+	public Date getBirthday() {
+		return birthday;
 	}
-	public void setManagerId(Integer managerId) {
-		this.managerId = managerId;
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User)obj;
-		return getId().equals(other.getId());
+	public Integer getRoleId() {
+		return roleId;
 	}
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+	public Integer getDeptId() {
+		return deptId;
+	}
+	public void setDeptId(Integer deptId) {
+		this.deptId = deptId;
+	}
+	public Integer getOnLineStatus() {
+		return onLineStatus;
+	}
+	public void setOnLineStatus(Integer onLineStatus) {
+		this.onLineStatus = onLineStatus;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Integer getListenLevel() {
+		return listenLevel;
+	}
+	public void setListenLevel(Integer listenLevel) {
+		this.listenLevel = listenLevel;
+	}
+	public Integer getMaxListen() {
+		return maxListen;
+	}
+	public void setMaxListen(Integer maxListen) {
+		this.maxListen = maxListen;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+    
 	
 }
