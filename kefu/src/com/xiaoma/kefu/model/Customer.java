@@ -30,6 +30,9 @@ public class Customer implements Serializable {
 	
 	@Column(name = "styleId")
 	private Integer styleId;
+	
+	@Column(name = "customerName")
+	private String customerName;
     
 	@Column(name = "phone")
 	private String phone;
@@ -111,6 +114,14 @@ public class Customer implements Serializable {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 	
 	
