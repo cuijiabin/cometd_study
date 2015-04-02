@@ -49,11 +49,11 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 	 * 添加一条
 	 */
 	@Override
-	public Integer createNewCustomer(Customer customer){
+	public Long createNewCustomer(Customer customer){
 		
 		try {
 			Serializable id = add(customer);
-			return (Integer)id;
+			return (Long)id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,10 +76,17 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 		}
 		return false;
 	}
-	
 
-
-	
+	@Override
+	public Long getMaxCustomerId() {
+		
+		Session session = getSession();
+		
+		String hql = "select max(id) from Customer";
+		Query query = session.createSQLQuery(hql);
+	 
+		return ((Number)query.uniqueResult()).longValue();
+	}
 
 	
 }

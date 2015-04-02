@@ -24,8 +24,9 @@ public interface CustomerDao {
 	 * @param customer
 	 * @return
 	 */
-	public Integer createNewCustomer(Customer customer);
+	public Long createNewCustomer(Customer customer);
 	
 	public boolean updateCustomer(Customer customer);
 
+	public Long getMaxCustomerId();
 }
