@@ -35,7 +35,7 @@ public class Department implements Serializable {
 	
 	@Column(name="sortNum")
 	private Integer sortNum;
-
+	
 	@Column(name="isDel")
 	private Integer isDel;
 	
