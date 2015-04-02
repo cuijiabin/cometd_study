@@ -5,3 +5,4 @@
 /kefu/.externalToolBuilders
 classes
 /kefu/src/log4j.properties
+/kefu/src/datasource-context.xml
