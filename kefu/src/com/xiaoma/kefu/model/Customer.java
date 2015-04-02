@@ -26,7 +26,7 @@ public class Customer implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "styleId")
 	private Integer styleId;
@@ -52,11 +52,11 @@ public class Customer implements Serializable {
 	@Column(name = "userId")
 	private Integer userId;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -123,6 +123,5 @@ public class Customer implements Serializable {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
-	
 	
 }
