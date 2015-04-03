@@ -12,7 +12,7 @@ import com.xiaoma.kefu.model.Dialogue;
 * @createdAt: 2015年4月3日上午10:01:54
 **********************************
  */
-public interface DialogueDao {
+public interface DialogueDao extends BaseDao<Dialogue> {
 	
 	/**
 	 * 更新为删除状态, 用于逻辑删除
@@ -22,15 +22,6 @@ public interface DialogueDao {
 	* @Date: 2015年4月3日
 	 */
 	public int update2Del(Dialogue dialogue) ;
-	
-	/**
-	 * 物理删除
-	* @Description: TODO
-	* @param dialogue
-	* @Author: wangxingfei
-	* @Date: 2015年4月3日
-	 */
-	public void delete(Dialogue dialogue);
 	
 	/**
 	 * 更新为正常状态,用于回收站还原

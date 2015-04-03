@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DialogueDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Dialogue;
 
 /**
@@ -16,7 +15,7 @@ import com.xiaoma.kefu.model.Dialogue;
 **********************************
  */
 @Repository("dialogueDaoImpl")
-public class DialogueDaoImpl extends HibBaseDao<Dialogue> implements DialogueDao {
+public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDao {
 	
 	/**
 	 * 更新为删除状态, 用于逻辑删除
@@ -47,7 +46,5 @@ public class DialogueDaoImpl extends HibBaseDao<Dialogue> implements DialogueDao
 	    query.setInteger("id", dialogue.getId());
 	    return query.executeUpdate();  
 	}
-
-
 
 }

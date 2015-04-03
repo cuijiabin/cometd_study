@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.ChatRecordFieldDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.ChatRecordField;
 
 /**
@@ -18,7 +17,7 @@ import com.xiaoma.kefu.model.ChatRecordField;
 **********************************
  */
 @Repository("chatRecordFieldDaoImpl")
-public class ChatRecordFieldDaoImpl extends HibBaseDao<ChatRecordField> implements ChatRecordFieldDao {
+public class ChatRecordFieldDaoImpl extends BaseDaoImpl<ChatRecordField> implements ChatRecordFieldDao {
 
 
 	@SuppressWarnings("unchecked")

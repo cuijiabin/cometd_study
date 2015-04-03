@@ -8,11 +8,10 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DepartmentDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Department;
 
 @Repository("deptDaoImpl")
-public class DepartmentDaoImpl extends HibBaseDao<Department> implements DepartmentDao{
+public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements DepartmentDao{
 	/**
 	 * 查询所有数据
 	 */

@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.dao.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;

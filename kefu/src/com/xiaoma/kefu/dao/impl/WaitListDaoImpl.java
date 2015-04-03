@@ -6,7 +6,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.dao.WaitListDao;
 import com.xiaoma.kefu.model.WaitList;
 
@@ -19,7 +18,7 @@ import com.xiaoma.kefu.model.WaitList;
 **********************************
  */
 @Repository("waitListDaoImpl")
-public class WaitListDaoImpl extends HibBaseDao<WaitList> implements WaitListDao {
+public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDao {
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -7,14 +7,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.dao.RoleDao;
 import com.xiaoma.kefu.model.Role;
 
 
 
 @Repository("roleDaoImpl")
-public class RoleDaoImpl extends HibBaseDao<Role> implements RoleDao{
+public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao{
 	/**
 	 * 查询所有数据
 	 */
