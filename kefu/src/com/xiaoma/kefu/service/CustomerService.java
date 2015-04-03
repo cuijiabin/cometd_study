@@ -48,7 +48,7 @@ public class CustomerService {
 	/**
 	 * 条件查询
 	 */
-public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String loginName ,String phone){
+   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String loginName ,String phone){
 	
 	Integer totalCount = customerDaoImpl.getAllCustomerCount();
 	PageBean<Customer> result = new PageBean<Customer>();
@@ -63,7 +63,40 @@ public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageR
 //	result.setObjList(list);
 	
 	return result;
-}
+    }
 
-	
+		/**
+		 * 添加
+		 */
+		public boolean createNewCustomer(Customer customer){
+		   return customerDaoImpl.createNewCustomer(customer);
+		}
+		
+		
+		/**
+		* 修改
+		*/
+		public boolean updateCustomer(Customer customer){
+		  return customerDaoImpl.updateCustomer(customer); 
+		}
+		
+		/**
+		 * 删除
+		 */
+		public boolean deleteCustomerById(Long id){
+		boolean flag = true;
+		Customer customer = customerDaoImpl.getCustomerById(id);
+		if (customer!=null) {
+		customer.setStatus(0);
+		flag = customerDaoImpl.updateCustomer(customer);
+		   }
+		    return flag;
+		  }
+
+	/**
+	 * 查询一条
+	 */
+		public Customer getCustomerById(long id){
+			return customerDaoImpl.getCustomerById(id);
+		}
 }

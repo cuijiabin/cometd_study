@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -49,15 +48,15 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 	 * 添加一条
 	 */
 	@Override
-	public Long createNewCustomer(Customer customer){
+	public boolean createNewCustomer(Customer customer){
 		
 		try {
-			Serializable id = add(customer);
-			return (Long)id;
+			 add(customer);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 
 	}
 	
@@ -80,10 +79,15 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 
 
 	
-
+    /**
+     * 查询一条
+     */
 	@Override
-	public Customer getById(Long id) {
-		
+	public Customer getCustomerById(Long id) {
+		if(id==null)
+		{
+			return null;
+		}
 		return findByLongId(Customer.class,id);
 	}
 

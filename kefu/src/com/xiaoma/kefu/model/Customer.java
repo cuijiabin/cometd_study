@@ -51,7 +51,13 @@ public class Customer implements Serializable {
 	
 	@Column(name = "userId")
 	private Integer userId;
-
+    
+	@Column(name = "customerType")
+	private Integer customerType;
+	
+	@Column(name = "status")
+	private Integer status;
+	
 	public Long getId() {
 		return id;
 	}
@@ -122,6 +128,22 @@ public class Customer implements Serializable {
 
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+
+	public Integer getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(Integer customerType) {
+		this.customerType = customerType;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	

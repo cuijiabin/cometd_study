@@ -24,10 +24,18 @@ public interface CustomerDao {
 	 * @param customer
 	 * @return
 	 */
-	public Long createNewCustomer(Customer customer);
-	
+	public boolean createNewCustomer(Customer customer);
+	/**
+	 * 修改一条
+	 * @param customer
+	 * @return
+	 */
 	public boolean updateCustomer(Customer customer);
 
-	
-	public Customer getById(Long id);
+	/**
+	 * 查询一条
+	 * @param id
+	 * @return
+	 */
+	public Customer getCustomerById(Long id);
 }
