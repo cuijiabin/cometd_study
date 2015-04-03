@@ -12,9 +12,10 @@
 	http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 	
 	<!-- Abstract beans, used as templates for our implementation -->
-	<bean id="hibBaseDao" class="com.xiaoma.kefu.dao.HibBaseDao">
+	<bean id="hibBaseDao" class="com.xiaoma.kefu.dao.impl.BaseDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+
 	
 	<bean id="sendShortMessage" class="com.xiaoma.kefu.util.SendShortMessage">
 		<property name="validcode_save_time" value="2" />
