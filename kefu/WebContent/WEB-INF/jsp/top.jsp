@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
-<script type="text/javascript" src="/jsplugin/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 
 <div class="navbar navbar-masthead navbar-static-top m-top">
     <div class="navbar-inner">
