@@ -121,6 +121,8 @@ public class User implements Serializable {
 	public void setOnLineStatus(Integer onLineStatus) {
 		this.onLineStatus = onLineStatus;
 	}
+
+
 	public Integer getStatus() {
 		return status;
 	}

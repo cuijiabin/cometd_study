@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -8,7 +7,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Customer;
 
 /**
@@ -17,7 +15,7 @@ import com.xiaoma.kefu.model.Customer;
  *
  */
 @Repository("customerDaoImpl")
-public class CustomerDaoImpl extends HibBaseDao<Customer> implements
+public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 		CustomerDao {
 
 	@Override
@@ -51,15 +49,15 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements
 	 * 添加一条
 	 */
 	@Override
-	public Long createNewCustomer(Customer customer) {
+	public boolean createNewCustomer(Customer customer) {
 
 		try {
-			Serializable id = add(customer);
-			return (Long) id;
+			add(customer);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 
 	}
 
@@ -80,10 +78,15 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements
 		return false;
 	}
 
+	/**
+	 * 查询一条
+	 */
 	@Override
-	public Customer getById(Long id) {
-
-		return findByLongId(Customer.class, id);
+	public Customer getCustomerById(Long id) {
+		if (id == null) {
+			return null;
+		}
+		return findById(Customer.class, id);
 	}
 
 	@Override
@@ -95,5 +98,4 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements
 
 		return ((Number) query.uniqueResult()).longValue();
 	}
-
 }

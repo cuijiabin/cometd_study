@@ -26,7 +26,7 @@ public class CustomerDaoTest {
 //		
 //		customerDao.createNewCustomer(customer);
 		
-		Customer customer = customerDao.getById(1L);
+		Customer customer = customerDao.findById(Customer.class,1L);
 		
 		System.out.println(customer.getRemark());
 		
