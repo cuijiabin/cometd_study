@@ -17,53 +17,56 @@ import com.xiaoma.kefu.model.Customer;
  *
  */
 @Repository("customerDaoImpl")
-public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao{
-	
+public class CustomerDaoImpl extends HibBaseDao<Customer> implements
+		CustomerDao {
+
 	@Override
-	public Integer getAllCustomerCount(){
+	public Integer getAllCustomerCount() {
 		Session session = getSession();
 		String hql = "select count(1) from Customer  ";
 
-	 Query query = session.createSQLQuery(hql);
-	 
-	 return ((Number)query.uniqueResult()).intValue();
-		
- 	}
-	
+		Query query = session.createSQLQuery(hql);
+
+		return ((Number) query.uniqueResult()).intValue();
+
+	}
+
 	@SuppressWarnings("unchecked")
-	@Override	
-    public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
-		
-		//参数检查
-		start = (start == null)? 0 :start;
-		offset = (offset == null)? 20 :offset;
-		
+	@Override
+	public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
+
+		// 参数检查
+		start = (start == null) ? 0 : start;
+		offset = (offset == null) ? 20 : offset;
+
 		Session session = getSession();
 		String hql = "from Customer limit order by id asc";
-		Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
-		
+		Query query = session.createQuery(hql).setFirstResult(start)
+				.setMaxResults(offset);
+
 		return (List<Customer>) query.list();
 	}
-	
+
 	/**
 	 * 添加一条
 	 */
 	@Override
-	public Long createNewCustomer(Customer customer){
-		
+	public Long createNewCustomer(Customer customer) {
+
 		try {
 			Serializable id = add(customer);
-			return (Long)id;
+			return (Long) id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 
 	}
-	
+
 	/**
 	 * 修改
-	 * @param 
+	 * 
+	 * @param
 	 * @return
 	 */
 	@Override
@@ -76,16 +79,21 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 		}
 		return false;
 	}
-	
-
-
-	
 
 	@Override
 	public Customer getById(Long id) {
-		
-		return findByLongId(Customer.class,id);
+
+		return findByLongId(Customer.class, id);
 	}
 
-	
+	@Override
+	public Long getMaxCustomerId() {
+		Session session = getSession();
+		String hql = "select max(id) from Customer  ";
+
+		Query query = session.createSQLQuery(hql);
+
+		return ((Number) query.uniqueResult()).longValue();
+	}
+
 }

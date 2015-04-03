@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.xiaoma.kefu.common.DialogueUniqueTag;
+
 public class WebSocketMIPool {
 
 	//保存连接的MAP容器
@@ -17,8 +19,19 @@ public class WebSocketMIPool {
 	 */
 	public static void addMessageInbound(WebSocketMI inbound){
 		
-		System.out.println("user : " + inbound.getCustomerId()+ "进入连接池！");
-		connections.put("", inbound);
+		DialogueUniqueTag uniqueTag = inbound.getUniqueTag();
+		System.out.println("user :进入连接池！");
+		String tag = uniqueTag.getUniqueTag();
+		if(uniqueTag.getType() == DialogueUniqueTag.USER_TYPE){
+			String sendTag = uniqueTag.getSendUniqueTag(tag);
+			DialogueUniqueTag customerTag = uniqueTag.genDialogueUniqueTag(sendTag);
+			customerTag.setUserId(-1);
+			
+			String key = customerTag.getUniqueTag();
+			connections.remove(key);
+			connections.put(sendTag, new WebSocketMI(customerTag));
+		}
+		connections.put(uniqueTag.getUniqueTag(), inbound);
 		System.out.println(connections.keySet());
 	}
 	

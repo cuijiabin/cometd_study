@@ -30,4 +30,6 @@ public interface CustomerDao {
 
 	
 	public Customer getById(Long id);
+	
+	public Long getMaxCustomerId();
 }

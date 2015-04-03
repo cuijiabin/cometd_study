@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 
+import com.xiaoma.kefu.common.DialogueUniqueTag;
+import com.xiaoma.kefu.common.DialogueUtil;
+
 //如果要接收浏览器的ws://协议的请求就必须实现WebSocketServlet这个类
 @WebServlet(urlPatterns = { "/message/*"})
 public class WebSocketMessageServlet extends WebSocketServlet {
@@ -20,10 +23,11 @@ public class WebSocketMessageServlet extends WebSocketServlet {
     @Override
     protected StreamInbound createWebSocketInbound(String subProtocol,HttpServletRequest request) {
     	
-    	System.out.println("进入请求！");
     	
-//    	Customer customer = CustomerUtil.generateCustomer(request);
+    	DialogueUniqueTag uniqueTag = DialogueUtil.genUniqueTag(request);
     	
-        return new WebSocketMI(1008L);
+    	System.out.println("进入/message/");
+    	
+        return new WebSocketMI(uniqueTag);
     }
 }
