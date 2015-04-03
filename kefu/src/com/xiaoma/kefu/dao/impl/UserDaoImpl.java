@@ -5,11 +5,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.User;
 @Repository("userDaoImpl")
-public class UserDaoImpl extends HibBaseDao<User> implements UserDao {
+public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	public User findUser(String name, String password) {
 		Session session = getSession();
 		String hql = "from User u where u.loginName = :name and u.password = :password and u.status = 1";

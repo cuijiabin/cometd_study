@@ -1,4 +1,4 @@
-package com.xiaoma.kefu.dao;
+package com.xiaoma.kefu.dao.impl;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xiaoma.kefu.dao.BaseDao;
 import com.xiaoma.kefu.util.PageBean;
 /**
  * 公用Dao类，封装基本的增删改查和条件查询
@@ -27,7 +28,7 @@ import com.xiaoma.kefu.util.PageBean;
  */
 @Repository
 @Transactional
-public class HibBaseDao<T> {
+public class BaseDaoImpl<T> implements BaseDao<T> {
 	//由Spring注入SessionFactory
 	
 	private SessionFactory sessionFactory;
@@ -172,7 +173,7 @@ public class HibBaseDao<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public T findByLongId(Class<T> clazz,Long id){
+	public T findById(Class<T> clazz,Long id){
 		Session session = getSession();
 		return (T) session.get(clazz, id);
 	}
@@ -192,26 +193,40 @@ public class HibBaseDao<T> {
 	 * 
 	 */
 	public Serializable add(T obj){
-		Session session = getSession();
-		return session.save(obj);
+		try{
+			Session session = getSession();
+			return session.save(obj);
+		}catch(Exception ex){
+			return 0;
+		}
 	}
 	/**
 	 * 更新
 	 * @param obj
 	 * 
 	 */
-	public void update(T obj){
-		Session session = getSession();
-		session.update(obj);
+	public int update(T obj){
+		try{
+			Session session = getSession();
+			session.update(obj);
+			return 1;
+		}catch(Exception ex){
+			return 0;
+		}
 	}
 	/**
 	 * 删除
 	 * @param obj
 	 * 
 	 */
-	public void delete(T obj){
-		Session session = getSession();
-		session.delete(obj);
+	public int delete(T obj){
+		try{
+			Session session = getSession();
+			session.delete(obj);
+			return 1;
+		}catch(Exception ex){
+			return 0;
+		}
 	}
 }
 /**

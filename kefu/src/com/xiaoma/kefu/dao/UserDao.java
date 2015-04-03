@@ -8,7 +8,7 @@ import com.xiaoma.kefu.model.User;
  * @author tanzhipeng
  *
  */
-public interface UserDao {
+public interface UserDao extends BaseDao<User>{
 	/**
 	 * find user by username and password
 	 * @param name

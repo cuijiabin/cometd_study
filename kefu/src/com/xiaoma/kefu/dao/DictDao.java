@@ -11,7 +11,7 @@ import com.xiaoma.kefu.model.Dict;
  * @time 2015年1月13日下午5:31:32
  *
  */
-public interface DictDao {
+public interface DictDao extends BaseDao<Dict>{
 	
    /**
     * 获取全部字典表数据

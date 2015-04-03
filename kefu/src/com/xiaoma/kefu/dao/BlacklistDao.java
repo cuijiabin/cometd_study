@@ -9,7 +9,7 @@ import com.xiaoma.kefu.model.Blacklist;
  * @time 2015年4月2日下午8:50:34
  *  
  */
-public interface BlacklistDao {
+public interface BlacklistDao extends BaseDao<Blacklist>{
     
 	/**
 	 * 添加一条

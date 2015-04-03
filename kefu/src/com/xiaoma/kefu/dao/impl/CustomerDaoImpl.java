@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Customer;
 
 /**
@@ -16,7 +15,7 @@ import com.xiaoma.kefu.model.Customer;
  *
  */
 @Repository("customerDaoImpl")
-public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao{
+public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDao{
 	
 	@Override
 	public Integer getAllCustomerCount(){
@@ -88,7 +87,7 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 		{
 			return null;
 		}
-		return findByLongId(Customer.class,id);
+		return findById(Customer.class,id);
 	}
 
 	
