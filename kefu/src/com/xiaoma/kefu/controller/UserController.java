@@ -28,21 +28,45 @@ public class UserController {
 	 * @param password
 	 * @param session
 	 */
-	@RequestMapping(value = "login.action", method = RequestMethod.POST)
+	@RequestMapping(value = "login.action", method = RequestMethod.GET)
 	public String login(HttpSession session, String name, String password,
 			Model model) {
-		Assert.notNull(name, "userName can not be null!");
-		Assert.notNull(password, "password can not be null!");
-		model.addAttribute("msg", "登录名或者密码为空!");
-		User user = userService.login(name, password);
-		model.addAttribute("msg", "登录名或者密码不正确!");
-		if (user != null) {
-			session.setAttribute("currentUser", user);
-			return "/views/welcome";
-		} else {
-			logger.debug("login failed!username or password is incorrect.");
-			return "/views/login";
-		}
+//		Assert.notNull(name, "userName can not be null!");
+//		Assert.notNull(password, "password can not be null!");
+//		model.addAttribute("msg", "登录名或者密码为空!");
+//		User user = userService.login(name, password);
+//		model.addAttribute("msg", "登录名或者密码不正确!");
+//		if (user != null) {
+//			session.setAttribute("currentUser", user);
+//			return "/views/welcome";
+//		} else {
+//			logger.debug("login failed!username or password is incorrect.");
+//			return "/views/login";
+//		}
+		return "index";
+	}
+	/**
+	 * User login
+	 * 
+	 * @param name
+	 * @param password
+	 * @param session
+	 */
+	@RequestMapping(value = "demo.action", method = RequestMethod.GET)
+	public String demo(HttpSession session) {
+//		Assert.notNull(name, "userName can not be null!");
+//		Assert.notNull(password, "password can not be null!");
+//		model.addAttribute("msg", "登录名或者密码为空!");
+//		User user = userService.login(name, password);
+//		model.addAttribute("msg", "登录名或者密码不正确!");
+//		if (user != null) {
+//			session.setAttribute("currentUser", user);
+//			return "/views/welcome";
+//		} else {
+//			logger.debug("login failed!username or password is incorrect.");
+//			return "/views/login";
+//		}
+		return "demo";
 	}
 
 	
