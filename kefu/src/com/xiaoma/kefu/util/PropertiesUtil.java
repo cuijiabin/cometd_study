@@ -14,8 +14,7 @@ public class PropertiesUtil {
 	/**
 	 * 日志组件
 	 */
-	private static Logger logger = Logger.getLogger(PropertiesUtil.class
-			.getName());
+	private static Logger logger = Logger.getLogger(PropertiesUtil.class.getName());
 
 	private static PropertiesUtil instance = null;
 
@@ -76,6 +75,12 @@ public class PropertiesUtil {
 			CacheMan.addCache(CacheName.MAILCOUNT,p.getProperty("mail.mailCount"));
 			CacheMan.addCache(CacheName.MAILPASSWORD,p.getProperty("mail.mailPassword"));
 			CacheMan.addCache(CacheName.MAILSERVER,p.getProperty("mail.mailServer"));
+			
+			//redis
+			CacheMan.addCache(CacheName.REDISHOST,p.getProperty("redis.host"));
+			CacheMan.addCache(CacheName.REDISPORT,p.getProperty("redis.port"));
+			CacheMan.addCache(CacheName.REDISPASSWORD,p.getProperty("redis.password"));
+			CacheMan.addCache(CacheName.REDISTIMEOUT,p.getProperty("redis.timeout"));
 		} catch (Exception e) {
 			Log.error(e.getMessage(), e);
 			e.printStackTrace();
@@ -94,5 +99,6 @@ public class PropertiesUtil {
 
 	public static void main(String[] args) {
 		System.out.println(getProperties(CacheName.PAYURL));
+		System.out.println(getProperties(CacheName.REDISHOST));
 	}
 }

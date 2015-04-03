@@ -49,7 +49,19 @@ public class CustomerController {
 		model.addAttribute("customerName", customerName);
 		model.addAttribute("phone", phone);
 
-		return "xx/customerList";
+		return "customer/customerList";
+	}
+	/**
+	 * 查询所有
+	 * 
+	 * @param conditions
+	 * @param pageBean
+	 * @return
+	 */
+	@RequestMapping(value = "getLeft.action", method = RequestMethod.GET)
+	public String getLeft(Model model,Integer funcId) {
+		
+		return "customer/left";
 	}
 	
 	/**

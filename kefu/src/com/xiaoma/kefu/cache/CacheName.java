@@ -26,5 +26,11 @@ public class CacheName {
 	public static final String MAILCOUNT="MAILCOUNT";
 	public static final String MAILPASSWORD="MAILPASSWORD";
 	
+	//redis
+	public static final String REDISHOST="REDISHOST";
+	public static final String REDISPORT="REDISPORT";
+	public static final String REDISPASSWORD="REDISPASSWORD";
+	public static final String REDISTIMEOUT="REDISTIMEOUT";
+	
 	
 }

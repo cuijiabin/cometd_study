@@ -1,8 +1,11 @@
 package com.xiaoma.kefu.redis;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.util.PropertiesUtil;
 import com.xiaoma.kefu.util.SerializeUtil;
 
 import redis.clients.jedis.Jedis;
@@ -20,6 +23,13 @@ public class JedisDao {
 	private static Log log = LogFactory.getLog(JedisDao.class);
 	private static Jedis jedis;
 	private static JedisPool pool;
+	
+	//redisConf
+	private static String host = PropertiesUtil.getProperties(CacheName.REDISHOST);
+	private static String port = PropertiesUtil.getProperties(CacheName.REDISPORT);
+	private static String timeout = PropertiesUtil.getProperties(CacheName.REDISTIMEOUT);
+	private static String password = PropertiesUtil.getProperties(CacheName.REDISPASSWORD);
+	
     
 	/**
 	 * 获取redis操作实例（不必加锁）
@@ -29,7 +39,10 @@ public class JedisDao {
 	public static Jedis getJedis() {
 		try {
 			if (pool == null) {
-				pool = new JedisPool(new JedisPoolConfig(), "192.168.1.210");
+				
+				password = (StringUtils.isBlank(password)) ? null : password;
+				
+				pool = new JedisPool(new JedisPoolConfig(), host, Integer.valueOf(port), Integer.valueOf(timeout), password);
 				jedis = pool.getResource();
 			} else
 				return jedis;
@@ -99,6 +112,11 @@ public class JedisDao {
 		
 		return SerializeUtil.unserialize(byteObj);
 		
+	}
+	
+	public static void main(String[] args) {
+		setKV("test","test");
+		System.out.println(getValue("test"));
 	}
 	
 }
