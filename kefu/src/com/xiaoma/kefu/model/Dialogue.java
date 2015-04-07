@@ -28,7 +28,7 @@ public class Dialogue implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name="id")
-	private Integer id;
+	private Long id;
 	@Column(name="userId")
 	private Integer userId;
 	@Column(name="cardName",length=50)
@@ -36,7 +36,7 @@ public class Dialogue implements Serializable {
 	@Column(name="deptId")
 	private Integer deptId;
 	@Column(name="customerId")
-	private Integer customerId;
+	private Long customerId;
 	@Column(name="beginDate")
 	private Date beginDate;
 	@Column(name="endDate")
@@ -82,10 +82,11 @@ public class Dialogue implements Serializable {
 	@Column(name="styleId")
 	private Integer styleId;
 	
-	public Integer getId() {
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public Integer getStyleId() {
@@ -112,10 +113,10 @@ public class Dialogue implements Serializable {
 	public void setDeptId(Integer deptId) {
 		this.deptId = deptId;
 	}
-	public Integer getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 	public Date getBeginDate() {

@@ -28,7 +28,7 @@ public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDa
 	public int update2Del(Dialogue dialogue) {
 		Session session = getSession();
 	    Query query = session.createQuery("update Dialogue t set t.isDel = 1 where id = :id "); 
-	    query.setInteger("id", dialogue.getId());
+	    query.setLong("id", dialogue.getId());
 	    return query.executeUpdate();  
 	}
 	
@@ -43,7 +43,7 @@ public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDa
 	public int update2Restore(Dialogue dialogue) {
 		Session session = getSession();
 	    Query query = session.createQuery("update Dialogue t set t.isDel = 0 where id = :id "); 
-	    query.setInteger("id", dialogue.getId());
+	    query.setLong("id", dialogue.getId());
 	    return query.executeUpdate();  
 	}
 

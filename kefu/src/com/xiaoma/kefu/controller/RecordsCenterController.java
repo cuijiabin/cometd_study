@@ -11,8 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.Dialogue;
+import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
+import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.database.DataBase;
@@ -37,7 +42,36 @@ public class RecordsCenterController {
 	private WaitListService waitListService;//等待菜单列表
 	@Autowired
 	private StyleService styleService;//风格
+	@Autowired
+	private DialogueService dialogueService;//对话信息
+	@Autowired
+	private CustomerService customerService;//客户信息
 	
+	
+	/**
+	 * 聊天记录查询
+	* @Description: TODO
+	* @param deptId	部门id	
+	* @param beginDate	开始日期
+	* @param endDate	结束日期
+	* @param userId		客服id
+	* @param isTalk		客户是否说话
+	* @param customerId	客户编码
+	* @param ipInfo		ip地址
+	* @param consultPage	咨询页面
+	* @param talkContent	聊天内容
+	* @param keywords		关键字(访问来源)
+	* @param totalNum		总条数
+	* @param numCondition	大于 等于 小于 等条件
+	* @param styleName		风格名称(站点来源)
+	* @param openType		开始方式
+	* @param closeType		结束方式
+	* @param isWait			是否进入等待队列
+	* @param waitListName	考试项目
+	* @param deviceType		设备类型
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
 	@RequestMapping(value = "queryTalk.action", method = RequestMethod.GET)
 	public void queryTalkRecord(
 				Integer deptId,//部门id	
@@ -182,7 +216,6 @@ public class RecordsCenterController {
 				String beginDate,//开始日期
 				String endDate,//结束日期
 				Integer userId,//客服id
-//				String cardName,//工号
 				Integer isTalk//客户是否说话
 			){
 		
@@ -241,6 +274,138 @@ public class RecordsCenterController {
 	}
 	
 	
+	
+	/**
+	 * 查询聊天 详情
+	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
+	* @Description: TODO
+	* @param dialogueId	对话id
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	@RequestMapping(value = "queryTalkList.action", method = RequestMethod.GET)
+	public void queryTalkList(Long dialogueId){
+		//获取对话信息
+		Dialogue dia = dialogueService.findById(dialogueId);
+		//获取聊天记录列表
+		List<Dialogue> list = findDialogueByCId(dia.getCustomerId(),0);
+		
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i).getId()+"-"+list.get(i).getBeginDate());
+		}
+	}
+	
+	/**
+	 * 查询聊天 详情(回收站)
+	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
+	* @Description: TODO
+	* @param dialogueId	对话id
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	@RequestMapping(value = "queryTalkDelList.action", method = RequestMethod.GET)
+	public void queryTalkDelList(Long dialogueId){
+		//获取对话信息
+		Dialogue dia = dialogueService.findById(dialogueId);
+		//获取聊天记录列表
+		List<Dialogue> list = findDialogueByCId(dia.getCustomerId(),1);
+		
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i).getId()+"-"+list.get(i).getBeginDate());
+		}
+	}
+	
+	/**
+	 * 对话信息的基本信息
+	* @Description: TODO
+	* @param dialogueId
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	@RequestMapping(value = "queryTalkDetail.action", method = RequestMethod.GET)
+	public void queryTalkDetail(Long dialogueId){
+		//获取对话信息
+		Dialogue dia = dialogueService.findById(dialogueId);
+		//获取用户名称
+		Customer cus = customerService.getCustomerById(dia.getCustomerId());
+		//格式化后返回?
+	}
+	
+	/**
+	 * 对话信息的聊天内容
+	* @Description: TODO
+	* @param dialogueId	对话id
+	* @param iPageIndex	当前页码
+	* @param iPageSize	每页显示条数
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	@RequestMapping(value = "queryTalkContent.action", method = RequestMethod.GET)
+	public void queryTalkContent(Long dialogueId,int iPageIndex,int iPageSize){
+		iPageIndex = 1;//test
+		iPageSize = 10;//test
+		String sql = " SELECT dd.id, dd.dialogueId, dd.dialogueType,dd.customerId, "
+				+ " dd.userId, dd.cardName, dd.content,"
+				+ " DATE_FORMAT(dd.createDate,'%Y-%m-%d %H:%i:%S') createDate  "
+				+ " FROM dialogue_detail AS dd "
+				+ " WHERE dd.dialogueId = " + dialogueId
+				+ " order by dd.createDate " ;
+		DataSet ds = DataBase.Query(sql,iPageIndex,iPageSize);
+		List<DialogueDetail> list = new ArrayList<DialogueDetail>((int) ds.RowCount);
+		for(int i=0;i<ds.RowCount;i++){
+			DialogueDetail dd = new DialogueDetail();
+			dd.setId(ds.getRow(i).getLong("id"));
+			dd.setDialogueType(ds.getRow(i).getInt("dialogueType"));
+			String content = null;
+			if(dd.getDialogueType().equals(1)){//客户
+				content = ds.getRow(i).getString("customerId") + " " 
+						+ ds.getRow(i).getString("createDate")
+						+ "<br> &ensp;&ensp;&ensp;&ensp;"
+						+ ds.getRow(i).getString("content");
+			}else{//客服+机器人
+				content = ds.getRow(i).getString("cardName") + " " 
+						+ ds.getRow(i).getString("createDate")
+						+ "<br> &ensp;&ensp;&ensp;&ensp;"
+						+ ds.getRow(i).getString("content");
+			}
+			dd.setContent(content);
+			list.add(dd);
+			
+		}
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i).getDialogueType());
+			System.out.println(list.get(i).getContent());
+		}
+	}
+	
+	
+
+	/**
+	 * 根据客户id,获取对话列表
+	* @Description: 根据
+	* @param customerId
+	* @param isDel
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	private List<Dialogue> findDialogueByCId(Long customerId,Integer isDel) {
+		String sql = " SELECT t1.id dialogueId,t1.beginDate "
+				+ " FROM dialogue t1 "
+				+ " WHERE t1.isDel = " + isDel
+				+ " and t1.customerId = " + customerId ;
+		DataSet ds = DataBase.Query(sql);
+		List<Dialogue> list = new ArrayList<Dialogue>((int) ds.RowCount);
+		for(int i=0;i<ds.RowCount;i++){
+			Dialogue dia = new Dialogue();
+			dia.setId(ds.getRow(i).getLong("dialogueId"));
+			dia.setBeginDate(ds.getRow(i).getDate("beginDate"));
+			list.add(dia);
+			
+		}
+		return list;
+	}
+
 	/**
 	 * 
 	* @Description: 根据用户,获取显示字段

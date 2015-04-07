@@ -31,7 +31,7 @@ public class DialogueServiceTest {
 		List<Dialogue> list = new ArrayList<Dialogue>();
 		for(int i=0;i<5;i++){
 			Dialogue model = new Dialogue();
-			model.setId(i+1);
+			model.setId((long) (i+1));
 			list.add(model);
 		}
 		dialogueService.delete4Logic(list);
@@ -42,7 +42,7 @@ public class DialogueServiceTest {
 		List<Dialogue> list = new ArrayList<Dialogue>();
 		for(int i=0;i<5;i++){
 			Dialogue model = new Dialogue();
-			model.setId(i+1);
+			model.setId((long) (i+1));
 			list.add(model);
 		}
 		dialogueService.restore(list);
@@ -53,7 +53,7 @@ public class DialogueServiceTest {
 		List<Dialogue> list = new ArrayList<Dialogue>();
 		for(int i=0;i<5;i++){
 			Dialogue model = new Dialogue();
-			model.setId(i+3);
+			model.setId((long) (i+3));
 			list.add(model);
 		}
 		dialogueService.delete(list);

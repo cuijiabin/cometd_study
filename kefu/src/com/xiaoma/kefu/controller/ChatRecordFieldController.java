@@ -37,7 +37,8 @@ public class ChatRecordFieldController {
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
 	public String saveRecord(HttpSession session,String date){
 		//获取当前用户id
-		chatRecordFieldService.saveRecord(1,date);
+		Integer userId = 1;
+		chatRecordFieldService.saveRecord(userId,date);
 		return "";
 	}
 	

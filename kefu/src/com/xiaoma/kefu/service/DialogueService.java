@@ -62,6 +62,18 @@ public class DialogueService {
 			dialogueDaoImpl.update2Restore(dialogue);
 		}
 	}
+	
+	/**
+	 * 
+	* @Description: 根据id,获取对话信息
+	* @param dialogueId
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public Dialogue findById(Long dialogueId) {
+		return dialogueDaoImpl.findById(Dialogue.class, dialogueId);
+	}
 
 
 }
