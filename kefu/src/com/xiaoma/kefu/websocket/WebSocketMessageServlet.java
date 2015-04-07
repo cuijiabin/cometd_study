@@ -26,8 +26,6 @@ public class WebSocketMessageServlet extends WebSocketServlet {
     	
     	DialogueUniqueTag uniqueTag = DialogueUtil.genUniqueTag(request);
     	
-    	System.out.println("进入/message/");
-    	
         return new WebSocketMI(uniqueTag);
     }
 }

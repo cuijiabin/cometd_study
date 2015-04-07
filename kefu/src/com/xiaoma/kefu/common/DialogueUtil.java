@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.common;
 
+import java.nio.CharBuffer;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -9,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.CookieUtils;
 import com.xiaoma.kefu.util.DesUtil;
+import com.xiaoma.kefu.websocket.WebSocketMI;
 
 public class DialogueUtil {
 
@@ -107,13 +110,20 @@ public class DialogueUtil {
 				user = new User();
 				user.setId(1);
 			}
-            Long customerId = (StringUtils.isBlank(paramArr[2])) ? null : Long.valueOf(paramArr[1]);
+            Long customerId = (StringUtils.isBlank(paramArr[2])) ? null : Long.valueOf(paramArr[2]);
             
 			return new DialogueUniqueTag(type, customerId, user.getId());
 		}
 
 		return null;
 
+	}
+	
+	public static String generateMessage(CharBuffer message,WebSocketMI webSocketMI){
+		
+		//TODO
+		
+		return message.toString();
 	}
 
 	public static void main(String[] args) {

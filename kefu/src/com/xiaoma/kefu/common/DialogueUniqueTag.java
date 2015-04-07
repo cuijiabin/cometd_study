@@ -17,6 +17,8 @@ public class DialogueUniqueTag {
 	public static Integer USER_TYPE = 2;
 
 	public static String DELIMITER = "##";
+	
+	public static Integer DEFAULT_USER_ID = -1;
 
 	public DialogueUniqueTag() {
 	}
@@ -54,7 +56,8 @@ public class DialogueUniqueTag {
 
 	public String getUniqueTag() {
 
-		StringBuffer sbf = new StringBuffer(type);
+		StringBuffer sbf = new StringBuffer();
+		sbf.append(type);
 
 		// 如果是空的话使用-1代替
 		customerId = (customerId == null) ? -1L : customerId;
@@ -63,12 +66,42 @@ public class DialogueUniqueTag {
 		switch (type) {
 		case 1:
 			sbf.append(DELIMITER).append(customerId);
-			sbf.append(DELIMITER).append(userId);
+			sbf.append(DELIMITER).append(DEFAULT_USER_ID);
 			break;
 
 		case 2:
 			sbf.append(DELIMITER).append(userId);
 			sbf.append(DELIMITER).append(customerId);
+			break;
+
+		default:
+			sbf.deleteCharAt(0);
+			break;
+		}
+
+		return sbf.toString();
+
+	}
+	
+	public String getSendUniqueTag() {
+
+		StringBuffer sbf = new StringBuffer();
+		
+		// 如果是空的话使用-1代替
+		customerId = (customerId == null) ? -1L : customerId;
+		userId = (userId == null) ? -1 : userId;
+
+		switch (type) {
+		case 1:
+			sbf.append(USER_TYPE);
+			sbf.append(DELIMITER).append(userId);
+			sbf.append(DELIMITER).append(customerId);
+			break;
+
+		case 2:
+			sbf.append(CUSTOMER_TYPE);
+			sbf.append(DELIMITER).append(customerId);
+			sbf.append(DELIMITER).append(DEFAULT_USER_ID);
 			break;
 
 		default:
@@ -86,7 +119,7 @@ public class DialogueUniqueTag {
 			return "";
 		}
 		String[] uArr = uniqueTag.split(DELIMITER);
-		if (uArr.length <= 3) {
+		if (uArr.length < 3) {
 			return "";
 		}
 
@@ -96,15 +129,17 @@ public class DialogueUniqueTag {
 		switch (type) {
 		case 1:
 			sbf.append(USER_TYPE);
+			sbf.append(DELIMITER).append(uArr[2]);
+			sbf.append(DELIMITER).append(uArr[1]);
 			break;
 
 		case 2:
 			sbf.append(CUSTOMER_TYPE);
+			sbf.append(DELIMITER).append(uArr[2]);
+			sbf.append(DELIMITER).append(DEFAULT_USER_ID);
 			break;
 		}
 
-		sbf.append(DELIMITER).append(uArr[2]);
-		sbf.append(DELIMITER).append(uArr[1]);
 
 		return sbf.toString();
 

@@ -12,7 +12,6 @@
 var ws = null;
 function startWebSocket() {
 	if (!window.WebSocket) alert("本浏览器不支持WebSocket!");
-	//if (window.WebSocket) alert("本浏览器支持WebSocket!");
 	
 	// 创建WebSocket
 	ws = new WebSocket("ws://192.168.1.97:8080/message/1");
@@ -37,9 +36,7 @@ function startWebSocket() {
   
 // 发送消息
 function sendMsg() {
-    //var message = null;
 	var data = document.getElementById('msgSendBox').value;
-	//message.data = data;
 	
 	ws.send(data);
 	document.getElementById('msgSendBox').value = '';
