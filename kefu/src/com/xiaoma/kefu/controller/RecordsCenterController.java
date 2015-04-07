@@ -1,8 +1,14 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
@@ -20,6 +27,8 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.WaitListService;
+import com.xiaoma.kefu.util.PropertiesUtil;
+import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
 
@@ -376,6 +385,38 @@ public class RecordsCenterController {
 			System.out.println(list.get(i).getDialogueType());
 			System.out.println(list.get(i).getContent());
 		}
+	}
+	
+	/**
+	 * 导出对话信息
+	* @Description: TODO
+	* @param date	yyyy-MM-dd	(时间)
+	* @param response
+	* @throws IOException
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	@RequestMapping(value = "/expTalk", method = RequestMethod.GET)
+	public void expTalk(String date,HttpServletResponse response) throws IOException {
+		String basePath = PropertiesUtil.getProperties(CacheName.FILEROOT)
+				+File.separator + SysConst.EXP_TALK_PATH ;
+		String path = basePath + File.separator + date + ".xlsx";
+		response.setContentType("application/octet-stream");// 二进制流
+		response.setHeader("Content-Disposition", "attachment;filename=\"" + date + ".xlsx\"");
+		OutputStream out = response.getOutputStream();
+		try {
+			FileInputStream in = new FileInputStream(path);
+			byte[] buf = new byte[1024];
+			int b;
+			while ((b = in.read(buf)) != -1) {
+				out.write(buf, 0, b);
+			}
+			out.flush();
+			out.close();
+			in.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
 	}
 	
 	
