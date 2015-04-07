@@ -16,7 +16,7 @@ import com.xiaoma.kefu.model.WaitList;
 * @createdAt: 2015年4月3日下午4:42:35
 **********************************
  */
-public interface WaitListDao {
+public interface WaitListDao extends BaseDao<WaitList>{
 
 	public List<WaitList> findByNameLike(String waitListName);
 	

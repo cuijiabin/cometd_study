@@ -1,6 +1,8 @@
 package com.xiaoma.kefu.service;
 
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,29 +27,16 @@ public class ChatRecordFieldService {
 	@Autowired
 	private ChatRecordFieldDao chatRecordFieldDaoImpl;
 	
-	/**
-	 * 只更新是否显示字段
-	* @Description: TODO
-	* @param list
-	* @Author: wangxingfei
-	* @Date: 2015年4月3日
-	 */
-	public void updateIsDisplay(List<ChatRecordField> list) {
-		for(ChatRecordField crf : list){
-			chatRecordFieldDaoImpl.updateIsDisplay(crf);
-		}
-	}
-	
 	
 	/**
-	 * 获取需要展示的字段
-	* @Description: TODO
+	 * 
+	* @Description: 根据用户  获取需要展示的字段
 	* @return	key=字段code,value=字段名称
 	* @Author: wangxingfei
-	* @Date: 2015年4月3日
+	* @Date: 2015年4月7日
 	 */
-	public Map<String, String> getDisplayMap() {
-		List<ChatRecordField> list = chatRecordFieldDaoImpl.findDisplay();
+	public Map<String, String> findDisplayMapByUserId(Integer userId) {
+		List<ChatRecordField> list = chatRecordFieldDaoImpl.findByUserId(userId);
 		Map<String,String> hm = new LinkedHashMap<String,String>(list.size(),1);//需要按顺序放
 		for(ChatRecordField crf : list){
 			hm.put(crf.getCode(), crf.getName());
@@ -64,19 +53,92 @@ public class ChatRecordFieldService {
 	* @Date: 2015年4月3日
 	 */
 	public ChatRecordField findById(Integer id) {
-		return chatRecordFieldDaoImpl.findById(id);
+		return chatRecordFieldDaoImpl.findById(ChatRecordField.class,id);
 	}
 	
 	/**
-	 * 获取所有
+	 * 获取默认需要展示的字段
 	* @Description: TODO
-	* @return
+	* @return	key=字段code,value=字段名称
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public List<ChatRecordField> findAll(){
-		return chatRecordFieldDaoImpl.findAll();
+	public Map<String, String> findDefaultMap() {
+		List<ChatRecordField> list = chatRecordFieldDaoImpl.findCommonDefault();
+		Map<String,String> hm = new LinkedHashMap<String,String>(list.size(),1);//需要按顺序放
+		for(ChatRecordField crf : list){
+			hm.put(crf.getCode(), crf.getName());
+		}
+		return hm;
 	}
+
+	
+	/**
+	 * 
+	* @Description: 根据用户保存配置
+	* @param userId
+	* @param date
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public void saveRecord(Integer userId, String date) {
+		if(userId!=null && userId==1){
+			Map<String,ChatRecordField> hm = findCommonMap();
+			String[] strs = date.split(",");
+			for(int i=0;i<strs.length;i++){
+				String[] temp = strs[i].split(":");
+				ChatRecordField crf = hm.get(temp[0]);
+				crf.setIsDisplay(Integer.valueOf(temp[1]));
+				crf.setUpdateDate(new Date());
+				chatRecordFieldDaoImpl.update(crf);
+			}
+		}else{
+			//先删除
+			chatRecordFieldDaoImpl.deleteByUserId(userId);
+			//再保存
+			Map<String,ChatRecordField> hm = findCommonMap();
+			String[] strs = date.split(",");
+			for(int i=0;i<strs.length;i++){
+				String[] temp = strs[i].split(":");
+				ChatRecordField crf = hm.get(temp[0]);
+				crf.setUserId(userId);
+				crf.setIsDisplay(Integer.valueOf(temp[1]));
+				crf.setCreateDate(new Date());
+				crf.setUpdateDate(null);
+				crf.setId(null);
+				chatRecordFieldDaoImpl.add(crf);
+			}
+		}
+		
+	}
+	
+	/**
+	 * 
+	* @Description: 获取基本的配置字段信息
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public List<ChatRecordField> findCommon(){
+		return chatRecordFieldDaoImpl.findCommon();
+	}
+	
+	/**
+	 * 
+	* @Description: 获取基本的配置字段信息
+	* @return	key=code,value=ChatRecordField
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public Map<String,ChatRecordField> findCommonMap(){
+		List<ChatRecordField> list = findCommon();
+		Map<String,ChatRecordField> hm = new HashMap<String,ChatRecordField>(list.size(),1);
+		for(ChatRecordField crf : list){
+			hm.put(crf.getCode(), crf);
+		}
+		return hm;
+	}
+
 
 
 

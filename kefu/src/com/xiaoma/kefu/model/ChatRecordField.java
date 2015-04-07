@@ -28,6 +28,8 @@ public class ChatRecordField implements Serializable {
 	@GeneratedValue
 	@Column(name="id")
 	private Integer id;
+	@Column(name="userId")
+	private Integer userId;
 	@Column(name="code",length=32)
 	private String code;
 	@Column(name="name")
@@ -48,6 +50,12 @@ public class ChatRecordField implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	public String getCode() {
 		return code;

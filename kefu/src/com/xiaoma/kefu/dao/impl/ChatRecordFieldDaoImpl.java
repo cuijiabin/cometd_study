@@ -19,21 +19,6 @@ import com.xiaoma.kefu.model.ChatRecordField;
 @Repository("chatRecordFieldDaoImpl")
 public class ChatRecordFieldDaoImpl extends BaseDaoImpl<ChatRecordField> implements ChatRecordFieldDao {
 
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ChatRecordField> findDisplay() {
-		Session session = getSession();
-		String hql = "from ChatRecordField cr where cr.isDisplay = 1 order by cr.sortId ";
-		Query query = session.createQuery(hql);
-		return	query.list();
-	}
-
-	@Override
-	public ChatRecordField findById(Integer id) {
-		return findById(ChatRecordField.class, id);
-	}
-
 	@Override
 	public int updateIsDisplay(ChatRecordField crf) {
 		Session session = getSession();
@@ -42,10 +27,48 @@ public class ChatRecordFieldDaoImpl extends BaseDaoImpl<ChatRecordField> impleme
 	    query.setInteger("id", crf.getId());
 	    return query.executeUpdate();  
 	}
+	
+	/**
+	* @Description: 获取默认展示的字段
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月3日
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChatRecordField> findCommonDefault() {
+		Session session = getSession();
+		String hql = "from ChatRecordField cr where cr.userId = 1 and cr.isDefault = 1 order by cr.sortId ";
+		Query query = session.createQuery(hql);
+		return	query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChatRecordField> findCommon() {
+		Session session = getSession();
+		String hql = "from ChatRecordField cr where cr.userId = 1 order by cr.sortId ";
+		Query query = session.createQuery(hql);
+		return	query.list();
+	}
 
 	@Override
-	public List<ChatRecordField> findAll() {
-		return findAll(ChatRecordField.class);
+	public int deleteByUserId(Integer userId) {
+		Session session = getSession();
+	    Query query = session.createQuery("delete ChatRecordField cr where cr.userId = :userId "); 
+	    query.setInteger("userId", userId);
+	    return query.executeUpdate();  
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChatRecordField> findByUserId(Integer userId) {
+		Session session = getSession();
+		String hql = "from ChatRecordField cr where cr.userId = :userId order by cr.sortId ";
+		Query query = session.createQuery(hql);
+		query.setInteger("userId", userId);
+		return	query.list();
+	}
+
 
 }
