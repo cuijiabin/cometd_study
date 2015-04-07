@@ -13,18 +13,16 @@ import com.xiaoma.kefu.model.ChatRecordField;
 * @createdAt: 2015年4月3日上午10:01:54
 **********************************
  */
-public interface ChatRecordFieldDao {
+public interface ChatRecordFieldDao extends BaseDao<ChatRecordField>{
 
 	/**
-	* @Description: 获取需要展示的字段
+	* @Description: 根据用户id获取需要展示的字段
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public List<ChatRecordField> findDisplay();
+	public List<ChatRecordField> findByUserId(Integer userId);
 
-	public ChatRecordField findById(Integer id);
-	
 	/**
 	 * 只更新是否显示字段
 	* @Description: TODO
@@ -36,12 +34,30 @@ public interface ChatRecordFieldDao {
 	public int updateIsDisplay(ChatRecordField crf);
 	
 	/**
-	 * 获取所有
-	* @Description: TODO
+	* @Description: 获取默认展示的字段
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public List<ChatRecordField> findAll();
+	public List<ChatRecordField> findCommonDefault();
+	
+	/**
+	 * 
+	* @Description: 获取基本的需要展示的字段
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public List<ChatRecordField> findCommon();
+	
+	/**
+	 * 
+	* @Description: 根据用户id,删除配置
+	* @param userId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月7日
+	 */
+	public int deleteByUserId(Integer userId);
 	
 }
