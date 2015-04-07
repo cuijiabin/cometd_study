@@ -12,7 +12,7 @@ import javax.persistence.Table;
 /**
  * @author frongji
  * @time 2015年4月1日下午4:22:55
- *  访客信息模型
+ *  访客信息--模型类
  */
 @Entity
 @Table(name = "customer")
@@ -57,6 +57,12 @@ public class Customer implements Serializable {
 	
 	@Column(name = "status")
 	private Integer status;
+	
+	@Column(name = "firstVisitSource")
+	private String firstVisitSource;
+	
+	@Column(name = "firstLandingPage")
+	private String firstLandingPage;
 	
 	public Long getId() {
 		return id;
@@ -144,6 +150,22 @@ public class Customer implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getFirstVisitSource() {
+		return firstVisitSource;
+	}
+
+	public void setFirstVisitSource(String firstVisitSource) {
+		this.firstVisitSource = firstVisitSource;
+	}
+
+	public String getFirstLandingPage() {
+		return firstLandingPage;
+	}
+
+	public void setFirstLandingPage(String firstLandingPage) {
+		this.firstLandingPage = firstLandingPage;
 	}
 	
 	

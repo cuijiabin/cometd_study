@@ -17,7 +17,7 @@
     <div class="col-auto">
     	<div class="col-1">
         	<div class="content" style="position:relative;overflow:hidden;">
-            	<iframe name="rightBody" id="rightBody" src="/welcome.html" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="auto" allowtransparency="true"></iframe>
+            	<iframe name="rightBody" id="rightBody" src="/user/demo.action" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="auto" allowtransparency="true"></iframe>
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * @author frongji
@@ -43,6 +44,32 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 		
 		return (List<Customer>) query.list();
 	}
+	
+	   /**
+	    * 条件查询
+	    */
+		
+		@SuppressWarnings("unchecked")
+		@Override	
+	    public List<Customer> getCustomerByConditions(Integer start, Integer offset ,String customerName,String phone) {
+			
+			//参数检查
+			start = (start == null)? 0 :start;
+			offset = (offset == null)? 20 :offset;
+			
+			Session session = getSession();
+			
+			String hql = "from Customer c where 1=1 ";
+			if(StringHelper.isNotEmpty(customerName)){
+				hql += " and c.customerName like '"+"%"+customerName+"%"+"'";
+			}
+			if(StringHelper.isNotEmpty(phone)){
+				hql += " and c.phone like '"+"%"+phone+"%"+"'";
+			}
+			Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
+			return (List<Customer>) query.list();
+		}
+
 	
 	/**
 	 * 添加一条
