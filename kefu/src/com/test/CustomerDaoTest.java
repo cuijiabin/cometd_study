@@ -31,6 +31,11 @@ public class CustomerDaoTest {
 //		System.out.println(customer.getRemark());
 //		
 //		JedisDao.setKOT("customer:2", customer, 600);
+		Customer customer = customerDao.findById(Customer.class,1L);
+		
+		System.out.println(customer.getRemark());
+		
+		JedisDao.setKOT("customer:2", customer, 600);
 	}
 	
 	@Test

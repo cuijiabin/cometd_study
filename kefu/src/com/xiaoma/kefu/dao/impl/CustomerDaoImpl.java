@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.util.StringHelper;
 
@@ -17,7 +16,7 @@ import com.xiaoma.kefu.util.StringHelper;
  *
  */
 @Repository("customerDaoImpl")
-public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao{
+public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDao{
 	
 	@Override
 	public Integer getAllCustomerCount(){
@@ -115,8 +114,16 @@ public class CustomerDaoImpl extends HibBaseDao<Customer> implements CustomerDao
 		{
 			return null;
 		}
-		return findByLongId(Customer.class,id);
+		return findById(Customer.class,id);
 	}
 
-	
+	@Override
+	public Long getMaxCustomerId() {
+		Session session = getSession();
+		String hql = "select max(id) from Customer  ";
+
+		Query query = session.createSQLQuery(hql);
+
+		return ((Number) query.uniqueResult()).longValue();
+	}
 }

@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.util.StringHelper;
 
@@ -17,7 +16,7 @@ import com.xiaoma.kefu.util.StringHelper;
  *   黑名单的接口实现类
  */
 @Repository("blacklistDaoImpl")
-public class BlacklistDaoImpl extends HibBaseDao<Blacklist> implements BlacklistDao{
+public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements BlacklistDao{
 
 	/**
 	 * 添加一条

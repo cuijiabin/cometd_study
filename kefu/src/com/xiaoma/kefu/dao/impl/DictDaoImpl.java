@@ -9,14 +9,13 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DictDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Dict;
 
 
 
 
 @Repository("dictDaoImpl")
-public class DictDaoImpl extends HibBaseDao<Dict> implements DictDao {
+public class DictDaoImpl extends BaseDaoImpl<Dict> implements DictDao {
 	
 	/**
 	 * 查询所有字典表数据

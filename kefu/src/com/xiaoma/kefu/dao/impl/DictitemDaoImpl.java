@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DictitemDao;
-import com.xiaoma.kefu.dao.HibBaseDao;
 import com.xiaoma.kefu.model.Dictitem;
 
 
@@ -19,7 +18,7 @@ import com.xiaoma.kefu.model.Dictitem;
  *
  */
 @Repository("dictitemDaoImpl")
-public class DictitemDaoImpl extends HibBaseDao<Dictitem> implements DictitemDao{
+public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDao{
 	
 	/**
 	 * 查询所有字典详细表数据

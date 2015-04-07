@@ -22,7 +22,7 @@ public class CustomerService {
 	private CustomerDao customerDaoImpl;
 	
 	/**
-	 * 条件查询
+	 * 查询所有、 条件查询
 	 */
    public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String customerName ,String phone){
 	

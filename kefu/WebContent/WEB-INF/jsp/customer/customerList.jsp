@@ -19,68 +19,38 @@
     <ul class="f-cb">
         <li><b>位置：</b></li>
         <li><a href="#">首页</a></li>
-        <li><i>&gt;</i><a href="#">客户管理中心</a></li>
-        <li><i>&gt;</i>客户管理</li>
+        <li><i>&gt;</i><a href="#">访客管理</a></li>
+        <li><i>&gt;</i>客户信息</li>
     </ul>
 </div>
 <!-- 查询条件 -->
 <div class="m-query f-mar10">
-	<div class="m-query-hd">
-        <label>部门：</label><select class="c-wd80">
-            <option selected="selected">全部部门</option>
-            <option value="客服部">客服部</option>
-            <option value="留学部">留学部</option>
-            <option value="随时学">随时学</option>
-            <option value="好顾问">好顾问</option>
-        </select>
-        <label>专题：</label><input class="c-wd80" type="text" />
-        <label>关键词：</label><input class="c-wd80" type="text" />
-        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
-        <div class="u-subsec">
-           	<label><input type="checkbox">显示子栏目</label>
-        </div>
-    </div>
+	
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
+            <label>客户姓名：</label><input class="c-wd150" type="text" />
             <label>客户编号：</label><input class="c-wd150" type="text" />
-            <label>IP地址：</label><input class="c-wd150" type="text" />
-            <label>咨询页面：</label><input class="c-wd150" type="text" />
-            <label>聊天内容：</label><input class="c-wd150" type="text" /><span class="help-inline c-clred">协议类型不能为空</span>
+            <label>联系方式：</label><input class="c-wd150" type="text" />
+            <label>风格：</label><input class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
-            <label>客户编号：</label><input class="c-wd150" type="text" />
-            <label>IP地址：</label><input class="c-wd150" type="text" />
+           <label>添加时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
             <label>咨询页面：</label><input class="c-wd150" type="text" />
-            <label>聊天内容：</label><input class="c-wd150" type="text" /><span class="help-inline c-clred">协议类型不能为空</span>
+            <label>网站关键词：</label><input class="c-wd150" type="text" />
+             <label></label>
+              <label></label>
+               <label></label>
+            <button type="button" class="btn btn-primary btn-small">查询</button>
+            <label></label>
+            <button type="button" class="btn btn-primary btn-small">导出</button>
         </div>
-        <div class="f-mbm">
-            <label>部门：</label><select class="c-wd80">
-                <option selected="selected">全部部门</option>
-                <option value="客服部">客服部</option>
-                <option value="留学部">留学部</option>
-                <option value="随时学">随时学</option>
-                <option value="好顾问">好顾问</option>
-            </select>
-            <label>专题：</label><input class="c-wd150" type="text" /><span class="help-inline c-clred">协议类型不能为空</span>
-            <label>关键词：</label><input class="c-wd150" type="text" />
-            <label>交谈条数：</label>
-            <div class="u-subsec">
-                <label><input type="radio" name="1" />小于</label>
-                <label><input type="radio" name="1" />等于</label>
-                <label><input type="radio" name="1" />大于</label>
-            </div>
-            <div class="input-append">
-              	<input class="c-wd30" type="text">
-              	<button class="btn btn-small" type="button">条</button>
-            </div>
-        </div>
+        <div class="m-query-hd">
     </div>
-    <div class="u-hr"></div>
-    <div class="m-query-bd">
-    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" onClick="WdatePicker()" />
-        <button type="button" class="btn btn-primary btn-small">下载</button>
+      
     </div>
+
+ 
 </div>
 
 
@@ -101,13 +71,13 @@
     <tbody>
         <c:forEach var="customer" items="${pageBean.objList}">
         <tr>
-         
-<%--             <td>${customer.id}</td> --%>
-<%--             <td>${customer.id}</td> --%>
-<%--             <td>${customer.id}</td> --%>
-<%--            <td>${customer.id}</td> --%>
-<%--            <td>${customer.id}</td> --%>
-<%--            <td>${customer.id}</td> --%>
+            <td>风格</td>
+            <td>${customer.id}</td>
+            <td>${customer.customerName}</td>
+            <td>${customer.phone}</td>
+            <td>咨询页面</td>
+            <td>${customer.createDate}</td>
+
         </tr>
         </c:forEach>
     </tbody>

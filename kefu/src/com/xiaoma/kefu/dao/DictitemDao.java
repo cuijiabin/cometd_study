@@ -2,6 +2,7 @@ package com.xiaoma.kefu.dao;
 
 import java.util.List;
 
+import com.xiaoma.kefu.model.Dict;
 import com.xiaoma.kefu.model.Dictitem;
 
 
@@ -11,7 +12,7 @@ import com.xiaoma.kefu.model.Dictitem;
  * @time 2015年1月19日上午11:00:46
  *
  */
-public interface DictitemDao {
+public interface DictitemDao extends BaseDao<Dictitem>{
 
 	/**
 	 * 查询所有

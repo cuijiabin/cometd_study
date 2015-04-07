@@ -9,7 +9,7 @@ import com.xiaoma.kefu.model.Customer;
  * @time 2015年4月1日下午4:55:41
  *
  */
-public interface CustomerDao {
+public interface CustomerDao extends BaseDao<Customer>{
     
 	/**
 	 * 获取全部数据
@@ -49,4 +49,7 @@ public interface CustomerDao {
 	 */
 	public List<Customer> getCustomerByConditions(Integer start, Integer offset,
 			String customerName, String phone);
+
+	
+	public Long getMaxCustomerId();
 }
