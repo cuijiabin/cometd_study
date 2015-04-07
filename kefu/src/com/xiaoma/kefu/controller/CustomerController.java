@@ -13,7 +13,6 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.PageBean;
 
-
 /**
  * @author frongji
  * @time 2015年4月2日上午9:54:59
@@ -25,8 +24,6 @@ public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
-	
-	
 	
 	/**
 	 * 查询所有

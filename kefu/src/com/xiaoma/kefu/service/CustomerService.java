@@ -21,34 +21,10 @@ public class CustomerService {
 	@Autowired
 	private CustomerDao customerDaoImpl;
 	
-	
 	/**
-	 * 查询所有
-	 * @param map
-	 * @param pageBean
-	 * @return
+	 * 查询所有、 条件查询
 	 */
-	public PageBean<Customer> getResult(Integer currentPage,Integer pageRecorders){
-			
-			Integer totalCount = customerDaoImpl.getAllCustomerCount();
-			PageBean<Customer> result = new PageBean<Customer>();
-			
-			result.setCurrentPage(currentPage);
-			result.setPageRecorders(pageRecorders);
-			result.setTotalRows(totalCount);
-			
-			Integer start = result.getStartRow();
-			
-		      List<Customer> list =customerDaoImpl.getCustomerOrderById(start,pageRecorders);
-			result.setObjList(list);
-			
-			return result;
-		    }
-	
-	/**
-	 * 条件查询
-	 */
-   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String loginName ,String phone){
+   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String customerName ,String phone){
 	
 	Integer totalCount = customerDaoImpl.getAllCustomerCount();
 	PageBean<Customer> result = new PageBean<Customer>();
@@ -59,8 +35,8 @@ public class CustomerService {
 	
 	Integer start = result.getStartRow();
 	
-//	  List<Customer> list =customerDaoImpl.getCustomerByLoginNameOrPhone(start,pageRecorders,loginName ,phone);
-//	result.setObjList(list);
+	  List<Customer> list =customerDaoImpl.getCustomerByConditions(start,pageRecorders,customerName ,phone);
+	result.setObjList(list);
 	
 	return result;
     }

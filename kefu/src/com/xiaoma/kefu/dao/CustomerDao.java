@@ -38,6 +38,17 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @return
 	 */
 	public Customer getCustomerById(Long id);
+    
+	/**
+	 * 条件查询
+	 * @param start
+	 * @param offset
+	 * @param customerName
+	 * @param phone
+	 * @return
+	 */
+	public List<Customer> getCustomerByConditions(Integer start, Integer offset,
+			String customerName, String phone);
 
 	
 	public Long getMaxCustomerId();
