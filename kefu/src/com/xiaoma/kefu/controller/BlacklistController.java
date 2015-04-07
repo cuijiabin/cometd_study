@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.PageBean;
 
 
 /**
@@ -24,7 +25,7 @@ public class BlacklistController {
 	private BlacklistService blacklistService;
 	
 	/**
-	 * 查询所有
+	 * 查询所有、条件查询
 	 * 
 	 * @param conditions
 	 * @param pageBean
@@ -36,16 +37,16 @@ public class BlacklistController {
 
 		currentPage = (currentPage == null) ? 1 : currentPage;
 		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-//		PageBean<Customer> pageBean = blacklistService.getResultByConditions(currentPage, pageRecorders,
-	//			customerId, userId,description);
+		PageBean<Blacklist> pageBean = blacklistService.getResultByConditions(currentPage, pageRecorders,
+				customerId, userId,description);
 
-//		model.addAttribute("list", pageBean.getObjList());
-//		model.addAttribute("pageBean", pageBean);
+		model.addAttribute("list", pageBean.getObjList());
+		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("customerId", customerId);
-		model.addAttribute("userId", userId);
+		model.addAttribute("description", description);
 		model.addAttribute("userId",userId);
 
-		return "xx/customerList";
+		return "customer/blackList";
 	}
 	
 	/**

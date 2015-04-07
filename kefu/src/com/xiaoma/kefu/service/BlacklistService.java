@@ -1,11 +1,12 @@
 package com.xiaoma.kefu.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
-import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -22,20 +23,20 @@ public class BlacklistService {
 		/**
 		 * 条件查询
 		 */
-	   public PageBean<Blacklist> getResultByConditions(Integer currentPage,Integer geRecorders,
-			Long	customerId,Integer userId,String description){
+	   public PageBean<Blacklist> getResultByConditions(Integer currentPage,Integer pageRecorders,
+			Long customerId,Integer userId,String description){
 		
 		Integer totalCount = blacklistDaoImpl.getAllBlacklistCount();
 		PageBean<Blacklist> result = new PageBean<Blacklist>();
 		
 		result.setCurrentPage(currentPage);
-//		result.setPageRecorders(pageRecorders);
+		result.setPageRecorders(pageRecorders);
 		result.setTotalRows(totalCount);
 		
 		Integer start = result.getStartRow();
 		
-//		  List<Customer> list =blacklistDaoImpl.getCustomerByLoginNameOrPhone(start,pageRecorders,customerId ,userId,description);		
-	//	  result.setObjList(list);
+		  List<Blacklist> list =blacklistDaoImpl.getBlacklistByConditions(start,pageRecorders,customerId ,userId,description);		
+		  result.setObjList(list);
 		
 		return result;
 	    }

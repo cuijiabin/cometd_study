@@ -26,7 +26,7 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	/**
-	 * 查询所有
+	 * 查询所有、条件查询
 	 * 
 	 * @param conditions
 	 * @param pageBean

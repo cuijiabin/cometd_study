@@ -58,7 +58,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 			
 			Session session = getSession();
 			
-			String hql = "from Customer c where 1=1 ";
+			String hql = "from Customer c where 1=1 and c.status<>1";
 			if(StringHelper.isNotEmpty(customerName)){
 				hql += " and c.customerName like '"+"%"+customerName+"%"+"'";
 			}

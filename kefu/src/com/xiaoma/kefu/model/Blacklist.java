@@ -41,7 +41,7 @@ public class Blacklist implements Serializable{
 	private Date endDate;
 	
 	@Column(name = "customerId")
-	private Integer  customerId;
+	private Long  customerId;
 	
 	@Column(name= "description")
 	private String description;
@@ -92,11 +92,13 @@ public class Blacklist implements Serializable{
 		this.endDate = endDate;
 	}
 
-	public Integer getCustomerId() {
+
+
+	public Long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 

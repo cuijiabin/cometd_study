@@ -80,9 +80,7 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			if(customerId!=null){
 				hql += " and b.customerId like '"+"%"+customerId+"%"+"'";
 			}
-			if(userId!=null){
-				hql += " and b.userId like '"+"%"+userId+"%"+"'";
-			}
+			
 			
 			if(StringHelper.isNotEmpty(description)){
 				hql += " and b.description like '"+"%"+description+"%"+"'";
