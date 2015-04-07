@@ -20,19 +20,16 @@ public class WebSocketMIPool {
 	public static void addMessageInbound(WebSocketMI inbound){
 		
 		DialogueUniqueTag uniqueTag = inbound.getUniqueTag();
-		System.out.println("user :进入连接池！");
 		String tag = uniqueTag.getUniqueTag();
+		
 		if(uniqueTag.getType() == DialogueUniqueTag.USER_TYPE){
-			String sendTag = uniqueTag.getSendUniqueTag(tag);
-			DialogueUniqueTag customerTag = uniqueTag.genDialogueUniqueTag(sendTag);
-			customerTag.setUserId(-1);
-			
-			String key = customerTag.getUniqueTag();
-			connections.remove(key);
-			connections.put(sendTag, new WebSocketMI(customerTag));
+			String sendTag = uniqueTag.getSendUniqueTag();
+			WebSocketMI cus = connections.get(sendTag);
+			cus.getUniqueTag().setUserId(uniqueTag.getUserId());
 		}
-		connections.put(uniqueTag.getUniqueTag(), inbound);
-		System.out.println(connections.keySet());
+		
+		//用户进入连接池
+		connections.put(tag, inbound);
 	}
 	
 	/**
@@ -49,8 +46,10 @@ public class WebSocketMIPool {
 	 */
 	public static void removeMessageInbound(WebSocketMI inbound){
 		
-		System.out.println("user : 退出连接！");
-		connections.remove("");
+		DialogueUniqueTag uniqueTag = inbound.getUniqueTag();
+		String tag = uniqueTag.getUniqueTag();
+		
+		connections.remove(tag);
 	}
 	
 	/**
@@ -61,7 +60,7 @@ public class WebSocketMIPool {
 	 */
 	public static void sendMessageToUser(String user,String message){
 		try {
-			System.out.println("send message to user : " + user + " ,message content : " + message);
+			
 			WebSocketMI inbound = connections.get(user);
 			if(inbound != null){
 				inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));

@@ -97,7 +97,8 @@ public class DataBase implements Serializable{
 			iPageIndex=1;
 		}
 		int iStartIdx = (iPageIndex - 1) * iPageSize;
-		String strSQLPage = String.format(strSQL+" limit %1$d, %2$d ", iStartIdx, iPageSize);
+//		String strSQLPage = String.format(strSQL+" limit %1$d, %2$d ", iStartIdx, iPageSize);
+		String strSQLPage = strSQL + " limit " + iStartIdx + "," + iPageSize;
 		log.debug(strSQLPage);
 		DataSet dsDataSet = Query(strSQLPage);
 		dsDataSet.SQLNoPaging = strSQL;
