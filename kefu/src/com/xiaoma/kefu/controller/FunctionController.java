@@ -24,10 +24,11 @@ public class FunctionController {
 	private FunctionService funcService;
 	
 	//查询各个级别的树
+	@SuppressWarnings("static-access")
 	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
-	public String tree(Model model,Integer tid) {
-		if(tid!=null){
-		List list = funcService.findTree(tid);
+	public String tree(Model model,Integer id) {
+		if(id!=null){
+		List list = funcService.findTree(id);
 		JSONArray json = new JSONArray().fromObject(list);
 		System.out.println(json);
 		model.addAttribute("json",json.toString());
