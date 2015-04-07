@@ -195,7 +195,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 			offset = (offset == null)? 20 :offset;
 			
 			Session session = getSession();
-			String hql = "from User u where u.status<>2 and u.deptId ="+deptId+" limit order by id asc";
+			String hql = "from User u where u.status<>2 and u.deptId ="+deptId+" order by u.id asc";
 			Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
 			
 			return (List<User>) query.list();
