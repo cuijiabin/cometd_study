@@ -66,10 +66,6 @@ public interface UserDao extends BaseDao<User>{
 	public boolean deleteUserById(Integer id);
 
 	public Integer checkUser(User user);
-    //查询出客服组长
-	public  List<User> getLeader();
-    //查询出客服经理
-	public abstract List<User> getManager();
 
 	//查询部门里的员工
 	public abstract Integer getDeptUserCount(Integer deptId);

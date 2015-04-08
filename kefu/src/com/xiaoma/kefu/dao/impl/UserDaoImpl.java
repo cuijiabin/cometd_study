@@ -201,16 +201,4 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 			return (List<User>) query.list();
 		}
 
-		@Override
-		public List<User> getLeader() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public List<User> getManager() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
 }

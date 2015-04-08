@@ -89,7 +89,7 @@ public class UserController {
 //			logger.debug("login failed!username or password is incorrect.");
 //			return "/views/login";
 //		}
-		return "customer/left";
+		return "demo";
 	}
 
 	/**
@@ -112,8 +112,7 @@ public class UserController {
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("phone", phone);
 		model.addAttribute("userName", userName);
-        System.out.println(pageBean.getObjList());
-		return "/views/admin/userList";
+		return "/set/govern/userList";
       }catch(Exception e){
 			model.addAttribute("error","对不起出错了");
 			return "/views/error500";
@@ -121,23 +120,32 @@ public class UserController {
 	}
 
 	/**
-	 * 添加
+	 * 跳转到添加页面
 	 */
 
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
+	public String changadd(Model model, User user) {
+		try {
+			List<Role> rlist= (List<Role>) roleService.findRole();
+			List<Department> dlist= deptService.findDept();
+			model.addAttribute("deptList",dlist);
+			model.addAttribute("roleList",rlist);
+		} catch (Exception e) {
+			
+		}
+
+		return "/set/govern/addUser";
+	}
+	/**
+	 * 添加到数据库
+	 */
+
+	@RequestMapping(value = "save.action", method = RequestMethod.GET)
 	public String addUser(Model model, User user) {
-            User use =new User();
-            use.setLoginName("xn102345");
-            use.setPassword("666666");
-            use.setUserName("蒋钦");
-            use.setCardName("蒋老师");
-            use.setDeptId(1);
-            use.setRoleId(1);
-            use.setCreateDate(new Date());
 		try {
 			// 对用户密码进行加密！
 			String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
-			use.setPassword(password);
+			user.setPassword(password);
             
 			boolean isSuccess = userService.createNewUser(user
 					);
@@ -150,7 +158,7 @@ public class UserController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 	/**
@@ -193,9 +201,12 @@ public class UserController {
 	public String userDetail(Model model, Integer id) {
        try{
 		User user = userService.getUserById(id);
-		JSONObject jsonObject = JSONObject.fromObject(user);
-		model.addAttribute("result", jsonObject.toString());
-		return "views/resultjson";
+		List<Role> rlist= (List<Role>) roleService.findRole();
+		List<Department> dlist= deptService.findDept();
+		model.addAttribute("deptList",dlist);
+		model.addAttribute("roleList",rlist);
+		model.addAttribute("user", user);
+		return "/set/govern/addUser";
        }catch(Exception e){
 			model.addAttribute("error","对不起出错了");
 			return "/views/error500";
@@ -222,7 +233,7 @@ public class UserController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 
 	}
     
@@ -248,7 +259,7 @@ public class UserController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 	/**
@@ -276,7 +287,7 @@ public class UserController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 	
@@ -327,7 +338,7 @@ public class UserController {
 			model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 
 	}
 
@@ -349,9 +360,9 @@ public class UserController {
 	public String queryByCheck(Model model, User user) throws UnsupportedEncodingException {
 		
 		try {
-			if(user == null || (StringHelper.isEmpty(user.getLoginName()) && StringHelper.isEmpty(user.getPhone()))){
+			if(user == null || (StringHelper.isEmpty(user.getLoginName()))){
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
-				return "/views/resultjson";
+				return "resultjson";
 			}
 			Integer count = userService.checkUser(user);
 			if(count!=null && count==0){
@@ -363,7 +374,7 @@ public class UserController {
 			ex.printStackTrace();
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 	@RequestMapping(value = "checkMsg.action", method = RequestMethod.GET)
@@ -371,14 +382,14 @@ public class UserController {
 		try {
 			if(StringHelper.isEmpty(phone) || StringHelper.isEmpty(msg)){
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
-				return "/views/resultjson";
+				return "resultjson";
 			}
 			model.addAttribute("result", Ajax.toJson(0, "手机号码校验成功！"));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 }

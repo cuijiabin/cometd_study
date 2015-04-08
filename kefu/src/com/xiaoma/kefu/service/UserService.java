@@ -2,6 +2,8 @@ package com.xiaoma.kefu.service;
 
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -83,19 +85,14 @@ public Integer checkUser (User user){
 	
 	}
 
-	/**
-	 * 查询出team leader
-	 * @return
-	 */
-		public List<User> findLeader() {
-			
-			return userDaoImpl.getLeader();
-		}
 
 		/**
 		 * 添加
+		 * @throws ParseException 
 		 */
-       public boolean createNewUser(User user){
+       public boolean createNewUser(User user) throws ParseException{
+    	  user.setOnLineStatus(1);
+    	  user.setStatus(1);
           return userDaoImpl.createNewUser(user);
        }
       
@@ -138,32 +135,28 @@ public Integer checkUser (User user){
 		}
 		return flag;
 	}
-       /**
-        * 查询出客服经理
-        * @return
-        */
-		public List<User> findManager() {
-			
-			return userDaoImpl.getManager();
-		}
+//员工离职
 	public boolean leaveUser(String ids) {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	String time = sdf.format(new Date());
 		if(ids.length()>2){
 			String[] array = ids.split(",");
 			boolean flg=false;
 			for (String str : array) {
 			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(str));
 			       leup.setStatus(2);
-			       leup.setEndDate(new Date());
+			       leup.setEndDate(time);
 			       flg = userDaoImpl.updateUser(leup);
 			}
 			return flg;
 		}else{
 			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(ids));
 		       leup.setStatus(2);
-		       leup.setEndDate(new Date());
+		       leup.setEndDate(time);
 		        return userDaoImpl.updateUser(leup);
 		}
 	}
+	//员工转换部门
 	public boolean tradeUser(String ids, Integer deptId) {
 		if(ids.length()>2){
 			String[] array = ids.split(",");
@@ -180,6 +173,7 @@ public Integer checkUser (User user){
 		        return userDaoImpl.updateUser(leup);
 		}
 	}
+	//通过部门查询员工
 	public PageBean<User> getResultDept(Integer currentPage, Integer pageRecorders, Integer deptId) {
 			
 		Integer totalCount = userDaoImpl.getDeptUserCount(deptId);

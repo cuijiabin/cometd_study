@@ -51,7 +51,7 @@ public class DepartmentController {
 		model.addAttribute("pageBean", pageBean);
 		System.out.println(pageBean.getObjList());
         System.out.println(pageBean);
-		return "/views/admin/deptList";
+		return "/set/govern/deptList";
      }catch(Exception e){
 			model.addAttribute("error","对不起出错了");
 			return "/views/error500";
@@ -100,7 +100,7 @@ public class DepartmentController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	/**
 	 * 检查用部门是否存在
@@ -119,7 +119,7 @@ public class DepartmentController {
 			ex.printStackTrace();
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
-		return "/views/resultjson";
+		return "resultjson";
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class DepartmentController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 
 	}
 	
@@ -185,7 +185,7 @@ public class DepartmentController {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 }

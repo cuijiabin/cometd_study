@@ -47,13 +47,23 @@ public class RoleController {
 		model.addAttribute("pageBean", pageBean);
 		System.out.println(pageBean.getObjList());
         System.out.println(pageBean);
-		return "/views/admin/roleList";
+		return "/set/govern/roleList";
      }catch(Exception e){
 			model.addAttribute("error","对不起出错了");
 			return "/views/error500";
 		}
 	}
-	
+	/**
+	 * 跳转到页面
+	 * @param model
+	 * @param role
+	 * @return
+	 */
+	@RequestMapping(value = "addRole.action", method = RequestMethod.GET)
+	public String addRole(Model model, Role role) {
+
+		return "/govern/addRole";
+	}
 	/**
 	 * 添加
 	 */
@@ -71,7 +81,7 @@ public class RoleController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	/**
 	 * 检查用户名是否存在
@@ -90,7 +100,7 @@ public class RoleController {
 			ex.printStackTrace();
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
-		return "/views/resultjson";
+		return "resultjson";
 	}
 
 	/**
@@ -104,7 +114,7 @@ public class RoleController {
 		JSONObject jsonObject = JSONObject.fromObject(role);
 		model.addAttribute("result", jsonObject.toString());
 
-		return "views/resultjson";
+		return "resultjson";
 	}
 	
 	/**
@@ -132,7 +142,7 @@ public class RoleController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 
 	}
 	
@@ -156,7 +166,7 @@ public class RoleController {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 	
 }

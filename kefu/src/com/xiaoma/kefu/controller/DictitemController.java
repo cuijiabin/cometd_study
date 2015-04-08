@@ -82,7 +82,7 @@ public class DictitemController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class DictitemController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "/views/resultjson";
+		return "resultjson";
 
 	}
 
@@ -124,7 +124,7 @@ public class DictitemController {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
 		
-		return "/views/resultjson";
+		return "resultjson";
 	}
 
 }
