@@ -2,11 +2,15 @@ package com.xiaoma.kefu.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import redis.clients.jedis.Jedis;
+
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -20,6 +24,8 @@ public class CustomerService {
    
 	@Autowired
 	private CustomerDao customerDaoImpl;
+	
+	private Jedis jedis = JedisDao.getJedis();
 	
 	/**
 	 * 查询所有、 条件查询
@@ -74,5 +80,16 @@ public class CustomerService {
 	 */
 		public Customer getCustomerById(long id){
 			return customerDaoImpl.getCustomerById(id);
+		}
+		
+		public Long getMaxCustomerId(){
+			String maxCustomerId = jedis.get("MaxCustomerId");
+			
+			//如果缓存中不空，直接取
+			if(StringUtils.isNotBlank(maxCustomerId)){
+				return Long.valueOf(maxCustomerId);
+			}
+			
+			return customerDaoImpl.getMaxCustomerId();
 		}
 }

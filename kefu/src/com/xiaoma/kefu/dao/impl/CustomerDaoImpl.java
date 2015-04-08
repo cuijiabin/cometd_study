@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.util.StringHelper;
 
 /**
@@ -77,7 +78,10 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 	public boolean createNewCustomer(Customer customer){
 		
 		try {
-			 add(customer);
+			Long id = (Long) add(customer);
+			
+			//更新redis
+			JedisDao.getJedis().set("MaxCustomerId", id.toString());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
