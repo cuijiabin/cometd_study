@@ -11,6 +11,9 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 </head>
 
 <body>
@@ -51,9 +54,6 @@
 <div id="table_data">
 	<jsp:include page="loginLogList.jsp"></jsp:include>
 </div>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
 
 function find(currentPage){

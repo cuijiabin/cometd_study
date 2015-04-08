@@ -11,7 +11,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.sun.xml.internal.ws.message.StringHeader;
 import com.xiaoma.kefu.dao.LoginLogDao;
 import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.util.PageBean;
@@ -21,7 +20,7 @@ import com.xiaoma.kefu.util.StringHelper;
 public class LoginLogDaoImpl extends BaseDaoImpl<LoginLog> implements
 		LoginLogDao {
 	private static Logger logger = Logger.getLogger(LoginLogDaoImpl.class);
-
+	
 	public void findByCondition(Map<String, String> conditions,
 			PageBean<LoginLog> pageBean) {
 		List<String> relation = new ArrayList<String>();

@@ -51,77 +51,19 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
-if(!Array.prototype.map){
-	Array.prototype.map = function(fn,scope) {
-  		var result = [],ri = 0;
-  		for (var i = 0,n = this.length; i < n; i++){
-			if(i in this){
-	  			result[ri++]  = fn.call(scope ,this[i],i,this);
-			}
-  		}
-		return result;
-	};
+$(function(){
+	$("#rightMain").attr("src", "welcome.html");
+})
+function _MP(menuid,targetUrl){
+	$("#rightMain").attr("src", targetUrl);
+	$(".submenu").removeClass("on");
+	$("#_MP"+menuid).addClass("on");
 }
-var getWindowSize = function(){
-	return ["Height","Width"].map(function(name){
-  		return window["inner"+name] ||
-		document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
-	});
-}
-window.onload = function (){
-	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
-	  document.body.onresize = resize;
-	} else { 
-	  window.onresize = resize;
-	}
-	function resize() {
-		wSize();
-		return false;
-	}
-}
-function wSize(){
-	//这是一字符串
-	var str=getWindowSize();
-	var strs= new Array(); //定义一数组
-	strs=str.toString().split(","); //字符分割
-	var heights = strs[0]-150,
-		Body = $('body');
-	$('#rightMain').height(heights-2);
-	$('#rightMain').css("margin-bottom","-6px");
-	//iframe.height = strs[0]-46;
-	if(strs[1]<980){
-		$('.g-head').css('width',980+'px');
-		$('.g-bd').css('width',980+'px');
-		Body.removeClass('g-body');
-	}else{
-		$('.g-head').css('width','auto');
-		$('.g-bd').css('width','auto');
-		Body.addClass('g-body');
-	}
-	var openClose = $("#rightMain").height()+25;
-	$("#openClose").height(openClose+30);
-	$("#leftMain").height(openClose-20);
-	$("#leftTreeBody").height(openClose);
-}
-wSize();
-//左侧开关
-$("#openClose").click(function(){
-	if($(this).data('clicknum')==1) {
-		$("html").removeClass("on");
-		$(".g-sd").removeClass("left_menu_on");
-		$(this).removeClass("close");
-		$(this).data('clicknum', 0);
-	} else {
-		$(".g-sd").addClass("left_menu_on");
-		$(this).addClass("close");
-		$("html").addClass("on");
-		$(this).data('clicknum', 1);
-	}
-	return false;
-});
 </script>
 </body>
 </html>

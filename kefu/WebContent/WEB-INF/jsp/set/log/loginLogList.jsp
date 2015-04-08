@@ -2,10 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
-<script type="text/javascript" src="/js/jquery.min.js"></script>
+<!-- 表格有边框 -->
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
-<!-- 表格有边框 -->
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>

@@ -3,6 +3,7 @@ package com.xiaoma.kefu.controller;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +40,7 @@ public class LogController {
 	 */
 
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions,
+	public String queryAll(MapEntity conditions,Model model,
 			@ModelAttribute("pageBean") PageBean<LoginLog> pageBean) {
 		try {
 			loginLogService.getResult(conditions.getMap(), pageBean);
@@ -49,7 +50,9 @@ public class LogController {
 			else
 				return "/set/log/loginLogList";
 		} catch (Exception e) {
-			return "/error500";
+			logger.error(e.getMessage());
+			model.addAttribute("message", "登录日志查询失败，请刷新后重试!");
+			return "/error";
 		}
 	}
 
