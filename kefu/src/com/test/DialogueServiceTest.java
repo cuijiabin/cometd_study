@@ -1,6 +1,9 @@
 package com.test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -48,7 +51,7 @@ public class DialogueServiceTest {
 		dialogueService.restore(list);
 	}
 	
-	@Test
+//	@Test
 	public void testDelete(){
 		List<Dialogue> list = new ArrayList<Dialogue>();
 		for(int i=0;i<5;i++){
@@ -57,6 +60,27 @@ public class DialogueServiceTest {
 			list.add(model);
 		}
 		dialogueService.delete(list);
+	}
+	
+	@Test
+	public void testExp() throws Exception{
+		dialogueService.writeExcelByTime();
+	}
+	
+	public static void main(String[] args) throws Exception{
+//		testExp();
+		System.out.println(getFileName());
+	}
+	
+	private static String getFileName() {
+		Calendar c = Calendar.getInstance();  
+        Date date = new Date();  
+        c.setTime(date);  
+        int day = c.get(Calendar.DATE);  
+        c.set(Calendar.DATE, day - 1);  
+        String dayBefore = new SimpleDateFormat("yyyy-MM-dd").format(c  
+                .getTime());  
+        return dayBefore;  
 	}
 	
 	

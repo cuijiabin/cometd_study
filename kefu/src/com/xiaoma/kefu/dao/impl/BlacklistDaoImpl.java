@@ -40,7 +40,7 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
      public Integer getAllBlacklistCount() {
 		
 		Session session = getSession();
-		String hql = "select count(1) from Blacklist  ";
+		String hql = "select count(1) from black_list  ";
 		Query query = session.createSQLQuery(hql);
 		
 		return ((Number)query.uniqueResult()).intValue();

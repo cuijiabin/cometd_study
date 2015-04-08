@@ -25,6 +25,7 @@ import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
+import com.xiaoma.kefu.service.FunctionService;
 import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.Ajax;
@@ -49,6 +50,9 @@ public class UserController {
 	
 	@Autowired
 	private DepartmentService deptService;
+	
+	@Autowired
+	private FunctionService funcService;
 
 	/**
 	 * User login
@@ -60,18 +64,8 @@ public class UserController {
 	@RequestMapping(value = "login.action", method = RequestMethod.GET)
 	public String login(HttpSession session, String name, String password,
 			Model model) {
-//		Assert.notNull(name, "userName can not be null!");
-//		Assert.notNull(password, "password can not be null!");
-//		model.addAttribute("msg", "登录名或者密码为空!");
-//		User user = userService.login(name, password);
-//		model.addAttribute("msg", "登录名或者密码不正确!");
-//		if (user != null) {
-//			session.setAttribute("currentUser", user);
-//			return "/views/welcome";
-//		} else {
-//			logger.debug("login failed!username or password is incorrect.");
-//			return "/views/login";
-//		}
+        List list = funcService.findFuncOne();
+        model.addAttribute("topList", list);
 		return "index";
 	}
 	/**
@@ -95,7 +89,7 @@ public class UserController {
 //			logger.debug("login failed!username or password is incorrect.");
 //			return "/views/login";
 //		}
-		return "demo";
+		return "customer/left";
 	}
 
 	/**

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
@@ -22,23 +22,11 @@
 
 <div class="m-nav">
     <ul>
-        <li id="_M1" class="nLi on">
-            <h3><a href="javascript:_M(1,'/iframe3.html')">首页</a></h3>
+        <c:forEach items="${topList}" var="top" varStatus="i">
+        <li id="_M${i.index+1}" class="nLi on">
+            <h3><a href="javascript:_M(${i.index+1},'${top.url}')">${top.name}</a></h3>
         </li>
-        <li id="_M2" class="nLi">
-            <h3><a href="javascript:_M(2,'/iframe7.html')">产品价格</a></h3>
-        </li>
-        <li id="_M3" class="nLi">
-            <h3><a href="javascript:_M(3,'')">产品特性</a></h3>
-        </li>
-        <li id="_M4" class="nLi">
-            <h3><a href="javascript:_M(4,'')">客户案例</a></h3>
-        </li>
-        <li id="_M5" class="nLi">
-            <h3><a href="javascript:_M(5,'">文档中心</a></h3>
-        </li>
-        <li id="_M6" class="nLi">
-            <h3><a href="javascript:_M(6,'')">关于我们</a></h3>
-        </li>
+
+       </c:forEach>
     </ul>
 </div>

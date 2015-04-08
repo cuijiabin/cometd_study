@@ -32,5 +32,8 @@ public class CacheName {
 	public static final String REDISPASSWORD="REDISPASSWORD";
 	public static final String REDISTIMEOUT="REDISTIMEOUT";
 	
+	//保存的文件
+	public static final String FILEROOT="FILEROOT";
+	
 	
 }

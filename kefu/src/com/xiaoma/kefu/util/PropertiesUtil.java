@@ -81,6 +81,9 @@ public class PropertiesUtil {
 			CacheMan.addCache(CacheName.REDISPORT,p.getProperty("redis.port"));
 			CacheMan.addCache(CacheName.REDISPASSWORD,p.getProperty("redis.password"));
 			CacheMan.addCache(CacheName.REDISTIMEOUT,p.getProperty("redis.timeout"));
+			
+			//保存的文件的顶级目录
+			CacheMan.addCache(CacheName.FILEROOT,p.getProperty("file.root"));
 		} catch (Exception e) {
 			Log.error(e.getMessage(), e);
 			e.printStackTrace();
