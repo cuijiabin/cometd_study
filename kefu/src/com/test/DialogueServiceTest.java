@@ -1,10 +1,8 @@
 package com.test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.service.DialogueService;
 
 /**
@@ -31,35 +28,35 @@ public class DialogueServiceTest {
 	
 //	@Test
 	public void testDelete4Logic(){
-		List<Dialogue> list = new ArrayList<Dialogue>();
-		for(int i=0;i<5;i++){
-			Dialogue model = new Dialogue();
-			model.setId((long) (i+1));
-			list.add(model);
-		}
-		dialogueService.delete4Logic(list);
+//		List<Dialogue> list = new ArrayList<Dialogue>();
+//		for(int i=0;i<5;i++){
+//			Dialogue model = new Dialogue();
+//			model.setId((long) (i+1));
+//			list.add(model);
+//		}
+		dialogueService.delete4Logic("1,2,4");
 	}
 	
 //	@Test
 	public void testRestore(){
-		List<Dialogue> list = new ArrayList<Dialogue>();
-		for(int i=0;i<5;i++){
-			Dialogue model = new Dialogue();
-			model.setId((long) (i+1));
-			list.add(model);
-		}
-		dialogueService.restore(list);
+//		List<Dialogue> list = new ArrayList<Dialogue>();
+//		for(int i=0;i<5;i++){
+//			Dialogue model = new Dialogue();
+//			model.setId((long) (i+1));
+//			list.add(model);
+//		}
+		dialogueService.restore("1,2,4");
 	}
 	
 //	@Test
 	public void testDelete(){
-		List<Dialogue> list = new ArrayList<Dialogue>();
-		for(int i=0;i<5;i++){
-			Dialogue model = new Dialogue();
-			model.setId((long) (i+3));
-			list.add(model);
-		}
-		dialogueService.delete(list);
+//		List<Dialogue> list = new ArrayList<Dialogue>();
+//		for(int i=0;i<5;i++){
+//			Dialogue model = new Dialogue();
+//			model.setId((long) (i+3));
+//			list.add(model);
+//		}
+		dialogueService.delete("1,2,4");
 	}
 	
 	@Test

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -48,12 +49,16 @@ public class DialogueService {
 	/**
 	 * 逻辑删除 对话信息
 	* @Description: TODO
-	* @param list
+	* @param ids	1,2,3
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void delete4Logic(List<Dialogue> list){
-		for(Dialogue dialogue : list){
+	public void delete4Logic(String ids){
+		if(StringUtils.isBlank(ids)) return;
+		String[] temp = ids.split(",");
+		for(String str : temp){
+			Dialogue dialogue = new Dialogue();
+			dialogue.setId(Long.valueOf(str));
 			dialogueDaoImpl.update2Del(dialogue);
 		}
 	}
@@ -61,12 +66,16 @@ public class DialogueService {
 	/**
 	 * 物理删除	对话信息
 	* @Description: TODO
-	* @param list
+	* @param ids	1,2,3
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void delete(List<Dialogue> list){
-		for(Dialogue dialogue : list){
+	public void delete(String ids){
+		if(StringUtils.isBlank(ids)) return;
+		String[] temp = ids.split(",");
+		for(String str : temp){
+			Dialogue dialogue = new Dialogue();
+			dialogue.setId(Long.valueOf(str));
 			dialogueDaoImpl.delete(dialogue);
 		}
 	}
@@ -74,12 +83,16 @@ public class DialogueService {
 	/**
 	 * 回收站信息还原
 	* @Description: TODO
-	* @param list
+	* @param ids	1,2,3
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void restore(List<Dialogue> list){
-		for(Dialogue dialogue : list){
+	public void restore(String ids){
+		if(StringUtils.isBlank(ids)) return;
+		String[] temp = ids.split(",");
+		for(String str : temp){
+			Dialogue dialogue = new Dialogue();
+			dialogue.setId(Long.valueOf(str));
 			dialogueDaoImpl.update2Restore(dialogue);
 		}
 	}

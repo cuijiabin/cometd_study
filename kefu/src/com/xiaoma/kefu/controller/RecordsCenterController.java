@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,6 +24,7 @@ import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.service.CustomerService;
@@ -289,11 +293,12 @@ public class RecordsCenterController {
 	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
 	* @Description: TODO
 	* @param dialogueId	对话id
+	* @param isShowTel	是否显示显示电话号码  1是 0否
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "queryTalkList.action", method = RequestMethod.GET)
-	public void queryTalkList(Long dialogueId){
+	public void queryTalkList(Long dialogueId,Integer isShowTel){
 		//获取对话信息
 		Dialogue dia = dialogueService.findById(dialogueId);
 		//获取聊天记录列表
@@ -309,11 +314,12 @@ public class RecordsCenterController {
 	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
 	* @Description: TODO
 	* @param dialogueId	对话id
+	* @param isShowTel	是否显示显示电话号码  1是 0否
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "queryTalkDelList.action", method = RequestMethod.GET)
-	public void queryTalkDelList(Long dialogueId){
+	public void queryTalkDelList(Long dialogueId,Integer isShowTel){
 		//获取对话信息
 		Dialogue dia = dialogueService.findById(dialogueId);
 		//获取聊天记录列表
@@ -332,25 +338,27 @@ public class RecordsCenterController {
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "queryTalkDetail.action", method = RequestMethod.GET)
-	public void queryTalkDetail(Long dialogueId){
+	public void queryTalkDetail(Long dialogueId,Model model){
 		//获取对话信息
 		Dialogue dia = dialogueService.findById(dialogueId);
 		//获取用户名称
 		Customer cus = customerService.getCustomerById(dia.getCustomerId());
 		//格式化后返回?
+		model.addAttribute("cus", cus);
 	}
 	
 	/**
 	 * 对话信息的聊天内容
 	* @Description: TODO
 	* @param dialogueId	对话id
+	* @param isShowTel	是否显示显示电话号码  1是 0否
 	* @param iPageIndex	当前页码
 	* @param iPageSize	每页显示条数
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "queryTalkContent.action", method = RequestMethod.GET)
-	public void queryTalkContent(Long dialogueId,int iPageIndex,int iPageSize){
+	public void queryTalkContent(Long dialogueId,Integer isShowTel,int iPageIndex,int iPageSize){
 		iPageIndex = 1;//test
 		iPageSize = 10;//test
 		String sql = " SELECT dd.id, dd.dialogueId, dd.dialogueType,dd.customerId, "
@@ -377,6 +385,9 @@ public class RecordsCenterController {
 						+ "<br> &ensp;&ensp;&ensp;&ensp;"
 						+ ds.getRow(i).getString("content");
 			}
+			if(isShowTel!=null && isShowTel!=1){
+				content = replaceTel(content);
+			}
 			dd.setContent(content);
 			list.add(dd);
 			
@@ -387,6 +398,111 @@ public class RecordsCenterController {
 		}
 	}
 	
+	/**
+	 * 留言记录 查询
+	* @Description: TODO
+	* @param beginDate	开始日期
+	* @param endDate	结束日期
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	@RequestMapping(value = "queryMessage.action", method = RequestMethod.GET)
+	public void queryMessage(String beginDate,String endDate){
+		StringBuilder condition = new StringBuilder();
+		if(beginDate!=null){
+			condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
+		}
+		if(endDate!=null){
+			condition.append(" and t1.createDate <= '" + endDate + " 23:59:59'");
+		}
+		
+		String sql = " select t1.id,IFNULL(t2.customerName,t1.customerId) customerId "
+				+ " ,t1.ipInfo,t1.consultPage,t1.keywords,t1.createDate  "
+//				+ " ,DATE_FORMAT(t1.createDate,'%Y-%m-%d %H:%i') createDate "
+				+ " from message_records t1 "
+				+ " inner join customer t2 on t1.customerId = t2.id "
+				+ " where t1.isDel = 0 "
+				+ condition.toString();
+		DataSet ds = DataBase.Query(sql);
+		List<MessageRecords> list = new ArrayList<MessageRecords>((int) ds.RowCount);
+		for(int i=0;i<ds.RowCount;i++){
+			MessageRecords mr = new MessageRecords();
+			mr.setId(ds.getRow(i).getInt("id"));
+			mr.setCustomerName(ds.getRow(i).getString("customerId"));
+			mr.setIpInfo(ds.getRow(i).getString("ipInfo"));
+			mr.setConsultPage(ds.getRow(i).getString("consultPage"));
+			mr.setKeywords(ds.getRow(i).getString("keywords"));
+			mr.setCreateDate(ds.getRow(i).getDate("createDate"));
+			list.add(mr);
+		}
+		//结果输出
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i).getIpInfo());
+		}
+	}
+	
+	/**
+	 * 留言记录 查询(回收站)
+	* @Description: TODO
+	* @param beginDate	开始日期
+	* @param endDate	结束日期
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	@RequestMapping(value = "queryMessageDel.action", method = RequestMethod.GET)
+	public void queryMessageDel(String beginDate,String endDate){
+		StringBuilder condition = new StringBuilder();
+		if(beginDate!=null){
+			condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
+		}
+		if(endDate!=null){
+			condition.append(" and t1.createDate <= '" + endDate + " 23:59:59'");
+		}
+		
+		String sql = " select t1.id,IFNULL(t2.customerName,t1.customerId) customerId "
+				+ " ,t1.ipInfo,t1.consultPage,t1.keywords,t1.createDate  "
+//				+ " ,DATE_FORMAT(t1.createDate,'%Y-%m-%d %H:%i') createDate "
+				+ " from message_records t1 "
+				+ " inner join customer t2 on t1.customerId = t2.id "
+				+ " where t1.isDel = 1 "
+				+ condition.toString();
+		DataSet ds = DataBase.Query(sql);
+		List<MessageRecords> list = new ArrayList<MessageRecords>((int) ds.RowCount);
+		for(int i=0;i<ds.RowCount;i++){
+			MessageRecords mr = new MessageRecords();
+			mr.setId(ds.getRow(i).getInt("id"));
+			mr.setCustomerName(ds.getRow(i).getString("customerId"));
+			mr.setIpInfo(ds.getRow(i).getString("ipInfo"));
+			mr.setConsultPage(ds.getRow(i).getString("consultPage"));
+			mr.setKeywords(ds.getRow(i).getString("keywords"));
+			mr.setCreateDate(ds.getRow(i).getDate("createDate"));
+			list.add(mr);
+		}
+		//结果输出
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+		}
+	}
+	
+	
+	
+	/**
+	 * 替换聊天内容中的电话号码为*
+	* @Description: TODO
+	* @param content
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	private String replaceTel(String content) {
+		String regex = "(?<!\\d)(?:(?:1[3578]\\d{9})|(?:861[3578]\\d{9}))(?!\\d)";
+		Matcher matcher = Pattern.compile(regex).matcher(content); 
+		while (matcher.find()) {
+			content = content.replaceAll(matcher.group(), "*");
+	    }  
+		return content;
+	}
+
 	/**
 	 * 导出对话信息
 	* @Description: TODO
