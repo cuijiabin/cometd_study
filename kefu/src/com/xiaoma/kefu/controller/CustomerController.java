@@ -33,18 +33,19 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(Model model, String customerName, String phone,
+	public String queryAll(Model model, String customerName, String phone,Long customerId,
 			Integer currentPage, Integer pageRecorders) {
 
 		currentPage = (currentPage == null) ? 1 : currentPage;
 		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
 		PageBean<Customer> pageBean = customerService.getResultNameOrPhone(currentPage, pageRecorders,
-				customerName, phone);
+				customerName, phone,customerId);
 
 		model.addAttribute("list", pageBean.getObjList());
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("customerName", customerName);
 		model.addAttribute("phone", phone);
+		model.addAttribute("customerId", customerId);
 
 		return "customer/customerList";
 	}
@@ -80,7 +81,7 @@ public class CustomerController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "iews/resultjson";
+		return "resultjson";
 
 	}
 	
@@ -95,8 +96,8 @@ public class CustomerController {
 		try {
 			
 			Customer toUpdate = customerService.getCustomerById(customer.getId());
-			toUpdate.setPhone(customer.getPhone());
-			toUpdate.setEmail(customer.getEmail());
+			toUpdate.setPhone(customer.getCustomerName());
+			
 			
 			boolean isSuccess = customerService.updateCustomer(toUpdate);
 

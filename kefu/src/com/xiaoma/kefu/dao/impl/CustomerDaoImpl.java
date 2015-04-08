@@ -51,7 +51,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 		
 		@SuppressWarnings("unchecked")
 		@Override	
-	    public List<Customer> getCustomerByConditions(Integer start, Integer offset ,String customerName,String phone) {
+	    public List<Customer> getCustomerByConditions(Integer start, Integer offset ,String customerName,String phone,Long customerId) {
 			
 			//参数检查
 			start = (start == null)? 0 :start;
@@ -60,12 +60,17 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 			Session session = getSession();
 			
 			String hql = "from Customer c where 1=1 and c.status<>1";
+			if(customerId !=null)
+			{
+				hql += " and c.id ="+customerId;
+			}
 			if(StringHelper.isNotEmpty(customerName)){
-				hql += " and c.customerName like '"+"%"+customerName+"%"+"'";
+				hql += " and c.customerName like ' "+"%"+customerName+"%"+"'";// "'"连接的是'
 			}
 			if(StringHelper.isNotEmpty(phone)){
 				hql += " and c.phone like '"+"%"+phone+"%"+"'";
 			}
+			
 			Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
 			return (List<Customer>) query.list();
 		}

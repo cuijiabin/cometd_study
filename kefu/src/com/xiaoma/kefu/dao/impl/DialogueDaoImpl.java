@@ -9,7 +9,7 @@ import com.xiaoma.kefu.model.Dialogue;
 
 /**
  * *********************************
-* @Description: 聊天记录结果字段配置	daoImpl
+* @Description: 对话信息	daoImpl
 * @author: wangxingfei
 * @createdAt: 2015年4月3日上午10:02:34
 **********************************

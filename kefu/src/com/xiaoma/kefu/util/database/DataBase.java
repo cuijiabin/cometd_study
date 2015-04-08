@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -15,6 +16,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Component;
+
+import com.xiaoma.kefu.util.PageBean;
 
 /**
  * 执行原生sql工具类
@@ -251,6 +254,21 @@ public class DataBase implements Serializable{
 		}
 
 		return ds;
+	}
+	
+	/**
+	 * 分页查询	自动设置 totalRows , objList需手动set
+	* @Description: TODO
+	* @param sql
+	* @param pageBean
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	public static <T> DataSet Query(String sql, PageBean<T> pageBean) {
+		String total = getSingleResult("select count(1) from ( " + sql + ") as total_aabbcc");
+		pageBean.setTotalRows(Integer.valueOf(total));
+		return Query(sql,pageBean.getCurrentPage(),pageBean.getPageRecorders());
 	}
 
 }

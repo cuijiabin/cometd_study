@@ -48,7 +48,7 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @return
 	 */
 	public List<Customer> getCustomerByConditions(Integer start, Integer offset,
-			String customerName, String phone);
+			String customerName, String phone ,Long customerId);
 
 	
 	public Long getMaxCustomerId();
