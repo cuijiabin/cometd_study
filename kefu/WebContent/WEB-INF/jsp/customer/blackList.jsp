@@ -29,15 +29,14 @@
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
-           
-            <label>客户编号：</label><input class="c-wd150" type="text" />
-            <label>添加工号：</label><input class="c-wd150" type="text" />
-            <label>组织原因：</label><input class="c-wd150" type="text" />
-               <button type="button" class="btn btn-primary btn-small">查询</button>
+            <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" />
+            <label>添加工号：</label><input  class="c-wd150" type="text" />
+            <label>阻止原因：</label><input id="customerDes" name="customerDes" value="${description}" class="c-wd150" type="text" />
+               <button type="button" class="btn btn-primary btn-small" onclick="page()">查询</button>
         </div>
         <div class="f-mbm">
          
-        <button type="button" class="btn btn-primary btn-small">添加黑名单</button>
+        <button type="button" class="btn btn-primary btn-small" onclick="add()">添加黑名单</button>
             <label></label>
             <button type="button" class="btn btn-primary btn-small">删除</button>
         </div>
@@ -56,7 +55,7 @@
     <thead>
         <tr>
          
-            
+            <td></td>
             <td>客户编码</td>
             <td>IP地址</td>
             <td>地理位置</td>
@@ -77,6 +76,7 @@
             <td>${blacklist.endDate}</td>
            <td>添加工号</td>
            <td>${blacklist.description}</td>
+           <td>编辑</td>
         </tr>
         </c:forEach>
     </tbody>
@@ -90,9 +90,31 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
-//$('.btn-group .btn').click(function(){
-//	$(this).addClass("active").siblings().removeClass("active");
-//})
+
+/*
+ * 条件查询
+ */
+function page(currentPage, pageRecorders) {
+		pageRecorders = (pageRecorders == null) ? "${pageBean.pageRecorders}"
+				: pageRecorders;
+		currentPage = (currentPage == null) ? "${pageBean.currentPage}"
+				: currentPage;
+
+		window.location.href = '/blacklist/find.action?currentPage=' + currentPage
+				+ '&pageRecorders=' + pageRecorders +  '&description='
+				+ $("#customerDes").val() + '&customerId=' 
+				+$("#customerId").val();
+	}
+	
+	/*
+	*  控制转向添加页面
+	*/
+	
+	function add(){
+	
+	href="<%=request.getContextPath()%>/jsp/customer/blacklistAdd.jsp";
+	}
+
 </script>
 </body>
 </html>
