@@ -24,7 +24,7 @@ public class CustomerService {
 	/**
 	 * 查询所有、 条件查询
 	 */
-   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String customerName ,String phone){
+   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String customerName ,String phone,Long customerId){
 	
 	Integer totalCount = customerDaoImpl.getAllCustomerCount();
 	PageBean<Customer> result = new PageBean<Customer>();
@@ -35,7 +35,7 @@ public class CustomerService {
 	
 	Integer start = result.getStartRow();
 	
-	  List<Customer> list =customerDaoImpl.getCustomerByConditions(start,pageRecorders,customerName ,phone);
+	  List<Customer> list =customerDaoImpl.getCustomerByConditions(start,pageRecorders,customerName ,phone,customerId);
 	result.setObjList(list);
 	
 	return result;
@@ -63,7 +63,7 @@ public class CustomerService {
 		boolean flag = true;
 		Customer customer = customerDaoImpl.getCustomerById(id);
 		if (customer!=null) {
-		customer.setStatus(0);
+		customer.setStatus(1);
 		flag = customerDaoImpl.updateCustomer(customer);
 		   }
 		    return flag;

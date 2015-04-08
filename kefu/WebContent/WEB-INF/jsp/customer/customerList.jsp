@@ -29,10 +29,10 @@
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
-            <label>客户姓名：</label><input class="c-wd150" type="text" />
-            <label>客户编号：</label><input class="c-wd150" type="text" />
-            <label>联系方式：</label><input class="c-wd150" type="text" />
-            <label>风格：</label><input class="c-wd150" type="text" />
+            <label>客户姓名：</label><input id="customerName" name="customerName" value="${customerName}" class="c-wd150" type="text" />
+            <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId} " class="c-wd150" type="text" />
+            <label>联系方式：</label><input id="customerPhone" name="customerPhone" value="${phone }" class="c-wd150" type="text" />
+            <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
            <label>添加时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
@@ -41,9 +41,9 @@
              <label></label>
               <label></label>
                <label></label>
-            <button type="button" class="btn btn-primary btn-small">查询</button>
+            <button type="button" class="btn btn-primary btn-small" onclick="page()">查询</button>
             <label></label>
-            <button type="button" class="btn btn-primary btn-small">导出</button>
+            <button type="button" class="btn btn-primary btn-small" >导出</button>
         </div>
         <div class="m-query-hd">
     </div>
@@ -61,7 +61,7 @@
         <tr>
          
             <td>风格</td>
-            <td>客户编码</td>
+            <td>客户编号</td>
             <td>客户姓名</td>
             <td>联系方式</td>
              <td>咨询页面</td>
@@ -91,9 +91,23 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
-//$('.btn-group .btn').click(function(){
-//	$(this).addClass("active").siblings().removeClass("active");
-//})
+
+
+/*
+ * 条件查询
+ */
+function page(currentPage, pageRecorders) {
+		pageRecorders = (pageRecorders == null) ? "${pageBean.pageRecorders}"
+				: pageRecorders;
+		currentPage = (currentPage == null) ? "${pageBean.currentPage}"
+				: currentPage;
+
+		window.location.href = '/customer/find.action?currentPage=' + currentPage
+				+ '&pageRecorders=' + pageRecorders + '&phone='
+				+ $("#customerPhone").val() + '&customerName='
+				+ $("#customerName").val() + '&customerId=' 
+				+$("#customerId").val();
+	}
 </script>
 </body>
 </html>
