@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,12 +26,14 @@ import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.MessageRecords;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.WaitListService;
+import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.PropertiesUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.database.DataBase;
@@ -85,8 +88,8 @@ public class RecordsCenterController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
-	@RequestMapping(value = "queryTalk.action", method = RequestMethod.GET)
-	public void queryTalkRecord(
+	@RequestMapping(value = "find.action", method = RequestMethod.GET)
+	public String queryTalkRecord(Model model,
 				Integer deptId,//部门id	
 				String beginDate,//开始日期
 				String endDate,//结束日期
@@ -106,7 +109,9 @@ public class RecordsCenterController {
 				Integer closeType,//结束方式
 				Integer isWait,//是否进入等待队列
 				String waitListName,//考试项目		需先处理
-				Integer deviceType//设备类型
+				Integer deviceType,//设备类型
+				Integer typeId,//首次查询	1否   null 是	
+				@ModelAttribute("pageBean") PageBean<List<String>> pageBean
 			){
 		
 		StringBuilder condition = new StringBuilder();
@@ -164,7 +169,9 @@ public class RecordsCenterController {
 		
 		//需要使用缓存
 		//获取需要展示的字段
-		Map<String,String> recordFieldMap = getRecordFieldMap(1);
+		User user = new User();//当前用户
+		user.setId(1);
+		Map<String,String> recordFieldMap = getRecordFieldMap(user);
 		
 		//针对查询条件包含聊天记录的处理
 		if(StringUtils.isNotBlank(talkContent)){
@@ -183,35 +190,47 @@ public class RecordsCenterController {
 				+ " , t1.ipInfo, t1.consultPage, t1.keywords  "
 				+ " , t1.styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
-				+ " , t1.landingPage, t1.keywords, t1.durationTime, t1.btnCode "
+				+ " , t1.landingPage, t1.durationTime, t1.btnCode "
 				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
 				+ " WHERE t1.isDel = 0 "
 				+ condition.toString();
-		logger.debug(sql);
-		System.out.println(sql);
-		DataSet ds = DataBase.Query(sql);
+		DataSet ds = DataBase.Query(sql,pageBean);
 		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);
 		for(int i=0;i<ds.RowCount;i++){
 			List<String> tempList = new ArrayList<String>(recordFieldMap.size()+1);
 			tempList.add(ds.getRow(i).getString("dialogueId"));//对话id,固定第一位
 			for(Map.Entry<String, String> entry:recordFieldMap.entrySet()){
-				tempList.add(ds.getRow(i).getString(entry.getKey()));
+				String key = entry.getKey();
+				if(key.equals(SysConst.CHAT_CONTENT)){//如果需要展示聊天记录
+					tempList.add(getChatContent(ds.getRow(i).getString("dialogueId")));
+				}else{
+					tempList.add(ds.getRow(i).getString(key));
+				}
 			}
 			contentList.add(tempList);
 		}
 		List<String> title = getDisplayTitle(recordFieldMap);
+//		//结果输出
+//		System.out.println(title);
+//		for(int i=0;i<contentList.size();i++){
+//			System.out.println(contentList.get(i));
+//		}
+		pageBean.setObjList(contentList);
 		
-		//结果输出
-		System.out.println(title);
-		for(int i=0;i<contentList.size();i++){
-			System.out.println(contentList.get(i));
+		model.addAttribute("title", title);
+		model.addAttribute("pageBean", pageBean);
+		if(typeId==null){
+			return "/record/talk/talk";
+		}else{
+			return "/record/talk/talkList";
 		}
 		
 	}
 	
+
 	/**
 	 * 
 	* @Description: 聊天记录回收站查询
@@ -251,13 +270,15 @@ public class RecordsCenterController {
 		
 		//需要使用缓存
 		//获取需要展示的字段
-		Map<String,String> recordFieldMap = getRecordFieldMap(1);
+		User user = new User();//当前用户
+		user.setId(1);
+		Map<String,String> recordFieldMap = getRecordFieldMap(user);
 		
 		String sql = " SELECT t1.id dialogueId,IFNULL(t2.customerName,t1.customerId) customerId "
 				+ " , t1.ipInfo, t1.consultPage, t1.keywords  "
 				+ " , t1.styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
-				+ " , t1.landingPage, t1.keywords, t1.durationTime, t1.btnCode "
+				+ " , t1.landingPage, t1.durationTime, t1.btnCode "
 				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
@@ -406,8 +427,9 @@ public class RecordsCenterController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月8日
 	 */
-	@RequestMapping(value = "queryMessage.action", method = RequestMethod.GET)
-	public void queryMessage(String beginDate,String endDate){
+	@RequestMapping(value = "findMessage.action", method = RequestMethod.GET)
+	public String queryMessage(String beginDate,String endDate,Integer typeId,//首次查询	1否   null 是	
+			@ModelAttribute("pageBean") PageBean<MessageRecords> pageBean){
 		StringBuilder condition = new StringBuilder();
 		if(beginDate!=null){
 			condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
@@ -423,7 +445,7 @@ public class RecordsCenterController {
 				+ " inner join customer t2 on t1.customerId = t2.id "
 				+ " where t1.isDel = 0 "
 				+ condition.toString();
-		DataSet ds = DataBase.Query(sql);
+		DataSet ds = DataBase.Query(sql,pageBean);
 		List<MessageRecords> list = new ArrayList<MessageRecords>((int) ds.RowCount);
 		for(int i=0;i<ds.RowCount;i++){
 			MessageRecords mr = new MessageRecords();
@@ -436,8 +458,14 @@ public class RecordsCenterController {
 			list.add(mr);
 		}
 		//结果输出
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i).getIpInfo());
+//		for(int i=0;i<list.size();i++){
+//			System.out.println(list.get(i).getIpInfo());
+//		}
+		pageBean.setObjList(list);
+		if(typeId==null){
+			return "/record/message/message";
+		}else{
+			return "/record/message/messageList";
 		}
 	}
 	
@@ -486,22 +514,6 @@ public class RecordsCenterController {
 	
 	
 	
-	/**
-	 * 替换聊天内容中的电话号码为*
-	* @Description: TODO
-	* @param content
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月8日
-	 */
-	private String replaceTel(String content) {
-		String regex = "(?<!\\d)(?:(?:1[3578]\\d{9})|(?:861[3578]\\d{9}))(?!\\d)";
-		Matcher matcher = Pattern.compile(regex).matcher(content); 
-		while (matcher.find()) {
-			content = content.replaceAll(matcher.group(), "*");
-	    }  
-		return content;
-	}
 
 	/**
 	 * 导出对话信息
@@ -535,7 +547,36 @@ public class RecordsCenterController {
 		} 
 	}
 	
+	/**
+	 * 根据对话id,获取聊天记录(目前只取第一条聊天记录)
+	* @Description: TODO
+	* @param string
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	private String getChatContent(String dialogueId) {
+		String sql = " select content,min(createDate) from dialogue_detail "
+				+ " where dialogueId =  " + dialogueId ;
+		return DataBase.getSingleResult(sql);
+	}
 	
+	/**
+	 * 替换聊天内容中的电话号码为*
+	* @Description: TODO
+	* @param content
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月8日
+	 */
+	private String replaceTel(String content) {
+		String regex = "(?<!\\d)(?:(?:1[3578]\\d{9})|(?:861[3578]\\d{9}))(?!\\d)";
+		Matcher matcher = Pattern.compile(regex).matcher(content); 
+		while (matcher.find()) {
+			content = content.replaceAll(matcher.group(), "*");
+	    }  
+		return content;
+	}
 
 	/**
 	 * 根据客户id,获取对话列表
@@ -571,11 +612,11 @@ public class RecordsCenterController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
-	private Map<String, String> getRecordFieldMap(Integer userId) {
+	private Map<String, String> getRecordFieldMap(User user) {
 		Map<String,String> recordFieldMap = null;
 		//进行权限判断,如果有权限配置字段,则去查询配置结果,否则取默认
-		if(userId!=1){
-			recordFieldMap = chatRecordFieldService.findDisplayMapByUserId(userId);
+		if(user!=null && user.getId()!=null && user.getId()!=1){
+			recordFieldMap = chatRecordFieldService.findDisplayMapByUserId(user.getId());
 		}
 		if(recordFieldMap==null || recordFieldMap.size()==0){//如果没权限或者没设置,则用默认
 			recordFieldMap = chatRecordFieldService.findDefaultMap();

@@ -13,4 +13,11 @@ public class SysConst {
 	 * 聊天记录导出 存放目录
 	 */
 	public static final String EXP_TALK_PATH="expTalk";
+	
+	/**
+	 * 聊天及记录结果展示中-聊天内容字段code
+	 */
+	public static final String CHAT_CONTENT = "chatContent";
+	
+	
 }

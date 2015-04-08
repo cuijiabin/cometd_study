@@ -214,13 +214,14 @@ public class DialogueService {
 	private List<List<String>> getContentList(Map<String, String> recordFieldMap) {
 		String sql = " SELECT t1.id dialogueId,IFNULL(t2.customerName,t1.customerId) customerId "
 				+ " , t1.ipInfo, t1.consultPage, t1.keywords  "
-				+ " , t1.styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
+				+ " , t3.name styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
 				+ " , t1.landingPage, t1.keywords, t1.durationTime, t1.btnCode "
 				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
+				+ " INNER JOIN style t3 on t1.styleId = t3.id "//风格(站点来源)
 				+ " WHERE t1.isDel = 0 " ;
 		DataSet ds = DataBase.Query(sql);
 		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);
