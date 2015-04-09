@@ -68,7 +68,7 @@ public class BlacklistController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
-		return "iews/resultjson";
+		return "resultjson";
 	}
 	
 	/**
