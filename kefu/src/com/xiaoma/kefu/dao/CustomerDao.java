@@ -27,6 +27,14 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @return
 	 */
 	public boolean createNewCustomer(Customer customer);
+	
+	/**
+	 * 添加一条
+	 * @param customer
+	 * @return
+	 */
+	public Long insert(Customer customer);
+	
 	/**
 	 * 修改一条
 	 * @param customer

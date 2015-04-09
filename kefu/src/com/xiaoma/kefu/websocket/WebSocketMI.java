@@ -7,15 +7,21 @@ import java.util.List;
 
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.common.DialogueCache;
 import com.xiaoma.kefu.common.DialogueUniqueTag;
 import com.xiaoma.kefu.common.DialogueUtil;
 import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.util.DesUtil;
+import com.xiaoma.kefu.util.PropertiesUtil;
 
 public class WebSocketMI extends MessageInbound {
 	
-	
+	@Autowired
+	private CustomerService customerService;
 	
 	//当前连接的用户
 	private final DialogueUniqueTag uniqueTag;
@@ -65,9 +71,22 @@ public class WebSocketMI extends MessageInbound {
 		
 		
 		String contentFormat = DialogueUtil.generateMessage(message, this);
-		
 		String uniqueTag = this.uniqueTag.getUniqueTag();
 		String sendUniqueTag = this.uniqueTag.getSendUniqueTag();
+		
+		if("getCookie".equals(contentFormat)){
+			
+			try {
+				String id = DesUtil.encrypt(this.uniqueTag.getCustomerId().toString(),PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				
+				WebSocketMIPool.sendMessageToUser(uniqueTag, id);
+				
+				return ;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
 		
 		//redis操作
 		String key = DialogueCache.buildKey(this.uniqueTag);

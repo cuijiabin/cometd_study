@@ -8,9 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.User;
-import com.xiaoma.kefu.util.CookieUtils;
+import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
+import com.xiaoma.kefu.util.PropertiesUtil;
 import com.xiaoma.kefu.websocket.WebSocketMI;
 
 public class DialogueUtil {
@@ -22,7 +24,7 @@ public class DialogueUtil {
 			String customerInfo = null;
 			for (int i = 0; i < cookies.length; i++) {
 				Cookie cookie = cookies[i];
-				if (CookieUtils.KF_CUSTOMER_ID.equals(cookie.getName())) {
+				if (CookieUtil.KF_CUSTOMER_ID.equals(cookie.getName())) {
 					customerInfo = cookie.getValue();
 				}
 			}
@@ -31,8 +33,7 @@ public class DialogueUtil {
 			}
 
 			try {
-				customerInfo = DesUtil.decrypt(customerInfo,
-						CookieUtils.ENCRYPTION_KEY);
+				customerInfo = DesUtil.decrypt(customerInfo,PropertiesUtil.getProperties(CacheName.SECRETKEY));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -72,13 +73,13 @@ public class DialogueUtil {
 			if(cookies != null){
 				for (int i = 0; i < cookies.length; i++) {
 					Cookie cookie = cookies[i];
-					if (CookieUtils.KF_CUSTOMER_ID.equals(cookie.getName())) {
+					if (CookieUtil.KF_CUSTOMER_ID.equals(cookie.getName())) {
 						customerInfo = cookie.getValue();
 					}
 				}
 				
 				try {
-					customerInfo = DesUtil.decrypt(customerInfo,CookieUtils.ENCRYPTION_KEY);
+					customerInfo = DesUtil.decrypt(customerInfo,PropertiesUtil.getProperties(CacheName.SECRETKEY));
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

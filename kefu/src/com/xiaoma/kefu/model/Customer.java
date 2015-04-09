@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.xiaoma.kefu.util.JsonUtil;
+
 /**
  * @author frongji
  * @time 2015年4月1日下午4:22:55
@@ -166,6 +168,11 @@ public class Customer implements Serializable {
 
 	public void setFirstLandingPage(String firstLandingPage) {
 		this.firstLandingPage = firstLandingPage;
+	}
+	
+	public String toString(){
+		
+		return JsonUtil.toJson(this);
 	}
 	
 	
