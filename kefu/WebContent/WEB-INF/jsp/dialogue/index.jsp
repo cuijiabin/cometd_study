@@ -26,9 +26,17 @@ function startWebSocket() {
 		alert('对话关闭！~~~~~~~');
 	};
 	// 连接上时走这个方法
-	ws.onopen = function() {
+	ws.onopen = function(event) {
+		 // 发送一个初始化消息
+		  ws.send('getCookie'); 
+		  // 监听消息
+		  ws.onmessage = function(event) { 
+			 console.log('Client received a message',event); 
+			 console.log('Client received a message data',event.data); 
+			 setCookie('KF_CUSTOMER_ID',event.data);
+  		  }; 
+		  
 		console.log('open~~~~~~~~'); 
-		//ws.send();
 	};
 	
 }
@@ -42,6 +50,15 @@ function sendMsg() {
 	document.getElementById('msgSendBox').value = '';
 	
 }
+
+function setCookie(name,value){
+    var Days = 30;
+    var exp = new Date();
+    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    
+}
+
 </script>
 </head>
 <body onload="startWebSocket();">

@@ -135,4 +135,15 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 
 		return ((Number) query.uniqueResult()).longValue();
 	}
+
+	@Override
+	public Long insert(Customer customer) {
+		try {
+			Long id = (Long) add(customer);
+			return id;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

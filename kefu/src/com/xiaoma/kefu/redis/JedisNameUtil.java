@@ -29,6 +29,11 @@ public class JedisNameUtil {
 	
 	
 	/**
+	 * 临时对话标识
+	 */
+	public static final String TEMPORARY_DIALOGUE = "temporary_dialogue:";
+	
+	/**
 	 * 部门信息
 	 */
 	public static final String DEPARTMENT = "department:";
@@ -41,6 +46,16 @@ public class JedisNameUtil {
 	public static String getDepartmentKey(Integer id){
 		
 		return DEPARTMENT+id;
+	}
+	
+	/**
+	 * 生成对话标记 （统一使用）
+	 * @param customerId
+	 * @return
+	 */
+	public static String genDialogueKey(Long customerId){
+		
+		return TEMPORARY_DIALOGUE+customerId;
 	}
 	
 }

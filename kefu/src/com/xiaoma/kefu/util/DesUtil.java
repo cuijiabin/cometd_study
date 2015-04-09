@@ -106,7 +106,7 @@ public class DesUtil {
     }
     
     public static void main(String[] args) throws Exception {
-        String data = "最近刚刚登陆";
+        String data = "12";
         String key = "cuijiabin";
         
         String jiami = encrypt(data, key);
