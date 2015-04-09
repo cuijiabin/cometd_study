@@ -64,6 +64,9 @@ function wSize(){
 	$(".m-dialog  .u-txtarea").width($(".g-mn5c").width()-112);
 	$(".g-sd5").height(heights3-2);
 	$(".slideTab .bd .tabBox").height(heights3-28);
+	$(".g-mn6c .m-dialog").height(heights3-137);// 聊天记录详情
+	$(".g-mn6c .m-dialog .u-record").height(heights3-163);// 聊天记录详情
+	$(".m-recordtime").height(heights3-21);// 聊天记录详情
 	
 	if(strs[1]<1000){
 		$(".g-head").css("width",1000+"px");
