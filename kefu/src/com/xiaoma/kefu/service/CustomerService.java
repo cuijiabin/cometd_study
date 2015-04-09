@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,19 @@ public class CustomerService {
    
 	@Autowired
 	private CustomerDao customerDaoImpl;
-	
-	/**
-	 * 查询所有、 条件查询
-	 */
-   public PageBean<Customer> getResultNameOrPhone(Integer currentPage,Integer pageRecorders,String customerName ,String phone,Long customerId){
-	
-	Integer totalCount = customerDaoImpl.getAllCustomerCount();
-	PageBean<Customer> result = new PageBean<Customer>();
-	
-	result.setCurrentPage(currentPage);
-	result.setPageRecorders(pageRecorders);
-	result.setTotalRows(totalCount);
-	
-	Integer start = result.getStartRow();
-	
-	  List<Customer> list =customerDaoImpl.getCustomerByConditions(start,pageRecorders,customerName ,phone,customerId);
-	result.setObjList(list);
-	
-	return result;
-    }
 
+   
+   /**
+	 * 分页查询
+	 * 
+	 * @param map
+	 * @param pageBean
+	 * @return
+	 */
+	public void getResult(Map<String, String> conditions,PageBean<Customer> pageBean){
+		customerDaoImpl.findByCondition(conditions,pageBean);
+
+	 }
 		/**
 		 * 添加
 		 */

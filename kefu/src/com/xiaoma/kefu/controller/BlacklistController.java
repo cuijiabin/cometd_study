@@ -3,19 +3,21 @@ package com.xiaoma.kefu.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 
 /**
  * @author frongji
  * @time 2015年4月2日上午11:21:05
- *
+ *    黑名单 Controller
  */
 @Controller
 @RequestMapping(value = "blacklist")
@@ -32,21 +34,18 @@ public class BlacklistController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(Model model, Long customerId, Integer userId,String description,
-			Integer currentPage, Integer pageRecorders) {
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ){
 
-		currentPage = (currentPage == null) ? 1 : currentPage;
-		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean<Blacklist> pageBean = blacklistService.getResultByConditions(currentPage, pageRecorders,
-				customerId, userId,description);
-
-		model.addAttribute("list", pageBean.getObjList());
-		model.addAttribute("pageBean", pageBean);
-		model.addAttribute("customerId", customerId);
-		model.addAttribute("description", description);
-		model.addAttribute("userId",userId);
-
-		return "customer/blackList";
+		try {
+			blacklistService.getResult(conditions.getMap(), pageBean);
+			if (conditions == null || conditions.getMap() == null
+					|| conditions.getMap().get("typeId") == null)
+				return "customer/black";
+			else
+				return "customer/blackList";
+		} catch (Exception e) {
+			return "/error500";
+		}
 	}
 	
 	/**
