@@ -82,7 +82,6 @@ public class PropertiesUtil {
 			CacheMan.addCache(CacheName.REDISPASSWORD,p.getProperty("redis.password"));
 			CacheMan.addCache(CacheName.REDISTIMEOUT,p.getProperty("redis.timeout"));
 			
-			//cookie加密密钥
 			CacheMan.addCache(CacheName.SECRETKEY,p.getProperty("secret.key"));
 			
 			//保存的文件的顶级目录

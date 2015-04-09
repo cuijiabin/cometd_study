@@ -32,7 +32,7 @@ public class CacheName {
 	public static final String REDISPASSWORD="REDISPASSWORD";
 	public static final String REDISTIMEOUT="REDISTIMEOUT";
 	
-	//cookie加密密钥
+	//secretkey
 	public static final String SECRETKEY="SECRETKEY";
 	
 	//保存的文件

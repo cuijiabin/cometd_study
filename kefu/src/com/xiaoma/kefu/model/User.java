@@ -52,9 +52,9 @@ public class User implements Serializable {
 	@Column(name="maxListen")
 	private Integer maxListen;
 	@Column(name="createDate")
-	private Date createDate;
+	private String createDate;
 	@Column(name="endDate")
-	private Date endDate;
+	private String endDate;
 	public Integer getId() {
 		return id;
 	}
@@ -141,18 +141,19 @@ public class User implements Serializable {
 	public void setMaxListen(Integer maxListen) {
 		this.maxListen = maxListen;
 	}
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+
     
 	
 }
