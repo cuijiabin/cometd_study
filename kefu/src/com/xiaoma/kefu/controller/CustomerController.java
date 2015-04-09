@@ -5,12 +5,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -33,21 +35,19 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(Model model, String customerName, String phone,Long customerId,
-			Integer currentPage, Integer pageRecorders) {
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Customer> pageBean) {
 
-		currentPage = (currentPage == null) ? 1 : currentPage;
-		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean<Customer> pageBean = customerService.getResultNameOrPhone(currentPage, pageRecorders,
-				customerName, phone,customerId);
+		try {
+			customerService.getResult(conditions.getMap(), pageBean);
+			if (conditions == null || conditions.getMap() == null
+					|| conditions.getMap().get("typeId") == null)
+				return "customer/customer";
+			else
+				return "customer/customerList";
+		} catch (Exception e) {
+			return "/error500";
+		}
 
-		model.addAttribute("list", pageBean.getObjList());
-		model.addAttribute("pageBean", pageBean);
-		model.addAttribute("customerName", customerName);
-		model.addAttribute("phone", phone);
-		model.addAttribute("customerId", customerId);
-
-		return "customer/customerList";
 	}
 	/**
 	 * 查询所有

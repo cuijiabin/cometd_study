@@ -1,13 +1,21 @@
 package com.xiaoma.kefu.dao.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
+import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
 
 /**
@@ -18,6 +26,8 @@ import com.xiaoma.kefu.util.StringHelper;
 @Repository("blacklistDaoImpl")
 public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements BlacklistDao{
 
+	 private static Logger logger   = Logger.getLogger(BlacklistDaoImpl.class);
+	
 	/**
 	 * 添加一条
 	 */
@@ -90,7 +100,50 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 		}
 		
 
-		
+		/**
+         * 查询
+         * @param conditions
+         * @param pageBean
+         */
+		@Override
+		public void findByCondition(Map<String, String> conditions,
+				PageBean<Blacklist> pageBean) {
+		      
+			List<String> relation = new ArrayList<String>();
+			List<Criterion> role = new ArrayList<Criterion>();// 条件
+			List<Order> orders = new ArrayList<Order>();// 排序
+			if (conditions != null) {
+				if (StringHelper.isNotEmpty(conditions.get("customerDescription"))) {
+					role.add(Restrictions.like("customerDescription",
+							"%" + conditions.get("customerDescription").trim() + "%"));
+				}
+				if (StringHelper.isNotEmpty(conditions.get("customerId"))&& !"0".equals(conditions.get("deptId"))) {
+					role.add(Restrictions.eq("customerId", conditions.get("customerId")));
+				}
+				
+				if (conditions.get("startDate") != null
+						&& !conditions.get("startDate").isEmpty()
+						&& conditions.get("endDate") != null
+						&& !conditions.get("endDate").isEmpty()) {
+					SimpleDateFormat format = new SimpleDateFormat(
+							"yyyy-MM-dd HH:mm:ss");
+					try {
+						role.add(Restrictions.between(
+								"createDate",
+								format.parse(conditions.get("startDate")
+										+ " 0:00:00"),
+								format.parse(conditions.get("endDate")
+										+ " 23:59:59")));
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error(e.getMessage());
+					}
+				}
+			}
+			orders.add(Order.asc("createDate"));
+			find(Blacklist.class, relation, role, null, orders, pageBean);
+			logger.info("search Blacklist by conditions!");
+		} 
 
 		/**
 		 * 查询一条

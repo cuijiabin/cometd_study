@@ -1,8 +1,10 @@
 package com.xiaoma.kefu.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xiaoma.kefu.model.Blacklist;
+import com.xiaoma.kefu.util.PageBean;
 
 /**
  * @author frongji
@@ -61,5 +63,13 @@ public interface BlacklistDao extends BaseDao<Blacklist>{
      * @return
      */
 	public boolean deleteBlacklistById(Integer id);
+   
+	/**
+	 * 查询
+	 * @param conditions
+	 * @param pageBean
+	 */
+	public void findByCondition(Map<String, String> conditions,
+			PageBean<Blacklist> pageBean);
 
 }

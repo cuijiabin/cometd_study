@@ -1,12 +1,14 @@
 package com.xiaoma.kefu.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
+import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -40,7 +42,17 @@ public class BlacklistService {
 		
 		return result;
 	    }
-	   
+	   /**
+		 * 分页查询
+		 * 
+		 * @param map
+		 * @param pageBean
+		 * @return
+		 */
+		public void getResult(Map<String, String> conditions,PageBean<Blacklist> pageBean){
+			blacklistDaoImpl.findByCondition(conditions,pageBean);
+
+		 }
 
 			/**
 			 * 添加
