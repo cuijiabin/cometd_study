@@ -24,7 +24,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
@@ -44,6 +43,7 @@ import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.PropertiesUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.RoleNameId;
+import com.xiaoma.kefu.util.TimeHelper;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
 
@@ -167,6 +167,7 @@ public class RecordsCenterController {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
 		} catch (Exception e) {
+			logger.error("deleteTalk4Logic失败!"+ids);
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
 		return "resultjson";
@@ -230,7 +231,7 @@ public class RecordsCenterController {
 	
 
 	/**
-	 * 查询聊天 详情
+	 * 查询聊天 详情	(聊天详情整个页面)
 	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
 	* @Description: TODO
 	* @param dialogueId	对话id
@@ -246,14 +247,8 @@ public class RecordsCenterController {
 		Dialogue dialogue = dialogueService.findById(dialogueId);
 		//获取聊天记录列表
 		List<Dialogue> timeList = findDialogueByCId(dialogue.getCustomerId(),0);
-		
-		//获取用户名称
-		Customer customer = customerService.getCustomerById(dialogue.getCustomerId());
-		if(StringUtils.isNotBlank(customer.getCustomerName())){
-			dialogue.setCustomerName(dialogue.getCustomerId()+"("+customer.getCustomerName()+")");
-		}else{
-			dialogue.setCustomerName(dialogue.getCustomerId().toString());
-		}
+		//封装聊天记录
+		packDialogue(dialogue);
 		
 		List<DialogueDetail> detailList = queryTalkContent(dialogueId,isShowTel,pageBean);
 		pageBean.setObjList(detailList);
@@ -265,6 +260,49 @@ public class RecordsCenterController {
 		return "/record/talk/talkDetail"; 
 	}
 	
+	/**
+	 * 聊天明细查询	(聊天详情右侧页面)
+	* @Description: TODO
+	* @param model
+	* @param dialogueId	对话id
+	* @param isShowTel	是否显示电话号码
+	* @param typeId	查询类别(返回大页面还是小页面)
+	* @param pageBean
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "queryTalkDetail.action", method = RequestMethod.GET)
+	public String queryTalkDetail(Model model,Long dialogueId,Integer isShowTel,Integer typeId,
+			@ModelAttribute("pageBean") PageBean<DialogueDetail> pageBean
+		){
+		if(dialogueId==null){
+			return "/error500";
+		}
+		try {
+			//获取对话信息
+			Dialogue dialogue = dialogueService.findById(dialogueId);
+			//封装对话信息
+			packDialogue(dialogue);
+			
+			List<DialogueDetail> detailList = queryTalkContent(dialogueId,isShowTel,pageBean);
+			pageBean.setObjList(detailList);
+			
+			model.addAttribute("dialogue", dialogue);
+			model.addAttribute("pageBean", pageBean);
+			model.addAttribute("isShowTel", isShowTel);
+			
+			if(typeId==null || typeId!=1){
+				return "/record/talk/talkDetailCommon";
+			}
+			return "/record/talk/talkDetailCommonList"; 
+		} catch (Exception e) {
+			return "/error500";
+		}
+		
+	}
+	
+
 	/**
 	 * 查询聊天 详情(回收站)
 	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
@@ -283,74 +321,6 @@ public class RecordsCenterController {
 		
 		for(int i=0;i<list.size();i++){
 			System.out.println(list.get(i).getId()+"-"+list.get(i).getBeginDate());
-		}
-	}
-	
-	/**
-	 * 对话信息的基本信息
-	* @Description: TODO
-	* @param dialogueId
-	* @Author: wangxingfei
-	* @Date: 2015年4月7日
-	 */
-	@RequestMapping(value = "queryTalkDetail.action", method = RequestMethod.GET)
-	public void queryTalkDetail(Long dialogueId,Model model){
-		//获取对话信息
-		Dialogue dia = dialogueService.findById(dialogueId);
-		//获取用户名称
-		Customer cus = customerService.getCustomerById(dia.getCustomerId());
-		//格式化后返回?
-		model.addAttribute("cus", cus);
-	}
-	
-	/**
-	 * 对话信息的聊天内容
-	* @Description: TODO
-	* @param dialogueId	对话id
-	* @param isShowTel	是否显示显示电话号码  1是 0否
-	* @param iPageIndex	当前页码
-	* @param iPageSize	每页显示条数
-	* @Author: wangxingfei
-	* @Date: 2015年4月7日
-	 */
-	@RequestMapping(value = "queryTalkContent.action", method = RequestMethod.GET)
-	public void queryTalkContent(Long dialogueId,Integer isShowTel,int iPageIndex,int iPageSize){
-		iPageIndex = 1;//test
-		iPageSize = 10;//test
-		String sql = " SELECT dd.id, dd.dialogueId, dd.dialogueType,dd.customerId, "
-				+ " dd.userId, dd.cardName, dd.content,"
-				+ " DATE_FORMAT(dd.createDate,'%Y-%m-%d %H:%i:%S') createDate  "
-				+ " FROM dialogue_detail AS dd "
-				+ " WHERE dd.dialogueId = " + dialogueId
-				+ " order by dd.createDate " ;
-		DataSet ds = DataBase.Query(sql,iPageIndex,iPageSize);
-		List<DialogueDetail> list = new ArrayList<DialogueDetail>((int) ds.RowCount);
-		for(int i=0;i<ds.RowCount;i++){
-			DialogueDetail dd = new DialogueDetail();
-			dd.setId(ds.getRow(i).getLong("id"));
-			dd.setDialogueType(ds.getRow(i).getInt("dialogueType"));
-			String content = null;
-			if(dd.getDialogueType().equals(1)){//客户
-				content = ds.getRow(i).getString("customerId") + " " 
-						+ ds.getRow(i).getString("createDate")
-						+ "<br> &ensp;&ensp;&ensp;&ensp;"
-						+ ds.getRow(i).getString("content");
-			}else{//客服+机器人
-				content = ds.getRow(i).getString("cardName") + " " 
-						+ ds.getRow(i).getString("createDate")
-						+ "<br> &ensp;&ensp;&ensp;&ensp;"
-						+ ds.getRow(i).getString("content");
-			}
-			if(isShowTel!=null && isShowTel!=1){
-				content = replaceTel(content);
-			}
-			dd.setContent(content);
-			list.add(dd);
-			
-		}
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i).getDialogueType());
-			System.out.println(list.get(i).getContent());
 		}
 	}
 	
@@ -495,8 +465,8 @@ public class RecordsCenterController {
 	public List<DialogueDetail> queryTalkContent(Long dialogueId,Integer isShowTel,
 			PageBean<DialogueDetail> pageBean){
 		String sql = " SELECT dd.id, dd.dialogueId, dd.dialogueType,dd.customerId, "
-				+ " dd.userId, dd.cardName, dd.content,"
-				+ " DATE_FORMAT(dd.createDate,'%Y-%m-%d %H:%i:%S') createDate  "
+				+ " dd.userId, dd.cardName, dd.content,dd.createDate "
+//				+ " DATE_FORMAT(dd.createDate,'%Y-%m-%d %H:%i:%S') createDate  "
 				+ " FROM dialogue_detail AS dd "
 				+ " WHERE dd.dialogueId = " + dialogueId
 				+ " order by dd.createDate " ;
@@ -506,19 +476,24 @@ public class RecordsCenterController {
 			DialogueDetail dd = new DialogueDetail();
 			dd.setId(ds.getRow(i).getLong("id"));
 			dd.setDialogueType(ds.getRow(i).getInt("dialogueType"));
-			String content = null;
-			if(dd.getDialogueType().equals(1)){//客户
-				content = ds.getRow(i).getString("customerId") + " " 
-						+ ds.getRow(i).getString("createDate")
-						+ "<br> &ensp;&ensp;&ensp;&ensp;"
-						+ ds.getRow(i).getString("content");
-			}else{//客服+机器人
-				content = ds.getRow(i).getString("cardName") + " " 
-						+ ds.getRow(i).getString("createDate")
-						+ "<br> &ensp;&ensp;&ensp;&ensp;"
-						+ ds.getRow(i).getString("content");
-			}
-			if(isShowTel!=null && isShowTel!=1){
+			dd.setCustomerId(ds.getRow(i).getLong("customerId"));
+			dd.setUserId(ds.getRow(i).getInt("userId"));
+			dd.setCardName(ds.getRow(i).getString("cardName"));
+			dd.setCreateDate(ds.getRow(i).getDate("createDate"));
+			
+			String content = ds.getRow(i).getString("content");
+//			if(dd.getDialogueType().equals(1)){//客户
+//				content = ds.getRow(i).getString("customerId") + " " 
+//						+ ds.getRow(i).getString("createDate")
+//						+ "<br> &ensp;&ensp;&ensp;&ensp;"
+//						+ ds.getRow(i).getString("content");
+//			}else{//客服+机器人
+//				content = ds.getRow(i).getString("cardName") + " " 
+//						+ ds.getRow(i).getString("createDate")
+//						+ "<br> &ensp;&ensp;&ensp;&ensp;"
+//						+ ds.getRow(i).getString("content");
+//			}
+			if(isShowTel==null || isShowTel!=1){
 				content = replaceTel(content);
 			}
 			dd.setContent(content);
@@ -847,5 +822,27 @@ public class RecordsCenterController {
 			list.add(entry.getValue());
 		}   
 		return list;
+	}
+	
+	/**
+	 * 封装对话信息	客户名称,对话时长格式化,枚举项转换等
+	* @Description: TODO
+	* @param dialogue
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	private void packDialogue(Dialogue dialogue) {
+		//获取用户名称
+		Customer customer = customerService.getCustomerById(dialogue.getCustomerId());
+		if(StringUtils.isNotBlank(customer.getCustomerName())){
+			dialogue.setCustomerName(dialogue.getCustomerId()+"("+customer.getCustomerName()+")");
+		}else{
+			dialogue.setCustomerName(dialogue.getCustomerId().toString());
+		}
+		//格式化时间
+		dialogue.setDurationTimeFM(TimeHelper.secToTime(dialogue.getDurationTime()));
+		
+		//开始,结束方式,评分
+		
 	}
 }

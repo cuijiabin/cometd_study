@@ -84,7 +84,9 @@ public class Dialogue implements Serializable {
 	private Integer styleId;
 	
 	@Transient
-	private String customerName;//客户名称 虚拟列
+	private String customerName;//虚拟列 客户名称 
+	@Transient
+	private String durationTimeFM;//虚拟列 对话时长格式化 xx:xx:xx
 	
 	public Long getId() {
 		return id;
@@ -254,6 +256,11 @@ public class Dialogue implements Serializable {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
-	
+	public String getDurationTimeFM() {
+		return durationTimeFM;
+	}
+	public void setDurationTimeFM(String durationTimeFM) {
+		this.durationTimeFM = durationTimeFM;
+	}
 	
 }

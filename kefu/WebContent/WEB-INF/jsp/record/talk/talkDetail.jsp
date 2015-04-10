@@ -30,7 +30,7 @@
         <input type="hidden" id="isShowTel" value="${isShowTel }" />        	
         <ul class="m-recordtime">
         	<c:forEach var="timeDia" items="${timeList }">
-        		<li><a href="#"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timeDia.beginDate}"/></a></li>
+        		<li><a href="#" onClick="showDetail(${timeDia.id})"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timeDia.beginDate}"/></a></li>
 			</c:forEach>
         </ul>
     </div>
@@ -51,10 +51,55 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
 
-$(function(){
-	var isShowTel = $("#isShowTel").val() ;
-});
 
+//查看明细,切换右侧明细
+function showDetail(dialogueId){
+	var isShowTel = $("#isShowTel").val() ;
+	var url="/recordsCenter/queryTalkDetail.action";
+	var data = {
+			"dialogueId":dialogueId,
+			"isShowTel":isShowTel
+	};
+	$.ajax({
+	    type: "get",
+	    url: url,
+	    data: data,
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "html",
+	    success: function (data) {
+	       $("#table_data").html(data);
+	    },
+	    error: function (msg) {
+	        alert(msg);
+	    }
+	});
+}
+
+//分页, 切换右下聊天内容
+function find(currentPage){
+	var isShowTel = $("#isShowTel").val() ;
+	var dialogueId = $("#dialogueId").val() ;
+	var url="/recordsCenter/queryTalkDetail.action";
+	var data = {
+			"currentPage":currentPage,
+			"typeId":1,
+			"dialogueId":dialogueId,
+			"isShowTel":isShowTel
+	};
+	$.ajax({
+	    type: "get",
+	    url: url,
+	    data: data,
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "html",
+	    success: function (data) {
+	       $("#table_detail_data").html(data);
+	    },
+	    error: function (msg) {
+	        alert(msg);
+	    }
+	});
+}
 </script>
 </body>
 </html>

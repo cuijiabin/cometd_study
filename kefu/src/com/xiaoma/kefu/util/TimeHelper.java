@@ -60,4 +60,43 @@ public class TimeHelper {
 		else
 			return false;
 	}
+	
+	/**
+	 * int类型格式化位 xx:xx:xx 格式
+	 * 例如  传入60, 返回 00:01:00
+	* @Description: TODO
+	* @param time	秒数
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	public static String secToTime(Integer time) {
+		if(time==null) time=0;
+        String timeStr = null;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        if (time <= 0)
+            return "00:00:00";
+        else {
+            minute = time / 60;
+            hour = minute / 60;
+            if (hour > 99)
+                return "99:59:59";
+            minute = minute % 60;
+            second = time - hour * 3600 - minute * 60;
+            timeStr = unitFormat(hour) + ":" + unitFormat(minute) + ":" + unitFormat(second);
+        }
+        return timeStr;
+    }
+	
+	//格式化用
+    private static String unitFormat(int i) {
+        String retStr = null;
+        if (i >= 0 && i < 10)
+            retStr = "0" + Integer.toString(i);
+        else
+            retStr = "" + i;
+        return retStr;
+    }
 }
