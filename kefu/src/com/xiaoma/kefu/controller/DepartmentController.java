@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.UserService;
@@ -71,27 +72,43 @@ public class DepartmentController {
      try{
 		currentPage = (currentPage == null) ? 1 : currentPage;
 		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean<User> pageBean = userService.getResultDept(currentPage, pageRecorders,1);
+		PageBean<User> pageBean = userService.getResultDept(currentPage, pageRecorders,deptId);
 		System.out.println(pageBean.getObjList());
 		model.addAttribute("list", pageBean.getObjList());
 		model.addAttribute("pageBean", pageBean);
 		System.out.println(pageBean.getObjList());
         System.out.println(pageBean);
-		return "/views/admin/deptList";
+		return "/set/govern/deptUser";
+		
      }catch(Exception e){
 			model.addAttribute("error","对不起出错了");
 			return "/views/error500";
 		}
 	}
+	
+	/**
+	 * 跳转到页面
+	 * @param model
+	 * @param role
+	 * @return
+	 */
+	@RequestMapping(value = "addDept.action", method = RequestMethod.GET)
+	public String addRole(Model model, Department dept) {
+       Integer num=deptService.getMaxNum();
+       System.out.println(num);
+       dept.setSortNum(num+1);
+       model.addAttribute("dept", dept);
+		return "/set/govern/addDept";
+	}
+	
 	/**
 	 * 添加部门
 	 */
-
-	@RequestMapping(value = "add.action", method = RequestMethod.GET)
+	@RequestMapping(value = "save.action", method = RequestMethod.GET)
 	public String addUser(Model model, Department dept) {
 		try {
-			boolean isSuccess = deptService.createNewDept(dept);
-			if (isSuccess) {
+			Integer isSuccess = deptService.createNewDept(dept);
+			if (isSuccess!=0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
@@ -111,9 +128,9 @@ public class DepartmentController {
 		try {
 			Integer count = deptService.checkDept(dept);
 			if(count!=null && count==0){
-				model.addAttribute("result", Ajax.toJson(0, "该用户名可以使用！"));
+				model.addAttribute("result", Ajax.toJson(0, "该部门名可以使用！"));
 			}else{
-				model.addAttribute("result", Ajax.toJson(1, "该用户名已存在！"));
+				model.addAttribute("result", Ajax.toJson(1, "该部门名已存在！"));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -130,10 +147,9 @@ public class DepartmentController {
 
 		Department dept = deptService.getDeptById(id);
 		System.out.println(dept);
-		JSONObject jsonObject = JSONObject.fromObject(dept);
-		model.addAttribute("result", jsonObject.toString());
+		model.addAttribute("dept", dept);
 
-		return "views/resultjson";
+		return "/set/govern/addDept";
 	}
 	
 	/**
@@ -145,14 +161,9 @@ public class DepartmentController {
 	public String updateUser(Model model, Department dept) {
            System.out.println(dept.getName());
 		try {
+			Integer isSuccess = deptService.updateDept(dept);
 
-			Department toUpdateDepartment = deptService.getDeptById(dept.getId());
-
-			toUpdateDepartment.setName(dept.getName());
-
-			boolean isSuccess = deptService.updateDept(toUpdateDepartment);
-
-			if (isSuccess) {
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -175,8 +186,8 @@ public class DepartmentController {
 	public String deleteProduct(Model model, Integer id) {
 
 		try {
-			boolean isSuccess = deptService.deleteDeptById(id);
-			if (isSuccess) {
+			Integer isSuccess = deptService.deleteDeptById(id);
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "删除产品成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
@@ -185,7 +196,7 @@ public class DepartmentController {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
-		return "resultjson";
+		return "redirect:/dept/list.action";
 	}
 	
 }

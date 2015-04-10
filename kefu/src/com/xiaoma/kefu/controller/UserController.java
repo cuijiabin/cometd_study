@@ -62,7 +62,7 @@ public class UserController {
 	 * @param password
 	 * @param session
 	 */
-	@RequestMapping(value = "login.action", method = RequestMethod.POST)
+
 	public String login(HttpSession session, String name, String password,
 			Model model) {
 		model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
@@ -92,6 +92,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "demo.action", method = RequestMethod.GET)
 	public String demo(HttpSession session) {
+
 		// Assert.notNull(name, "userName can not be null!");
 		// Assert.notNull(password, "password can not be null!");
 		// model.addAttribute("msg", "登录名或者密码为空!");
@@ -118,11 +119,13 @@ public class UserController {
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
 	public String queryAll(Model model, String userName, String phone,
 			Integer currentPage, Integer pageRecorders) {
+
 		try {
 			currentPage = (currentPage == null) ? 1 : currentPage;
 			pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
 			PageBean<User> pageBean = userService.getResultByuserNameOrPhone(
 					currentPage, pageRecorders, userName, phone);
+
 
 			model.addAttribute("list", pageBean.getObjList());
 			model.addAttribute("pageBean", pageBean);
@@ -142,11 +145,13 @@ public class UserController {
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
 	public String changadd(Model model, User user) {
 		try {
+
 			List<Role> rlist = (List<Role>) roleService.findRole();
 			List<Department> dlist = deptService.findDept();
 			model.addAttribute("deptList", dlist);
 			model.addAttribute("roleList", rlist);
 		} catch (Exception e) {
+
 
 		}
 
@@ -161,12 +166,12 @@ public class UserController {
 	public String addUser(Model model, User user) {
 		try {
 			// 对用户密码进行加密！
-			String password = new String(DigestUtils.md5Hex(user.getPassword()
-					.getBytes("UTF-8")));
+
 			user.setPassword(password);
 
 			Integer isSuccess = userService.createNewUser(user);
-			if (isSuccess!=null) {
+
+			if (isSuccess!=0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
@@ -178,11 +183,13 @@ public class UserController {
 		return "resultjson";
 	}
 
+
 	/**
 	 * 查询出角色列表
 	 */
 	@RequestMapping(value = "role.action", method = RequestMethod.GET)
 	public String role(Model model) {
+
 		try {
 			List<Role> list = (List<Role>) roleService.findRole();
 			System.out.println(list);
@@ -200,6 +207,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "dept.action", method = RequestMethod.GET)
 	public String findDept(Model model) {
+
 		try {
 			List<Department> list = deptService.findDept();
 			JSONArray json = JSONArray.fromObject(list);
@@ -217,6 +225,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
 	public String userDetail(Model model, Integer id) {
+
 		try {
 			User user = userService.getUserById(id);
 			List<Role> rlist = (List<Role>) roleService.findRole();
@@ -240,9 +249,11 @@ public class UserController {
 	public String updateUser(Model model, User user) {
 
 		try {
-			boolean isSuccess = userService.updateUser(user);
 
-			if (isSuccess) {
+			Integer isSuccess = userService.updateUser(user);
+
+
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -254,6 +265,7 @@ public class UserController {
 		return "resultjson";
 
 	}
+
 
 	/**
 	 * 员工离职
@@ -262,13 +274,16 @@ public class UserController {
 	 */
 	@RequestMapping(value = "leave.action", method = RequestMethod.GET)
 	public String updateLeave(Model model, String ids) {
+
 		if (ids == null) {
 			ids = "3";
 		}
 		try {
-			boolean isSuccess = userService.leaveUser(ids);
 
-			if (isSuccess) {
+			Integer isSuccess = userService.leaveUser(ids);
+
+
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -280,12 +295,14 @@ public class UserController {
 		return "resultjson";
 	}
 
+
 	/**
 	 * 员工转移部门
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "tradept.action", method = RequestMethod.GET)
+
 	public String updatedept(Model model, String ids, Integer deptId) {
 		if (ids == null) {
 			ids = "3";
@@ -294,9 +311,9 @@ public class UserController {
 			deptId = 2;
 		}
 		try {
-			boolean isSuccess = userService.tradeUser(ids, deptId);
+			boolean isSuccess = userService.tradeUser(ids,deptId);
 
-			if (isSuccess) {
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -308,22 +325,14 @@ public class UserController {
 		return "resultjson";
 	}
 
+
 	/**
 	 * 删除
 	 */
 	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
 	public String deletUser(Model model, Integer id) {
-		try {
-			boolean isSuccess = userService.deleteUserById(id);
-			String message = "failure";
-			Integer code = -1;
 
-			if (isSuccess) {
-				message = "success";
-				code = 200;
-			}
-			model.addAttribute("message", message);
-			model.addAttribute("code", code);
+
 
 			return "/views/message";
 		} catch (Exception e) {
@@ -342,12 +351,14 @@ public class UserController {
 	public String updateUser(Model model, Integer id, String password) {
 		try {
 
-			User toUpdateUser = userService.getUserById(id);
-			toUpdateUser.setPassword(DigestUtils.md5Hex(password
-					.getBytes("UTF-8")));
-			boolean isSuccess = userService.updateUser(toUpdateUser);
 
-			if (isSuccess) {
+			User toUpdateUser = userService.getUserById(id);
+
+
+			Integer isSuccess = userService.updateUser(toUpdateUser);
+
+
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "密码重置成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
@@ -375,19 +386,21 @@ public class UserController {
 	 */
 
 	@RequestMapping(value = "check.action", method = RequestMethod.GET)
-	public String queryByCheck(Model model, User user)
-			throws UnsupportedEncodingException {
-
+		
 		try {
+
 			if (user == null || (StringHelper.isEmpty(user.getLoginName()))) {
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
 				return "resultjson";
 			}
 			Integer count = userService.checkUser(user);
+
 			if (count != null && count == 0) {
-				model.addAttribute("result", Ajax.toJson(0, "该用户名可以使用！"));
+
+				model.addAttribute("result", Ajax.toJson(0, "该工号名可以使用！"));
 			} else {
-				model.addAttribute("result", Ajax.toJson(1, "该用户名已存在！"));
+
+				model.addAttribute("result", Ajax.toJson(1, "该工号名已存在！"));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -396,10 +409,11 @@ public class UserController {
 		return "resultjson";
 	}
 
-	@RequestMapping(value = "checkMsg.action", method = RequestMethod.GET)
+
 	public String checkMsg(Model model, String ln, Integer uId, String phone,
 			String msg) throws UnsupportedEncodingException {
 		try {
+
 			if (StringHelper.isEmpty(phone) || StringHelper.isEmpty(msg)) {
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
 				return "resultjson";
@@ -411,5 +425,6 @@ public class UserController {
 		}
 		return "resultjson";
 	}
+
 
 }

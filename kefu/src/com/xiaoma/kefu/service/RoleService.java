@@ -56,7 +56,7 @@ public class RoleService {
 	    * 在弹出的对话框显示详细信息
 	    */
 	public Role getRoleById(Integer id) {
-		return roleDaoImpl.getRoleByRoleId(id);
+		return roleDaoImpl.findById(Role.class, id);
 	}
 	
 	/**
@@ -65,16 +65,20 @@ public class RoleService {
 	 * @return
 	 */
 
-	public boolean updateRole(Role role) {
-			  return roleDaoImpl.updateUser(role); 
+	public Integer updateRole(Role role) {
+	         role.setCreateDate(new Date());
+	         role.setIsDel(0);
+			  return roleDaoImpl.update(role); 
 	}
 	/**
-	 * 删除
+	 * 假删除
 	 * @param id
 	 * @return
 	 */
-	public boolean deleteRoleById(Integer id){
-           return roleDaoImpl.deleteRoleById(id);
+	public Integer deleteRoleById(Integer id){
+		Role role =roleDaoImpl.findById(Role.class, id);
+		role.setIsDel(1);
+           return roleDaoImpl.update(role);
 	}
 
 	public Integer checkRole(Role role) {

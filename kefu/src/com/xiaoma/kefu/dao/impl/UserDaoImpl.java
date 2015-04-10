@@ -29,20 +29,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		query.setString("password", password);
 		return (User) query.uniqueResult();
 	}
-    
-	/**
-	 * 添加一条
-	 */
-	@Override
-	public boolean createNewUser(User user) {
-		try {
-			add(user);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 	
 
 	/**
@@ -132,52 +118,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 			Query query = session.createSQLQuery(hqlBf.toString());
 			
 			return ((Number)query.uniqueResult()).intValue();
-		}
-		
-		/**
-		 * 查询一条
-		 */
-		@Override
-		public User getUserByUserId(Integer id) {
-			
-			if(id == null){
-				return null;
-			}
-			return findById(User.class,id);
-			
-		}
-		
-		/**
-		 * 修改
-		 * @param 
-		 * @return
-		 */
-		@Override
-		public boolean updateUser(User user) {
-			try {
-				update(user);
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-		
-		/**
-		 * 删除
-		 */
-		@Override
-		public boolean deleteUserById(Integer id){
-			User user = this.getUserByUserId(id);
-			try {	
-			delete(user);
-			return true;
-			
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-			
 		}
 
 		@Override

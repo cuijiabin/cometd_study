@@ -14,17 +14,17 @@
 </head>
 <body>
 <!-- 面包屑 -->
-<!-- <div class="m-crumb" style="margin-bottom: 20px"> -->
-<!--     <ul class="f-cb"> -->
-<!--         <li><b>位置：</b></li> -->
-<!--         <li><a href="#">设置中心</a></li> -->
-<!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
-<!--         <li><i>&gt;</i>工号管理</li> -->
-<!--     </ul> -->
-<!-- </div> -->
+<div class="m-crumb" style="margin-bottom: 20px">
+    <ul class="f-cb">
+        <li><b>位置：</b></li>
+        <li><a href="#">设置中心</a></li>
+        <li><i>&gt;</i><a href="#">管理设置</a></li>
+        <li><i>&gt;</i>工号管理</li>
+    </ul>
+</div>
 
 <!-- 表格有边框 -->
-<a href="" style="font-size:18px">在职员工</a> <a href="" style="font-size:18px">离职员工</a><button style="float:right;margin-right:40px;" onclick="javascript:addUser();" class="btn" >添加工号</button>
+<a href="" style="font-size:18px">在职员工</a> <a href="" style="font-size:18px">离职员工</a><button style="float:right;margin-right:5px;" onclick="window.location.href='/user/add.action'" class="btn" >添加工号</button>
 
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
@@ -65,11 +65,7 @@
       <option value="5">转移至随时学</option>
       <option value="6">转移至留学部</option>
   </select></c:if>
-
-
-
-
-
+  
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -111,7 +107,7 @@ function save(){
 		"cardName" : $("#cardName").val(),
 		"createDate" : $("#createDate").val(),		    
 	};
-	alert(data);
+	$.dialog.alert(data);
 	//新增时验证参数
 	if (!verificationParam(data)) {
 		
@@ -124,10 +120,10 @@ function save(){
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		success : function(data) {
-				alert(data.msg);
+			$.dialog.alert(data.msg);
 		},
 		error : function(msg) {
-			alert(data.msg);
+			$.dialog.alert(data.msg);
 		}
 	});
 }
@@ -137,55 +133,55 @@ function save(){
 function verificationParam(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace("^[ ]+$", "").length == 0) {
-		alert("登录名不得为空！");
+		$.dialog.alert("登录名不得为空！");
 		return false;
 	}
 	
-	var chinesePatrn = /^[\da-zA-Z]{6,10}$/;
+	var chinesePatrn = /^[\da-zA-Z]{10,15}$/;
 	if(chinesePatrn.test(loginName)){
-		alert("工号输入规则不对");
+		$.dialog.alert("工号输入规则不对");
 		return false;
 	}
 	
 	 if(checkUser()){
-		   alert("登录名已存在！");
+		   $.dialog.alert("登录名已存在！");
 		   return false;
 	   }
 	
 	var userName = userData.userName;
 	if (userName.replace("^[ ]+$", "").length == 0) {
-		alert("用户名不得为空！");
+		$.dialog.alert("用户名不得为空！");
 		return false;
 	}
 	
 	var password = userData.password;
 	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 	if (!patrn.test(password)) {
-		alert("密码格式不正确");
+		$.dialog.alert("密码格式不正确");
 		return false;
 	}
 	
 	var password1 = userData.password1;
 	if (password !=password1) {
-		alert("两次输入密码不一致！");
+		$.dialog.alert("两次输入密码不一致！");
 		return false;
 	}
 	
 	var maxListen = userData.maxListen;
 	if (maxListen.replace("^[ ]+$", "").length == 0) {
-		alert("请填写最大接听数！");
+		$.dialog.alert("请填写最大接听数！");
 		return false;
 	}
 	
 	var cardName = userData.cardName;
 	if (cardName.replace("^[ ]+$", "").length == 0) {
-		alert("请填写名片！");
+		$.dialog.alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace("^[ ]+$", "").length == 0) {
-		alert("请填写入职时间！");
+		$.dialog.alert("请填写入职时间！");
 		return false;
 	}
 	
@@ -213,7 +209,7 @@ function checkUser(){
 			}
 		},
 		error : function(msg){
-			alert("查询失败!");
+			$.dialog.alert("查询失败!");
 		}
 	});
 	return flag;

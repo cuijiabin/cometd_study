@@ -72,7 +72,7 @@ public class RoleController {
 	public String addUser(Model model, Role role) {
 		try {
 			Integer isSuccess = roleService.createNewUser(role);
-			if (isSuccess!=null) {
+			if (isSuccess!=0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
@@ -111,10 +111,9 @@ public class RoleController {
 
 		Role role = roleService.getRoleById(id);
 		System.out.println(role);
-		JSONObject jsonObject = JSONObject.fromObject(role);
-		model.addAttribute("result", jsonObject.toString());
+		model.addAttribute("role", role);
 
-		return "resultjson";
+		return "/set/govern/addRole";
 	}
 	
 	/**
@@ -124,16 +123,10 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.GET)
 	public String updateUser(Model model, Role role) {
-           System.out.println(role.getName());
 		try {
+			Integer isSuccess = roleService.updateRole(role);
 
-			Role toUpdateRole = roleService.getRoleById(role.getId());
-
-			toUpdateRole.setName(role.getName());
-
-			boolean isSuccess = roleService.updateRole(toUpdateRole);
-
-			if (isSuccess) {
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -156,8 +149,10 @@ public class RoleController {
 	public String deleteProduct(Model model, Integer id) {
 
 		try {
-			boolean isSuccess = roleService.deleteRoleById(id);
-			if (isSuccess) {
+			//boolean isSuccess = roleService.deleteRoleById(id);
+			System.out.println(id);
+			Integer isSuccess = roleService.deleteRoleById(id);
+			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "删除产品成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
@@ -166,7 +161,7 @@ public class RoleController {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
-		return "resultjson";
+		return "redirect:/role/list.action";
 	}
 	
 }
