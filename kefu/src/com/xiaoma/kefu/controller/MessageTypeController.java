@@ -1,5 +1,8 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.List;
+
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,22 @@ public class MessageTypeController {
 	 @Autowired
 	 private MessageTypeService messageTypeService;
 	 
+		//查询各个级别的树
+	    @SuppressWarnings("static-access")
+		@RequestMapping(value = "main.action", method = RequestMethod.GET)
+		public String main(Model model,Integer typeId) {
+			if(typeId!=null){
+			List list = messageTypeService.findTree(typeId);
+			
+			JSONArray json = new JSONArray().fromObject(list);
+			System.out.println(json);
+			model.addAttribute("json",json.toString());
+			return "/message/messageTree";
+			}else{
+				return "null";
+			}
+		}
+	 
 	 /**
 	  * 显示详细信息
 	  * @param mode
@@ -38,7 +57,7 @@ public class MessageTypeController {
 		 JSONObject jsonObject = JSONObject.fromObject(messageType);
          mode.addAttribute("result", jsonObject.toString());
 		 
-		 return "xxxx";
+		 return "message/publicMessageType";
 	 }
 	 
 }

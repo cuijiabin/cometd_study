@@ -108,17 +108,17 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 		@Override
 		public void findByCondition(Map<String, String> conditions,
 				PageBean<Blacklist> pageBean) {
-		      
+		     try{ 
 			List<String> relation = new ArrayList<String>();
 			List<Criterion> role = new ArrayList<Criterion>();// 条件
 			List<Order> orders = new ArrayList<Order>();// 排序
 			if (conditions != null) {
-				if (StringHelper.isNotEmpty(conditions.get("customerDescription"))) {
-					role.add(Restrictions.like("customerDescription",
-							"%" + conditions.get("customerDescription").trim() + "%"));
+				if (StringHelper.isNotEmpty(conditions.get("description"))) {
+					role.add(Restrictions.like("description",
+							"%" + conditions.get("description").trim() + "%"));
 				}
-				if (StringHelper.isNotEmpty(conditions.get("customerId"))&& !"0".equals(conditions.get("deptId"))) {
-					role.add(Restrictions.eq("customerId", conditions.get("customerId")));
+				if (StringHelper.isNotEmpty(conditions.get("customerId")) ){
+					role.add(Restrictions.eq("customerId", conditions.get("customerId").trim()));
 				}
 				
 				if (conditions.get("startDate") != null
@@ -143,6 +143,9 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			orders.add(Order.asc("createDate"));
 			find(Blacklist.class, relation, role, null, orders, pageBean);
 			logger.info("search Blacklist by conditions!");
+		     }catch(Exception e){
+		    	 e.printStackTrace();
+		     }
 		} 
 
 		/**

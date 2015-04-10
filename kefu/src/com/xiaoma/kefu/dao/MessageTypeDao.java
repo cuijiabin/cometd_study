@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.dao;
 
+import java.util.List;
+
 import com.xiaoma.kefu.model.MessageType;
 
 /**
@@ -33,5 +35,11 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
 	 * @return
 	 */
    public	boolean deleteMessageTypeById(Integer id);
+   /**
+    * 查询树
+    * @param tid
+    * @return
+    */
+   public	List findTree(int tid);
 
 }

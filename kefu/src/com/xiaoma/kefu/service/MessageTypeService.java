@@ -20,7 +20,11 @@ public class MessageTypeService {
 	
 	@Autowired
 	private MessageTypeDao messageTypeDaoImpl;
-	
+	  
+      public List findTree(int tid) {
+		
+		return messageTypeDaoImpl.findTree(tid);
+	  }
 	
 	  /**
 	    * 在弹出的对话框显示详细信息

@@ -13,7 +13,6 @@ import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
-
 /**
  * @author frongji
  * @time 2015年4月2日上午11:21:05
@@ -48,26 +47,40 @@ public class BlacklistController {
 		}
 	}
 	
+	  /**
+     * 保存前页面跳转
+     * 
+     * @return 返回值
+     */
+    @RequestMapping(value = "new.action", method = RequestMethod.GET)
+    public String toSave() {
+
+    	
+        return "customer/blacklistAdd";
+      }
+
 	/**
-	 * 添加
+	 * 保存黑名单实体
 	 */
-
-	@RequestMapping(value = "add.action", method = RequestMethod.GET)
-	public String addBlacklist(Model model, Blacklist blacklist) {
-
+  
+	@RequestMapping(value = "add.action", method = RequestMethod.POST)
+	public String save(Model model,  Blacklist blacklist) {
+		
+		System.out.println("888888888888888888888888888888888888888888888888");
 		try {
+	  
 		
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
-			} else {
+			  } else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
-			}
-		} catch (Exception e) {
+			  }
+		   } catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
-		}
+		 }
 
-		return "iews/resultjson";
+		return "customer/blackList";
 	}
 	
 	/**
@@ -97,7 +110,7 @@ public class BlacklistController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
-		return "iews/resultjson";
+		return "resultjson";
 
 	}
 

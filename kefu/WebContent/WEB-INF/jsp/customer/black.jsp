@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
+<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
+<%    
+String path = request.getContextPath();
+%>
+ 
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -31,12 +35,12 @@
         <div class="f-mbm">
             <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" />
             <label>添加工号：</label><input  class="c-wd150" type="text" />
-            <label>阻止原因：</label><input id="customerDescription" name="customerDescription" value="${description}" class="c-wd150" type="text" />
+            <label>阻止原因：</label><input id="description" name="description" value="${description}" class="c-wd150" type="text" />
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
         </div>
         <div class="f-mbm">
          
-        <button type="button" class="btn btn-primary btn-small" onclick="add()">添加黑名单</button>
+        <button type="button" class="btn btn-primary btn-small" onclick="location.href='<%=path%>/blacklist/new.action'">添加黑名单</button>
             <label></label>
             <button type="button" class="btn btn-primary btn-small">删除</button>
         </div>
@@ -63,7 +67,7 @@ function find(currentPage){
 	var data = {
 			"currentPage":currentPage,
 			"map[customerId]":$("#customerId").val(),
-			"map[customerDescription]":$("#customerDescription").val(),
+			"map[description]":$("#description").val(),
 			"map[typeId]":1
 	};
 	$.ajax({
