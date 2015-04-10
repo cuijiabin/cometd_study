@@ -48,6 +48,13 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @return
 	 */
 	public Customer getCustomerById(Long id);
+	
+	/**
+	 * 根据ip获取用户
+	 * @param ip
+	 * @return
+	 */
+	public Customer getByIp(String ip);
     
 	/**
 	 * 条件查询

@@ -30,6 +30,9 @@ public class Customer implements Serializable {
 	@Column(name = "id")
 	private Long id;
 	
+	@Column(name = "ip")
+	private String ip;
+	
 	@Column(name = "styleId")
 	private Integer styleId;
 	
@@ -72,6 +75,15 @@ public class Customer implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public Integer getStyleId() {
