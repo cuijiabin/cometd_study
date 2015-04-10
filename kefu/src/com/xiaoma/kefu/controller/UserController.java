@@ -147,9 +147,9 @@ public class UserController {
 			String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
 			user.setPassword(password);
             
-			boolean isSuccess = userService.createNewUser(user
+			Integer isSuccess = userService.createNewUser(user
 					);
-			if (isSuccess) {
+			if (isSuccess!=null) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));

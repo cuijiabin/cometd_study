@@ -97,7 +97,127 @@ function addUser(){
 			    ]
 		});
 }
-
+function save(){
+	var url = "/user/save.action";
+	var data = {
+		"loginName" : $("#loginName").val(),
+		"userName" : $("#userName").val(),
+		"password" : $("#password").val(),
+		"password1" : $("#password1").val(),
+		"listenLevel" : $("#listenLevel option:selected").val(),
+		"deptId" : $("#deptId option:selected").val(),
+		"roleId" : $("#roleId option:selected").val(),
+		"maxListen" : $("#maxListen").val(),
+		"cardName" : $("#cardName").val(),
+		"createDate" : $("#createDate").val(),		    
+	};
+	alert(data);
+	//新增时验证参数
+	if (!verificationParam(data)) {
+		
+		return;
+	}
+	$.ajax({
+		type : "get",
+		url : url,
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		success : function(data) {
+				alert(data.msg);
+		},
+		error : function(msg) {
+			alert(data.msg);
+		}
+	});
+}
+/**
+ *  js 校验添加
+ */
+function verificationParam(userData) {
+	var loginName = userData.loginName;
+	if (loginName.replace("^[ ]+$", "").length == 0) {
+		alert("登录名不得为空！");
+		return false;
+	}
+	
+	var chinesePatrn = /^[\da-zA-Z]{6,10}$/;
+	if(chinesePatrn.test(loginName)){
+		alert("工号输入规则不对");
+		return false;
+	}
+	
+	 if(checkUser()){
+		   alert("登录名已存在！");
+		   return false;
+	   }
+	
+	var userName = userData.userName;
+	if (userName.replace("^[ ]+$", "").length == 0) {
+		alert("用户名不得为空！");
+		return false;
+	}
+	
+	var password = userData.password;
+	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
+	if (!patrn.test(password)) {
+		alert("密码格式不正确");
+		return false;
+	}
+	
+	var password1 = userData.password1;
+	if (password !=password1) {
+		alert("两次输入密码不一致！");
+		return false;
+	}
+	
+	var maxListen = userData.maxListen;
+	if (maxListen.replace("^[ ]+$", "").length == 0) {
+		alert("请填写最大接听数！");
+		return false;
+	}
+	
+	var cardName = userData.cardName;
+	if (cardName.replace("^[ ]+$", "").length == 0) {
+		alert("请填写名片！");
+		return false;
+	}
+	
+	var createDate = userData.createDate;
+	if (createDate.replace("^[ ]+$", "").length == 0) {
+		alert("请填写入职时间！");
+		return false;
+	}
+	
+	return true;
+}
+function checkUser(){
+	var flag = false;
+	if($("#1oginName").val()==''){
+		$("#info").html("登录名不能为空!");
+		return true;
+	}
+	$.ajax({
+		type : "get",
+		url : "/user/check.action",
+		data : {'loginName':$("#loginName").val()},
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		async:false,
+		success : function(data) {
+			if(data.code==0)
+				$("#info").html("*");
+			else{
+				$("#info").html("该登录名已存在!");
+			 	flag = true;
+			}
+		},
+		error : function(msg){
+			alert("查询失败!");
+		}
+	});
+	return flag;
+}
 </script>
 </body>
 </html>

@@ -39,19 +39,6 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao{
 		
 		return (List<Role>) query.list();
 	}
-	/**
-	 * 添加一条
-	 */
-	@Override
-	public boolean createNewRole(Role role) {
-		try {
-			add(role);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 	
 	/**
 	 * 根据id得到角色详情

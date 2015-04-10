@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,10 @@ public class RoleService {
 	/**
 	 * 添加
 	 */
-	public boolean createNewUser(Role role) {
-		// TODO Auto-generated method stub
-		return roleDaoImpl.createNewRole(role);
+	public Integer createNewUser(Role role) {
+		role.setCreateDate(new Date());
+		role.setIsDel(0);
+		return (Integer) roleDaoImpl.add(role);
 	}
 
 	  /**

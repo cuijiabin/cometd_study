@@ -15,25 +15,25 @@
 
 <body>
 <!-- 面包屑 -->
-<div class="m-crumb">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">设置中心</a></li>
-        <li><i>&gt;</i><a href="#">管理设置</a></li>
-        <li><i>&gt;</i>角色管理</li>
-    </ul>
-</div>
-<input type="button" value="添加角色" style="margin-left:1608px"/>
+<!-- <div class="m-crumb"> -->
+<!--     <ul class="f-cb"> -->
+<!--         <li><b>位置：</b></li> -->
+<!--         <li><a href="#">设置中心</a></li> -->
+<!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
+<!--         <li><i>&gt;</i>角色管理</li> -->
+<!--     </ul> -->
+<!-- </div> -->
 <!-- 表格有边框 -->
 <h2>添加角色</h2>
-<table class="table table-bordered table-striped table-hover m-table">
+<form action="/role/add.action" method="post" id="form">
+<table  border="1" aglin="centert" class="table">
         <tr>
-            <td>角色名称</td>
-        </tr>
-        <tr>
-           <input type ="text" id ="name" name="name"/>
+           <td>角色名称</td>
+           <td><input type ="text" id ="name" name="name"/><td>
         </tr>
 </table>
+ <button style="float:right;margin-right:40px;" onclick="javascript:addRole();" class="btn" >添加</button>
+</form>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -41,6 +41,15 @@
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
+function addRole(){
+  var name=	$("#name").val();
+	alert(name);
+	if(name!==""||name==null){
+		alert("名称不能为空");
+	}else{
+		$("#form").submit();
+	}
+}
 </script>
 </body>
 </html>

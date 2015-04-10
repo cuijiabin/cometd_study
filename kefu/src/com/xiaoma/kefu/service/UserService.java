@@ -90,10 +90,10 @@ public Integer checkUser (User user){
 		 * 添加
 		 * @throws ParseException 
 		 */
-       public boolean createNewUser(User user) throws ParseException{
+       public Integer createNewUser(User user) throws ParseException{
     	  user.setOnLineStatus(1);
     	  user.setStatus(1);
-          return userDaoImpl.createNewUser(user);
+          return (Integer) userDaoImpl.add(user);
        }
       
        /**

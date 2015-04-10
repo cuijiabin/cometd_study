@@ -23,7 +23,7 @@
         <li><i>&gt;</i>角色管理</li>
     </ul>
 </div>
-<button style="float:right;margin-right:20px;" onclick="window.location='/role/addRole.action'" class="btn" >添加角色</button>
+<button style="float:right;margin-right:5px;" onclick="javascript:addRole();" class="btn" >添加角色</button>
 <!-- 表格有边框 -->
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
@@ -49,10 +49,27 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-//$('.btn-group .btn').click(function(){
-//	$(this).addClass("active").siblings().removeClass("active");
-//})
+function addRole(){
+	$.dialog({content:'url:/role/addRole.action',
+		width: 900,height: 500,
+		button: [
+			        {
+			            name: '确认',
+			            callback: function () {
+			                 save(); 
+			                return false;
+			            },
+			            focus: true
+			        },
+			        {
+			            name: '关闭我'
+			        }
+			    ]
+		});
+}
 </script>
 </body>
 </html>
