@@ -27,51 +27,60 @@ public class MessageRecordsService {
 	 * 逻辑删除
 	* @Description: TODO
 	* @param ids	1,2,3
+	 * @return 
 	* @Author: wangxingfei
 	* @Date: 2015年4月8日
 	 */
-	public void delete4Logic(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int delete4Logic(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			MessageRecords record = new MessageRecords();
 			record.setId(Integer.valueOf(str));
-			messageRecordsDaoImpl.update2Del(record);
+			num += messageRecordsDaoImpl.update2Del(record);
 		}
+		return num;
 	}
 	
 	/**
 	 * 物理删除
 	* @Description: TODO
 	* @param ids	1,2,3
+	 * @return 
 	* @Author: wangxingfei
 	* @Date: 2015年4月8日
 	 */
-	public void delete(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int delete(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			MessageRecords record = new MessageRecords();
 			record.setId(Integer.valueOf(str));
-			messageRecordsDaoImpl.delete(record);
+			num += messageRecordsDaoImpl.delete(record);
 		}
+		return num;
 	}
 	
 	/**
 	 * 回收站信息还原
 	* @Description: TODO
 	* @param ids	1,2,3
+	 * @return 
 	* @Author: wangxingfei
 	* @Date: 2015年4月8日
 	 */
-	public void restore(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int restore(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			MessageRecords record = new MessageRecords();
 			record.setId(Integer.valueOf(str));
-			messageRecordsDaoImpl.update2Restore(record);
+			num += messageRecordsDaoImpl.update2Restore(record);
 		}
+		return num;
 	}
 
 }

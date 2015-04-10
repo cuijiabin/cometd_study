@@ -11,7 +11,7 @@
 <table class="table table-bordered table-striped table-hover m-table">
 	<thead>
 		<tr>
-			<td style="width: 30px; text-align: center;"><input type="checkbox" id="inlineCheckbox" value="全选"> </td>
+			<td style="width: 30px; text-align: center;"><input type="checkbox" id="titleCheckbox" name="titleCheckbox" onclick="javascript:checkedAll();" value="全选"> </td>
 			<c:forEach var="title" items="${title }">
 				<td>${title}</td>
 			</c:forEach>
@@ -20,7 +20,7 @@
 	<tbody>
 		<c:forEach var="contentMap" items="${pageBean.objList}">
 			<tr>
-				<td><input type="checkbox" name="dialogueIdCheckbox" value="${contentMap.dialogueId}" >
+				<td><input type="checkbox" name="detailCheckbox" value="${contentMap.dialogueId}" >
 					<input type="hidden" id="dialogueId" value="${contentMap.dialogueId}">
 					<input type="hidden" id="hasName" value="${contentMap.hasName}">
 					<input type="hidden" id="customerId" value="${contentMap.customerId}">
@@ -34,7 +34,9 @@
 									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>图片</td>
 								</c:when>
 								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName != 1 }"> 
-									<td><a href="#">${mapItem.value}</a>[<a href="#">创建</a>]</td>
+									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>
+										[<a href="#">创建</a>]
+									</td>
 								</c:when>
 								<c:otherwise> 
 									<td>${mapItem.value}</td>
