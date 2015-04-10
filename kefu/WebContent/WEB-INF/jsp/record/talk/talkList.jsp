@@ -35,7 +35,7 @@
 								</c:when>
 								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName != 1 }"> 
 									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>
-										[<a href="#">创建</a>]
+										[<a href="#" onClick="updateCusl(${contentMap.customerId},${contentMap.dialogueId})">创建</a>]
 									</td>
 								</c:when>
 								<c:otherwise> 
