@@ -2,7 +2,15 @@
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <!-- 翻页 -->
-<div id="kkpager"></div>
+<div id="kkpager" >每页
+	<select id="pageRecorders" name="pageRecorders" style="width:50px;" onchange="find(1)">
+		<option value="5">5</option>
+		<option value="10">10</option>
+		<option value="20">20</option>
+		<option value="100">100</option>
+	</select>
+	条
+</div>
 <script type="text/javascript">
 $(function(){
 	var totalPage = '${pageBean.totalPages}';

@@ -60,6 +60,7 @@ function find(currentPage){
 	var url="/log/find.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"map[loginName]":$("#loginName").val(),
 			"map[deptId]":$("#deptId").val(),
 			"map[userId]":$("#userId").val(),
