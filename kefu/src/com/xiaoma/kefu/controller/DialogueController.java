@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import redis.clients.jedis.Jedis;
@@ -38,7 +37,6 @@ public class DialogueController {
 
 	private Jedis jedis = JedisDao.getJedis();
 
-//	private Logger logger = Logger.getLogger(DialogueController.class);
 
 	/**
 	 * 默认对话框
@@ -50,6 +48,18 @@ public class DialogueController {
 	@RequestMapping(value = "index.action", method = RequestMethod.GET)
 	public String index(HttpSession session, Model model) {
 		return "/dialogue/comet";
+	}
+	
+	@RequestMapping(value = "chat.action", method = RequestMethod.GET)
+	public String chat(HttpSession session, Model model) {
+		
+		return "/dialogue/chat";
+	}
+	
+	@RequestMapping(value = "customerChat.action", method = RequestMethod.GET)
+	public String customerChat(HttpSession session, Model model) {
+		
+		return "/dialogue/customerChat";
 	}
 	
 	@RequestMapping(value = "user.action", method = RequestMethod.GET)

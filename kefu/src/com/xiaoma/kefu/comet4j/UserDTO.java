@@ -16,7 +16,7 @@ public class UserDTO {
 		this.id = id;
 		this.name = name;
 		Date d = new Date(System.currentTimeMillis());
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
 		this.transtime = f.format(d);
 	}
 

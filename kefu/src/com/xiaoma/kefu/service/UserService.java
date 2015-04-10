@@ -21,7 +21,7 @@ import com.xiaoma.kefu.util.PageBean;
  * @author  yangxiaofeng
  *
  */
-@Service
+@Service("userService")
 public class UserService {
 	
 	@Autowired

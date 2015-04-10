@@ -8,8 +8,7 @@ import org.comet4j.core.CometEngine;
  * @author cuijiabin
  */
 public class HealthSender implements Runnable {
-	private static final CometEngine engine = CometContext.getInstance()
-			.getEngine();
+	private static final CometEngine engine = CometContext.getInstance().getEngine();
 	private static final HealthDTO healthDto = new HealthDTO();
 	private static final long startup = System.currentTimeMillis();
 

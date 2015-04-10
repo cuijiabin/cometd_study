@@ -12,13 +12,32 @@ public class JoinDTO {
 	private String type;
 	private String id;
 	private String name;
+	private String realId;
+	private String cookieVal;
+	 
+
+	public String getCookieVal() {
+		return cookieVal;
+	}
+
+	public void setCookieVal(String cookieVal) {
+		this.cookieVal = cookieVal;
+	}
+
+	public String getRealId() {
+		return realId;
+	}
+
+	public void setRealId(String realId) {
+		this.realId = realId;
+	}
 
 	public JoinDTO(String id, String name) {
 		this.type = "up";
 		this.id = id;
 		this.name = name;
 		Date d = new Date(System.currentTimeMillis());
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
 		this.transtime = f.format(d);
 	}
 
