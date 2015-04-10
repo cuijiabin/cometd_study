@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
@@ -198,5 +197,13 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Customer getByIp(String ip) {
+		Session session = getSession();
+		String hql = "from Customer c where c.ip= '"+ip+"'";
+		Query query = session.createQuery(hql);
+		return (Customer) query.uniqueResult();
 	}
 }

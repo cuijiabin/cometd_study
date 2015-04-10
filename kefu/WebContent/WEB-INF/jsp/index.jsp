@@ -93,7 +93,7 @@ $("#openClose").click(function(){
 });
 
 $(function(){
-	$("#leftMain").load("/iframe3.html");
+	$("#leftMain").load("/function/tree.action?id=2");
 	$("#rightMain").attr("src", "/welcome.html");
 })
 

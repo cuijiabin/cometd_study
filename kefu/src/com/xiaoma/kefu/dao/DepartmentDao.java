@@ -7,7 +7,7 @@ import com.xiaoma.kefu.model.Department;
 
 
 
-public interface DepartmentDao {
+public interface DepartmentDao extends BaseDao<Department>{
 	/**
 	 * 获取全部数据
 	 * @return

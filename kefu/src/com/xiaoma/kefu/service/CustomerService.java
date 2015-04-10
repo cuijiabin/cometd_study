@@ -34,11 +34,6 @@ public class CustomerService {
 	@Autowired
 	private CustomerDao customerDaoImpl;
 
-
-   
- 
-
-	
 	private Jedis jedis = JedisDao.getJedis();
 	
 	
@@ -112,17 +107,23 @@ public class CustomerService {
 		 */
 		public Customer genCustomer(HttpServletRequest request) throws Exception{
 			Cookie cookie = CookieUtil.getCustomerCookie(request);
+			String ip = CookieUtil.getIpAddr(request);
+			Customer customer = customerDaoImpl.getByIp(ip);
 			
-			Customer customer = new Customer();
-			Long customerId;
-			if (cookie == null) {
-				//创建一个新的Customer
-			    customerId = this.insert(customer);
-			} else {
+			Long customerId = null;
+			if(customer != null){
+				customerId = customer.getId();
+			}else if (customer == null && cookie != null) {
 				String id = DesUtil.decrypt(cookie.getValue(),PropertiesUtil.getProperties(CacheName.SECRETKEY));
 				customerId = Long.valueOf(id);
-				cookie.setMaxAge(5 * 365 * 24 * 60 * 60);
+				
+			} else if(customer == null && cookie == null){
+				//创建一个新的Customer
+				customer = new Customer();
+				customer.setIp(ip);
+			    customerId = this.insert(customer);
 			}
+			
 			customer = this.getCustomerById(customerId);
 			return customer;
 		}

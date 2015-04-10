@@ -95,7 +95,10 @@
 //})
 function save(id){
 	alert(id);
-	var url = "/user/save.action";
+	if(id!=null){
+		var url = "/user/save.action";
+		
+	}
 	var data = {
 		"loginName" : $("#loginName").val(),
 		"userName" : $("#userName").val(),

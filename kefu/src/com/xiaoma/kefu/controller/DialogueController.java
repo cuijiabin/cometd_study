@@ -49,7 +49,12 @@ public class DialogueController {
 	 */
 	@RequestMapping(value = "index.action", method = RequestMethod.GET)
 	public String index(HttpSession session, Model model) {
-		return "/dialogue/index";
+		return "/dialogue/comet";
+	}
+	
+	@RequestMapping(value = "user.action", method = RequestMethod.GET)
+	public String user(HttpSession session, Model model) {
+		return "/dialogue/userChat";
 	}
 
 	@RequestMapping(value = "conopen.action", method = RequestMethod.GET)

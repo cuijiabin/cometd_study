@@ -6,7 +6,7 @@ import com.xiaoma.kefu.model.Role;
 
 
 
-public interface RoleDao {
+public interface RoleDao extends BaseDao<Role>{
 	/**
 	 * 获取全部数据
 	 * @return
@@ -14,12 +14,6 @@ public interface RoleDao {
 	public Integer getAllRoleCount();
 
 	public List<Role> getRoleOrderById(Integer start, Integer offset);
-	/**
-	 * create a new role
-	 * @param user
-	 * @return
-	 */
-	public abstract boolean createNewRole(Role role);
 
 	/**
 	 * get Role by id

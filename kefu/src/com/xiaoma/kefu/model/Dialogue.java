@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 对话信息	实体类
@@ -82,6 +83,10 @@ public class Dialogue implements Serializable {
 	@Column(name="styleId")
 	private Integer styleId;
 	
+	@Transient
+	private String customerName;//虚拟列 客户名称 
+	@Transient
+	private String durationTimeFM;//虚拟列 对话时长格式化 xx:xx:xx
 	
 	public Long getId() {
 		return id;
@@ -244,6 +249,18 @@ public class Dialogue implements Serializable {
 	}
 	public void setLandingPage(String landingPage) {
 		this.landingPage = landingPage;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getDurationTimeFM() {
+		return durationTimeFM;
+	}
+	public void setDurationTimeFM(String durationTimeFM) {
+		this.durationTimeFM = durationTimeFM;
 	}
 	
 }

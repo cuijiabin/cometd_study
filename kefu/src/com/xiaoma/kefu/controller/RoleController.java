@@ -62,17 +62,17 @@ public class RoleController {
 	@RequestMapping(value = "addRole.action", method = RequestMethod.GET)
 	public String addRole(Model model, Role role) {
 
-		return "/govern/addRole";
+		return "/set/govern/addRole";
 	}
 	/**
 	 * 添加
 	 */
 
-	@RequestMapping(value = "add.action", method = RequestMethod.GET)
+	@RequestMapping(value = "save.action", method = RequestMethod.GET)
 	public String addUser(Model model, Role role) {
 		try {
-			boolean isSuccess = roleService.createNewUser(role);
-			if (isSuccess) {
+			Integer isSuccess = roleService.createNewUser(role);
+			if (isSuccess!=null) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));

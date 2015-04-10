@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 留言记录	实体类
@@ -78,6 +79,7 @@ public class MessageRecords implements Serializable {
 	@Column(name="status")
 	private Integer status;
 	
+	@Transient
 	private String customerName;//客户名称 虚拟列
 	
 	

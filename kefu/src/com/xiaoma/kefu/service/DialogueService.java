@@ -53,14 +53,16 @@ public class DialogueService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void delete4Logic(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int delete4Logic(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			Dialogue dialogue = new Dialogue();
 			dialogue.setId(Long.valueOf(str));
-			dialogueDaoImpl.update2Del(dialogue);
+			num += dialogueDaoImpl.update2Del(dialogue);
 		}
+		return num;
 	}
 	
 	/**
