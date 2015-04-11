@@ -19,7 +19,7 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements Depart
     public Integer getAllDeptCount() {
 		
 		Session session = getSession();
-		String hql = "select count(1) from Department c where 1=1 ";
+		String hql = "select count(1) from Department c where isDel<>1 ";
 		Query query = session.createSQLQuery(hql);
 		return ((Number)query.uniqueResult()).intValue();
 		
@@ -32,67 +32,16 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements Depart
 		offset = (offset == null)? 20 :offset;
 		
 		Session session = getSession();
-		String hql = "from Department limit order by sortNum asc";
+		String hql = "from Department where isDel<>1 order by sortNum asc";
 		Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
 		
 		return (List<Department>) query.list();
 	}
-	/**
-	 * 添加一条
-	 */
-	@Override
-	public boolean createNewDept(Department dept) {
-		try {
-			add(dept);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	/**
-	 * 根据id得到角色详情
-	 */
-	@Override
-	public Department getDeptByDeptId(Integer id) {
-		if(id == null){
-			return null;
-		}
-		return findById(Department.class,id);
-	}
-	
-	@Override
-	public boolean updateUser(Department dept) {
-		try {
-			update(dept);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	/**
-	 * 删除
-	 */
-	@Override
-	public boolean deleteDeptById(Integer id){
-		Department dept = this.getDeptByDeptId(id);
-		try {	
-		delete(dept);
-		return true;
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-		
-	}
+
 	@Override
 	public Integer checkDept(Department dept) {
 		Session session = getSession();
-		StringBuffer hqlBf = new StringBuffer("select count(a.id) from Department a where 1 = 1");
+		StringBuffer hqlBf = new StringBuffer("select count(a.id) from Department a where isDel<>1");
 		if(StringUtils.isNotBlank(dept.getName())){
 			hqlBf.append(" and a.name  = '"+dept.getName()+"' ");
 		}
@@ -105,9 +54,17 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements Depart
 	@Override
 	public List<Department> findDept() {
 		Session session = getSession();
-		String hql = "from Department where 1=1 ";
+		String hql = "from Department where isDel<>1 ";
 		Query query = session.createQuery(hql);
 		return query.list();
+	}
+	@Override
+	public Integer getMaxNum() {
+		Session session = getSession();
+		String hql = "select max(sortNum) from Department c where isDel<>1 ";
+		Query query = session.createSQLQuery(hql);
+		return ((Number)query.uniqueResult()).intValue();
+		
 	} 
 }
 

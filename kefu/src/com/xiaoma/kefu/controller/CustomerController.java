@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
@@ -26,6 +28,8 @@ public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private DialogueService dialogueService;//对话信息
 	
 	/**
 	 * 查询所有、条件查询
@@ -145,6 +149,31 @@ public class CustomerController {
 
 	}
 
+	
+	/**
+	 * 编辑用户信息页面(用于记录中心)
+	* @Description: TODO
+	* @param model
+	* @param customerId
+	* @param dialogueId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "editCus.action", method = RequestMethod.GET)
+	public String editCus(Model model,String customerId,String dialogueId) {
+		try {
+			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+			Dialogue dialogue = dialogueService.findById(Long.valueOf(dialogueId));
+			model.addAttribute("customer", customer);
+			model.addAttribute("dialogue", dialogue);
+			return "/customer/editCus";
+		} catch (Exception e) {
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+
+	}
 
 
 

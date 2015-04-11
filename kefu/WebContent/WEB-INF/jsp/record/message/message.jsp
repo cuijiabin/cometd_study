@@ -18,19 +18,23 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">设置中心</a></li>
-        <li><i>&gt;</i><a href="#">日志管理</a></li>
-        <li><i>&gt;</i>登录日志</li>
+        <li><a href="#">记录中心</a></li>
+        <li><i>&gt;</i><a href="#">留言记录</a></li>
     </ul>
 </div>
 <!-- 查询条件 -->
 <div class="m-query f-mar10">
 	<div class="m-query-hd">
-        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
+        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
+        <input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
         <div class="u-subsec">
            	<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
         </div>
     </div>
+    <div class="u-subsec">
+       <button type="button" class="btn btn-primary btn-small" onclick="del();">删除</button>
+       <button type="button" class="btn btn-primary btn-small" onclick="toRecycle();">回收站</button>
+   	</div>
     <div class="u-hr"></div>
 </div>
 
@@ -40,13 +44,16 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 
 function find(currentPage){
 	var url="/recordsCenter/findMessage.action";
 	var data = {
 			"currentPage":currentPage,
-			"typeId":1
+			"typeId":1,
+			"beginDate":$("#beginDate").val(),
+			"endDate":$("#endDate").val()
 	};
 	$.ajax({
 	    type: "get",
@@ -61,6 +68,66 @@ function find(currentPage){
 	        alert(msg);
 	    }
 	});
+}
+
+//全选/全不选
+function checkedAll(){
+	if(($("#titleCheckbox").is(":checked"))){
+		$("#table_data :checkbox").attr("checked", true);  
+	}else{
+		$("#table_data :checkbox").attr("checked", false);
+	}
+}
+
+//回收站
+function toRecycle(){
+	var url="/recordsCenter/findMessageDel.action";
+	window.location.href = url;
+	return;
+}
+
+//删除
+function del(){
+	
+	var ids = "";
+	$("input[type=checkbox][name=detailCheckbox]:checked").each(function(){ 
+    	if(ids!=""){
+    		ids+=",";
+    	}
+   		ids+=$(this).val();
+    });
+	if(ids==""){
+		$.dialog.alert("请先选择数据!");
+		return;
+	}
+	
+	$.dialog.confirm('你确定要删除吗？', function(){
+		var url="/recordsCenter/deleteMsg4Logic.action";
+		$.ajax({
+		    type: "GET",
+		    url: url,
+		    data: {"ids":ids},
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function (data) {
+		    	if(data.result==0){
+		    		$.dialog.alert(data.msg);
+		    		find(1);
+		    	}else{
+		    		$.dialog.alert(data.msg);
+		    	}
+		    },
+		    error: function (msg) {
+		    	$.dialog.alert(msg);
+		    }
+		});
+	});
+	
+}
+
+//查看明细
+function showDetail(id){
+	return;
 }
 </script>
 </body>

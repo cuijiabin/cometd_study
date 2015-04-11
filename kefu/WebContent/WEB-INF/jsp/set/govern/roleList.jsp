@@ -23,7 +23,7 @@
         <li><i>&gt;</i>角色管理</li>
     </ul>
 </div>
-<button style="float:right;margin-right:5px;" onclick="javascript:addRole();" class="btn" >添加角色</button>
+<button style="float:right;margin-right:5px;" onclick="window.location.href='/role/addRole.action'" class="btn" >添加角色</button>
 <!-- 表格有边框 -->
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
@@ -36,7 +36,7 @@
         <c:forEach var="role" items="${list}">
         <tr>
             <td>${role.name}</td>
-            <td><a href="">查看<a/>&nbsp;&nbsp;<a href="">编辑<a/>&nbsp;&nbsp;<a href="">删除<a/>&nbsp;&nbsp;<a href="">权限配置<a/></td>
+            <td><a href="">查看<a/>&nbsp;&nbsp;<a href="/role/detail.action?id=${role.id}">编辑<a/>&nbsp;&nbsp;<a href="javascript:if(confirm('确实要删除吗?'))location='/role/delete.action?id=${role.id}'">删除<a/>&nbsp;&nbsp;<a href="">权限配置<a/></td>
         </tr>
         </c:forEach>
     </tbody>

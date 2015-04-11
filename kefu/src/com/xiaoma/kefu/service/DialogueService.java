@@ -72,31 +72,36 @@ public class DialogueService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void delete(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int delete(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			Dialogue dialogue = new Dialogue();
 			dialogue.setId(Long.valueOf(str));
-			dialogueDaoImpl.delete(dialogue);
+			num += dialogueDaoImpl.delete(dialogue);
 		}
+		return num;
 	}
 	
 	/**
 	 * 回收站信息还原
 	* @Description: TODO
 	* @param ids	1,2,3
+	 * @return 
 	* @Author: wangxingfei
 	* @Date: 2015年4月3日
 	 */
-	public void restore(String ids){
-		if(StringUtils.isBlank(ids)) return;
+	public int restore(String ids){
+		int num = 0;
+		if(StringUtils.isBlank(ids)) return num;
 		String[] temp = ids.split(",");
 		for(String str : temp){
 			Dialogue dialogue = new Dialogue();
 			dialogue.setId(Long.valueOf(str));
-			dialogueDaoImpl.update2Restore(dialogue);
+			num += dialogueDaoImpl.update2Restore(dialogue);
 		}
+		return num;
 	}
 	
 	/**

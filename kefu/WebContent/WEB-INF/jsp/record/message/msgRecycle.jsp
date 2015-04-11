@@ -19,49 +19,28 @@
     <ul class="f-cb">
         <li><b>位置：</b></li>
         <li><a href="#">记录中心</a></li>
-        <li><i>&gt;</i><a href="#">聊天记录</a></li>
+        <li><i>&gt;</i><a href="#">留言记录</a></li>
         <li><i>&gt;</i><a href="#">回收站</a></li>
     </ul>
 </div>
 <!-- 查询条件 -->
 <div class="m-query f-mar10">
-	<div class="m-query-bd">
-	    <div class="f-mbm">
-            <label>部门：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部部门</option>
-	                <option value="客服部">客服部</option>
-	                <option value="留学部">留学部</option>
-	                <option value="随时学">随时学</option>
-	                <option value="好顾问">好顾问</option>
-            	</select>
-            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
-            	<input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
-            <label>工号：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部工号</option>
-	                <option value="李老师">李老师</option>
-	                <option value="王老师">王老师</option>
-	                <option value="张老师">张老师</option>
-            	</select>
-            <div class="u-subsec">
-           		<label><input type="checkbox">仅显示客户有说话记录</label>
-       		</div>
-       		<div class="u-subsec">
-           		<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
-        	</div>
+	<div class="m-query-hd">
+        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
+        <input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
+        <div class="u-subsec">
+           	<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
         </div>
-	    <div class="u-hr"></div>
-	    <div class="u-subsec">
-	        <button type="button" class="btn btn-primary btn-small" onclick="restore();">还原</button>
-	        <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">彻底删除</button>
-	        <button type="button" class="btn btn-primary btn-small">配置显示字段</button>
-     	</div>
     </div>
+    <div class="u-subsec">
+        <button type="button" class="btn btn-primary btn-small" onclick="restore();">还原</button>
+        <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">彻底删除</button>
+   	</div>
+    <div class="u-hr"></div>
 </div>
 
 <div id="table_data">
-	<jsp:include page="talkRecycleList.jsp"></jsp:include>
+	<jsp:include page="msgRecycleList.jsp"></jsp:include>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -70,7 +49,7 @@
 <script type="text/javascript">
 
 function find(currentPage){
-	var url="/recordsCenter/queryTalkDel.action";
+	var url="/recordsCenter/findMessageDel.action";
 	var data = {
 			"currentPage":currentPage,
 			"typeId":1,
@@ -114,8 +93,9 @@ function restore(){
 		$.dialog.alert("请先选择数据!");
 		return;
 	}
+	
 	$.dialog.confirm('你确定要还原吗？', function(){
-		var url="/recordsCenter/restoreTalk.action";
+		var url="/recordsCenter/restoreMsg.action";
 		$.ajax({
 		    type: "GET",
 		    url: url,
@@ -134,7 +114,8 @@ function restore(){
 		    	$.dialog.alert(msg);
 		    }
 		});
-	});
+	});	
+		
 }
 
 //彻底删除
@@ -151,7 +132,7 @@ function delTrue(){
 		return;
 	}
 	$.dialog.confirm('你确定要彻底删除吗？', function(){
-		var url="/recordsCenter/deleteTalkTrue.action";
+		var url="/recordsCenter/deleteMsgTrue.action";
 		$.ajax({
 		    type: "GET",
 		    url: url,
@@ -174,17 +155,10 @@ function delTrue(){
 }
 
 //查看明细
-function showDetail(dialogueId){
-	var isShowTel = 0 ;
-	if(($("#isShowTel").is(":checked"))){
-		isShowTel = 1;
-	};
-	var url="/recordsCenter/queryTalkList.action";
-	url+="?dialogueId="+dialogueId+"&isShowTel="+isShowTel+"&isDel=1";
-	window.location.href = url;
+function showDetail(id){
 	return;
 }
+
 </script>
 </body>
 </html>
-

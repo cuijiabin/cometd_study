@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.comet4j.core.CometConnection;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 import org.comet4j.core.util.JSONUtil;
@@ -16,53 +18,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.redis.JedisDao;
+
 
 @Controller
 @RequestMapping(value = "dialogue")
 public class CometController {
 	private static final CometContext context = CometContext.getInstance();
 	
-	
-	
-	private static final AppStore appStore = AppStore.getInstance();
-	
 	@RequestMapping(value = "talk.action", method = RequestMethod.POST)
 	public void talk(HttpServletRequest request,HttpServletResponse response, String cmd) throws IOException{
 	    CometEngine engine = context.getEngine();
 	    
-		if ("rename".equals(cmd)) {
-			String id = request.getParameter("id");
-			if (id == null)
-				return;
-			String newName = request.getParameter("newName");
-			String oldName = request.getParameter("oldName");
-			appStore.put(id, newName);
-			RenameDTO dto = new RenameDTO(id, oldName, newName);
-			engine.sendToAll("talker", dto);
-			return;
-		}
 
 		if ("talk".equals(cmd)) {
 			String id = request.getParameter("id");
-			String name = appStore.get(id);
+			String name = JedisDao.getJedis().get("1###"+id);
+			if(StringUtils.isNotBlank(name)){
+				name = JedisDao.getJedis().get("2###"+id);
+			}
+			
 			String text = request.getParameter("text");
 			TalkDTO dto = new TalkDTO(id, name, text);
-			engine.sendToAll("talker", dto);
+			
+			String cid = request.getParameter("cid");//engine.getConnectionId(request);
+			System.out.println(cid);
+			
+			CometConnection ccn = engine.getConnection(id);
+			
+			engine.sendTo("talker", ccn, dto);
 			return;
 		}
 
-		if ("list".equals(cmd)) {
-			List<UserDTO> userList = new ArrayList<UserDTO>();
-			Map<String, String> map = AppStore.getInstance().getMap();
-			Iterator<Map.Entry<String, String>> iter = map.entrySet().iterator();
-			while (iter.hasNext()) {
-				Map.Entry<String, String> entry = iter.next();
-				String id = (String) entry.getKey();
-				String name = (String) entry.getValue();
-				userList.add(new UserDTO(id, name));
-			}
-			String json = JSONUtil.convertToJson(userList);
-			response.getWriter().print(json);
-		}
 	}
 }

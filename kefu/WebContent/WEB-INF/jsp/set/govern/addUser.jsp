@@ -36,9 +36,9 @@
         <tr>
          
             <td>密码</td>
-            <td><input type="password" id="password" name="password" value="${user.password}"/></td>
+            <td><input type="password" id="password" name="password"/></td>
             <td>确认密码</td>
-            <td><input type="password" id="password1" name="password1" value="${user.password}"/></td>
+            <td><input type="password" id="password1" name="password1"/></td>
         </tr>
         <tr>
          
@@ -83,39 +83,57 @@
                                      <input type="button" value="保存" onclick="save(${user.id})"/>  <input type="button" value="关闭" />
 </form>
 
-
-
-
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
 function save(id){
-	alert(id);
-	if(id!=null){
-		var url = "/user/save.action";
-		
+	var url="";
+	var data="";
+	if(id!=undefined){
+		 url = "/user/update.action";
+		 data = {
+			"id":id,
+			"loginName" : $("#loginName").val(),
+			"userName" : $("#userName").val(),
+			"password" : $("#password").val(),
+			"password1" : $("#password1").val(),
+			"listenLevel" : $("#listenLevel option:selected").val(),
+			"deptId" : $("#deptId option:selected").val(),
+			"roleId" : $("#roleId option:selected").val(),
+			"maxListen" : $("#maxListen").val(),
+			"cardName" : $("#cardName").val(),
+			"createDate" : $("#createDate").val(),		    
+		};
+			//时验证参数
+			if (!verificationParam1(data)) {
+				return;
+			}
+	}else{
+		 url = "/user/save.action";
+		 data = {
+			"loginName" : $("#loginName").val(),
+			"userName" : $("#userName").val(),
+			"password" : $("#password").val(),
+			"password1" : $("#password1").val(),
+			"listenLevel" : $("#listenLevel option:selected").val(),
+			"deptId" : $("#deptId option:selected").val(),
+			"roleId" : $("#roleId option:selected").val(),
+			"maxListen" : $("#maxListen").val(),
+			"cardName" : $("#cardName").val(),
+			"createDate" : $("#createDate").val(),		    
+		};
+			//新增时验证参数
+			if (!verificationParam(data)) {
+				return;
+			}
 	}
-	var data = {
-		"loginName" : $("#loginName").val(),
-		"userName" : $("#userName").val(),
-		"password" : $("#password").val(),
-		"password1" : $("#password1").val(),
-		"listenLevel" : $("#listenLevel option:selected").val(),
-		"deptId" : $("#deptId option:selected").val(),
-		"roleId" : $("#roleId option:selected").val(),
-		"maxListen" : $("#maxListen").val(),
-		"cardName" : $("#cardName").val(),
-		"createDate" : $("#createDate").val(),		    
-	};
-	//新增时验证参数
-	if (!verificationParam(data)) {
-		alert(data);
-		return;
-	}
+
 	$.ajax({
 		type : "get",
 		url : url,
@@ -123,10 +141,10 @@ function save(id){
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		success : function(data) {
-				alert(data.msg);
+				$.dialog.alert(data.msg);
 		},
 		error : function(msg) {
-			alert(data.msg);
+			$.dialog.alert(data.msg);
 		}
 	});
 }
@@ -136,55 +154,108 @@ function save(id){
 function verificationParam(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace("^[ ]+$", "").length == 0) {
-		alert("登录名不得为空！");
+		$.dialog.alert("工号不得为空！");
 		return false;
 	}
-	
-	var chinesePatrn = /^[\da-zA-Z]{6,10}$/;
-	if(chinesePatrn.test(loginName)){
-		alert("工号输入规则不对");
+	var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
+	if(!chinesePatrn.test(loginName)){
+		$.dialog.alert("工号输入规则不对");
 		return false;
 	}
 	
 	 if(checkUser()){
-		   alert("登录名已存在！");
+		   $.dialog.alert("登录名已存在！");
 		   return false;
 	   }
 	
 	var userName = userData.userName;
 	if (userName.replace("^[ ]+$", "").length == 0) {
-		alert("用户名不得为空！");
+		$.dialog.alert("用户名不得为空！");
 		return false;
 	}
 	
 	var password = userData.password;
 	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 	if (!patrn.test(password)) {
-		alert("密码格式不正确");
+		$.dialog.alert("密码格式不正确");
 		return false;
 	}
 	
 	var password1 = userData.password1;
 	if (password !=password1) {
-		alert("两次输入密码不一致！");
+		$.dialog.alert("两次输入密码不一致！");
 		return false;
 	}
 	
 	var maxListen = userData.maxListen;
 	if (maxListen.replace("^[ ]+$", "").length == 0) {
-		alert("请填写最大接听数！");
+		$.dialog.alert("请填写最大接听数！");
 		return false;
 	}
 	
 	var cardName = userData.cardName;
 	if (cardName.replace("^[ ]+$", "").length == 0) {
-		alert("请填写名片！");
+		$.dialog.alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace("^[ ]+$", "").length == 0) {
-		alert("请填写入职时间！");
+		$.dialog.alert("请填写入职时间！");
+		return false;
+	}
+	
+	return true;
+}
+
+//修改时验证
+function verificationParam1(userData) {
+	var loginName = userData.loginName;
+	if (loginName.replace("^[ ]+$", "").length == 0) {
+		$.dialog.alert("工号不得为空！");
+		return false;
+	}
+	var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
+	if(!chinesePatrn.test(loginName)){
+		$.dialog.alert("工号输入规则不对");
+		return false;
+	}
+		
+	var userName = userData.userName;
+	if (userName.replace("^[ ]+$", "").length == 0) {
+		$.dialog.alert("用户名不得为空！");
+		return false;
+	}
+	
+	var password = userData.password;
+	if(password.replace("^[ ]+$", "").length !=0){
+		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
+		if (!patrn.test(password)) {
+			$.dialog.alert("密码格式不正确");
+			return false;
+		}
+		
+		var password1 = userData.password1;
+		if (password !=password1) {
+			$.dialog.alert("两次输入密码不一致！");
+			return false;
+		}
+	}
+	var maxListen = userData.maxListen;
+	if (maxListen.replace("^[ ]+$", "").length == 0) {
+		$.dialog.alert("请填写最大接听数！");
+		return false;
+	}
+	
+	var cardName = userData.cardName;
+	if (cardName.replace("^[ ]+$", "").length == 0) {
+		$.dialog.alert("请填写名片！");
+		return false;
+	}
+	
+	var createDate = userData.createDate;
+	if (createDate.replace("^[ ]+$", "").length == 0) {
+		$.dialog.alert("请填写入职时间！");
 		return false;
 	}
 	
@@ -212,7 +283,7 @@ function checkUser(){
 			}
 		},
 		error : function(msg){
-			alert("查询失败!");
+			$.dialog.alert("查询失败!");
 		}
 	});
 	return flag;

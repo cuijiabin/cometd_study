@@ -77,46 +77,6 @@
                 <p>北京市 [ 北京联通 ]</p>
                 <span class="u-close">x</span>
             </li>
-        	<li class="on">
-            	<p class="">在线客户2</p>
-                <p class="">北京市 [ 北京长城 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li>
-            	<p class="">离线客户3</p>
-                <p class="">北京市 [ 北京电信 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li class="on">
-            	<p class="">在线客户2</p>
-                <p class="">北京市 [ 北京长城 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li class="on">
-            	<p class="">在线客户2</p>
-                <p class="">北京市 [ 北京长城 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li class="on">
-            	<p class="">在线客户2</p>
-                <p class="">北京市 [ 北京长城 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li>
-            	<p class="">离线客户3</p>
-                <p class="">北京市 [ 北京电信 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li>
-            	<p class="">离线客户3</p>
-                <p class="">北京市 [ 北京电信 ]</p>
-                <span class="u-close">x</span>
-            </li>
-        	<li>
-            	<p class="">离线客户3</p>
-                <p class="">北京市 [ 北京电信 ]</p>
-                <span class="u-close">x</span>
-            </li>
         </ul>
     </div>
     <div class="g-mn2">
@@ -125,23 +85,8 @@
             <div class="g-mn2c-cnt c-bor">
         		<h3 class="u-tit c-bg">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
-                    <div class="u-record r-sms-manager">
+                    <div class="u-record r-sms-manager" id="inputbox">
                         <p class="r-welcome">欢迎使用客服系统</p>
-                        <p class="r-welcome">※ 已建立链接</p>
-                        <p class="r-manager">管理员 15:30:59</p>
-                        <p class="r-manager-txt">请问有什么需要帮助你的吗？<br />请问有什么需要帮助你的吗？</p>
-                        <p class="r-visitor">访问者 15:31:30</p>
-                        <p class="r-visitor-txt">谢谢，没有！</p>
-                        <p class="r-manager">管理员 15:30:59</p>
-                        <p class="r-manager-txt">请问有什么需要帮助你的吗？<br />请问有什么需要帮助你的吗？</p>
-                        <p class="r-visitor">访问者 15:31:30</p>
-                        <p class="r-visitor-txt">谢谢，没有！</p>
-                        <p class="r-manager">管理员 15:30:59</p>
-                        <p class="r-manager-txt">请问有什么需要帮助你的吗？<br />请问有什么需要帮助你的吗？</p>
-                        <p class="r-visitor">访问者 15:31:30</p>
-                        <p class="r-visitor-txt">谢谢，没有！</p>
-                        <p class="r-visitor">访问者 15:31:30</p>
-                        <p class="r-visitor-txt"><a href="http://www.xiaoma.com/" target="_blank">http://www.xiaoma.com/</a></p>
                     </div>
                     <div class="u-operate">
                         <div class="u-operatebar c-bg">
@@ -225,5 +170,77 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+
+<script type="text/javascript" src="/js/comet4j.js"></script>
+<script language="javascript" for="window" event="onload"> 
+	console.log("init");
+	// 引擎事件绑定
+	JS.Engine.on({
+		start : function(cId, aml, engine) {
+			var style = engine.getConnector().workStyle;
+			style = style === 'stream'?'长连接':'长轮询';
+			console.log("style: "+ style);
+		},
+		stop : function(cause, url, cId, engine) {
+		},
+		talker : function(data, timespan, engine) {
+			console.log("type:" +data);
+			var props = "";
+			for(var p in data){   
+			    // 方法  
+			    if(typeof(data[p])=="function"){   
+			        //obj[p]();  
+			    }else{   
+			        // p 为属性名称，obj[p]为对应属性的值  
+			        props += p + "=" + data[p] + ";  ";  
+			    }   
+			} 
+			console.log(props);
+			switch (data.type) {
+			case 'talk': // 收到聊天消息
+				onMessage(data, timespan);
+				break;
+			case 'list': // 收到聊天消息
+				userList(data, timespan);
+				break;
+			case 'up': // 上线
+				onJoin(data, timespan);
+				break;
+			case 'down': // 下线
+				onLeft(data, timespan);
+				break;
+			default:
+				userList(data);
+			}
+		}
+	});
+	
+	start();
+	//开启连接
+	function start(){
+		JS.Engine.start('/conn');
+		inputbox.focus();
+	}
+	
+	//1.获取列表
+	function userList(data) {
+		console.log("用户："+data);
+	}
+	
+	
+	// 用户上线通知
+	function onJoin(data) {
+		var id = JS.Engine.getId();
+		JS.AJAX.get('/chat/list.action?id='+id);
+		console.log(data);
+	}
+	// 用户下线通知
+	function onLeft(data) {
+		var id = JS.Engine.getId();
+		JS.AJAX.get('/chat/list.action?id='+id);
+		console.log(data);
+	}
+	
+</script>
 </body>
 </html>

@@ -34,7 +34,8 @@
 	                <option value="随时学">随时学</option>
 	                <option value="好顾问">好顾问</option>
             	</select>
-            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
+            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
+            				<input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
             <label>工号：</label>
             	<select class="c-wd80">
 	                <option selected="selected">全部工号</option>
@@ -97,8 +98,8 @@
 		</div> 
 	    <div class="u-hr"></div>
 	    <div class="m-query-bd">
-	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" onClick="WdatePicker()" />
-	        <button type="button" class="btn btn-primary btn-small">下载</button>
+	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker()" />
+	        <button type="button" class="btn btn-primary btn-small" onclick="expExcel();">下载</button>
 	    </div>
 	    <div class="u-hr"></div>
 	    <div class="u-subsec">
@@ -123,7 +124,9 @@ function find(currentPage){
 	var url="/recordsCenter/find.action";
 	var data = {
 			"currentPage":currentPage,
-			"typeId":1
+			"typeId":1,
+			"beginDate":$("#beginDate").val(),
+			"endDate":$("#endDate").val()
 	};
 	$.ajax({
 	    type: "get",
@@ -147,10 +150,30 @@ function toRecycle(){
 	return;
 }
 
+//全选/全不选
+function checkedAll(){
+	if(($("#titleCheckbox").is(":checked"))){
+		$("#table_data :checkbox").attr("checked", true);  
+	}else{
+		$("#table_data :checkbox").attr("checked", false);
+	}
+}
+
+//下载
+function expExcel(){
+	var expDate = $("#expDate").val()
+	if(expDate==null || expDate==""){
+		$.dialog.alert("请先选择日期!");
+		return;
+	}
+	var url = "/recordsCenter/expTalk.action?date="+expDate;
+	window.open(url);  
+}
+
 //删除
 function del(){
 	var ids = "";
-	$("input[type=checkbox][name=dialogueIdCheckbox]:checked").each(function(){ 
+	$("input[type=checkbox][name=detailCheckbox]:checked").each(function(){ 
     	if(ids!=""){
     		ids+=",";
     	}
@@ -160,24 +183,26 @@ function del(){
 		$.dialog.alert("请先选择数据!");
 		return;
 	}
-	var url="/recordsCenter/deleteTalk4Logic.action";
-	$.ajax({
-	    type: "GET",
-	    url: url,
-	    data: {"ids":ids},
-	    contentType: "application/json; charset=utf-8",
-	    dataType: "json",
-	    success: function (data) {
-	    	if(data.result==0){
-	    		$.dialog.alert(data.msg);
-	    		find(1);
-	    	}else{
-	    		$.dialog.alert(data.msg);
-	    	}
-	    },
-	    error: function (msg) {
-	    	$.dialog.alert(msg);
-	    }
+	$.dialog.confirm('你确定要删除吗？', function(){
+		var url="/recordsCenter/deleteTalk4Logic.action";
+		$.ajax({
+		    type: "GET",
+		    url: url,
+		    data: {"ids":ids},
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function (data) {
+		    	if(data.result==0){
+		    		$.dialog.alert(data.msg);
+		    		find(1);
+		    	}else{
+		    		$.dialog.alert(data.msg);
+		    	}
+		    },
+		    error: function (msg) {
+		    	$.dialog.alert(msg);
+		    }
+		});
 	});
 }
 
@@ -191,6 +216,46 @@ function showDetail(dialogueId){
 	url+="?dialogueId="+dialogueId+"&isShowTel="+isShowTel;
 	window.location.href = url;
 	return;
+}
+
+//创建客户名称
+function updateCusl(customerId,dialogueId){
+	
+	$.dialog({content:'url:/customer/editCus.action?customerId='+customerId+'&dialogueId='+dialogueId,
+		width: 400,height: 500,
+		button: [
+			        {
+			            name: '确认',
+			            callback: function () {
+			                 save(); 
+			                return false;
+			            },
+			            focus: true
+			        },
+			        {
+			            name: '关闭'
+			        }
+			    ]
+		});
+}
+
+function save(){
+	alert('talk.Save');
+	var email = $("#email").val();
+	alert(email);
+	return;
+	var data = {
+		"loginName" : $("#loginName").val(),
+		"userName" : $("#userName").val(),
+		"password" : $("#password").val(),
+		"password1" : $("#password1").val(),
+		"listenLevel" : $("#listenLevel option:selected").val(),
+		"deptId" : $("#deptId option:selected").val(),
+		"roleId" : $("#roleId option:selected").val(),
+		"maxListen" : $("#maxListen").val(),
+		"cardName" : $("#cardName").val(),
+		"createDate" : $("#createDate").val(),		    
+	};
 }
 </script>
 </body>

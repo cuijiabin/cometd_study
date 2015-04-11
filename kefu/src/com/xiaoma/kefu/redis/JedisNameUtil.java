@@ -7,6 +7,8 @@ public class JedisNameUtil {
 	 */
 	public static final String USER = "user:";
 	
+	public static final String CCId = "CometConnectionId:";
+	
 	/**
 	 * 在线客服列表
 	 */

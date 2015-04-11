@@ -20,7 +20,7 @@ public class RenameDTO {
 		this.oldName = oldName;
 		this.newName = newName;
 		Date d = new Date(System.currentTimeMillis());
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
 		this.transtime = f.format(d);
 	}
 

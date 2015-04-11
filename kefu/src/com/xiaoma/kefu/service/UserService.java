@@ -21,7 +21,7 @@ import com.xiaoma.kefu.util.PageBean;
  * @author  yangxiaofeng
  *
  */
-@Service
+@Service("userService")
 public class UserService {
 	
 	@Autowired
@@ -100,77 +100,77 @@ public Integer checkUser (User user){
 	    * 在弹出的对话框显示详细信息
 	    */
 	   public User getUserById(Integer id){
-		   return userDaoImpl.getUserByUserId(id);
+		   return userDaoImpl.findById(User.class,id);
 	   }
 	   
 	   /**
 	    * 修改
 	 * @throws UnsupportedEncodingException 
 	    */
-	   public boolean updateUser(User user) throws UnsupportedEncodingException{
+	   public Integer updateUser(User user) throws UnsupportedEncodingException{
+		   User toUpdateUser = userDaoImpl.findById(User.class,user.getId());
+		   if(user.getPassword()!=""||user.getPassword()!=null){
 			String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
-			User toUpdateUser = userDaoImpl.getUserByUserId(user.getId());
+			  toUpdateUser.setPassword(password);
+		   }else{
+			   toUpdateUser.setPassword(toUpdateUser.getPassword());
+		   }
 		    toUpdateUser.setLoginName(user.getLoginName());
-		    toUpdateUser.setPassword(user.getPassword());
 		    toUpdateUser.setCardName(user.getCardName());
 		    toUpdateUser.setDeptId(user.getDeptId());
 		    toUpdateUser.setRoleId(user.getRoleId());
-		    toUpdateUser.setStatus(user.getStatus());
+		    toUpdateUser.setStatus(toUpdateUser.getStatus());
 		    toUpdateUser.setListenLevel(user.getListenLevel());
 		    toUpdateUser.setEmail(user.getEmail());
 		    toUpdateUser.setCreateDate(user.getCreateDate());
-		  return userDaoImpl.updateUser(toUpdateUser); 
+		  return userDaoImpl.update(toUpdateUser); 
 	   }
 	   
 	    /**
 		 * 删除(假删除)
 		 */
-	public boolean deleteUserById(Integer id){
-		boolean flag = true;
-		User user =  userDaoImpl.getUserByUserId(id);
-		
+	public Integer deleteUserById(Integer id){
+		User user =  userDaoImpl.findById(User.class,id);
 		if (user!=null) {
-			user.setStatus(0);
-			flag = userDaoImpl.updateUser(user);
+			user.setStatus(2);
+			return userDaoImpl.update(user);
 		}
-		return flag;
+		return 0;
 	}
 //员工离职
-	public boolean leaveUser(String ids) {
+	public Integer leaveUser(String ids) {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	String time = sdf.format(new Date());
 		if(ids.length()>2){
 			String[] array = ids.split(",");
-			boolean flg=false;
 			for (String str : array) {
-			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(str));
+			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
 			       leup.setStatus(2);
 			       leup.setEndDate(time);
-			       flg = userDaoImpl.updateUser(leup);
+			       return userDaoImpl.update(leup);
 			}
-			return flg;
+			return 0;
 		}else{
-			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(ids));
+			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(ids));
 		       leup.setStatus(2);
 		       leup.setEndDate(time);
-		        return userDaoImpl.updateUser(leup);
+		        return userDaoImpl.update(leup);
 		}
 	}
 	//员工转换部门
-	public boolean tradeUser(String ids, Integer deptId) {
+	public Integer tradeUser(String ids, Integer deptId) {
 		if(ids.length()>2){
 			String[] array = ids.split(",");
-			boolean flg=false;
 			for (String str : array) {
-			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(str));
+			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
 			       leup.setDeptId(deptId);
-			       flg = userDaoImpl.updateUser(leup);
+			       return userDaoImpl.update(leup);
 			}
-			return flg;
+			return 0;
 		}else{
-			   User leup = userDaoImpl.getUserByUserId(Integer.parseInt(ids));
+			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(ids));
 			   leup.setDeptId(deptId);
-		        return userDaoImpl.updateUser(leup);
+		        return userDaoImpl.update(leup);
 		}
 	}
 	//通过部门查询员工

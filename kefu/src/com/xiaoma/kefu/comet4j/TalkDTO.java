@@ -20,7 +20,7 @@ public class TalkDTO {
 		this.name = name;
 		this.text = text;
 		Date d = new Date(System.currentTimeMillis());
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
 		this.transtime = f.format(d);
 	}
 

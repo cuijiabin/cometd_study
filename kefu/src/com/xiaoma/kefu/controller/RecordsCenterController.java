@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +30,12 @@ import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
-import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.service.WaitListService;
@@ -72,6 +73,8 @@ public class RecordsCenterController {
 	private CustomerService customerService;//客户信息
 	@Autowired
 	private UserService userService;//用户
+	@Autowired
+	private MessageRecordsService messageRecordsService;//留言记录
 	
 	
 	/**
@@ -172,6 +175,56 @@ public class RecordsCenterController {
 		}
 		return "resultjson";
 	}
+	
+	/**
+	 * 还原对话信息
+	* @Description: TODO
+	* @param model
+	* @param ids
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "restoreTalk.action", method = RequestMethod.GET)
+	public String restoreTalk(Model model,String ids){
+		try {
+			int num = dialogueService.restore(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "还原成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "还原失败!"));
+			}
+		} catch (Exception e) {
+			logger.error("restoreTalk失败!"+ids);
+			model.addAttribute("result", Ajax.JSONResult(1, "还原失败!"));
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 彻底删除 对话信息
+	* @Description: TODO
+	* @param model
+	* @param ids
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "deleteTalkTrue.action", method = RequestMethod.GET)
+	public String deleteTalkTrue(Model model,String ids){
+		try {
+			int num = dialogueService.delete(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+		} catch (Exception e) {
+			logger.error("deleteTalkTrue失败!"+ids);
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
+		return "resultjson";
+	}
 
 
 	/**
@@ -190,7 +243,7 @@ public class RecordsCenterController {
 	* @Date: 2015年4月9日
 	 */
 	@RequestMapping(value = "queryTalkDel.action", method = RequestMethod.GET)
-	public String queryTalkRecordDel(HttpSession session,Model model,
+	public String queryTalkDel(HttpSession session,Model model,
 				Integer deptId,String beginDate,String endDate,
 				Integer userId,Integer isTalk,Integer typeId,
 				@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean
@@ -236,17 +289,20 @@ public class RecordsCenterController {
 	* @Description: TODO
 	* @param dialogueId	对话id
 	* @param isShowTel	是否显示显示电话号码  1是 0否
+	* @param typeId	查询类别
+	* @param isDel	是否是回收站查询
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "queryTalkList.action", method = RequestMethod.GET)
 	public String queryTalkList(Model model,Long dialogueId,Integer isShowTel,Integer typeId,
+			Integer isDel,
 			@ModelAttribute("pageBean") PageBean<DialogueDetail> pageBean
 		){
 		//获取对话信息
 		Dialogue dialogue = dialogueService.findById(dialogueId);
 		//获取聊天记录列表
-		List<Dialogue> timeList = findDialogueByCId(dialogue.getCustomerId(),0);
+		List<Dialogue> timeList = findDialogueByCId(dialogue.getCustomerId(),isDel);
 		//封装聊天记录
 		packDialogue(dialogue);
 		
@@ -302,27 +358,6 @@ public class RecordsCenterController {
 		
 	}
 	
-
-	/**
-	 * 查询聊天 详情(回收站)
-	 * (根据当前对话id,获取客户,然后获取客户所有聊天记录)
-	* @Description: TODO
-	* @param dialogueId	对话id
-	* @param isShowTel	是否显示显示电话号码  1是 0否
-	* @Author: wangxingfei
-	* @Date: 2015年4月7日
-	 */
-	@RequestMapping(value = "queryTalkDelList.action", method = RequestMethod.GET)
-	public void queryTalkDelList(Long dialogueId,Integer isShowTel){
-		//获取对话信息
-		Dialogue dia = dialogueService.findById(dialogueId);
-		//获取聊天记录列表
-		List<Dialogue> list = findDialogueByCId(dia.getCustomerId(),1);
-		
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i).getId()+"-"+list.get(i).getBeginDate());
-		}
-	}
 	
 	/**
 	 * 留言记录 查询
@@ -333,40 +368,15 @@ public class RecordsCenterController {
 	* @Date: 2015年4月8日
 	 */
 	@RequestMapping(value = "findMessage.action", method = RequestMethod.GET)
-	public String queryMessage(String beginDate,String endDate,Integer typeId,//首次查询	1否   null 是	
-			@ModelAttribute("pageBean") PageBean<MessageRecords> pageBean){
-		StringBuilder condition = new StringBuilder();
-		if(beginDate!=null){
-			condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
-		}
-		if(endDate!=null){
-			condition.append(" and t1.createDate <= '" + endDate + " 23:59:59'");
-		}
+	public String findMessage(Model model,String beginDate,String endDate,
+			Integer typeId,
+			@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean){
+		StringBuilder condition = getMsgCondition(beginDate,endDate);
 		
-		String sql = " select t1.id,IFNULL(t2.customerName,t1.customerId) customerId "
-				+ " ,t1.ipInfo,t1.consultPage,t1.keywords,t1.createDate  "
-//				+ " ,DATE_FORMAT(t1.createDate,'%Y-%m-%d %H:%i') createDate "
-				+ " from message_records t1 "
-				+ " inner join customer t2 on t1.customerId = t2.id "
-				+ " where t1.isDel = 0 "
-				+ condition.toString();
-		DataSet ds = DataBase.Query(sql,pageBean);
-		List<MessageRecords> list = new ArrayList<MessageRecords>((int) ds.RowCount);
-		for(int i=0;i<ds.RowCount;i++){
-			MessageRecords mr = new MessageRecords();
-			mr.setId(ds.getRow(i).getInt("id"));
-			mr.setCustomerName(ds.getRow(i).getString("customerId"));
-			mr.setIpInfo(ds.getRow(i).getString("ipInfo"));
-			mr.setConsultPage(ds.getRow(i).getString("consultPage"));
-			mr.setKeywords(ds.getRow(i).getString("keywords"));
-			mr.setCreateDate(ds.getRow(i).getDate("createDate"));
-			list.add(mr);
-		}
-		//结果输出
-//		for(int i=0;i<list.size();i++){
-//			System.out.println(list.get(i).getIpInfo());
-//		}
+		List<Map<String,String>> list = getMsgList(pageBean,condition,0);//content
 		pageBean.setObjList(list);
+		
+		model.addAttribute("showDetail", 1);//是否有权查看明细
 		if(typeId==null){
 			return "/record/message/message";
 		}else{
@@ -377,47 +387,107 @@ public class RecordsCenterController {
 	/**
 	 * 留言记录 查询(回收站)
 	* @Description: TODO
-	* @param beginDate	开始日期
-	* @param endDate	结束日期
+	* @param model
+	* @param beginDate
+	* @param endDate
+	* @param typeId
+	* @param pageBean
+	* @return
 	* @Author: wangxingfei
-	* @Date: 2015年4月8日
+	* @Date: 2015年4月10日
 	 */
-	@RequestMapping(value = "queryMessageDel.action", method = RequestMethod.GET)
-	public void queryMessageDel(String beginDate,String endDate){
-		StringBuilder condition = new StringBuilder();
-		if(beginDate!=null){
-			condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
-		}
-		if(endDate!=null){
-			condition.append(" and t1.createDate <= '" + endDate + " 23:59:59'");
-		}
+	@RequestMapping(value = "findMessageDel.action", method = RequestMethod.GET)
+	public String findMessageDel(Model model,String beginDate,String endDate,
+			Integer typeId,
+			@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean){
+		StringBuilder condition = getMsgCondition(beginDate,endDate);
 		
-		String sql = " select t1.id,IFNULL(t2.customerName,t1.customerId) customerId "
-				+ " ,t1.ipInfo,t1.consultPage,t1.keywords,t1.createDate  "
-//				+ " ,DATE_FORMAT(t1.createDate,'%Y-%m-%d %H:%i') createDate "
-				+ " from message_records t1 "
-				+ " inner join customer t2 on t1.customerId = t2.id "
-				+ " where t1.isDel = 1 "
-				+ condition.toString();
-		DataSet ds = DataBase.Query(sql);
-		List<MessageRecords> list = new ArrayList<MessageRecords>((int) ds.RowCount);
-		for(int i=0;i<ds.RowCount;i++){
-			MessageRecords mr = new MessageRecords();
-			mr.setId(ds.getRow(i).getInt("id"));
-			mr.setCustomerName(ds.getRow(i).getString("customerId"));
-			mr.setIpInfo(ds.getRow(i).getString("ipInfo"));
-			mr.setConsultPage(ds.getRow(i).getString("consultPage"));
-			mr.setKeywords(ds.getRow(i).getString("keywords"));
-			mr.setCreateDate(ds.getRow(i).getDate("createDate"));
-			list.add(mr);
-		}
-		//结果输出
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i));
+		List<Map<String,String>> list = getMsgList(pageBean,condition,1);//content
+		pageBean.setObjList(list);
+		
+		model.addAttribute("showDetail", 1);//是否有权查看明细
+		if(typeId==null){
+			return "/record/message/msgRecycle";
+		}else{
+			return "/record/message/msgRecycleList";
 		}
 	}
 	
 	
+	/**
+	 * 逻辑删除留言信息
+	* @Description: TODO
+	* @param model
+	* @param ids	1,2,3
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月9日
+	 */
+	@RequestMapping(value = "deleteMsg4Logic.action", method = RequestMethod.GET)
+	public String deleteMsg4Logic(Model model,String ids){
+		try {
+			int num = messageRecordsService.delete4Logic(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+		} catch (Exception e) {
+			logger.error("deleteMsg4Logic失败!"+ids);
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 还原留言信息
+	* @Description: TODO
+	* @param model
+	* @param ids
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "restoreMsg.action", method = RequestMethod.GET)
+	public String restoreMsg(Model model,String ids){
+		try {
+			int num = messageRecordsService.restore(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "还原成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "还原失败!"));
+			}
+		} catch (Exception e) {
+			logger.error("restoreMsg失败!"+ids);
+			model.addAttribute("result", Ajax.JSONResult(1, "还原失败!"));
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 彻底删除 留言信息
+	* @Description: TODO
+	* @param model
+	* @param ids
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "deleteMsgTrue.action", method = RequestMethod.GET)
+	public String deleteMsgTrue(Model model,String ids){
+		try {
+			int num = messageRecordsService.delete(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+		} catch (Exception e) {
+			logger.error("deleteMsgTrue失败!"+ids);
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
+		return "resultjson";
+	}
 	
 
 	/**
@@ -438,15 +508,20 @@ public class RecordsCenterController {
 		response.setHeader("Content-Disposition", "attachment;filename=\"" + date + ".xlsx\"");
 		OutputStream out = response.getOutputStream();
 		try {
-			FileInputStream in = new FileInputStream(path);
-			byte[] buf = new byte[1024];
-			int b;
-			while ((b = in.read(buf)) != -1) {
-				out.write(buf, 0, b);
+			if(new File(path).exists()){
+				FileInputStream in = new FileInputStream(path);
+				byte[] buf = new byte[1024];
+				int b;
+				while ((b = in.read(buf)) != -1) {
+					out.write(buf, 0, b);
+				}
+				out.flush();
+				out.close();
+				in.close();
+			}else{
+				Log.error("file does not exist!" + date);
+				throw new Exception("file does not exist!");
 			}
-			out.flush();
-			out.close();
-			in.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} 
@@ -521,13 +596,14 @@ public class RecordsCenterController {
 		if(deptId!=null && deptId>0){
 			condition.append(" and t1.deptId = " + deptId );
 		}
-		if(beginDate==null){
+		if(StringUtils.isBlank(beginDate)){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			beginDate = sdf.format(new Date());
 		}
 		condition.append(" and t1.beginDate >= '" + beginDate + " 00:00:00'");
-		if(endDate==null){
-			endDate = beginDate;
+		if(StringUtils.isBlank(endDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			endDate = sdf.format(new Date());
 		}
 		condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
 		if(userId!=null && userId>0){
@@ -574,13 +650,14 @@ public class RecordsCenterController {
 		if(deptId!=null && deptId>0){
 			condition.append(" and t1.deptId = " + deptId );
 		}
-		if(beginDate==null){
+		if(StringUtils.isBlank(beginDate)){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			beginDate = sdf.format(new Date());
 		}
 		condition.append(" and t1.beginDate >= '" + beginDate + " 00:00:00'");
-		if(endDate==null){
-			endDate = beginDate;
+		if(StringUtils.isBlank(endDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			endDate = sdf.format(new Date());
 		}
 		condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
 		if(userId!=null && userId>0){//后面再根据权限判断一次
@@ -662,7 +739,7 @@ public class RecordsCenterController {
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
-				+ " WHERE t1.isDel = " + isDel + " "
+				+ " WHERE t1.isDel = " + isDel 
 				+ condition.toString();
 		DataSet ds = DataBase.Query(sql,pageBean);
 //		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);
@@ -727,6 +804,9 @@ public class RecordsCenterController {
 	* @Date: 2015年4月7日
 	 */
 	private List<Dialogue> findDialogueByCId(Long customerId,Integer isDel) {
+		if(isDel==null || isDel!=1){
+			isDel = 0;
+		}
 		String sql = " SELECT t1.id dialogueId,t1.beginDate "
 				+ " FROM dialogue t1 "
 				+ " WHERE t1.isDel = " + isDel
@@ -844,5 +924,69 @@ public class RecordsCenterController {
 		
 		//开始,结束方式,评分
 		
+	}
+	
+	/**
+	 * 封装留言查询条件
+	* @Description: TODO
+	* @param beginDate
+	* @param endDate
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	private StringBuilder getMsgCondition(String beginDate, String endDate) {
+		StringBuilder condition = new StringBuilder();
+		if(StringUtils.isBlank(beginDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			beginDate = sdf.format(new Date());
+		}
+		condition.append(" and t1.createDate >= '" + beginDate + " 00:00:00'");
+		if(StringUtils.isBlank(endDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			endDate = sdf.format(new Date());
+		}
+		condition.append(" and t1.createDate <= '" + endDate + " 23:59:59'");
+		return condition;
+	}
+	
+	/**
+	 * 查询留言记录的List
+	* @Description: TODO
+	* @param pageBean
+	* @param condition
+	* @param isDel
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	private List<Map<String,String>> getMsgList(PageBean<Map<String,String>> pageBean,
+			StringBuilder condition, Integer isDel) {
+		if(isDel==null || isDel!=1){
+			isDel = 0;
+		}
+		String sql = " select t1.id,IFNULL(t2.customerName,t1.customerId) customerName "
+				+ " , CASE WHEN t2.customerName IS NULL THEN 0 ELSE 1 END hasName,t1.customerId "
+				+ " ,t1.ipInfo,t1.consultPage,t1.keywords,  "
+				+ " DATE_FORMAT(t1.createDate,'%Y-%m-%d %H:%i') createDate  "
+				+ " from message_records t1 "
+				+ " inner join customer t2 on t1.customerId = t2.id "
+				+ " where t1.isDel =  " + isDel
+				+ condition.toString();
+		DataSet ds = DataBase.Query(sql,pageBean);
+		List<Map<String,String>> list = new ArrayList<Map<String,String>>((int) ds.RowCount);
+		for(int i=0;i<ds.RowCount;i++){
+			Map<String,String> hm = new HashMap<String,String>();
+			hm.put("id", ds.getRow(i).getString("id"));
+			hm.put("customerName", ds.getRow(i).getString("customerName"));
+			hm.put("hasName", ds.getRow(i).getString("hasName"));
+			hm.put("customerId", ds.getRow(i).getString("customerId"));
+			hm.put("ipInfo", ds.getRow(i).getString("ipInfo"));
+			hm.put("consultPage", ds.getRow(i).getString("consultPage"));
+			hm.put("keywords", ds.getRow(i).getString("keywords"));
+			hm.put("createDate", ds.getRow(i).getString("createDate"));
+			list.add(hm);
+		}
+		return list;
 	}
 }
