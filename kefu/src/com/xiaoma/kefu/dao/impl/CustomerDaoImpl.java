@@ -102,8 +102,13 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 							"%" + conditions.get("customerName").trim() + "%"));
 				}
 			
-				if (StringHelper.isNotEmpty(conditions.get("userId"))&& !"0".equals(conditions.get("deptId"))) {
-					role.add(Restrictions.eq("userId", conditions.get("userId")));
+				if ((conditions.get("id")!=null)) {
+					role.add(Restrictions.eq("id", new Long(conditions.get("id"))));
+					
+				}
+				
+				if (StringHelper.isNotEmpty(conditions.get("phone"))) {
+					role.add(Restrictions.eq("phone", conditions.get("phone")));
 				}
 				if (conditions.get("startDate") != null
 						&& !conditions.get("startDate").isEmpty()

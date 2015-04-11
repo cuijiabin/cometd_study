@@ -52,18 +52,18 @@ public class BlacklistController {
      * 
      * @return 返回值
      */
-    @RequestMapping(value = "new.action", method = RequestMethod.GET)
+    @RequestMapping(value = "new.action")
     public String toSave() {
 
     	
-        return "customer/blacklistAdd";
+        return "customer/addBlacklist";
       }
 
 	/**
 	 * 保存黑名单实体
 	 */
   
-	@RequestMapping(value = "add.action", method = RequestMethod.POST)
+	@RequestMapping(value = "save.action", method = RequestMethod.POST)
 	public String save(Model model,  Blacklist blacklist) {
 		
 		System.out.println("888888888888888888888888888888888888888888888888");

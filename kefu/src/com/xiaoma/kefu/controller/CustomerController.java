@@ -61,7 +61,17 @@ public class CustomerController {
 		
 		return "customer/left";
 	}
-	
+//	 /**
+//     * 保存前页面跳转
+//     * 
+//     * @return 返回值
+//     */
+//    @RequestMapping(value = "/new.action")
+//    public String toSave() {
+//
+//        return "customer/addBlacklist";
+//    }
+
 	/**
 	 * 添加
 	 */

@@ -29,8 +29,8 @@
     <div class="m-query-bd">
         <div class="f-mbm">
             <label>客户姓名：</label><input id="customerName" name="customerName" value="${customerName}" class="c-wd150" type="text" />
-            <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId} " class="c-wd150" type="text" />
-            <label>联系方式：</label><input id="customerPhone" name="customerPhone" value="${phone }" class="c-wd150" type="text" />
+            <label>客户编号：</label><input id="customerId" name="customerId"  class="c-wd150" type="text" />
+            <label>联系方式：</label><input id="phone" name="phone" value="${phone }" class="c-wd150" type="text" />
             <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
@@ -62,8 +62,8 @@ function find(currentPage){
 	var data = {
 			"currentPage":currentPage,
 			"map[customerName]":$("#customerName").val(),
-			"map[customerId]":$("#customerId").val(),
-			"map[customerPhone]":$("#customerPhone").val(),
+			"map[id]":$("#customerId").val(),
+			"map[phone]":$("#phone").val(),
 			"map[typeId]":1
 	};
 	$.ajax({

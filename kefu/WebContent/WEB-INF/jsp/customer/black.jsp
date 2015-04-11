@@ -40,7 +40,7 @@ String path = request.getContextPath();
         </div>
         <div class="f-mbm">
          
-        <button type="button" class="btn btn-primary btn-small" onclick="location.href='<%=path%>/blacklist/new.action'">添加黑名单</button>
+        <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
             <label></label>
             <button type="button" class="btn btn-primary btn-small">删除</button>
         </div>
@@ -58,6 +58,8 @@ String path = request.getContextPath();
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 /*
  * 条件查询
@@ -84,6 +86,72 @@ function find(currentPage){
 	    }
 	});
 }
+/**
+ * 新增
+ */
+function addBlacklist(){
+	$.dialog({content:'url:/blacklist/new.action',
+		width: 900,height: 500,
+		
+		
+		
+		button: [
+			        {
+			            name: '确认',
+			            callback: function () {
+			                 save(); 
+			                return false;
+			            },
+			            focus: true
+			        },
+			        {
+			            name: '关闭我'
+			        }
+			    ]
+		});
+
+
+}
+
+function save(){
+	
+	alert("点击了保存");
+
+	var url = "/blacklist/save.action";
+	var data = {
+		"id" : $("#id").val(),
+		"ip" : $("#ip").val(),
+		"endDate" : $("#endDate").val(),
+		"description" : $("#description").val()
+	};
+
+
+	$.ajax({
+		type : "post",
+		url : url,
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		success : function(data) {
+			if (data.result == 0) {
+				alert(data.msg);
+				$("#id").val('');
+				$("#ip").val('');
+				$("#endDate").val('');
+				$("#description").val('');
+				location.reload();
+			} else {
+				alert(data.msg);
+			}
+		},
+		error : function(msg) {
+			alert(data.msg);
+		}
+	});
+}
+
+
+
 </script>
 </body>
 </html>
