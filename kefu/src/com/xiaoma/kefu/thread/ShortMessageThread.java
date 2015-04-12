@@ -19,6 +19,6 @@ public class ShortMessageThread extends Thread {
 		this.cacheName = cacheName;
 	}
 	public void run() {
-		CacheMan.removeCache(cacheName);
+		CacheMan.remove(cacheName,"");
 	}
 }

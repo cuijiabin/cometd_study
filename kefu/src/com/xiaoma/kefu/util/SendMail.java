@@ -17,6 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 
 
 
@@ -40,7 +41,7 @@ public class SendMail {
 			//建立邮件会话 
 			Properties props=new Properties(); //用来在一个文件中存储键-值对的，其中键和值是用等号分隔的， 
 			//存储发送邮件服务器的信息 
-			props.put("mail.smtp.host",PropertiesUtil.getProperties(CacheName.MAILSERVER)); 
+			props.put("mail.smtp.host",SystemConfiguration.getInstance().getMailServer()); 
 			//同时通过验证 
 			props.put("mail.smtp.auth","true"); 
 			//根据属性新建一个邮件会话 
@@ -49,7 +50,7 @@ public class SendMail {
 			//由邮件会话新建一个消息对象 
 			MimeMessage message=new MimeMessage(s); 
 			//设置邮件 
-			InternetAddress from= new InternetAddress(PropertiesUtil.getProperties(CacheName.MAILADDRESS));  
+			InternetAddress from= new InternetAddress(SystemConfiguration.getInstance().getMailAddress());  
 			message.setFrom(from); //设置发件人的地址 
 			//设置收件人,并设置其接收类型为TO 
 			InternetAddress to=new InternetAddress(str_to);
@@ -66,7 +67,7 @@ public class SendMail {
 			//发送邮件 
 			Transport transport=s.getTransport("smtp"); 
 			//以smtp方式登录邮箱,第一个参数是发送邮件用的邮件服务器SMTP地址,第二个参数为用户名,第三个参数为密码 
-			transport.connect(PropertiesUtil.getProperties(CacheName.MAILSERVER),PropertiesUtil.getProperties(CacheName.MAILCOUNT),PropertiesUtil.getProperties(CacheName.MAILPASSWORD)); 
+			transport.connect(SystemConfiguration.getInstance().getMailServer(),SystemConfiguration.getInstance().getMailCount(),SystemConfiguration.getInstance().getPassword()); 
 			//发送邮件,其中第二个参数是所有已设好的收件人地址 
 			transport.sendMessage(message,message.getAllRecipients()); 
 			transport.close(); 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.DictitemDao;
-import com.xiaoma.kefu.model.Dictitem;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.util.PageBean;
 
 
@@ -29,10 +29,10 @@ public class DictitemService {
 	 * @param pageBean
 	 * @return
 	 */
-	public PageBean<Dictitem> getResult(Integer currentPage,Integer pageRecorders, String code) {
+	public PageBean<DictItem> getResult(Integer currentPage,Integer pageRecorders, String code) {
 
 		Integer totalCount = dictitemDaoImpl.getCountByCode(code);
-		PageBean<Dictitem> result = new PageBean<Dictitem>();
+		PageBean<DictItem> result = new PageBean<DictItem>();
 
 		result.setCurrentPage(currentPage);
 		result.setPageRecorders(pageRecorders);
@@ -40,7 +40,7 @@ public class DictitemService {
 
 		Integer start = result.getStartRow();
 
-		List<Dictitem> list = dictitemDaoImpl.getDictitemByCode(start, pageRecorders, code);
+		List<DictItem> list = dictitemDaoImpl.getDictitemByCode(start, pageRecorders, code);
 		result.setObjList(list);
 
 		return result;
@@ -52,29 +52,29 @@ public class DictitemService {
 	 * @param pageBean
 	 * @return
 	 */
-	public List<Dictitem> getAll(String code) {
-		List<Dictitem> list = dictitemDaoImpl.getDictitemByCode(0, 10000, code);
+	public List<DictItem> getAll(String code) {
+		List<DictItem> list = dictitemDaoImpl.getDictitemByCode(0, 10000, code);
 		return list;
 	}
 
 	/**
 	 * 在弹出的对话框显示详细信息
 	 */
-	public Dictitem getDictitemById(Integer id) {
+	public DictItem getDictitemById(Integer id) {
 		return dictitemDaoImpl.getDictitemByDictitemId(id);
 	}
 
 	/**
 	 * 添加
 	 */
-	public boolean createNewDictitem(Dictitem dictitem) {
+	public boolean createNewDictitem(DictItem dictitem) {
 		return dictitemDaoImpl.createNewDictitem(dictitem);
 	}
 
 	/**
 	 * 修改
 	 */
-	public boolean updateDictitem(Dictitem dictitem) {
+	public boolean updateDictitem(DictItem dictitem) {
 		return dictitemDaoImpl.updateDictitem(dictitem);
 	}
 

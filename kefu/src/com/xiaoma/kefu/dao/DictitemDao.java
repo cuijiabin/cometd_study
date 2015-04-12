@@ -3,7 +3,7 @@ package com.xiaoma.kefu.dao;
 import java.util.List;
 
 import com.xiaoma.kefu.model.Dict;
-import com.xiaoma.kefu.model.Dictitem;
+import com.xiaoma.kefu.model.DictItem;
 
 
 
@@ -12,7 +12,7 @@ import com.xiaoma.kefu.model.Dictitem;
  * @time 2015年1月19日上午11:00:46
  *
  */
-public interface DictitemDao extends BaseDao<Dictitem>{
+public interface DictitemDao extends BaseDao<DictItem>{
 
 	/**
 	 * 查询所有
@@ -20,7 +20,7 @@ public interface DictitemDao extends BaseDao<Dictitem>{
 	 */
 	public Integer getAllDictitemCount();
 
-	public List<Dictitem> getDictitemByCode(Integer start, Integer offset,String code);
+	public List<DictItem> getDictitemByCode(Integer start, Integer offset,String code);
     
 	
 	/**
@@ -28,19 +28,19 @@ public interface DictitemDao extends BaseDao<Dictitem>{
 	 * @param id
 	 * @return
 	 */
-	public Dictitem getDictitemByDictitemId(Integer id);
+	public DictItem getDictitemByDictitemId(Integer id);
      /**
       * 添加
       * @param dictitem
       * @return
       */
-	boolean createNewDictitem(Dictitem dictitem);
+	boolean createNewDictitem(DictItem dictitem);
    /**
     * 修改
     * @param dictitem
     * @return
     */
-	boolean updateDictitem(Dictitem dictitem);
+	boolean updateDictitem(DictItem dictitem);
     /**
      * 删除
      * @param id

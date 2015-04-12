@@ -11,7 +11,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.sun.xml.internal.ws.message.StringHeader;
 import com.xiaoma.kefu.dao.LoginLogDao;
 import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.util.PageBean;
@@ -52,13 +51,11 @@ public class LoginLogDaoImpl extends BaseDaoImpl<LoginLog> implements
 							format.parse(conditions.get("endDate")
 									+ " 23:59:59")));
 				} catch (Exception e) {
-					e.printStackTrace();
 					logger.error(e.getMessage());
 				}
 			}
 		}
 		orders.add(Order.asc("createDate"));
 		find(LoginLog.class, relation, role, null, orders, pageBean);
-		logger.info("search LoginLog by conditions!");
 	}
 }

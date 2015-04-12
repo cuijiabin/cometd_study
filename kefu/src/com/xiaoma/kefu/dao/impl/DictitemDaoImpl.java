@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DictitemDao;
-import com.xiaoma.kefu.model.Dictitem;
+import com.xiaoma.kefu.model.DictItem;
 
 
 
@@ -18,7 +18,7 @@ import com.xiaoma.kefu.model.Dictitem;
  *
  */
 @Repository("dictitemDaoImpl")
-public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDao{
+public class DictitemDaoImpl extends BaseDaoImpl<DictItem> implements DictitemDao{
 	
 	/**
 	 * 查询所有字典详细表数据
@@ -35,7 +35,7 @@ public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDa
 	}
 	@SuppressWarnings("unchecked")
 	@Override	
-    public List<Dictitem> getDictitemByCode(Integer start, Integer offset,String code) {
+    public List<DictItem> getDictitemByCode(Integer start, Integer offset,String code) {
 		
 		//参数检查
 		start = (start == null)? 0 :start;
@@ -49,19 +49,19 @@ public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDa
 		
 		Query query = session.createQuery(hqlBf.toString()).setFirstResult(start).setMaxResults(offset);
 		
-		return (List<Dictitem>) query.list();
+		return (List<DictItem>) query.list();
 	}
 	
 	/**
 	 * 查询一条
 	 */
 	@Override
-	public Dictitem getDictitemByDictitemId(Integer id) {
+	public DictItem getDictitemByDictitemId(Integer id) {
 		
 		if(id == null){
 			return null;
 		}
-		return findById(Dictitem.class,id);
+		return findById(DictItem.class,id);
 		
 	}
 	/**
@@ -74,7 +74,7 @@ public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDa
 	  */
 		
 		@Override
-		public boolean createNewDictitem(Dictitem dictitem) {
+		public boolean createNewDictitem(DictItem dictitem) {
 			try {
 				add(dictitem);
 				return true;
@@ -90,7 +90,7 @@ public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDa
 		 * @return
 		 */
 		@Override
-		public boolean updateDictitem(Dictitem dictitem) {
+		public boolean updateDictitem(DictItem dictitem) {
 			try {
 				update(dictitem);
 				return true;
@@ -105,7 +105,7 @@ public class DictitemDaoImpl extends BaseDaoImpl<Dictitem> implements DictitemDa
 		 */
 		@Override
 		public boolean deleteDictitemById(Integer id){
-			Dictitem dictitem = this.getDictitemByDictitemId(id);
+			DictItem dictitem = this.getDictitemByDictitemId(id);
 			try {	
 			delete(dictitem);
 			return true;

@@ -6,24 +6,23 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import redis.clients.jedis.Jedis;
 
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.JedisNameUtil;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
-import com.xiaoma.kefu.util.PropertiesUtil;
 
 @Controller
 @RequestMapping(value = "dialogue")
@@ -163,7 +162,7 @@ public class DialogueController {
 			customerId = customerService.getMaxCustomerId();
 		} else {
 			String id = DesUtil.encrypt(cookie.getValue(),
-					PropertiesUtil.getProperties(CacheName.SECRETKEY));
+					SystemConfiguration.getInstance().getSecretKey());
 			customerId = Long.valueOf(id);
 			// 过期时间五年
 			cookie.setMaxAge(5 * 365 * 24 * 60 * 60);

@@ -21,10 +21,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.DialogueDao;
 import com.xiaoma.kefu.model.Dialogue;
-import com.xiaoma.kefu.util.PropertiesUtil;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
@@ -140,7 +139,7 @@ public class DialogueService {
 	* @Date: 2015年4月7日
 	 */
 	private void createExcel(List<String> title, List<List<String>> contentList) throws Exception {
-		String basePath = PropertiesUtil.getProperties(CacheName.FILEROOT)
+		String basePath = SystemConfiguration.getInstance().getFileUrl()
 				+File.separator + SysConst.EXP_TALK_PATH ;
 		String fileName = getFileName();
 		String path = basePath + File.separator + fileName + ".xlsx";

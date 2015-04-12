@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.xiaoma.kefu.model.Dictitem;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.service.DictitemService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.PageBean;
@@ -44,7 +44,7 @@ public class DictitemController {
 		currentPage = (currentPage == null) ? 1 : currentPage;
 		pageRecorders = (pageRecorders == null) ? 20 : pageRecorders;
 
-		PageBean<Dictitem> pageBean = dictitemService.getResult(currentPage, pageRecorders, code);
+		PageBean<DictItem> pageBean = dictitemService.getResult(currentPage, pageRecorders, code);
 
 		model.addAttribute("list", pageBean.getObjList());
 		model.addAttribute("pageBean", pageBean);
@@ -59,7 +59,7 @@ public class DictitemController {
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
 	public String dictitemDetail(Model model, Integer id) {
 
-		Dictitem dictitem = dictitemService.getDictitemById(id);
+		DictItem dictitem = dictitemService.getDictitemById(id);
 		JSONObject jsonObject = JSONObject.fromObject(dictitem);
 		model.addAttribute("result", jsonObject.toString());
 
@@ -70,7 +70,7 @@ public class DictitemController {
 	 * 添加
 	 */
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
-	public String addDictitem(Model model, Dictitem dictitem) {
+	public String addDictitem(Model model, DictItem dictitem) {
 		try {
 			boolean isSuccess = dictitemService.createNewDictitem(dictitem);
 			if (isSuccess) {
@@ -91,7 +91,7 @@ public class DictitemController {
 	 * @return
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.GET)
-	public String updateDict(Model model, Dictitem dictitem) {
+	public String updateDict(Model model, DictItem dictitem) {
 		try {
 			boolean isSuccess = dictitemService.updateDictitem(dictitem);
 			

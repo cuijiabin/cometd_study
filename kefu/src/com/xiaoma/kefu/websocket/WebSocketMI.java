@@ -9,14 +9,13 @@ import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.common.DialogueCache;
 import com.xiaoma.kefu.common.DialogueUniqueTag;
 import com.xiaoma.kefu.common.DialogueUtil;
 import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.DesUtil;
-import com.xiaoma.kefu.util.PropertiesUtil;
 
 public class WebSocketMI extends MessageInbound {
 	
@@ -77,7 +76,7 @@ public class WebSocketMI extends MessageInbound {
 		if("getCookie".equals(contentFormat)){
 			
 			try {
-				String id = DesUtil.encrypt(this.uniqueTag.getCustomerId().toString(),PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				String id = DesUtil.encrypt(this.uniqueTag.getCustomerId().toString(),SystemConfiguration.getInstance().getSecretKey());
 				
 				WebSocketMIPool.sendMessageToUser(uniqueTag, id);
 				

@@ -8,11 +8,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
-import com.xiaoma.kefu.util.PropertiesUtil;
 import com.xiaoma.kefu.websocket.WebSocketMI;
 
 public class DialogueUtil {
@@ -33,7 +32,7 @@ public class DialogueUtil {
 			}
 
 			try {
-				customerInfo = DesUtil.decrypt(customerInfo,PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				customerInfo = DesUtil.decrypt(customerInfo,SystemConfiguration.getInstance().getSecretKey());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -79,7 +78,7 @@ public class DialogueUtil {
 				}
 				
 				try {
-					customerInfo = DesUtil.decrypt(customerInfo,PropertiesUtil.getProperties(CacheName.SECRETKEY));
+					customerInfo = DesUtil.decrypt(customerInfo,SystemConfiguration.getInstance().getSecretKey());
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

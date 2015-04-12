@@ -16,27 +16,5 @@ public class CacheName {
 	public static final String SHORTMESSAGE="SHORTMESSAGE";
 	public static final String DICT="DICT";
 	public static final String SORT="SORT";
-	//支付平台路径
-	public static final String PAYURL="PAYURL";
-	public static final String TUOFU="TUOFU";
-	
-	//邮件
-	public static final String MAILSERVER="MAILSERVER";
-	public static final String MAILADDRESS="MAILADDRESS";
-	public static final String MAILCOUNT="MAILCOUNT";
-	public static final String MAILPASSWORD="MAILPASSWORD";
-	
-	//redis
-	public static final String REDISHOST="REDISHOST";
-	public static final String REDISPORT="REDISPORT";
-	public static final String REDISPASSWORD="REDISPASSWORD";
-	public static final String REDISTIMEOUT="REDISTIMEOUT";
-	
-	//secretkey
-	public static final String SECRETKEY="SECRETKEY";
-	
-	//保存的文件
-	public static final String FILEROOT="FILEROOT";
-	
 	
 }

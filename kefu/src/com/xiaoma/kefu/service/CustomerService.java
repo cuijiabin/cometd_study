@@ -17,10 +17,10 @@ import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
 import com.xiaoma.kefu.util.PageBean;
-import com.xiaoma.kefu.util.PropertiesUtil;
 
 /**
  * @author frongji
@@ -114,7 +114,7 @@ public class CustomerService {
 			if(customer != null){
 				customerId = customer.getId();
 			}else if (customer == null && cookie != null) {
-				String id = DesUtil.decrypt(cookie.getValue(),PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				String id = DesUtil.decrypt(cookie.getValue(),SystemConfiguration.getInstance().getSecretKey());
 				customerId = Long.valueOf(id);
 				
 			} else if(customer == null && cookie == null){

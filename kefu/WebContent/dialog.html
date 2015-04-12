@@ -4,6 +4,7 @@
 <title>欢迎页--客服信息管理系统</title>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="jsplugin/datepicker/WdatePicker.js"></script>
 
 </head>
 <body>
@@ -41,30 +42,26 @@ function returnFunc(){
 	$.dialog.alert("提示之后!");
 }
 function test(){
-	$.dialog({
+	
+	var str='<table><tr><td><input type="text" name="test1" id="test1" value="123" /></td></tr><tr><td><input class="c-wd80 Wdate" type="text" name="test2" id="test2" onClick="WdatePicker()" /></td></tr></table>';
+	
+	var d = $.dialog({
 	    id: 'testID',
-	    content: 'hello world!',
+	    content:str ,
 	    button: [
 	        {
-	            name: '同意',
+	            name: '确定',
 	            callback: function () {
-	                this.content('你同意了').time(2);
+	            	$.dialog.alert($("#test1").val()+"===="+$("#test2").val());
 	                return false;
 	            },
 	            focus: true
 	        },
 	        {
-	            name: '不同意',
+	            name: '取消',
 	            callback: function () {
 	                alert('你不同意')
 	            }
-	        },
-	        {
-	            name: '无效按钮',
-	            disabled: true
-	        },
-	        {
-	            name: '关闭我'
 	        }
 	    ]
 	});

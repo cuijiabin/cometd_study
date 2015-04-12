@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "dictitem")
-public class Dictitem implements Serializable {
+public class DictItem implements Serializable {
 
 	/**
 	 * 
