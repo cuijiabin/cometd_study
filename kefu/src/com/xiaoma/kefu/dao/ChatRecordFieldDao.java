@@ -60,4 +60,14 @@ public interface ChatRecordFieldDao extends BaseDao<ChatRecordField>{
 	 */
 	public int deleteByUserId(Integer userId);
 	
+	/**
+	 * 更新是否显示
+	* @Description: TODO
+	* @param crf
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	public int updateDisplay(ChatRecordField crf);
+	
 }

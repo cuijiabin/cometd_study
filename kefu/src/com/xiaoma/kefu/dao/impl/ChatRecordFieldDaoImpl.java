@@ -69,6 +69,24 @@ public class ChatRecordFieldDaoImpl extends BaseDaoImpl<ChatRecordField> impleme
 		query.setInteger("userId", userId);
 		return	query.list();
 	}
+	
+	/**
+	 * 更新是否显示
+	* @Description: TODO
+	* @param crf
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	@Override
+	public int updateDisplay(ChatRecordField crf){
+		Session session = getSession();
+	    Query query = session.createQuery("update ChatRecordField t set t.isDisplay = :isDisplay,t.updateDate=:updateDate where id = :id "); 
+	    query.setInteger("isDisplay", crf.getIsDisplay());
+	    query.setDate("updateDate", crf.getUpdateDate());
+	    query.setInteger("id", crf.getId());
+	    return query.executeUpdate();  
+	}
 
 
 }

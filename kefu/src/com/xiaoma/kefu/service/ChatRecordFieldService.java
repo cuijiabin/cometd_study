@@ -39,6 +39,9 @@ public class ChatRecordFieldService {
 		List<ChatRecordField> list = chatRecordFieldDaoImpl.findByUserId(userId);
 		Map<String,String> hm = new LinkedHashMap<String,String>(list.size(),1);//需要按顺序放
 		for(ChatRecordField crf : list){
+			if(crf.getIsDisplay()!=1){
+				continue;
+			}
 			hm.put(crf.getCode(), crf.getName());
 		}
 		return hm;
@@ -77,7 +80,7 @@ public class ChatRecordFieldService {
 	 * 
 	* @Description: 根据用户保存配置
 	* @param userId
-	* @param date
+	* @param date	格式  customerName:1,cardName:0
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
@@ -90,7 +93,7 @@ public class ChatRecordFieldService {
 				ChatRecordField crf = hm.get(temp[0]);
 				crf.setIsDisplay(Integer.valueOf(temp[1]));
 				crf.setUpdateDate(new Date());
-				chatRecordFieldDaoImpl.update(crf);
+				chatRecordFieldDaoImpl.updateDisplay(crf);
 			}
 		}else{
 			//先删除

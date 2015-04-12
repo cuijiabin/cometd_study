@@ -78,6 +78,8 @@ public class MessageRecords implements Serializable {
 	private String landingPage;
 	@Column(name="status")
 	private Integer status;
+	@Column(name="styleId")
+	private Integer styleId;
 	
 	@Transient
 	private String customerName;//客户名称 虚拟列
@@ -238,6 +240,12 @@ public class MessageRecords implements Serializable {
 	}
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+	public Integer getStyleId() {
+		return styleId;
+	}
+	public void setStyleId(Integer styleId) {
+		this.styleId = styleId;
 	}
 	
 }

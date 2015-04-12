@@ -833,7 +833,7 @@ public class RecordsCenterController {
 	private Map<String, String> getRecordFieldMap(User user) {
 		Map<String,String> recordFieldMap = null;
 		//进行权限判断,如果有权限配置字段,则去查询配置结果,否则取默认
-		if(user!=null && user.getId()!=null && user.getId()!=1){
+		if(user!=null && user.getId()!=null ){
 			recordFieldMap = chatRecordFieldService.findDisplayMapByUserId(user.getId());
 		}
 		if(recordFieldMap==null || recordFieldMap.size()==0){//如果没权限或者没设置,则用默认
