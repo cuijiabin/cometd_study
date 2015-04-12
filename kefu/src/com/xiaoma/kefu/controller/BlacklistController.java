@@ -25,6 +25,8 @@ public class BlacklistController {
 	@Autowired
 	private BlacklistService blacklistService;
 	
+//	@Autowired
+//	private User user;
 	/**
 	 * 查询所有、条件查询
 	 * 
@@ -64,11 +66,13 @@ public class BlacklistController {
 	 */
   
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Model model,  Blacklist blacklist) {
+	public String save( @ModelAttribute("blacklist")Blacklist blacklist,String enddate,Model model) {
 		
+
 		System.out.println("888888888888888888888888888888888888888888888888");
+		
+	
 		try {
-	  
 		
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
 			if (isSuccess) {
@@ -79,10 +83,6 @@ public class BlacklistController {
 		   } catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		 }
-
-
-	
-
 		return "resultjson";
 
 	}

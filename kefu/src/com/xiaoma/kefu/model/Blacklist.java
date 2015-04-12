@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @author frongji
  * @time 2015年4月2日上午11:03:42
@@ -22,6 +24,8 @@ public class Blacklist implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+
    
 	@Id
 	@GeneratedValue
@@ -37,6 +41,7 @@ public class Blacklist implements Serializable{
 	@Column(name = "startDate")
 	private Date startDate;
 	
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss"  )
 	@Column(name = "endDate")
 	private Date endDate;
 	
@@ -45,6 +50,7 @@ public class Blacklist implements Serializable{
 	
 	@Column(name= "description")
 	private String description;
+	
 	
 	@Column(name = "userId")
 	private Integer userId;
@@ -110,13 +116,6 @@ public class Blacklist implements Serializable{
 		this.description = description;
 	}
 
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
 
 	public Date getCreateDate() {
 		return createDate;
@@ -125,6 +124,19 @@ public class Blacklist implements Serializable{
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+
+
+
+
 	
 	
 }

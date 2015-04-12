@@ -27,9 +27,9 @@
             <td>${blacklist.ip}</td>
             <td>${blacklist.ipInfo}</td>
             <td>${blacklist.endDate}</td>
-            <td>添加工号</td>
+            <td>${blacklist.id}</td>
             <td>${blacklist.description}</td>
-            <td>编辑</td>
+            <td><a href="javascript:toUpdate('${blacklist.id}')">编辑</a></td>
         </tr>
     </c:forEach>
     </tbody>

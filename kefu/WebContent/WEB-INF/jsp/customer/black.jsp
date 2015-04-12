@@ -34,7 +34,7 @@ String path = request.getContextPath();
     <div class="m-query-bd">
         <div class="f-mbm">
             <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" />
-            <label>添加工号：</label><input  class="c-wd150" type="text" />
+            <label>添加工号：</label><input  id="userId" name="userId" class="c-wd150" type="text" />
             <label>阻止原因：</label><input id="description" name="description" value="${description}" class="c-wd150" type="text" />
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
         </div>
@@ -85,57 +85,56 @@ function find(currentPage){
 	        alert(msg);
 	    }
 	});
-}
-/**
- * 新增
- */
-function addBlacklist(){
-	$.dialog({content:'url:/blacklist/new.action',
+   }
+	  /**
+	  * 跳转新增前的页面
+	  */
+     function addBlacklist(){
+	
+	  var str='<table><tr><td>客户编号<input type="text" name="customerId" id="customerId" value="1234567890" /></td></tr>'+
+	               '<tr><td>IP地址<input type="text" name="ip" id="ip" value="192.168.1.102" /></td></tr>'+
+	               '<tr><td>失效时间<input type="text" name="endDate" id="endDate"  value="2015-01-28 23:58:29"/></td></tr>'+
+	               '<tr><td>阻止原因<input type="text" name="description" id="description" value="骂人"/></td></tr></table>';
+	               
+    	$.dialog({
+		content:str,
 		width: 900,height: 500,
-		
-		
-		
 		button: [
 			        {
 			            name: '确认',
 			            callback: function () {
-			                 save(); 
+			               save(); 
 			                return false;
 			            },
 			            focus: true
 			        },
 			        {
-			            name: '关闭我'
+			            name: '取消'
 			        }
 			    ]
 		});
-
-
-}
-
-function save(){
-	
-	alert("点击了保存");
-
+    }
+    /**
+    *新增的方法
+    */
+    function save(){
 	var url = "/blacklist/save.action";
 	var data = {
-		"id" : $("#id").val(),
+		"customerId" : $("#customerId").val(),
 		"ip" : $("#ip").val(),
-		"endDate" : $("#endDate").val(),
-		"description" : $("#description").val()
+		"description" : $("#description").val(),
+		"enddate" : $("#endDate").val()
 	};
-
-
 	$.ajax({
 		type : "post",
 		url : url,
 		data : data,
-		contentType : "application/json; charset=utf-8",
 		dataType : "json",
+		async:false,
 		success : function(data) {
 			if (data.result == 0) {
 				alert(data.msg);
-				$("#id").val('');
+				$("#customerId").val('');
 				$("#ip").val('');
 				$("#endDate").val('');
 				$("#description").val('');
@@ -148,9 +147,70 @@ function save(){
 			alert(data.msg);
 		}
 	});
-}
+  }
+    /**
+    *修改前的页面跳转
+    */
+    function toUpdate(blacklistId){
+    	
+  	  var str='<table><tr><td><input type="hidden" name="id" id="id" value="${blacklist.id}" /></td></tr>'+
+  	                '<tr><td>客户编号<input type="text" name="customerId" id="customerId" value="${blacklist.id}" /></td></tr>'+
+  	               '<tr><td>IP地址<input type="text" name="ip" id="ip" value="${blacklist.id}" /></td></tr>'+
+  	               '<tr><td>失效时间<input type="text" name="endDate" id="endDate"  value="${blacklist.id}"/></td></tr>'+
+  	               '<tr><td>阻止原因<input type="text" name="description" id="description" value="${blacklist.id}"/></td></tr></table>';
+  	               
+      	$.dialog({
+  		content:str,
+  		width: 900,height: 500,
+  		button: [
+  			        {
+  			            name: '确认',
+  			            callback: function () {
+  			               update(); 
+  			                return false;
+  			            },
+  			            focus: true
+  			        },
+  			        {
+  			            name: '取消'
+  			        }
+  			    ]
+  		});
+      }
 
+  //修改
+	function update(blacklistId) {
+	  
+	  alert("点击了修改");
+	//	var url = "/customer/detail.action";
+		var data = {
+			"id" : blacklistId
+		};
+		$.ajax({
+			type : "get",
+			url : url,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(data) {
 
+				var value = "<tr><td></td><td><input type='hidden' name='id' id='id' value='"+data.id+"'/></td></tr>"
+						+ "<tr><td>登录名</td><td><input type='text' name='loginName' id='loginName' readonly value='"+data.loginName+"'/></td></tr>"
+						+ "<tr><td>手机号</td><td><input type='text' name='phone' id='phone' value='"+data.phone+"'/></td></tr>"
+						+ "<tr><td>邮箱</td><td><input type='text' name='email' id='email' value='"+data.email+"'/></td></tr>";
+						
+				$("#uCustomerDetail").html(value);
+				$("#updateModal").modal({
+					show : true
+				});
+
+			},
+			error : function(msg) {
+				alert("error");
+			}
+		});
+
+	}
 
 </script>
 </body>

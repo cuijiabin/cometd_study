@@ -29,7 +29,7 @@
 <table  border="1" aglin="centert" class="table">
         <tr>
            <td>客户编号</td>
-           <td><input type ="text" id ="id" name="id" value="1000000001"/><td>
+           <td><input type ="text" id ="customerId" name="customerId" value="1000000001"/><td>
         </tr>
          <tr>
            <td>IP地址</td>
@@ -43,7 +43,7 @@
            <td>阻止原因</td>
            <td><input type ="text" id ="description" name="description" value="骂人"/><td>
         </tr>
-</table>
+   </table>
  <button style="float:right;margin-right:40px;" onclick="javascript:save();"  class="btn" >保存</button>
 </form>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -51,6 +51,8 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 
 <script type="text/javascript">
+
+
 
 </script>
 </body>
