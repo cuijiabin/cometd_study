@@ -94,7 +94,7 @@ public class BlacklistController {
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.GET)
 	public String updateBlacklist(Model model, Blacklist blacklist) {
-
+System.out.println("========进入修改方法==========================================");
 		try {
 
 			Blacklist toUpdateBlacklist = blacklistService.getBlacklistById(blacklist.getId());
@@ -136,6 +136,27 @@ public class BlacklistController {
 		model.addAttribute("code", code);
 
 		return "iews/message";
+
+	}
+	
+	/**
+	 * 页面修改前跳转
+	 * @param model
+	 * @param blacklistId
+	 * @return
+	 */
+	@RequestMapping(value = "editBlack.action", method = RequestMethod.GET)
+	public String update(Model model,Integer blacklistId) {
+		try {
+			Blacklist blacklist = blacklistService.getBlacklistById(blacklistId);
+			
+			model.addAttribute("blacklist", blacklist);
+		
+			return "/customer/editBlacklist";
+		} catch (Exception e) {
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
 
 	}
 

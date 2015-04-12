@@ -153,64 +153,27 @@ function find(currentPage){
     */
     function toUpdate(blacklistId){
     	
-  	  var str='<table><tr><td><input type="hidden" name="id" id="id" value="${blacklist.id}" /></td></tr>'+
-  	                '<tr><td>客户编号<input type="text" name="customerId" id="customerId" value="${blacklist.id}" /></td></tr>'+
-  	               '<tr><td>IP地址<input type="text" name="ip" id="ip" value="${blacklist.id}" /></td></tr>'+
-  	               '<tr><td>失效时间<input type="text" name="endDate" id="endDate"  value="${blacklist.id}"/></td></tr>'+
-  	               '<tr><td>阻止原因<input type="text" name="description" id="description" value="${blacklist.id}"/></td></tr></table>';
-  	               
-      	$.dialog({
-  		content:str,
-  		width: 900,height: 500,
-  		button: [
-  			        {
-  			            name: '确认',
-  			            callback: function () {
-  			               update(); 
-  			                return false;
-  			            },
-  			            focus: true
-  			        },
-  			        {
-  			            name: '取消'
-  			        }
-  			    ]
-  		});
-      }
+    	//创建客户名称
+    //	function updateCusl(customerId,dialogueId){
+    		
+    		$.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,
+    			width: 400,height: 500,
+    			button: [
+    				        {
+    				            name: '确认',
+    				            callback: function () {
+    				                 save(); 
+    				                return false;
+    				            },
+    				            focus: true
+    				        },
+    				        {
+    				            name: '关闭'
+    				        }
+    				    ]
+    			});
+    	}
 
-  //修改
-	function update(blacklistId) {
-	  
-	  alert("点击了修改");
-	//	var url = "/customer/detail.action";
-		var data = {
-			"id" : blacklistId
-		};
-		$.ajax({
-			type : "get",
-			url : url,
-			data : data,
-			contentType : "application/json; charset=utf-8",
-			dataType : "json",
-			success : function(data) {
-
-				var value = "<tr><td></td><td><input type='hidden' name='id' id='id' value='"+data.id+"'/></td></tr>"
-						+ "<tr><td>登录名</td><td><input type='text' name='loginName' id='loginName' readonly value='"+data.loginName+"'/></td></tr>"
-						+ "<tr><td>手机号</td><td><input type='text' name='phone' id='phone' value='"+data.phone+"'/></td></tr>"
-						+ "<tr><td>邮箱</td><td><input type='text' name='email' id='email' value='"+data.email+"'/></td></tr>";
-						
-				$("#uCustomerDetail").html(value);
-				$("#updateModal").modal({
-					show : true
-				});
-
-			},
-			error : function(msg) {
-				alert("error");
-			}
-		});
-
-	}
 
 </script>
 </body>
