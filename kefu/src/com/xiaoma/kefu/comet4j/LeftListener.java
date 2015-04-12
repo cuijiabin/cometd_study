@@ -6,7 +6,8 @@ import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.DropEvent;
 import org.comet4j.core.listener.DropListener;
 
-import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.redis.JedisConstant;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 
 /**
  * @description LeftListener
@@ -17,22 +18,36 @@ public class LeftListener extends DropListener {
 		CometConnection conn = anEvent.getConn();
 		if (conn != null) {
 			
-			
-			
-			String value = JedisDao.getJedis().get("1###"+conn.getId());
-			if(StringUtils.isNotBlank(value)){
-				value = JedisDao.getJedis().get("2###"+conn.getId());
-			}
+			String ccnId = conn.getId();
+			String userId = JedisTalkDao.getCurrentUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
 			
 			//移除缓存
-			JedisDao.getJedis().del("1###"+conn.getId(),"2###"+conn.getId());
-			
-			
-			JoinDTO dto = new JoinDTO(conn.getId(), value);
-			dto.setType("down");
+			if(StringUtils.isNotBlank(userId)){
+				JedisTalkDao.delCurrentUser(JedisConstant.CUSTOMER_TYPE, ccnId);
+				JedisTalkDao.delCcnList(JedisConstant.CUSTOMER_TYPE, ccnId);
+				
+				JedisTalkDao.delUserCcnList(userId, ccnId);
+				Integer count = JedisTalkDao.countUserCcnList(userId);
+				if(count <= 0){
+					JedisTalkDao.delCurrentUserList(JedisConstant.CUSTOMER_TYPE, userId);
+				}
+				
+			}else{
+				userId = JedisTalkDao.getCurrentUserId(JedisConstant.USER_TYPE, ccnId);
+				JedisTalkDao.delCurrentUser(JedisConstant.USER_TYPE, ccnId);
+				JedisTalkDao.delCcnList(JedisConstant.USER_TYPE, ccnId);
+				
+				JedisTalkDao.delUserCcnList(userId, ccnId);
+				Integer count = JedisTalkDao.countUserCcnList(userId);
+				//暂时不用
+				if(count <= 0){
+					JedisTalkDao.delCurrentUserList(JedisConstant.USER_TYPE, userId);
+				}
+			}
 			
 			//广播
-			((CometEngine) anEvent.getTarget()).sendToAll("talker", dto);
+			CometEngine engine = (CometEngine) anEvent.getTarget();
+			//TODO
 		}
 		return true;
 	}

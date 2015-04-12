@@ -71,19 +71,15 @@
 <div class="g-bd2 f-cb">
     <div class="g-sd2l c-bor">
         <h3 class="u-tit c-bg">当前共有0个对话</h3>
-        <ul class="m-talk">
-        	<li class="on">
-            	<p>在线客户1</p>
-                <p>北京市 [ 北京联通 ]</p>
-                <span class="u-close">x</span>
-            </li>
+        <ul class="m-talk" id="customerList">
         </ul>
     </div>
     <div class="g-mn2">
         <div class="g-mn2c">
             <div class="u-state c-bor">等待咨询...</div>
             <div class="g-mn2c-cnt c-bor">
-        		<h3 class="u-tit c-bg">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
+                <input type="hidden" id="currentCustomerId"/>
+        		<h3 class="u-tit c-bg" id="contentTitle">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
                     <div class="u-record r-sms-manager" id="inputbox">
                         <p class="r-welcome">欢迎使用客服系统</p>
@@ -184,33 +180,18 @@
 		stop : function(cause, url, cId, engine) {
 		},
 		talker : function(data, timespan, engine) {
-			console.log("type:" +data);
-			var props = "";
-			for(var p in data){   
-			    // 方法  
-			    if(typeof(data[p])=="function"){   
-			        //obj[p]();  
-			    }else{   
-			        // p 为属性名称，obj[p]为对应属性的值  
-			        props += p + "=" + data[p] + ";  ";  
-			    }   
-			} 
-			console.log(props);
 			switch (data.type) {
 			case 'talk': // 收到聊天消息
-				onMessage(data, timespan);
 				break;
-			case 'list': // 收到聊天消息
-				userList(data, timespan);
+			case 'list': //
+				userList(data);
 				break;
 			case 'up': // 上线
-				onJoin(data, timespan);
+			    //更新用户列表
+				updateCustomerList(data);
 				break;
 			case 'down': // 下线
-				onLeft(data, timespan);
 				break;
-			default:
-				userList(data);
 			}
 		}
 	});
@@ -228,17 +209,30 @@
 	}
 	
 	
-	// 用户上线通知
-	function onJoin(data) {
+	//更新用户列表
+	function updateCustomerList(data) {
 		var id = JS.Engine.getId();
-		JS.AJAX.get('/chat/list.action?id='+id);
-		console.log(data);
+		JS.AJAX.get('/chat/customerList.action?id='+id);
 	}
 	// 用户下线通知
-	function onLeft(data) {
-		var id = JS.Engine.getId();
-		JS.AJAX.get('/chat/list.action?id='+id);
-		console.log(data);
+	function userList(data) {
+		var list = data.obj
+		console.log(list.length);
+		var html = "";
+		for(var i=0; i<list.length; i++){
+			var customer = list[i];
+			html += "<li class='on'><p>"+customer.customerName+customer.id
+			+"</p><p><a href='javascript:changeTitle("+customer.id+");'>"
+			+customer.ip+"</a></p><span class='u-close'>x</span></li>"
+		}
+		console.log(html);
+		 $("#customerList").html(html);
+	}
+	function changeTitle(id){
+		
+		console.log("与客户"+id+"对话中");
+		$("#contentTitle").html("与客户"+id+"对话中");
+		$("#currentCustomerId").val(id);
 	}
 	
 </script>

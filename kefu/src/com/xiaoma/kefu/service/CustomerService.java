@@ -127,4 +127,10 @@ public class CustomerService {
 			customer = this.getCustomerById(customerId);
 			return customer;
 		}
+		
+		public List<Customer> findByIds(List<Long> ids){
+			
+			return customerDaoImpl.findByIds(Customer.class, ids);
+			
+		}
 }

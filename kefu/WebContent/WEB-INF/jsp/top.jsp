@@ -17,6 +17,7 @@
         <li><a href="#"><i class="icon-home"></i>首页</a></li>
         <li><a href="#"><i class="icon-lock"></i>锁屏</a></li>
         <li><a href="#"><i class="icon-logout"></i>退出</a></li>
+        <li><a target="_blank" href="/dialogue/user.action"><i class="icon-logout"></i>对话</a></li>
     </ul>
 </div>
 

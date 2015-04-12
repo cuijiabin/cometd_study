@@ -24,6 +24,8 @@
 </div>
 
 <script type="text/javascript">
+
+
 if(!Array.prototype.map){
 	Array.prototype.map = function(fn,scope) {
   		var result = [],ri = 0;

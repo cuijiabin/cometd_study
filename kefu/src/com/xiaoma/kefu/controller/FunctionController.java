@@ -30,7 +30,7 @@ public class FunctionController {
 		if(id!=null){
 		List list = funcService.findTree(id);
 		JSONArray json = new JSONArray().fromObject(list);
-		System.out.println(json);
+//		System.out.println(json);
 		model.addAttribute("json",json.toString());
 		return "left";
 		}else{
