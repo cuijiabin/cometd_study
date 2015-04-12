@@ -8,14 +8,15 @@ import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
 
+import com.cloopen.rest.sdk.utils.PropertiesUtil;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.DesUtil;
-import com.xiaoma.kefu.util.PropertiesUtil;
 
 /**
  * @description JoinListener
@@ -48,7 +49,7 @@ public class JoinListener extends ConnectListener {
 				value = customer.getId().toString();
 				type = "1###";
 				// 写入cookie
-				cookieVal = DesUtil.encrypt(value,PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				cookieVal = DesUtil.encrypt(value,SystemConfiguration.getInstance().getSecretKey());
 				
 			} catch (Exception e) {
 				e.printStackTrace();
