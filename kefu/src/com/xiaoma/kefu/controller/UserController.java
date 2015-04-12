@@ -60,9 +60,23 @@ public class UserController {
 	 * @param password
 	 * @param session
 	 */
-	@RequestMapping(value = "login.action", method = RequestMethod.GET)
+	@RequestMapping(value = "login.action", method = RequestMethod.POST)
 	public String login(HttpSession session, String name, String password,
 			Model model) {
+		List list = funcService.findFuncOne();
+		model.addAttribute("topList", list);
+        model.addAttribute("result", Ajax.JSONResult(0,"登录成功!"));
+		return "resultjson";
+	}
+	/**
+	 * User login
+	 * 
+	 * @param name
+	 * @param password
+	 * @param session
+	 */
+	@RequestMapping(value = "main.action", method = RequestMethod.GET)
+	public String main(HttpSession session,Model model) {
 		List list = funcService.findFuncOne();
 		model.addAttribute("topList", list);
 		return "index";

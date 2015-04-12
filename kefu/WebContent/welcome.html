@@ -8,16 +8,19 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="css/app.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 </head>
 <style type="text/css">
 </style>
 <body>
-<input type="button" onclick="javascript:cl();" value="关闭" />
 </body>
 <script type="text/javascript">
+	var api = frameElement.api,W=api.opener;
 	function cl(){
-		this.close();
+		W.$.dialog.alert('操作成功!',function(){
+			api.close();			
+		});
 	}
-
 </script>
 </html>

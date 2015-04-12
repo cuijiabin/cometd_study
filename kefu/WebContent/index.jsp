@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <!doctype html>
 <html lang="zh">
 <head>
@@ -13,6 +14,8 @@
 </head>
 
 <body style="background:#dfdfdf;">
+<xiaoma:select name="test" dictName="d_cus_reply_way"  value="2" />
+<xiaoma:dictValue name="d_cus_reply_way"  value="2" />
 <div class="m-login">
 		<div class="login_form">
 			<div class="m-login-info">密码错误！</div>
@@ -48,14 +51,13 @@
 			"loginName":$("#loginName").val(),
 			"password":$("#password").val()
 		};
-		alert(111);
 		$.ajax({
 			type: "post",
 		    url: "/user/login.action",
 		    data: data,
 		    dataType: "json",
-		    success: function (d) {
-		    	if(d.result==0){
+		    success: function (data) {
+		    	if(data.result==0){
 		    		window.location="/user/main.action";
 		    	}else{
 		    		$(".m-login-info").html(d.message);
