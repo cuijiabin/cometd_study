@@ -108,7 +108,8 @@ public class UserController {
 		model.addAttribute("userName", userName);
 		return "/set/govern/userList";
       }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+    	     logger.error(e.getMessage());
+			 model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -125,7 +126,8 @@ public class UserController {
 			model.addAttribute("deptList",dlist);
 			model.addAttribute("roleList",rlist);
 		} catch (Exception e) {
-			
+		    logger.error(e.getMessage());
+		    model.addAttribute("error","出错了,请刷新页面重试！");
 		}
 
 		return "/set/govern/addUser";
@@ -167,7 +169,8 @@ public class UserController {
 		model.addAttribute("result", json.toString());
 		return "views/resultjson";
       }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+  	    logger.error(e.getMessage());
+	    model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -184,7 +187,8 @@ public class UserController {
         System.out.println(json.toString());
 		return "views/resultjson";
 	 }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+		    logger.error(e.getMessage());
+		    model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -202,7 +206,8 @@ public class UserController {
 		model.addAttribute("user", user);
 		return "/set/govern/addUser";
        }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+   	    logger.error(e.getMessage());
+	    model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -304,7 +309,8 @@ public class UserController {
 
 		return "/views/message";
       }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+  	    logger.error(e.getMessage());
+	    model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 
@@ -365,7 +371,7 @@ public class UserController {
 				model.addAttribute("result", Ajax.toJson(1, "该工号名已存在！"));
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+		    logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";
@@ -380,7 +386,7 @@ public class UserController {
 			}
 			model.addAttribute("result", Ajax.toJson(0, "手机号码校验成功！"));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+		    logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";

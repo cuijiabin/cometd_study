@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +27,7 @@ import com.xiaoma.kefu.util.PageBean;
 @Controller
 @RequestMapping(value="dept")
 public class DepartmentController {
-
+	private Logger logger = Logger.getLogger(DepartmentController.class);  
 	@Autowired
 	private DepartmentService deptService;
 	
@@ -54,7 +55,8 @@ public class DepartmentController {
         System.out.println(pageBean);
 		return "/set/govern/deptList";
      }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+    	 logger.error(e.getMessage());
+		 model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -81,7 +83,8 @@ public class DepartmentController {
 		return "/set/govern/deptUser";
 		
      }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+    	 logger.error(e.getMessage());
+		 model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -114,6 +117,7 @@ public class DepartmentController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
@@ -133,7 +137,7 @@ public class DepartmentController {
 				model.addAttribute("result", Ajax.toJson(1, "该部门名已存在！"));
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";
@@ -169,6 +173,7 @@ public class DepartmentController {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
@@ -193,6 +198,7 @@ public class DepartmentController {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
