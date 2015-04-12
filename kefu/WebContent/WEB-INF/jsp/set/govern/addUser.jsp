@@ -25,7 +25,6 @@
 </div>
 
 <!-- 表格有边框 -->
-<form>
 <table class="table table-bordered table-striped table-hover m-table">
         <tr>
             <td>工号</td>
@@ -80,19 +79,17 @@
             <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker()" class="c-wd120 Wdate" /></td>
         </tr>
 </table>
-                                     <input type="button" value="保存" onclick="save(${user.id})"/>  <input type="button" value="关闭" />
-</form>
+<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:saveUser(${user.id});" class="btn" >确认</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-//$('.btn-group .btn').click(function(){
-//	$(this).addClass("active").siblings().removeClass("active");
-//})
-function save(id){
+var api = frameElement.api,W=api.opener;
+
+function saveUser(id){
 	var url="";
 	var data="";
 	if(id!=undefined){
@@ -133,18 +130,20 @@ function save(id){
 				return;
 			}
 	}
-
 	$.ajax({
-		type : "get",
+		type : "post",
 		url : url,
 		data : data,
-		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		success : function(data) {
-				$.dialog.alert(data.msg);
+
+				alert(data.msg);
+				cl();
+				
 		},
 		error : function(msg) {
-			$.dialog.alert(data.msg);
+
+			alert(data.msg);
 		}
 	});
 }
@@ -154,54 +153,54 @@ function save(id){
 function verificationParam(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("工号不得为空！");
+		 alert("工号不得为空！");
 		return false;
 	}
 	var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
 	if(!chinesePatrn.test(loginName)){
-		$.dialog.alert("工号输入规则不对");
+		 alert("工号输入规则不对");
 		return false;
 	}
 	
 	 if(checkUser()){
-		   $.dialog.alert("登录名已存在！");
+		    alert("登录名已存在！");
 		   return false;
 	   }
 	
 	var userName = userData.userName;
 	if (userName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("用户名不得为空！");
+		 alert("用户名不得为空！");
 		return false;
 	}
 	
 	var password = userData.password;
 	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 	if (!patrn.test(password)) {
-		$.dialog.alert("密码格式不正确");
+		 alert("密码格式不正确");
 		return false;
 	}
 	
 	var password1 = userData.password1;
 	if (password !=password1) {
-		$.dialog.alert("两次输入密码不一致！");
+		 alert("两次输入密码不一致！");
 		return false;
 	}
 	
 	var maxListen = userData.maxListen;
 	if (maxListen.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写最大接听数！");
+		 alert("请填写最大接听数！");
 		return false;
 	}
 	
 	var cardName = userData.cardName;
 	if (cardName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写名片！");
+		 alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写入职时间！");
+		 alert("请填写入职时间！");
 		return false;
 	}
 	
@@ -212,18 +211,18 @@ function verificationParam(userData) {
 function verificationParam1(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("工号不得为空！");
+		 alert("工号不得为空！");
 		return false;
 	}
 	var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
 	if(!chinesePatrn.test(loginName)){
-		$.dialog.alert("工号输入规则不对");
+		 alert("工号输入规则不对");
 		return false;
 	}
 		
 	var userName = userData.userName;
 	if (userName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("用户名不得为空！");
+		 alert("用户名不得为空！");
 		return false;
 	}
 	
@@ -231,36 +230,37 @@ function verificationParam1(userData) {
 	if(password.replace("^[ ]+$", "").length !=0){
 		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 		if (!patrn.test(password)) {
-			$.dialog.alert("密码格式不正确");
+			alert("密码格式不正确");
 			return false;
 		}
 		
 		var password1 = userData.password1;
 		if (password !=password1) {
-			$.dialog.alert("两次输入密码不一致！");
+			alert("两次输入密码不一致！");
 			return false;
 		}
 	}
 	var maxListen = userData.maxListen;
 	if (maxListen.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写最大接听数！");
+		alert("请填写最大接听数！");
 		return false;
 	}
 	
 	var cardName = userData.cardName;
 	if (cardName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写名片！");
+		alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("请填写入职时间！");
+		alert("请填写入职时间！");
 		return false;
 	}
 	
 	return true;
 }
+
 function checkUser(){
 	var flag = false;
 	if($("#1oginName").val()==''){
@@ -283,10 +283,14 @@ function checkUser(){
 			}
 		},
 		error : function(msg){
-			$.dialog.alert("查询失败!");
+			alert("查询失败!");
 		}
 	});
 	return flag;
+}
+
+function cl(){
+	api.close();			
 }
 </script>
 </body>

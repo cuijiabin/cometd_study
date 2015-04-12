@@ -5,57 +5,91 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.apache.log4j.Logger;
+
+import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
  * 角色管理 controller
+ * 
  * @author yangxiaofeng
- *
+ * 
  */
 @SuppressWarnings("unused")
 @Controller
-@RequestMapping(value="role")
+@RequestMapping(value = "role")
 public class RoleController {
 
 	private Logger logger = Logger.getLogger(RoleController.class);
+
 	@Autowired
 	private RoleService roleService;
-	
+
+	// /**
+	// * 角色查询
+	// * @param model
+	// * @param condition
+	// * @param currentPage
+	// * @param pageRecorders
+	// * @return
+	// */
+	// @RequestMapping(value = "list.action", method = RequestMethod.GET)
+	// public String queryAll(Model model, String loginName, String phone,
+	// Integer currentPage, Integer pageRecorders) {
+	// try{
+	// currentPage = (currentPage == null) ? 1 : currentPage;
+	// pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
+	// PageBean<Role> pageBean = roleService.getResult(currentPage,
+	// pageRecorders);
+	// System.out.println(pageBean.getObjList());
+	// model.addAttribute("list", pageBean.getObjList());
+	// model.addAttribute("pageBean", pageBean);
+	// System.out.println(pageBean.getObjList());
+	// System.out.println(pageBean);
+	// return "/set/govern/roleList";
+	// }catch(Exception e){
+	// logger.error(e.getMessage());
+	// model.addAttribute("error","出错了,请刷新页面重试！");
+	// return "/views/error500";
+	// }
+	// }
+
 	/**
-	 * 角色查询
-	 * @param model
-	 * @param condition
-	 * @param currentPage
-	 * @param pageRecorders
+	 * 查询
+	 * 
+	 * @param conditions
+	 * @param pageBean
 	 * @return
 	 */
+
 	@RequestMapping(value = "list.action", method = RequestMethod.GET)
-	public String queryAll(Model model, String loginName, String phone,
-			Integer currentPage, Integer pageRecorders) {
-     try{
-		currentPage = (currentPage == null) ? 1 : currentPage;
-		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean<Role> pageBean = roleService.getResult(currentPage, pageRecorders);
-        System.out.println(pageBean.getObjList());
-		model.addAttribute("list", pageBean.getObjList());
-		model.addAttribute("pageBean", pageBean);
-		System.out.println(pageBean.getObjList());
-        System.out.println(pageBean);
-		return "/set/govern/roleList";
-     }catch(Exception e){
-		logger.error(e.getMessage());
-	    model.addAttribute("error","出错了,请刷新页面重试！");
-			return "/views/error500";
+	public String queryAll(MapEntity conditions, Model model,
+			@ModelAttribute("pageBean") PageBean<Role> pageBean) {
+		try {
+			roleService.getResult(conditions.getMap(), pageBean);
+			if (conditions == null || conditions.getMap() == null
+					|| conditions.getMap().get("typeId") == null)
+				return "/set/govern/role";
+			else
+				return "/set/govern/roleList";
+		} catch (Exception e) {
+			model.addAttribute("message", "查询失败,请刷新重试!");
+			logger.error(e.getMessage());
+			return "/error";
 		}
 	}
+
 	/**
 	 * 跳转到页面
+	 * 
 	 * @param model
 	 * @param role
 	 * @return
@@ -65,6 +99,7 @@ public class RoleController {
 
 		return "/set/govern/addRole";
 	}
+
 	/**
 	 * 添加
 	 */
@@ -73,7 +108,7 @@ public class RoleController {
 	public String addUser(Model model, Role role) {
 		try {
 			Integer isSuccess = roleService.createNewUser(role);
-			if (isSuccess!=0) {
+			if (isSuccess != 0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
@@ -85,17 +120,19 @@ public class RoleController {
 
 		return "resultjson";
 	}
+
 	/**
 	 * 检查用户名是否存在
 	 */
 	@RequestMapping(value = "check.action", method = RequestMethod.GET)
-	public String queryByCheck(Model model, Role role) throws UnsupportedEncodingException {
-		
+	public String queryByCheck(Model model, Role role)
+			throws UnsupportedEncodingException {
+
 		try {
 			Integer count = roleService.checkRole(role);
-			if(count!=null && count==0){
+			if (count != null && count == 0) {
 				model.addAttribute("result", Ajax.toJson(0, "该用户名可以使用！"));
-			}else{
+			} else {
 				model.addAttribute("result", Ajax.toJson(1, "该用户名已存在！"));
 			}
 		} catch (Exception ex) {
@@ -117,7 +154,7 @@ public class RoleController {
 
 		return "/set/govern/addRole";
 	}
-	
+
 	/**
 	 * 修改
 	 * 
@@ -128,7 +165,7 @@ public class RoleController {
 		try {
 			Integer isSuccess = roleService.updateRole(role);
 
-			if (isSuccess==1) {
+			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -141,9 +178,10 @@ public class RoleController {
 		return "resultjson";
 
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param model
 	 * @param id
 	 * @return
@@ -152,10 +190,10 @@ public class RoleController {
 	public String deleteProduct(Model model, Integer id) {
 
 		try {
-			//boolean isSuccess = roleService.deleteRoleById(id);
+			// boolean isSuccess = roleService.deleteRoleById(id);
 			System.out.println(id);
 			Integer isSuccess = roleService.deleteRoleById(id);
-			if (isSuccess==1) {
+			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "删除产品成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
@@ -167,6 +205,5 @@ public class RoleController {
 
 		return "redirect:/role/list.action";
 	}
-	
-}
 
+}
