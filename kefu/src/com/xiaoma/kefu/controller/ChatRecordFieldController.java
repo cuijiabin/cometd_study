@@ -1,14 +1,21 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.xiaoma.kefu.model.ChatRecordField;
+import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
+import com.xiaoma.kefu.util.Ajax;
 
 /**
  * *********************************
@@ -34,12 +41,47 @@ public class ChatRecordFieldController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
-	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String saveRecord(HttpSession session,String date){
+	@RequestMapping(value = "saveRecord.action", method = RequestMethod.POST)
+	public String saveRecord(HttpSession session,Model model, @RequestParam("date") String date){
+		try {
+			//获取当前用户id
+			Integer userId = 1;
+			chatRecordFieldService.saveRecord(userId,date);
+			
+			model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 配置显示字段 编辑页面
+	* @Description: TODO
+	* @param session
+	* @param model
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
+	public String edit(HttpSession session,Model model){
 		//获取当前用户id
 		Integer userId = 1;
-		chatRecordFieldService.saveRecord(userId,date);
-		return "";
+		
+		List<ChatRecordField> list = chatRecordFieldService.findByUserId(userId);
+		if(list==null || list.size()==0){
+			//如果没有配置过,则取默认的
+			list = chatRecordFieldService.findByUserId(1);
+			for(ChatRecordField crf : list){
+				crf.setIsDisplay(0);
+				if(crf.getIsDefault()==1){
+					crf.setIsDisplay(1);
+				}
+			}
+		}
+		model.addAttribute("list", list);
+		return "/record/talk/recordField";
 	}
 	
 }

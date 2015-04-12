@@ -82,6 +82,7 @@ function find(currentPage){
 	var url="/recordsCenter/queryTalkDetail.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"typeId":1,
 			"dialogueId":dialogueId,
 			"isShowTel":isShowTel

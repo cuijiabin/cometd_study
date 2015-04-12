@@ -138,6 +138,18 @@ public class ChatRecordFieldService {
 		}
 		return hm;
 	}
+	
+	/**
+	 * 根据用户id,获取配置信息
+	* @Description: TODO
+	* @param userId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	public List<ChatRecordField> findByUserId(Integer userId) {
+		return chatRecordFieldDaoImpl.findByUserId(userId);
+	}
 
 
 

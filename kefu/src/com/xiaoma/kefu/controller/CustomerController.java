@@ -104,7 +104,7 @@ public class CustomerController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "update.action", method = RequestMethod.GET)
+	@RequestMapping(value = "update.action", method = RequestMethod.POST)
 	public String updateCustomer(Model model, Customer customer) {
 
 		try {
@@ -172,8 +172,39 @@ public class CustomerController {
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
+	}
+	
+	/**
+	 * 更新用户信息,用于记录中心
+	* @Description: TODO
+	* @param model
+	* @param customer
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	@RequestMapping(value = "updateCus.action", method = RequestMethod.POST)
+	public String updateCus(Model model, Customer customer) {
+		try {
+			
+			Customer toUpdate = customerService.getCustomerById(customer.getId());
+			toUpdate.setCustomerName(customer.getCustomerName());
+			toUpdate.setPhone(customer.getCustomerName());
+			toUpdate.setEmail(customer.getEmail());
+			toUpdate.setRemark(customer.getRemark());
+			boolean isSuccess = customerService.updateCustomer(customer);
+			if (isSuccess) {
+				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			}
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+		}
+		return "resultjson";
 
 	}
+	
 
 
 

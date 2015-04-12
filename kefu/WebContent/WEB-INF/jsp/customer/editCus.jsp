@@ -16,7 +16,7 @@
 <body>
 
 <!-- 表格有边框 -->
-<form>
+<form id="mainForm">
 <table class="table table-bordered m-table">
     <tbody>
         <tr>
@@ -47,13 +47,61 @@
         </tr>
     </tbody>
 </table>
-                    <button type="submit" class="btn btn-primary">Save changes <i class="icon-ok icon-white"></i></button>
-                    <button type="reset" class="btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+                    <button type="reset" class="btn" id="btn_cancel">取消</button>
 </form>
 
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+
+<script type="text/javascript">
+
+
+var api = frameElement.api;//调用父页面数据  
+var W = api.opener;//获取父页面对象  
+// //以下代码为弹出层页面添加按钮  
+// api.button({  
+//     id:'valueOk',  
+//     name:'确定'    
+// });  
+// api.button({  
+//     id:'cancel',  
+//     name:'关闭'  
+// }); 
+
+//取消
+$('#btn_cancel').on('click',function(){
+	 api.close();
+// 	 frameElement.lhgDG.cancel();
+});
+
+//保存
+$('#btn_save').on('click',function(){
+	$.ajax({
+		type : 'post',
+		url :  "/customer/updateCus.action",
+		dataType : 'json',
+		data : $('#mainForm').serialize(),
+		async: false,
+	 	success: function (data) {
+	    	if(data.result==0){
+	    		W.$.dialog.alert('操作成功!',function(){
+	    			W.editCallback();
+	    		});
+	    	}else{
+	    		$.dialog.alert(data.msg);
+	    	}
+	    },
+	    error: function (msg) {
+	    	$.dialog.alert(msg);
+	    }
+	});
+});
+
+
+</script>
 
 </body>
 </html>

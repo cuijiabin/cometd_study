@@ -106,7 +106,7 @@
         	<label><input type="checkbox" id="isShowTel">显式查看聊天记录中的电话号码</label>
 	        <button type="button" class="btn btn-primary btn-small" onclick="del();">删除</button>
 	        <button type="button" class="btn btn-primary btn-small" onclick="toRecycle();">回收站</button>
-	        <button type="button" class="btn btn-primary btn-small">配置显示字段</button>
+	        <button type="button" class="btn btn-primary btn-small" onclick="editDisplay();">配置显示字段</button>
      	</div>
     </div>
 </div>
@@ -124,6 +124,7 @@ function find(currentPage){
 	var url="/recordsCenter/find.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"typeId":1,
 			"beginDate":$("#beginDate").val(),
 			"endDate":$("#endDate").val()
@@ -222,41 +223,33 @@ function showDetail(dialogueId){
 function updateCusl(customerId,dialogueId){
 	
 	$.dialog({content:'url:/customer/editCus.action?customerId='+customerId+'&dialogueId='+dialogueId,
+		id: 'editCus',
 		width: 400,height: 500,
-		button: [
-			        {
-			            name: '确认',
-			            callback: function () {
-			                 save(); 
-			                return false;
-			            },
-			            focus: true
-			        },
-			        {
-			            name: '关闭'
-			        }
-			    ]
-		});
+		title:'添加访客信息'
+	});
 }
 
-function save(){
-	alert('talk.Save');
-	var email = $("#email").val();
-	alert(email);
+//配置显示字段
+function editDisplay(){
+	var url = "/charRecordField/edit.action";
+	window.location.href = url;
 	return;
-	var data = {
-		"loginName" : $("#loginName").val(),
-		"userName" : $("#userName").val(),
-		"password" : $("#password").val(),
-		"password1" : $("#password1").val(),
-		"listenLevel" : $("#listenLevel option:selected").val(),
-		"deptId" : $("#deptId option:selected").val(),
-		"roleId" : $("#roleId option:selected").val(),
-		"maxListen" : $("#maxListen").val(),
-		"cardName" : $("#cardName").val(),
-		"createDate" : $("#createDate").val(),		    
-	};
+	$.dialog({content:'url:/charRecordField/edit.action',
+		id: 'testID',
+		width: 400,height: 500,
+		lock:true, 
+		title:'配置显示字段'
+	});
 }
+
+//创建客户回调
+function editCallback(){
+	$.dialog({id:'editCus'}).close();
+	var pageNo = '${pageBean.currentPage}';
+	find(pageNo);
+}
+
+
 </script>
 </body>
 </html>
