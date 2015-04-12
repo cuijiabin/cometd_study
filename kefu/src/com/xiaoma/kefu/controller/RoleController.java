@@ -2,14 +2,12 @@ package com.xiaoma.kefu.controller;
 
 import java.io.UnsupportedEncodingException;
 
-import net.sf.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.apache.log4j.Logger;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.util.Ajax;
@@ -20,10 +18,12 @@ import com.xiaoma.kefu.util.PageBean;
  * @author yangxiaofeng
  *
  */
+@SuppressWarnings("unused")
 @Controller
 @RequestMapping(value="role")
 public class RoleController {
 
+	private Logger logger = Logger.getLogger(RoleController.class);
 	@Autowired
 	private RoleService roleService;
 	
@@ -49,7 +49,8 @@ public class RoleController {
         System.out.println(pageBean);
 		return "/set/govern/roleList";
      }catch(Exception e){
-			model.addAttribute("error","对不起出错了");
+		logger.error(e.getMessage());
+	    model.addAttribute("error","出错了,请刷新页面重试！");
 			return "/views/error500";
 		}
 	}
@@ -78,6 +79,7 @@ public class RoleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
@@ -97,7 +99,7 @@ public class RoleController {
 				model.addAttribute("result", Ajax.toJson(1, "该用户名已存在！"));
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";
@@ -132,6 +134,7 @@ public class RoleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 
@@ -158,6 +161,7 @@ public class RoleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
 		}
 
