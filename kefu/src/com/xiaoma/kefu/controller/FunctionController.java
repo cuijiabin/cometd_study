@@ -25,9 +25,9 @@ public class FunctionController {
 	private FunctionService funcService;
 
 	// 查询各个级别的树
-	@SuppressWarnings("static-access")
-	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
-			return "null";
-		}
-	}
+//	@SuppressWarnings("static-access")
+//	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
+//			return "null";
+//		}
+//	}
 }

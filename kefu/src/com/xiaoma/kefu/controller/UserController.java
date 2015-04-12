@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.sun.tracing.dtrace.Attributes;
 import com.xiaoma.kefu.model.Department;
-import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
