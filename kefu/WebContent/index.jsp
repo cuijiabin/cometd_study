@@ -27,8 +27,8 @@
 				</div>
 				<div class="field">
 					<label>验证码：</label>
-					<input type="text" class="text text1" size="10">
-                    <cite class="yzm">3986</cite>
+					<input type="text" class="text text1" name="yzm" id="yzm"size="10">
+                    <cite class="yzm"><img src="image.jsp" height="15" id="pic" name="pic"/></cite>  <a href="javascript:reloadImage('image.jsp')">看不清</a><br/>
 				</div>
 				<div class="field">
 					<label></label>
@@ -56,12 +56,20 @@
 		    dataType: "json",
 		    success: function (d) {
 		    		window.location="/user/main.action";
+		    	}else{
+		    		alert(data.msg);
+		    	}
 		    },
-		    error: function (msg) {
-		        alert(msg);
+		    error: function (data) {
+		    	alert(data.msg);
 		    }
 		});
 	}
+	
+	  function reloadImage(imgurl){
+          var getimagecode=document.getElementById("pic");
+          getimagecode.src= imgurl + "?id=" + Math.random();
+      }
 </script>
 </body>
 </html>

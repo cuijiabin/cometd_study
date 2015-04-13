@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.UserDao;
-import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 

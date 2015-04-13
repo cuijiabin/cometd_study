@@ -69,4 +69,5 @@ public interface UserDao extends BaseDao<User> {
 	public abstract void findByCondition(Map<String, String> conditions,
 			PageBean<User> pageBean);
 
+
 }

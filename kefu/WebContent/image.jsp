@@ -42,7 +42,7 @@
 	int red = 0, green = 0, blue = 0;
 	
 	// 随机产生4位数字的验证码
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 4; i++) {
 		// 得到随机产生的验证码数字
 		String strRand = String.valueOf(random.nextInt(10));
 	
@@ -61,7 +61,7 @@
 	// 将四位数字的验证码保存到session中
 	//HttpSession session = request.getSession();
 	session.setAttribute("randomCode", randomCode.toString());
-	
+	session.setAttribute("yzmtime",new Date());
 	// 禁止图像缓存
 	response.setHeader("Pragma", "no-cache");
 	response.setHeader("Cache-Control", "no-cache");

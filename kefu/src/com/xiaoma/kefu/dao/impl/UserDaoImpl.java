@@ -30,8 +30,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Query query = session.createQuery(hql);
 		// 设置参数,使用MD5对密码进行加密
 		try {
-			password = new String(
-					DigestUtils.md5Hex(password.getBytes("UTF-8")));
+			password = new String(DigestUtils.md5Hex(password.getBytes("UTF-8")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

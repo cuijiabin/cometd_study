@@ -76,6 +76,10 @@ function findUser(id){
 
 }
 
+function callback(){
+	$.dialog({id:'role'}).close();
+	find();
+}
 </script>
 </body>
 </html>
