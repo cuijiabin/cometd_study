@@ -60,7 +60,6 @@ function find(currentPage){
 	});
 }
 
-
 //添加风格
 function add(){
 // 	var url = '/style/edit.action';
@@ -90,17 +89,11 @@ function rename(id){
 	});
 }
 
-//查看明细
-function showDetail(msgId){
-// 	var url = '/messageRecords/view.action?msgId='+msgId;
-// 	window.location = url;
-// 	return;
-	$.dialog({content:'url:/messageRecords/view.action?msgId='+msgId,
-		id: 'viewMsg',
-		width: 400,height: 500,
-		title:'留言详情',
-		cancel: true
-	});
+//业务分组
+function fenzu(id){
+	var url = '/busiGroup/viewGroup.action?styleId='+id;
+	window.location = url;
+	return;
 }
 </script>
 </body>
