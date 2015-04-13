@@ -72,7 +72,7 @@ function findUser(id){
 
 	var d = $.dialog({content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
-		600,height: 300,});
+		600,height: 600,});
 
 }
 
