@@ -28,24 +28,24 @@
 	<div class="m-query-bd">
 	    <div class="f-mbm">
             <label>部门：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部部门</option>
-	                <option value="客服部">客服部</option>
-	                <option value="留学部">留学部</option>
-	                <option value="随时学">随时学</option>
-	                <option value="好顾问">好顾问</option>
+            	<select class="c-wd80" name="deptId" id="deptId">
+	                <option selected="selected" value="">全部部门</option>
+	                <option value="1">客服部</option>
+	                <option value="2">留学部</option>
+	                <option value="3">随时学</option>
+	                <option value="4">好顾问</option>
             	</select>
-            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
-            	<input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
+            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
+            	<input class="c-wd80 Wdate" type="text" id="endDate" value="${endDate }" onClick="WdatePicker()" />
             <label>工号：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部工号</option>
-	                <option value="李老师">李老师</option>
-	                <option value="王老师">王老师</option>
-	                <option value="张老师">张老师</option>
+            	<select class="c-wd80" name="userId" id="userId">
+	                <option selected="selected" value="">全部工号</option>
+	                <option value="1">李老师</option>
+	                <option value="2">王老师</option>
+	                <option value="3">张老师</option>
             	</select>
             <div class="u-subsec">
-           		<label><input type="checkbox">仅显示客户有说话记录</label>
+           		<label><input type="checkbox" id="isTalk" name="isTalk">仅显示客户有说话记录</label>
        		</div>
        		<div class="u-subsec">
            		<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
@@ -70,13 +70,20 @@
 <script type="text/javascript">
 
 function find(currentPage){
+	var isTalk = 0 ;
+	if(($("#isTalk").is(":checked"))){
+		isTalk = 1;
+	};
 	var url="/recordsCenter/queryTalkDel.action";
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
 			"typeId":1,
+			"deptId":$("#deptId").val(),
 			"beginDate":$("#beginDate").val(),
-			"endDate":$("#endDate").val()
+			"endDate":$("#endDate").val(),
+			"userId":$("#userId").val(),
+			"isTalk":isTalk
 	};
 	$.ajax({
 	    type: "get",

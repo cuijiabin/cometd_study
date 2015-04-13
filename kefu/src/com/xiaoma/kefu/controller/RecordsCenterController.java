@@ -42,6 +42,7 @@ import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.util.SysConst.CompareEnum;
 import com.xiaoma.kefu.util.SysConst.RoleNameId;
 import com.xiaoma.kefu.util.TimeHelper;
 import com.xiaoma.kefu.util.database.DataBase;
@@ -74,7 +75,6 @@ public class RecordsCenterController {
 	private UserService userService;//用户
 	@Autowired
 	private MessageRecordsService messageRecordsService;//留言记录
-	
 	
 	/**
 	 * 聊天记录查询
@@ -123,6 +123,8 @@ public class RecordsCenterController {
 		user.setRoleId(1);//test
 		user.setId(1);//test
 		
+		//主管看所有部门,所有员工
+		//员工看自己部门,自己的记录
 		List<User> userList = new ArrayList<User>();
 		if(user.getRoleId().equals(RoleNameId.员工.getCode())){
 			condition.append(" and t1.userId = " + userId );//员工只能查自己
@@ -142,6 +144,8 @@ public class RecordsCenterController {
 		model.addAttribute("title", title);
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("showDetail", 1);//是否能查看聊天明细
+		model.addAttribute("beginDate", initDate(beginDate));
+		model.addAttribute("endDate", initDate(endDate));
 		model.addAttribute("recordFieldMap", recordFieldMap);
 		if(typeId==null || typeId !=1){
 			return "/record/talk/talk";
@@ -273,6 +277,10 @@ public class RecordsCenterController {
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("showDetail", 1);//是否能查看聊天明细
 		model.addAttribute("recordFieldMap", recordFieldMap);
+		model.addAttribute("beginDate", initDate(beginDate));
+		model.addAttribute("endDate", initDate(endDate));
+		model.addAttribute("recordFieldMap", recordFieldMap);
+		
 		if(typeId==null || typeId !=1){
 			return "/record/talk/talkRecycle";
 		}else{
@@ -375,6 +383,8 @@ public class RecordsCenterController {
 		List<Map<String,String>> list = getMsgList(pageBean,condition,0);//content
 		pageBean.setObjList(list);
 		
+		model.addAttribute("beginDate", initDate(beginDate));
+		model.addAttribute("endDate", initDate(endDate));
 		model.addAttribute("showDetail", 1);//是否有权查看明细
 		if(typeId==null){
 			return "/record/message/message";
@@ -404,6 +414,8 @@ public class RecordsCenterController {
 		List<Map<String,String>> list = getMsgList(pageBean,condition,1);//content
 		pageBean.setObjList(list);
 		
+		model.addAttribute("beginDate", initDate(beginDate));
+		model.addAttribute("endDate", initDate(endDate));
 		model.addAttribute("showDetail", 1);//是否有权查看明细
 		if(typeId==null){
 			return "/record/message/msgRecycle";
@@ -679,7 +691,7 @@ public class RecordsCenterController {
 			condition.append(" and t1.keywords like '%" + keywords + "%'" );
 		}
 		if(StringUtils.isNotBlank(numCondition) && totalNum != null){
-			condition.append(" and t1.totalNum " + numCondition + totalNum  );
+			condition.append(" and t1.totalNum " + CompareEnum.valueOf(numCondition).getCode() + " " +  totalNum  );
 		}
 		if(openType!=null){
 			condition.append(" and t1.openType = " + openType );
@@ -987,5 +999,22 @@ public class RecordsCenterController {
 			list.add(hm);
 		}
 		return list;
+	}
+	
+	/**
+	 * 初始化查询日期, 如果为空,则默认当天
+	* @Description: TODO
+	* @param beginDate
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月13日
+	 */
+	private String initDate(String beginDate) {
+		String result = beginDate;
+		if(StringUtils.isBlank(beginDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			result = sdf.format(new Date());
+		}
+		return result;
 	}
 }

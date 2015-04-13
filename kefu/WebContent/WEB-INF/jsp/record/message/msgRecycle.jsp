@@ -26,8 +26,8 @@
 <!-- 查询条件 -->
 <div class="m-query f-mar10">
 	<div class="m-query-hd">
-        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
-        <input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
+        <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
+        <input class="c-wd80 Wdate" type="text" id="endDate" value="${endDate }" onClick="WdatePicker()" />
         <div class="u-subsec">
            	<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
         </div>

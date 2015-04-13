@@ -38,5 +38,24 @@ public class SysConst {
 		}
 	}
 	
+	/**
+	 * 运算符	
+	 * *********************************
+	* @Description: TODO
+	* @author: wangxingfei
+	* @createdAt: 2015年4月13日下午5:08:53
+	**********************************
+	 */
+	public enum CompareEnum{
+		XY("<"),EQ("="),DY(">");
+		private String value;
+		CompareEnum(String value){
+			this.value = value;
+		}
+		public String getCode(){
+			return this.value;
+		}
+	}
+	
 	
 }

@@ -23,11 +23,10 @@
     </ul>
 </div>
 <!-- 查询条件 -->
-<div class="m-query f-mar10">
-    <div class="u-subsec">
+<div class="m-query f-mar10" style="height: 30px">
+    <div style="float:right;margin-right: 30px;height: 24px">
        <button type="button" class="btn btn-primary btn-small" onclick="add();">添加风格</button>
    	</div>
-    <div class="u-hr"></div>
 </div>
 
 <div id="table_data">
