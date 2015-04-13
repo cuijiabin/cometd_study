@@ -24,9 +24,14 @@
     </ul>
 </div>
 <!-- 表格有边框 -->
-<h2>添加黑名单</h2>
-<form id="mainForm">
+<h2>修改黑名单</h2>
+
 <table  border="1" aglin="centert" class="table">
+
+        <tr>
+           <td></td>
+           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><td>
+        </tr>
         <tr>
            <td>客户编号</td>
            <td><input type ="text" id ="customerId" name="customerId" value="${blacklist.customerId}"/><td>
@@ -44,12 +49,13 @@
            <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><td>
         </tr>
    </table>
-                    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+   <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+<!--        <button type="submit" class="btn btn-primary" onclick="update()">保存<i class="icon-ok icon-white"></i></button> -->
                     <button type="reset" class="btn" id="btn_cancel">取消</button>
-</form>
+
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 
 
@@ -73,11 +79,19 @@ $('#btn_cancel').on('click',function(){
 
 //保存
 $('#btn_save').on('click',function(){
+	alert("修改确定");
+	var data = {
+		"id"  : $("#blacklistId").val(),
+		"customerId" : $("#customerId").val(),
+		"ip" : $("#ip").val(),
+		"enddate" : $("#endDate").val(),
+		"description" : $("#description").val()
+	};
 	$.ajax({
 		type : 'post',
-		url :  "/blacklist/update.action",
+		url : "/blacklist/update.action",
 		dataType : 'json',
-		data : $('#mainForm').serialize(),
+		data : data,
 		async:false,
 	 	success: function (data) {
 	    	if(data.result==0){
@@ -94,6 +108,41 @@ $('#btn_save').on('click',function(){
 	});
 });
 
+
+function update(){
+	alert("修改确定钱");
+	url : "/blacklist/update.action";
+	var data = {
+			"id"  : $("#blacklistId").val(),
+		"customerId" : $("#customerId").val(),
+		"ip" : $("#ip").val(),
+		"description" : $("#description").val(),
+		"enddate" : $("#endDate").val()
+	};
+	alert("修改确定hou");
+	$.ajax({
+		type : "post",
+		url : url,
+		data : data,
+		dataType : "json",
+		async:false,
+		success : function(data) {
+			if (data.result == 0) {
+				alert(data.msg);
+				$("#customerId").val('');
+				$("#ip").val('');
+				$("#endDate").val('');
+				$("#description").val('');
+				location.reload();
+			} else {
+				alert(data.msg);
+			}
+		},
+		error : function(msg) {
+			alert(data.msg);
+		}
+	});
+  }
 
 </script>
 </body>
