@@ -15,12 +15,11 @@ public class AppInit implements ServletContextListener {
 	/**
 	 * 初始化默认通道
 	 */
-	public static String DEFAULT_CHANNEL = "talker";
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		CometContext cc = CometContext.getInstance();
 		CometEngine engine = cc.getEngine();
-		cc.registChannel(DEFAULT_CHANNEL);
+		cc.registChannel(Constant.CHANNEL);
         
 		//加入时监听
 		engine.addConnectListener(new JoinListener());

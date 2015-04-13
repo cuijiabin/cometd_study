@@ -29,7 +29,7 @@ public class UserTest {
 		
 		List<User> users = pageBean.getObjList();
 		for(User user : users){
-			JedisTalkDao.setMaxReceiveCount(user.getId(), user.getMaxListen());
+			JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
 		}
 		
 	}

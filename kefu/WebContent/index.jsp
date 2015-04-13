@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <!doctype html>
 <html lang="zh">
 <head>
@@ -14,8 +13,6 @@
 </head>
 
 <body style="background:#dfdfdf;">
-<xiaoma:select name="test" dictName="d_cus_reply_way"  value="2" />
-<xiaoma:dictValue name="d_cus_reply_way"  value="2" />
 <div class="m-login">
 		<div class="login_form">
 			<div class="m-login-info">密码错误！</div>
@@ -30,8 +27,8 @@
 				</div>
 				<div class="field">
 					<label>验证码：</label>
-					<input type="text" class="text text1" name="yzm" id="yzm"size="10">
-                    <cite class="yzm"><img src="image.jsp" height="15"/></cite>
+					<input type="text" class="text text1" size="10">
+                    <cite class="yzm">3986</cite>
 				</div>
 				<div class="field">
 					<label></label>
@@ -49,57 +46,21 @@
 	function login(){
 		var data = {
 			"loginName":$("#loginName").val(),
-			"password":$("#password").val(),
-			"yzm":$("#yzm").val()
+			"password":$("#password").val()
 		};
-		if (!verificationParam(data)) {
-			return;
-		}
+		//alert(111);
 		$.ajax({
 			type: "post",
 		    url: "/user/login.action",
 		    data: data,
 		    dataType: "json",
-		    success: function (data) {
-		    	if(data.result==0){
+		    success: function (d) {
 		    		window.location="/user/main.action";
-		    	}else{
-		    		$(".m-login-info").html(d.message);
-		    	}
 		    },
 		    error: function (msg) {
 		        alert(msg);
 		    }
 		});
-	}
-	
-	/**
-	 *  js 校验
-	 */
-	function verificationParam(userData) {
-		var loginName = userData.loginName;
-		if (loginName.replace("^[ ]+$", "").length == 0) {
-			 alert("工号不得为空！");
-			return false;
-		}
-		var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
-		if(!chinesePatrn.test(loginName)){
-			 alert("工号输入规则不对");
-			return false;
-		}
-		var password = userData.password;
-		if (password.replace("^[ ]+$", "").length == 0) {
-			 alert("密码不得为空！");
-			return false;
-		}
-		
-		var yzm = userData.yzm;
-		if (yzm.replace("^[ ]+$", "").length == 0) {
-			 alert("验证码不得为空！");
-			return false;
-		}
-		
-		return true;
 	}
 </script>
 </body>

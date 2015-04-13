@@ -19,36 +19,40 @@ public class LeftListener extends DropListener {
 		if (conn != null) {
 			
 			String ccnId = conn.getId();
-			String userId = JedisTalkDao.getCurrentUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+			
+			String userId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
 			
 			//移除缓存
 			if(StringUtils.isNotBlank(userId)){
-				JedisTalkDao.delCurrentUser(JedisConstant.CUSTOMER_TYPE, ccnId);
-				JedisTalkDao.delCcnList(JedisConstant.CUSTOMER_TYPE, ccnId);
+				JedisTalkDao.remCcnList( JedisConstant.CUSTOMER_TYPE, ccnId);
+				JedisTalkDao.remUserCcnList(userId, ccnId);
+				JedisTalkDao.delCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
 				
-				JedisTalkDao.delUserCcnList(userId, ccnId);
-				Integer count = JedisTalkDao.countUserCcnList(userId);
-				if(count <= 0){
-					JedisTalkDao.delCurrentUserList(JedisConstant.CUSTOMER_TYPE, userId);
-				}
+				String opeCcnId = JedisTalkDao.getCcnPassiveId(ccnId);
+				JedisTalkDao.remCcnReceiveList(ccnId, opeCcnId);
+				JedisTalkDao.decrCurrentReceiveCount(opeCcnId);
+				
+				JedisTalkDao.delCcnPassiveId(ccnId);
+				// 写入cookie
+				// DesUtil.encrypt(userId,PropertiesUtil.getProperties(CacheName.SECRETKEY));
+				
+				//通知客更新后台列表
+				CometEngine engine = (CometEngine) anEvent.getTarget();
+		        CometConnection ccn = engine.getConnection(opeCcnId);
+		        
+				//通知数据
+				NoticeData nd = new NoticeData(Constant.ON_CLOSE, null);
+		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
 				
 			}else{
-				userId = JedisTalkDao.getCurrentUserId(JedisConstant.USER_TYPE, ccnId);
-				JedisTalkDao.delCurrentUser(JedisConstant.USER_TYPE, ccnId);
-				JedisTalkDao.delCcnList(JedisConstant.USER_TYPE, ccnId);
-				
-				JedisTalkDao.delUserCcnList(userId, ccnId);
-				Integer count = JedisTalkDao.countUserCcnList(userId);
-				//暂时不用
-				if(count <= 0){
-					JedisTalkDao.delCurrentUserList(JedisConstant.USER_TYPE, userId);
-				}
+				JedisTalkDao.remCcnList( JedisConstant.USER_TYPE, ccnId);
+				JedisTalkDao.remUserCcnList(userId, ccnId);
+				JedisTalkDao.delCnnUserId(JedisConstant.USER_TYPE, ccnId);
 			}
 			
-			//广播
-			CometEngine engine = (CometEngine) anEvent.getTarget();
-			//TODO
 		}
+		
 		return true;
+		
 	}
 }

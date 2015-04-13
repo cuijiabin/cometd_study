@@ -78,10 +78,10 @@
         <div class="g-mn2c">
             <div class="u-state c-bor">等待咨询...</div>
             <div class="g-mn2c-cnt c-bor">
-                <input type="hidden" id="currentCustomerId"/>
+                <input type="hidden" id="currentCcnId"/>
         		<h3 class="u-tit c-bg" id="contentTitle">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
-                    <div class="u-record r-sms-manager" id="inputbox">
+                    <div class="u-record r-sms-manager" >
                         <p class="r-welcome">欢迎使用客服系统</p>
                     </div>
                     <div class="u-operate">
@@ -95,10 +95,10 @@
                             </ul>
                         </div>
                         <div class="u-input f-cb">
-                            <textarea class="u-txtarea"></textarea>
+                            <textarea class="u-txtarea" id="inputbox" ></textarea>
                             <div class="u-send">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="#">发送</a>
+                                    <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
                                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                     </button>
@@ -179,40 +179,45 @@
 		},
 		stop : function(cause, url, cId, engine) {
 		},
-		talker : function(data, timespan, engine) {
+		dialogue : function(data, timespan, engine) {
 			switch (data.type) {
-			case 'talk': // 收到聊天消息
+			case 'on_message': // 收到聊天消息
 				break;
-			case 'list': //
+			case 'update_list': //
 				userList(data);
 				break;
-			case 'up': // 上线
+			case 'on_open': // 上线
 			    //更新用户列表
-				updateCustomerList(data);
+				updateCustomerList();
 				break;
-			case 'down': // 下线
+			case 'on_close': // 下线
+				updateCustomerList();
 				break;
 			}
 		}
 	});
 	
 	start();
+	updateCustomerList();
+	
 	//开启连接
 	function start(){
 		JS.Engine.start('/conn');
 		inputbox.focus();
-	}
-	
-	//1.获取列表
-	function userList(data) {
-		console.log("用户："+data);
+		
+		
 	}
 	
 	
 	//更新用户列表
-	function updateCustomerList(data) {
+	function updateCustomerList() {
+		if (!JS.Engine.running)
+			return;
 		var id = JS.Engine.getId();
-		JS.AJAX.get('/chat/customerList.action?id='+id);
+		var param = "ccnId=" + id ;
+		JS.AJAX.post('/chat/receiveList.action', param, function() {
+			inputbox.value = '';
+		});
 	}
 	// 用户下线通知
 	function userList(data) {
@@ -220,19 +225,36 @@
 		console.log(list.length);
 		var html = "";
 		for(var i=0; i<list.length; i++){
-			var customer = list[i];
-			html += "<li class='on'><p>"+customer.customerName+customer.id
-			+"</p><p><a href='javascript:changeTitle("+customer.id+");'>"
-			+customer.ip+"</a></p><span class='u-close'>x</span></li>"
+			var dQuene = list[i];
+			var ccnId = '"'+dQuene.ccnId+'"';
+			html += "<li class='on'><p>"+dQuene.customerName
+			+"</p><p><a href='javascript:changeTitle("+dQuene.customerId+", "+ccnId+");'>"
+			+dQuene.ip+"</a></p><span class='u-close'>x</span></li>"
 		}
 		console.log(html);
 		 $("#customerList").html(html);
 	}
-	function changeTitle(id){
+	function changeTitle(customerId,ccnId){
 		
-		console.log("与客户"+id+"对话中");
-		$("#contentTitle").html("与客户"+id+"对话中");
-		$("#currentCustomerId").val(id);
+		console.log("与客户"+customerId+"对话中");
+		$("#contentTitle").html("与客户"+customerId+"对话中");
+		$("#currentCcnId").val(ccnId);
+	}
+	
+	// 发送聊天信息动作
+	function sendMessage(message) {
+		if (!JS.Engine.running)
+			return;
+		message = message.trim();
+		if (!message)
+			return;
+		var userCId = JS.Engine.getId();
+		var cusCId = $("#currentCcnId").val();
+		alert(cusCId);
+		var param = "userCId=" + userCId + '&cusCId='+cusCId+'&message=' + encodeURIComponent(message);
+		JS.AJAX.post('/chat/toCustomer.action', param, function() {
+			inputbox.value = '';
+		});
 	}
 	
 </script>
