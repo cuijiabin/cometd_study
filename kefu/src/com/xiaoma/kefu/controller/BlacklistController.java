@@ -155,6 +155,27 @@ public class BlacklistController {
 		return "iews/message";
 
 	}
+	/**
+	 * 真删除
+	 * @param model
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "deleteBlackTrue.action", method = RequestMethod.GET)
+	public String deleteMsgTrue(Model model,String ids){
+		try {
+			int num = blacklistService.delete(ids);
+			if (num>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+		} catch (Exception e) {
+		
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
+		return "resultjson";
+	}
 	
 	/**
 	 * 页面修改前跳转

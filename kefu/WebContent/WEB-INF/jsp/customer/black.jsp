@@ -39,7 +39,7 @@
          
         <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
             <label></label>
-            <button type="button" class="btn btn-primary btn-small" onclick="deleteList();">删除</button>
+            <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">删除</button>
         </div>
         <div class="m-query-hd">
     </div>
@@ -166,40 +166,44 @@ function find(currentPage){
     			});
     	}
 
-	/**
-	* 删除
+
+	
+	/*
+	* 彻底删除
 	*/
-	function deleteList(){
-		var id=$("input[name='ck']:checked").val();
-		if(id != null){
-			var choice=confirm("您确认要删除吗？", function() { }, null);
-			if(choice){
-				
-				$("#blacklisttable input[name='ck']:checked").each(function(){
-					var _checkbox = "<input type='hidden' name='ck' value='"+$(this).val()+"' />" ;
-					$("#blacklisttable").append(_checkbox) ;
-				});
-				
-				var url = "/blacklist/delete.action" ;
-				$("#searchPage").val('${pager.pageNum}');
-				$("#pageSearchForm").attr('action',url).attr('method','get') ;
-				$("#pageSearchForm").submit();
-			}
-			
-		}else{
-			alert("请选择数据");
+	function delTrue(){
+		var ids = "";
+		$("input[type=checkbox][name='ck']:checked").each(function(){ 
+	    	if(ids!=""){
+	    		ids+=",";
+	    	}
+	   		ids+=$(this).val();
+	    });
+		if(ids==""){
+			$.dialog.alert("请先选择数据!");
+			return;
 		}
-	}
-	//删除一个方法
-    function del(id){
-		var choice=confirm("您确认要删除吗？", function() { }, null);
-		if(choice){
-			var url = "/blacklist/delete.action"+id ;
-			$("#searchPage").val('${pager.pageNum}');
-			$("#pageSearchForm").attr('action',url).attr('method','get') ;
-			$("#pageSearchForm").submit();
-		}
-		
+		$.dialog.confirm('你确定要彻底删除吗？', function(){
+			var url="/blacklist/deleteBlackTrue.action";
+			$.ajax({
+			    type: "GET",
+			    url: url,
+			    data: {"ids":ids},
+			    contentType: "application/json; charset=utf-8",
+			    dataType: "json",
+			    success: function (data) {
+			    	if(data.result==0){
+			    		$.dialog.alert(data.msg);
+			    		find(1);
+			    	}else{
+			    		$.dialog.alert(data.msg);
+			    	}
+			    },
+			    error: function (msg) {
+			    	$.dialog.alert(msg);
+			    }
+			});
+		});
 	}
 </script>
 </body>

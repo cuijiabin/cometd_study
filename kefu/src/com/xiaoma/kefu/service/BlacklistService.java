@@ -3,12 +3,14 @@ package com.xiaoma.kefu.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -76,6 +78,22 @@ public class BlacklistService {
 		public boolean deleteBlacklistById(Integer id){
 			
 			return blacklistDaoImpl.deleteBlacklistById(id);
+		}
+		/**
+		 * 删除所选中的
+		 * @param ids
+		 * @return
+		 */
+		public int delete(String ids){
+			int num = 0;
+			if(StringUtils.isBlank(ids)) return num;
+			String[] temp = ids.split(",");
+			for(String str : temp){
+		    Blacklist blacklist   = new Blacklist();
+		    blacklist.setId(Integer.valueOf(str));
+				num += blacklistDaoImpl.delete(blacklist);
+			}
+			return num;
 		}
 		
 		/**

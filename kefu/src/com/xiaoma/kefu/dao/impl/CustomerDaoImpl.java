@@ -97,18 +97,19 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 			List<Criterion> role = new ArrayList<Criterion>();// 条件
 			List<Order> orders = new ArrayList<Order>();// 排序
 			if (conditions != null) {
+				String customerId= conditions.get("id").trim();//去掉输入的访客编号左右的空格
 				if (StringHelper.isNotEmpty(conditions.get("customerName"))) {
 					role.add(Restrictions.like("customerName",
 							"%" + conditions.get("customerName").trim() + "%"));
 				}
 			
-				if ((conditions.get("id")!=null)) {
-					role.add(Restrictions.eq("id", new Long(conditions.get("id"))));
-					
-				}
+				if (StringHelper.isNotEmpty(customerId) ){   
+					role.add(Restrictions.eq("id", Long.parseLong(customerId))  );
+			 }
 				
 				if (StringHelper.isNotEmpty(conditions.get("phone"))) {
-					role.add(Restrictions.eq("phone", conditions.get("phone")));
+					
+					role.add(Restrictions.eq("phone", conditions.get("phone").trim()));
 				}
 				if (conditions.get("startDate") != null
 						&& !conditions.get("startDate").isEmpty()
