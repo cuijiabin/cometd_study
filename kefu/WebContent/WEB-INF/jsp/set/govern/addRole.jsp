@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>    
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>  
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
@@ -24,7 +25,7 @@
 <!--     </ul> -->
 <!-- </div> -->
 <!-- 表格有边框 -->
-<h2>添加角色</h2>
+<c:if test="${empty role.id}"><h2>添加角色</h2></c:if> <c:if test="${not empty role.id}"><h2>修改角色</h2></c:if>
 <table  border="1" aglin="centert" class="table">
         <tr>
            <td>角色名称</td>
