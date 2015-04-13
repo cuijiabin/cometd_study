@@ -145,12 +145,10 @@ public class UserController {
 	public String queryAll(MapEntity conditions, Model model,
 			@ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
-
 			userService.getResult(conditions.getMap(), pageBean);
 			System.out.println(pageBean.getObjList());
-			if (conditions == null || conditions.getMap() == null
-					|| conditions.getMap().get("typeId") == null)
-
+			model.addAttribute("asd",conditions.getMap().get("status"));
+			if (conditions == null || conditions.getMap() == null || conditions.getMap().get("typeId") == null)
 				return "/set/govern/user";
 			else
 				return "/set/govern/userList";
