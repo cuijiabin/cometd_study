@@ -32,10 +32,10 @@ public class LoginLogDaoImpl extends BaseDaoImpl<LoginLog> implements
 						"%" + conditions.get("loginName").trim() + "%"));
 			}
 			if (StringHelper.isNotEmpty(conditions.get("deptId")) && !"0".equals(conditions.get("deptId"))) {
-				role.add(Restrictions.eq("deptId", conditions.get("deptId")));
+				role.add(Restrictions.eq("deptId", Integer.parseInt(conditions.get("deptId"))));
 			}
 			if (StringHelper.isNotEmpty(conditions.get("userId"))&& !"0".equals(conditions.get("deptId"))) {
-				role.add(Restrictions.eq("userId", conditions.get("userId")));
+				role.add(Restrictions.eq("userId", Integer.parseInt(conditions.get("userId"))));
 			}
 			if (conditions.get("startDate") != null
 					&& !conditions.get("startDate").isEmpty()

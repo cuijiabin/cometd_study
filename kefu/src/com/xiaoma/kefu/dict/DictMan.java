@@ -49,7 +49,7 @@ public class DictMan {
 	public static List<DictItem> getDictList(String cacheName, String table) {
 		table = table.toLowerCase();
 		try {
-			DataSet ds = DataBase.Query("select * from dict_item d where d.code='"+table +"' order by d.itemCode");
+			DataSet ds = DataBase.Query("select * from dict_item d where d.code='"+table +"' order by d.id");
 			List<DictItem> list = new ArrayList<DictItem>((int) ds.RowCount);
 			for(int i=0;i<ds.RowCount;i++){
 				DictItem d = new DictItem();

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
+<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -27,71 +28,62 @@
 	<div class="m-query-bd">
 	    <div class="f-mbm">
             <label>部门：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部部门</option>
-	                <option value="客服部">客服部</option>
-	                <option value="留学部">留学部</option>
-	                <option value="随时学">随时学</option>
-	                <option value="好顾问">好顾问</option>
+            	<select class="c-wd80" name="deptId" id="deptId">
+	                <option selected="selected" value="">全部部门</option>
+	                <option value="1">客服部</option>
+	                <option value="2">留学部</option>
+	                <option value="3">随时学</option>
+	                <option value="4">好顾问</option>
             	</select>
-            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" onClick="WdatePicker()" /> - 
-            				<input class="c-wd80 Wdate" type="text" id="endDate" onClick="WdatePicker()" />
+            <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
+            				<input class="c-wd80 Wdate" type="text" id="endDate" value="${endDate }" onClick="WdatePicker()" />
             <label>工号：</label>
-            	<select class="c-wd80">
-	                <option selected="selected">全部工号</option>
-	                <option value="李老师">李老师</option>
-	                <option value="王老师">王老师</option>
-	                <option value="张老师">张老师</option>
+            	<select class="c-wd80" name="userId" id="userId">
+	                <option selected="selected" value="">全部工号</option>
+	                <option value="1">李老师</option>
+	                <option value="2">王老师</option>
+	                <option value="3">张老师</option>
             	</select>
             <div class="u-subsec">
-           		<label><input type="checkbox">仅显示客户有说话记录</label>
+           		<label><input type="checkbox" id="isTalk" name="isTalk">仅显示客户有说话记录</label>
        		</div>
         </div>
         <div class="f-mbm">
-            <label>客户编号：</label><input class="c-wd150" type="text" />
-            <label>IP地址：</label><input class="c-wd150" type="text" />
-            <label>咨询页面：</label><input class="c-wd150" type="text" />
-            <label>聊天内容：</label><input class="c-wd150" type="text" />
+            <label>客户编号：</label><input class="c-wd150" type="text" id="customerId" name="customerId" />
+            <label>IP地址：</label><input class="c-wd150" type="text"  id="ipInfo" name="ipInfo" />
+            <label>咨询页面：</label><input class="c-wd150" type="text" id="consultPage" name="consultPage" />
+            <label>聊天内容：</label><input class="c-wd150" type="text" id="talkContent" name="talkContent" />
         </div>
         <div class="f-mbm">
-            <label>访问来源：</label><input class="c-wd150" type="text" />
+            <label>访问来源：</label><input class="c-wd150" type="text" id="keywords" name="keywords" />
             <label>交谈条数：</label>
             <div class="u-subsec">
-                <label><input type="radio" name="1" />小于</label>
-                <label><input type="radio" name="1" />等于</label>
-                <label><input type="radio" name="1" />大于</label>
+                <label><input type="radio" name="numCondition" value='XY' />小于</label>
+                <label><input type="radio" name="numCondition" value='EQ' />等于</label>
+                <label><input type="radio" name="numCondition" value='DY' />大于</label>
             </div>
             <div class="input-append">
-              	<input class="c-wd30" type="text">
+              	<input class="c-wd30" type="text" id="totalNum" name="totalNum" >
               	<button class="btn btn-small" type="button">条</button>
             </div>
-            <label>站点来源：</label><input class="c-wd150" type="text" />
+            <label>站点来源：</label><input class="c-wd150" type="text" id="styleName" name="styleName" />
         </div>
         <div class="f-mbm">
-            <label>开始方式：</label><select class="c-wd80">
-                <option selected="selected">全部</option>
-                <option value="图标">图标</option>
-                <option value="邀请框">邀请框</option>
-            </select>
-            <label>对话结束方式：</label><select class="c-wd80">
-                <option selected="selected">全部</option>
-                <option value="图标">客服结束对话</option>
-                <option value="邀请框">访客结束对话</option>
-                <option value="邀请框">关闭网页</option>
-            </select>
-            <label>是否进入等待队列：</label><select class="c-wd80">
-                <option selected="selected">全部</option>
-                <option value="图标">是</option>
-                <option value="邀请框">否</option>
+            <label>开始方式：</label>
+            <xiaoma:select name="openType" dictName="d_open_type" all="0" allName="全部" />
+            <label>对话结束方式：</label>
+            <xiaoma:select name="closeType" dictName="d_close_type" all="0" allName="全部" />
+            <label>是否进入等待队列：</label>
+            <select class="c-wd80" name="isWait" id="isWait">
+                <option selected="selected" value="">全部</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
             </select>
 		</div> 
 		<div class="f-mbm">
-            <label>考试项目：</label><input class="c-wd150" type="text" />
-            <label>设备：</label><select class="c-wd80">
-                <option selected="selected">全部</option>
-                <option value="图标">PC</option>
-                <option value="邀请框">移动</option>
-            </select>
+            <label>考试项目：</label><input class="c-wd150" type="text" id="waitListName" name="waitListName" />
+            <label>设备：</label>
+            <xiaoma:select name="deviceType" dictName="d_device_type" all="0" allName="全部" />
             <div class="u-subsec">
            		<button class="btn btn-primary" type="button" onclick="javascript:find(1);"> 查 询  </button>
         	</div>
@@ -121,13 +113,37 @@
 <script type="text/javascript">
 
 function find(currentPage){
+// 	var s = $("#deptId").val();
+// 	alert(s);
+// 	return;
+	
+	var isTalk = 0 ;
+	if(($("#isTalk").is(":checked"))){
+		isTalk = 1;
+	};
 	var url="/recordsCenter/find.action";
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
 			"typeId":1,
+			"deptId":$("#deptId").val(),
 			"beginDate":$("#beginDate").val(),
-			"endDate":$("#endDate").val()
+			"endDate":$("#endDate").val(),
+			"userId":$("#userId").val(),
+			"isTalk":isTalk,
+			"customerId":$("#customerId").val(),
+			"ipInfo":$("#ipInfo").val(),
+			"consultPage":$("#consultPage").val(),
+			"talkContent":$("#talkContent").val(),
+			"keywords":$("#keywords").val(),
+			"numCondition":$("input[name='numCondition']:checked").val(),
+			"totalNum":$("#totalNum").val(),
+			"styleName":$("#styleName").val(),
+			"openType":$("#openType").val(),
+			"closeType":$("#closeType").val(),
+			"isWait":$("#isWait").val(),
+			"waitListName":$("#waitListName").val(),
+			"deviceType":$("#deviceType").val()
 	};
 	$.ajax({
 	    type: "get",

@@ -30,8 +30,8 @@
 				</div>
 				<div class="field">
 					<label>验证码：</label>
-					<input type="text" class="text text1" size="10">
-                    <cite class="yzm">3986</cite>
+					<input type="text" class="text text1" name="yzm" id="yzm"size="10">
+                    <cite class="yzm"><img src="image.jsp" height="15"/></cite>
 				</div>
 				<div class="field">
 					<label></label>
@@ -49,8 +49,12 @@
 	function login(){
 		var data = {
 			"loginName":$("#loginName").val(),
-			"password":$("#password").val()
+			"password":$("#password").val(),
+			"yzm":$("#yzm").val()
 		};
+		if (!verificationParam(data)) {
+			return;
+		}
 		$.ajax({
 			type: "post",
 		    url: "/user/login.action",
@@ -67,6 +71,35 @@
 		        alert(msg);
 		    }
 		});
+	}
+	
+	/**
+	 *  js 校验
+	 */
+	function verificationParam(userData) {
+		var loginName = userData.loginName;
+		if (loginName.replace("^[ ]+$", "").length == 0) {
+			 alert("工号不得为空！");
+			return false;
+		}
+		var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
+		if(!chinesePatrn.test(loginName)){
+			 alert("工号输入规则不对");
+			return false;
+		}
+		var password = userData.password;
+		if (password.replace("^[ ]+$", "").length == 0) {
+			 alert("密码不得为空！");
+			return false;
+		}
+		
+		var yzm = userData.yzm;
+		if (yzm.replace("^[ ]+$", "").length == 0) {
+			 alert("验证码不得为空！");
+			return false;
+		}
+		
+		return true;
 	}
 </script>
 </body>

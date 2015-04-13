@@ -141,30 +141,48 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 	    /**
 		 * 删除(假删除)
 		 */
-	public Integer deleteUserById(Integer id){
-		User user =  userDaoImpl.findById(User.class,id);
-		if (user!=null) {
-			user.setStatus(2);
-			return userDaoImpl.update(user);
+	public Integer deleteUserById(String ids){
+		int val=0;
+		if(ids.length()>2){
+			String[] array = ids.split(",");
+			for (String str : array) {
+			     User user= new User();
+			      user.setId(Integer.parseInt(str));
+			      val=userDaoImpl.delete(user);
+			}
+			if(val==1){
+				return 1;
+			}else{
+			  return 0;
+			}
+		}else{
+			  User user= new User();
+		      user.setId(Integer.parseInt(ids));
+		      return userDaoImpl.delete(user);
 		}
-		return 0;
 	}
+
 //员工离职
-	public Integer leaveUser(String ids) {
+	public Integer leaveUser(String ids,Integer status) {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	String time = sdf.format(new Date());
+	int val=0;
 		if(ids.length()>2){
 			String[] array = ids.split(",");
 			for (String str : array) {
 			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
-			       leup.setStatus(2);
+			       leup.setStatus(status);
 			       leup.setEndDate(time);
-			       return userDaoImpl.update(leup);
+			       val=userDaoImpl.update(leup);
 			}
-			return 0;
+			if(val==1){
+				return 1;
+			}else{
+			  return 0;
+			}
 		}else{
 			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(ids));
-		       leup.setStatus(2);
+		       leup.setStatus(status);
 		       leup.setEndDate(time);
 		        return userDaoImpl.update(leup);
 		}

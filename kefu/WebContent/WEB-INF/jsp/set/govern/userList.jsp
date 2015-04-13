@@ -22,7 +22,7 @@
     <tbody>
         <c:forEach var="user" items="${pageBean.objList}">
         <tr>
-            <td><input type="checkbox" id="id" value="${user.id}"/></td>
+            <td><input type="checkbox" id="id" name="id" value="${user.id}"/></td>
             <td>${user.loginName}</td>
             <td>${user.userName}</td>
             <td>${user.cardName}</td>

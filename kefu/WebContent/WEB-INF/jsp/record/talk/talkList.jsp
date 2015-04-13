@@ -32,7 +32,9 @@
 						<c:if test="${mapItem.key ==record.key}"> 
 							<c:choose>
 								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName == 1 }"> 
-									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>图片</td>
+									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>
+										<img src="/img/u168.png"/>
+									</td>
 								</c:when>
 								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName != 1 }"> 
 									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>

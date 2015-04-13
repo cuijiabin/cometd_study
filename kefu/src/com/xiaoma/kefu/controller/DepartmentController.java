@@ -1,7 +1,9 @@
 package com.xiaoma.kefu.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -116,6 +118,24 @@ public class DepartmentController {
 			System.out.println(pageBean);
 			return "/set/govern/deptUser";
 
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "/views/error500";
+		}
+	}
+
+	/**
+	 * 查询出所有的部门
+	 */
+	@RequestMapping(value = "dept.action", method = RequestMethod.GET)
+	public String findDept(Model model) {
+		try {
+			List<Department> list = deptService.findDept();
+			JSONArray json = JSONArray.fromObject(list);
+			model.addAttribute("result", json.toString());
+			System.out.println(json.toString());
+			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");

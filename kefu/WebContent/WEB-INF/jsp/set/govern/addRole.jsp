@@ -80,7 +80,7 @@ function addRole(id){
 			dataType : "json",
 			success : function(data) {
 					alert(data.msg);
-					w.callback();
+					cl();
 			},
 			error : function(msg) {
 				alert(data.msg);

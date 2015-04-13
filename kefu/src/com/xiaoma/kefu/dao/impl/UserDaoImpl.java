@@ -172,8 +172,10 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 				role.add(Restrictions.like("loginName",
 						"%" + conditions.get("loginName").trim() + "%"));
 			}
+			if (StringHelper.isNotEmpty(conditions.get("status"))&& !"0".equals(conditions.get("status"))) {
+				role.add(Restrictions.eq("status", Integer.parseInt(conditions.get("status"))));
+			}
 		}
-
 		orders.add(Order.asc("id"));
 		find(User.class, relation, role, null, orders, pageBean);
 	}
