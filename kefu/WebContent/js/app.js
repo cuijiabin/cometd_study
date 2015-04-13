@@ -40,6 +40,7 @@ function wSize(){
 	$(".g-bd").height(heights);
 	$("#rightMain").height(heights-20);
 	$("#rightMain").css("margin-bottom","-6px");
+	$(".g-cnt").height(heights+57);
 	// 客服端访客对话框架
 	$(".g-bd2").height(heights2-5);
 	$(".g-sd2l").height(heights2-7);
@@ -72,7 +73,7 @@ function wSize(){
 		$(".g-head").css("width",1000+"px");
 		$(".g-bd").css("width",1000+"px");
 		Body.removeClass("g-body");
-		Body.css("background","#f1f1f1");
+		// Body.css("background","#f1f1f1");
 	}else{
 		$(".g-head").css("width","auto");
 		$(".g-bd").css("width","auto");
@@ -110,3 +111,5 @@ $(".u-close").click(function(){
 jQuery(".slideTab").slide({trigger:"click"});
 jQuery(".slideTab2").slide({trigger:"click"});
 jQuery(".g-sd3").slide({mainCell:"ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1});
+
+
