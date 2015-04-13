@@ -23,7 +23,7 @@
 <!--         <li><i>&gt;</i>部门管理</li> -->
 <!--     </ul> -->
 <!-- </div> -->
-<h2>添加部门</h2>
+<c:if test="${empty dept.id}"><h2>添加角色</h2></c:if> <c:if test="${not empty dept.id}"><h2>修改角色</h2></c:if>
 <!-- 表格有边框 -->
 <table class="table table-bordered table-striped table-hover m-table">
         <tr>
