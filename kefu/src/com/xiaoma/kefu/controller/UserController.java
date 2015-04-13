@@ -287,12 +287,12 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "leave.action", method = RequestMethod.GET)
-	public String updateLeave(Model model, String ids) {
+	public String updateLeave(Model model, String ids ,Integer status) {
             if(ids==null){
             	ids="3";
             }
 		try {
-			Integer isSuccess = userService.leaveUser(ids);
+			Integer isSuccess = userService.leaveUser(ids,status);
 
 			if (isSuccess==1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
@@ -333,9 +333,9 @@ public class UserController {
 	 * 删除
 	 */
 	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
-	public String deletUser(Model model, Integer id) {
+	public String deletUser(Model model, String ids) {
       try{
-		Integer isSuccess = userService.deleteUserById(id);
+		Integer isSuccess = userService.deleteUserById(ids);
 		String message = "failure";
 		Integer code = -1;
 
