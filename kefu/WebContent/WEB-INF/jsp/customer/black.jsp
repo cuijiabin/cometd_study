@@ -2,9 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
-<%    
-String path = request.getContextPath();
-%>
  
 <!doctype html>
 <html lang="zh-cn">
@@ -42,14 +39,12 @@ String path = request.getContextPath();
          
         <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
             <label></label>
-            <button type="button" class="btn btn-primary btn-small">删除</button>
+            <button type="button" class="btn btn-primary btn-small" onclick="deleteList();">删除</button>
         </div>
         <div class="m-query-hd">
     </div>
       
     </div>
-
- 
 </div>
 
 <div id="table_data">
@@ -153,16 +148,13 @@ function find(currentPage){
     */
     function toUpdate(blacklistId){
     	
-    	//创建客户名称
-    //	function updateCusl(customerId,dialogueId){
-    		
     		$.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,
     			width: 400,height: 500,
     			button: [
     				        {
     				            name: '确认',
     				            callback: function () {
-    				                 save(); 
+    				                 update(); 
     				                return false;
     				            },
     				            focus: true
@@ -174,7 +166,41 @@ function find(currentPage){
     			});
     	}
 
-
+	/**
+	* 删除
+	*/
+	function deleteList(){
+		var id=$("input[name='ck']:checked").val();
+		if(id != null){
+			var choice=confirm("您确认要删除吗？", function() { }, null);
+			if(choice){
+				
+				$("#blacklisttable input[name='ck']:checked").each(function(){
+					var _checkbox = "<input type='hidden' name='ck' value='"+$(this).val()+"' />" ;
+					$("#blacklisttable").append(_checkbox) ;
+				});
+				
+				var url = "/blacklist/delete.action" ;
+				$("#searchPage").val('${pager.pageNum}');
+				$("#pageSearchForm").attr('action',url).attr('method','get') ;
+				$("#pageSearchForm").submit();
+			}
+			
+		}else{
+			alert("请选择数据");
+		}
+	}
+	//删除一个方法
+    function del(id){
+		var choice=confirm("您确认要删除吗？", function() { }, null);
+		if(choice){
+			var url = "/blacklist/delete.action"+id ;
+			$("#searchPage").val('${pager.pageNum}');
+			$("#pageSearchForm").attr('action',url).attr('method','get') ;
+			$("#pageSearchForm").submit();
+		}
+		
+	}
 </script>
 </body>
 </html>

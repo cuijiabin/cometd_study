@@ -1,5 +1,9 @@
 package com.xiaoma.kefu.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,18 +67,31 @@ public class BlacklistController {
 
 	/**
 	 * 保存黑名单实体
+	 * @throws ParseException 
 	 */
   
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save( @ModelAttribute("blacklist")Blacklist blacklist,String enddate,Model model) {
+	public String save( @ModelAttribute("blacklist")Blacklist blacklist,String enddate,Model model) throws ParseException {
 		
 
 		System.out.println("888888888888888888888888888888888888888888888888");
 		
+		 try {
+			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			  Date date = sdf.parse(enddate);
+			 blacklist.setEndDate(date);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	
 		try {
-		
+			     
+			 
+		         
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
+		
+			 
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			  } else {
@@ -92,16 +109,16 @@ public class BlacklistController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "update.action", method = RequestMethod.GET)
-	public String updateBlacklist(Model model, Blacklist blacklist) {
-System.out.println("========进入修改方法==========================================");
+	@RequestMapping(value = "update.action", method = RequestMethod.POST)
+	public String updateBlacklist(Model model, @ModelAttribute("blacklist")Blacklist blacklist ,String enddate) {
+      System.out.println("========进入修改方法==========");
 		try {
 
 			Blacklist toUpdateBlacklist = blacklistService.getBlacklistById(blacklist.getId());
 
 			toUpdateBlacklist.setCustomerId(blacklist.getCustomerId());
 			toUpdateBlacklist.setIp(blacklist.getIp());
-			toUpdateBlacklist.setEndDate(blacklist.getEndDate());;
+//			toUpdateBlacklist.setEndDate(blacklist.getEndDate());;
             toUpdateBlacklist.setDescription(blacklist.getDescription());
 			boolean isSuccess = blacklistService.updateBlacklist(toUpdateBlacklist);
 

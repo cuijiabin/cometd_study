@@ -6,7 +6,7 @@
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
 <!-- 表格有边框 -->
-<table class="table table-bordered table-striped table-hover m-table">
+<table id="blacklisttable" class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>
              <td></td>
@@ -22,7 +22,7 @@
     <tbody>
     <c:forEach var="blacklist" items="${pageBean.objList}"> 
         <tr>
-         <td><input type="checkbox" id="inlineCheckbox" value=""></td>
+         <td><input type="checkbox" name="ck" value="${blacklist.id }" value=""></td>
             <td>${blacklist.customerId}</td>
             <td>${blacklist.ip}</td>
             <td>${blacklist.ipInfo}</td>
