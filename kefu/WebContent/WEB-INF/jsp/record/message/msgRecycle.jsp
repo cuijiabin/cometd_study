@@ -52,6 +52,7 @@ function find(currentPage){
 	var url="/recordsCenter/findMessageDel.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"typeId":1,
 			"beginDate":$("#beginDate").val(),
 			"endDate":$("#endDate").val()

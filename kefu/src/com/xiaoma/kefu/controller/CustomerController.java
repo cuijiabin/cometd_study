@@ -196,7 +196,7 @@ public class CustomerController {
 			toUpdate.setPhone(customer.getCustomerName());
 			toUpdate.setEmail(customer.getEmail());
 			toUpdate.setRemark(customer.getRemark());
-			boolean isSuccess = customerService.updateCustomer(customer);
+			boolean isSuccess = customerService.updateCustomer(toUpdate);
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
