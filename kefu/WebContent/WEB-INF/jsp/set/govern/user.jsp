@@ -24,12 +24,13 @@
 </div>
 
 <!-- 表格有边框 -->
-<a href="" style="font-size:18px">在职员工</a> <a href="" style="font-size:18px">离职员工</a><button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn" >添加工号</button>
+<a href="/user/find.action?map[status]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2"style="font-size:18px">离职员工</a>
+<button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn" >添加工号</button>
 
 <div id="table_data" style="margin-top: 10px">
 	<jsp:include page="userList.jsp"></jsp:include>
 </div>
- <c:if test=""> <input type="button" value="员工离职" id="leaves"/>  
+ <c:if test="${status==1}"> <button class="btn" id="leaves" onclick="userLeave(2)">员工离职</button>  
   <select id="deptid">
       <option value="0">转移部门</option>
       <option value="1">转移至客服部</option>
@@ -39,7 +40,9 @@
       <option value="5">转移至随时学</option>
       <option value="6">转移至留学部</option>
   </select></c:if>
-  
+  <c:if test="${status==2}">
+  <button class="btn" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
+  </c:if>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -88,6 +91,44 @@ function findUser(id){
 
 }
 
+function userLeave(status){
+	var ids= $(":checkbox[checked='checked']").map(function(){
+		return $(this).val();
+	}).get();
+	$.ajax({
+		url:"/user/leave.action?status="+status+"",
+		type:"post",
+		data:"ids="+ids,
+		dataType:"json",
+		success:function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(data) {
+			alert("出现错误,请重试！");
+		}
+	});
+	
+}
+
+function deleteAll(){
+	var ids= $(":checkbox[checked='checked']").map(function(){
+		return $(this).val();
+	}).get();
+	$.ajax({
+		url:"/user/delete.action",
+		type:"post",
+		data:"ids="+ids,
+		dataType:"json",
+		success:function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(data) {
+			alert("出现错误,请重试！");
+		}
+	});
+}
 </script>
 </body>
 </html>

@@ -59,11 +59,15 @@ public class UserController {
 	 * @param session
 	 */
 	@RequestMapping(value = "login.action", method = RequestMethod.POST)
-	public String login(HttpSession session, String name, String password,
-			Model model) {
-		List list = funcService.findFuncOne();
-		model.addAttribute("topList", list);
-        model.addAttribute("result", Ajax.JSONResult(0,"登录成功!"));
+	public String login(HttpSession session, String loginName, String password,String yzm,Model model) {
+	    System.out.println(loginName);
+	    String yanzheng=session.getAttribute("randomCode").toString();
+	    System.out.println(yanzheng);
+	    if(yzm.equals(yanzheng)){
+	    	//userService.checkLogin();
+	    }else{
+	    	model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
+	    }
 		return "resultjson";
 	}
 	/**
@@ -147,7 +151,8 @@ public class UserController {
 		try {
 			userService.getResult(conditions.getMap(), pageBean);
 			System.out.println(pageBean.getObjList());
-			model.addAttribute("asd",conditions.getMap().get("status"));
+			System.out.println(conditions.getMap().get("status"));
+			model.addAttribute("status",conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null || conditions.getMap().get("typeId") == null)
 				return "/set/govern/user";
 			else
@@ -288,13 +293,14 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "leave.action", method = RequestMethod.GET)
-	public String updateLeave(Model model, String ids) {
-		if (ids == null) {
-			ids = "3";
+	@RequestMapping(value = "leave.action", method = RequestMethod.POST)
+	public String updateLeave(Model model, String ids,Integer status) {
+		if(ids==null ||status==null){
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "resultjson";
 		}
 		try {
-			Integer isSuccess = userService.leaveUser(ids);
+			Integer isSuccess = userService.leaveUser(ids,status);
 
 			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
@@ -339,26 +345,22 @@ public class UserController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
-	public String deletUser(Model model, Integer id) {
+	@RequestMapping(value = "delete.action", method = RequestMethod.POST)
+	public String deletUser(Model model, String ids) {
+
 		try {
-			Integer isSuccess = userService.deleteUserById(id);
-			String message = "failure";
-			Integer code = -1;
+			Integer isSuccess = userService.deleteUserById(ids);
 
-			if (isSuccess == 1) {
-				message = "success";
-				code = 200;
+				if (isSuccess == 1) {
+					model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+				} else {
+					model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+				}
+			} catch (Exception e) {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
-			model.addAttribute("message", message);
-			model.addAttribute("code", code);
 
-			return "/views/message";
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
-		}
+			return "resultjson";
 
 	}
 
