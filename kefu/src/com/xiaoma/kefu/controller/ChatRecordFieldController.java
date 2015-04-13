@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xiaoma.kefu.model.ChatRecordField;
-import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.util.Ajax;
 
@@ -36,20 +35,23 @@ public class ChatRecordFieldController {
 	/**
 	* @Description: 保存自定义配置
 	* @param session
-	* @param date
+	* @param model
+	* @param date	格式 customerName:1,cardName:0
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月7日
 	 */
 	@RequestMapping(value = "saveRecord.action", method = RequestMethod.POST)
-	public String saveRecord(HttpSession session,Model model, @RequestParam("date") String date){
+	public String saveRecord(HttpSession session,Model model,@RequestParam("data") String data){
 		try {
 			//获取当前用户id
 			Integer userId = 1;
-			chatRecordFieldService.saveRecord(userId,date);
+			chatRecordFieldService.saveRecord(userId,data);
 			
 			model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 		} catch (Exception e) {
+			logger.error("saveRecord失败!"+data);
+			e.printStackTrace();
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";

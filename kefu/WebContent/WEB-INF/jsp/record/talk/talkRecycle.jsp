@@ -55,7 +55,7 @@
 	    <div class="u-subsec">
 	        <button type="button" class="btn btn-primary btn-small" onclick="restore();">还原</button>
 	        <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">彻底删除</button>
-	        <button type="button" class="btn btn-primary btn-small">配置显示字段</button>
+	        <button type="button" class="btn btn-primary btn-small" onclick="editDisplay();">配置显示字段</button>
      	</div>
     </div>
 </div>
@@ -184,6 +184,33 @@ function showDetail(dialogueId){
 	url+="?dialogueId="+dialogueId+"&isShowTel="+isShowTel+"&isDel=1";
 	window.location.href = url;
 	return;
+}
+
+//创建客户名称
+function updateCusl(customerId,dialogueId){
+	
+	$.dialog({content:'url:/customer/editCus.action?customerId='+customerId+'&dialogueId='+dialogueId,
+		id: 'editCus',
+		width: 400,height: 500,
+		title:'添加访客信息'
+	});
+}
+
+//配置显示字段
+function editDisplay(){
+	$.dialog({content:'url:/charRecordField/edit.action',
+		id: 'editDisplay',
+		width: 650,height: 400,
+		lock:true, 
+		title:'配置显示字段'
+	});
+}
+
+//创建客户回调
+function editCallback(){
+	$.dialog({id:'editCus'}).close();
+	var pageNo = '${pageBean.currentPage}';
+	find(pageNo);
 }
 </script>
 </body>

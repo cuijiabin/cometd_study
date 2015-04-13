@@ -31,6 +31,7 @@
            <td><input type ="text" id ="name" name="name" value="${role.name}"/><td>
         </tr>
 </table>
+ <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
  <button style="float:right;margin-right:40px;" onclick="javascript:addRole(${role.id});" class="btn" >确认</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -42,6 +43,7 @@
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
+var api = frameElement.api,W=api.opener;
 function addRole(id){
 	var url="";
 	var data="";
@@ -51,18 +53,24 @@ function addRole(id){
 			   "id":id,
 				"name" : $("#name").val(),	    
 			};
+		//修改时验证参数
+		if (!verificationParam1(data)) {
+			
+			return;
+		}
   }else{
       url="/role/save.action";
       data = {
   			"name" : $("#name").val(),	    
   		};
-   }
-	
+      
 		//新增时验证参数
 		if (!verificationParam(data)) {
 			
 			return;
 		}
+   }
+		
 		$.ajax({
 			type : "get",
 			url : url,
@@ -70,10 +78,11 @@ function addRole(id){
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
-					$.dialog.alert(data.msg);
+					alert(data.msg);
+					w.callback();
 			},
 			error : function(msg) {
-				$.dialog.alert(data.msg);
+				alert(data.msg);
 			}
 		});
 	}
@@ -83,17 +92,29 @@ function addRole(id){
 function verificationParam(roleData) {
 	var roleName = roleData.name;
 	if (roleName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("角色名不得为空！");
+		
+		alert("角色名不得为空！");
 
 		return false;
 	}
 	if(checkRole()){
-		   $.dialog.alert("角色名已存在！");
+		
+		   alert("角色名已存在！");
 		   return false;
 	 }
 	return true;
 }
 
+function verificationParam1(roleData) {
+	var roleName = roleData.name;
+	if (roleName.replace("^[ ]+$", "").length == 0) {
+		
+		alert("角色名不得为空！");
+
+		return false;
+	}
+	return true;
+}
    /*
 * 验证角色唯一性(添加时)
 */
@@ -120,11 +141,15 @@ if($("#name").val()==''){
 		}
 	},
 	error : function(msg){
-		$.dialog.alert("查询失败!");
+		alert("查询失败!");
 	}
    });
   return flag;
   }
+   
+function cl(){
+		api.close();			
+}
 </script>
 </body>
 </html>

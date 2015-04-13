@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.dao.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -227,6 +228,25 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}catch(Exception ex){
 			return 0;
 		}
+	}
+	@Override
+	public List<T> findByIds(Class<T> clazz, List<Long> ids) {
+		
+		List<T> result = new ArrayList<T>();
+		Session session = getSession(); 
+		
+	    T obj = null; 
+        for (int i = 0; i < ids.size(); i++) {  
+        	
+        	Long id= ids.get(i);
+        	obj = (T) session.get(clazz, id);
+        	result.add(obj);
+            if (i % 50 == 0) {  
+                session.flush();  
+                session.clear();  
+            }  
+        }  
+		return result;
 	}
 }
 /**

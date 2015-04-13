@@ -14,7 +14,7 @@ package com.xiaoma.kefu.cache;
  */
 public class CacheName {
 	public static final String SHORTMESSAGE="SHORTMESSAGE";
-	public static final String DICT="DICT";
-	public static final String SORT="SORT";
+	public static final String DICTLIST="DICTLIST";
+	public static final String DICTITEM="DICTITEM";
 	
 }

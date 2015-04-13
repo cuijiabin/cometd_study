@@ -29,7 +29,8 @@
 	<c:forEach var="crf" items="${list }" varStatus="status">
 		<c:if test="${status.index % 5 == 0 }"> <br> </c:if>  
 		<label><input type="checkbox" name="items" value="${crf.isDefault} ">${crf.name }
-			<input type="hidden" name="codes" value="${crf.code} ">
+			<input type="hidden" name="codes" value="${crf.code }">
+			<input type="hidden" name="displays" value="${crf.isDisplay }">
 		</label>
 	</c:forEach>
 	<br>
@@ -42,8 +43,23 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+var api = frameElement.api;//调用父页面数据  
+var W = api.opener;//获取父页面对象  
 
-//默认勾选
+//初始化已勾选数据
+$(function(){
+	var displays = $("input[name='displays']");
+	var items = $("input[name='items']");
+	for (var i=0; i<displays.length; i++){
+		if(displays[i].value==1){
+			items[i].checked=true;
+		}else{
+			items[i].checked=false;
+		}
+	}
+});
+
+//勾选系统默认选项
 function toDef(){
 	$("input[name='items']").each(function(){
 		if($(this).val()==1){
@@ -56,6 +72,16 @@ function toDef(){
 
 //保存
 $('#btn_save').on('click',function(){
+	var num = $(":input[name=items]:checked").length;
+	if(num==0){
+		$.dialog.alert('请先进行勾选!');
+		return false;
+	}
+	if(num>9){
+		$.dialog.alert('最多只能勾选9项!');
+		return false;
+	}
+	
 	var items = $("input[name='items']");
 	var codes = $("input[name='codes']");
 	var str = '';
@@ -71,13 +97,15 @@ $('#btn_save').on('click',function(){
 	}
 	$.ajax({
 		type : 'post',
-		url :  "/charRecordField/xx.action",
+		url :  "/charRecordField/saveRecord.action",
 		dataType : 'json',
-		data : str,
+		data: {data:str} ,
 		async: false,
 	 	success: function (data) {
 	    	if(data.result==0){
-	    		alert(11)
+	    		W.$.dialog.alert('操作成功!',function(){
+	    			api.close();			
+	    		});
 	    	}else{
 	    		$.dialog.alert(data.msg);
 	    	}
@@ -86,6 +114,11 @@ $('#btn_save').on('click',function(){
 	    	$.dialog.alert(msg);
 	    }
 	});
+});
+
+//取消
+$('#btn_cancel').on('click',function(){
+	 api.close();
 });
 
 

@@ -125,9 +125,33 @@ function del(){
 	
 }
 
+//创建客户名称
+function updateCusl(customerId,msgId){
+	$.dialog({content:'url:/customer/editCus4Msg.action?customerId='+customerId+'&msgId='+msgId,
+		id: 'editCus',
+		width: 400,height: 500,
+		title:'添加访客信息'
+	});
+}
+
+//创建客户回调
+function editCallback(){
+	$.dialog({id:'editCus'}).close();
+	var pageNo = '${pageBean.currentPage}';
+	find(pageNo);
+}
+
 //查看明细
-function showDetail(id){
-	return;
+function showDetail(msgId){
+// 	var url = '/messageRecords/view.action?msgId='+msgId;
+// 	window.location = url;
+// 	return;
+	$.dialog({content:'url:/messageRecords/view.action?msgId='+msgId,
+		id: 'viewMsg',
+		width: 400,height: 500,
+		title:'留言详情',
+		cancel: true
+	});
 }
 </script>
 </body>

@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,17 @@ public class DepartmentService {
 		result.setObjList(list);
 
 		return result;
+	}
+
+	/**
+	 * 分页查询
+	 * 
+	 * @param map
+	 * @param pageBean
+	 * @return
+	 */
+	public void getResult(Map<String, String> conditions,PageBean<Department> pageBean){
+		deptDaoImpl.findByCondition(conditions,pageBean);	
 	}
 
 	/**

@@ -5,6 +5,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 <link rel="stylesheet" type="text/css"
 	href="/jsplugin/kkpager/src/kkpager.css" />
 <!-- 表格有边框 -->
@@ -34,7 +35,7 @@
 						</c:when>
 						<c:when test="${showDetail == 1 and contentMap.hasName != 1 }"> 
 							<a href="#" onClick="showDetail(${contentMap.id})">${contentMap.customerName}</a>
-								[<a href="#">创建</a>]
+								[<a href="#" onClick="updateCusl(${contentMap.customerId},${contentMap.id})">创建</a>]
 						</c:when>
 						<c:otherwise> 
 							${contentMap.customerName}

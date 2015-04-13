@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
+import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
@@ -30,6 +32,8 @@ public class CustomerController {
 	private CustomerService customerService;
 	@Autowired
 	private DialogueService dialogueService;//对话信息
+	@Autowired
+	private MessageRecordsService messageRecordsService;//留言信息
 	
 	/**
 	 * 查询所有、条件查询
@@ -151,7 +155,7 @@ public class CustomerController {
 
 	
 	/**
-	 * 编辑用户信息页面(用于记录中心)
+	 * 编辑用户信息页面(用于记录中心-聊天记录)
 	* @Description: TODO
 	* @param model
 	* @param customerId
@@ -202,7 +206,31 @@ public class CustomerController {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";
-
+	}
+	
+	/**
+	 * 编辑用户信息页面(用于记录中心留言记录)
+	* @Description: TODO
+	* @param model
+	* @param customerId
+	* @param dialogueId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月10日
+	 */
+	@RequestMapping(value = "editCus4Msg.action", method = RequestMethod.GET)
+	public String editCus4Msg(Model model,String customerId,Integer msgId) {
+		try {
+			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+			MessageRecords msg = messageRecordsService.findById(Integer.valueOf(msgId));
+			model.addAttribute("customer", customer);
+			model.addAttribute("dialogue", msg);//和聊天记录用一个
+			return "/customer/editCus";
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
 	}
 	
 

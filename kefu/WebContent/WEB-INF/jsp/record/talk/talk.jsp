@@ -231,12 +231,9 @@ function updateCusl(customerId,dialogueId){
 
 //配置显示字段
 function editDisplay(){
-	var url = "/charRecordField/edit.action";
-	window.location.href = url;
-	return;
 	$.dialog({content:'url:/charRecordField/edit.action',
-		id: 'testID',
-		width: 400,height: 500,
+		id: 'editDisplay',
+		width: 650,height: 400,
 		lock:true, 
 		title:'配置显示字段'
 	});

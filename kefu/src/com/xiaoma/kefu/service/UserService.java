@@ -6,12 +6,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -36,22 +38,22 @@ public class UserService {
 	 * @param pageBean
 	 * @return
 	 */
-	public PageBean<User> getResult(Integer currentPage,Integer pageRecorders){
-			
-		Integer totalCount = userDaoImpl.getAllUserCount();
-		PageBean<User> result = new PageBean<User>();
-		
-		result.setCurrentPage(currentPage);
-		result.setPageRecorders(pageRecorders);
-		result.setTotalRows(totalCount);
-		
-		Integer start = result.getStartRow();
-		
-	      List<User> list =userDaoImpl.getUsertOrderById(start,pageRecorders);
-		result.setObjList(list);
-		
-		return result;
-	}
+//	public PageBean<User> getResult(Integer currentPage,Integer pageRecorders){
+//			
+//		Integer totalCount = userDaoImpl.getAllUserCount();
+//		PageBean<User> result = new PageBean<User>();
+//		
+//		result.setCurrentPage(currentPage);
+//		result.setPageRecorders(pageRecorders);
+//		result.setTotalRows(totalCount);
+//		
+//		Integer start = result.getStartRow();
+//		
+//	      List<User> list =userDaoImpl.getUsertOrderById(start,pageRecorders);
+//		result.setObjList(list);
+//		
+//		return result;
+//	}
 	
 	/**
 	 * 条件查询
@@ -73,11 +75,21 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 	return result;
      }
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param map
+	 * @param pageBean
+	 * @return
+	 */
+	public void getResult(Map<String, String> conditions,PageBean<User> pageBean){
+		userDaoImpl.findByCondition(conditions,pageBean);	
+	}
      
     /**
      * 精确查询
      */
-public Integer checkUser (User user){
+   public Integer checkUser (User user){
 		
 	Integer totalCount = userDaoImpl.checkUser(user);
 	

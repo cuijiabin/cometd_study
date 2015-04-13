@@ -82,5 +82,17 @@ public class MessageRecordsService {
 		}
 		return num;
 	}
+	
+	/**
+	 * 根据ID,获得留言记录
+	* @Description: TODO
+	* @param valueOf
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月12日
+	 */
+	public MessageRecords findById(Integer id) {
+		return messageRecordsDaoImpl.findById(MessageRecords.class, id);
+	}
 
 }

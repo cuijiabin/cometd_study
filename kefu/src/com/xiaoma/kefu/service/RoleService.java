@@ -2,11 +2,13 @@ package com.xiaoma.kefu.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.RoleDao;
+import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -41,6 +43,17 @@ public class RoleService {
 		result.setObjList(list);
 
 		return result;
+	}
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param map
+	 * @param pageBean
+	 * @return
+	 */
+	public void getResult(Map<String, String> conditions,PageBean<Role> pageBean){
+		roleDaoImpl.findByCondition(conditions,pageBean);	
 	}
 
 	/**

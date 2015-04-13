@@ -15,14 +15,14 @@
 
 <body>
 <!-- 面包屑 -->
-<div class="m-crumb">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">设置中心</a></li>
-        <li><i>&gt;</i><a href="#">管理设置</a></li>
-        <li><i>&gt;</i>部门管理</li>
-    </ul>
-</div>
+<!-- <div class="m-crumb"> -->
+<!--     <ul class="f-cb"> -->
+<!--         <li><b>位置：</b></li> -->
+<!--         <li><a href="#">设置中心</a></li> -->
+<!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
+<!--         <li><i>&gt;</i>部门管理</li> -->
+<!--     </ul> -->
+<!-- </div> -->
 <h2>添加部门</h2>
 <!-- 表格有边框 -->
 <table class="table table-bordered table-striped table-hover m-table">
@@ -35,6 +35,7 @@
             <td><input type ="text" id="sortNum" name="sortNum" value="${dept.sortNum}" readonly="readonly"/></td>
         </tr>
 </table>
+<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
  <button style="float:right;margin-right:40px;" onclick="javascript:addDept(${dept.id});" class="btn" >确认</button>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -45,6 +46,8 @@
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
+var api = frameElement.api,W=api.opener;
+
 function addDept(id){
 	var url="";
 	var data="";
@@ -55,18 +58,22 @@ function addDept(id){
 				"name" : $("#name").val(),
 				"sortNum": $("#sortNum").val()
 			};
+		//新增时验证参数
+		if (!verificationParam1(data)) {		
+			return;
+		}
   }else{
       url="/dept/save.action";
       data = {
   			"name" : $("#name").val(),
   			"sortNum": $("#sortNum").val()
   		};
-   }
-	
-		//新增时验证参数
+  	//新增时验证参数
 		if (!verificationParam(data)) {		
 			return;
 		}
+   }
+	
 		$.ajax({
 			type : "get",
 			url : url,
@@ -74,10 +81,11 @@ function addDept(id){
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
-					$.dialog.alert(data.msg);
+					alert(data.msg);
+					cl();
 			},
 			error : function(msg) {
-				$.dialog.alert(data.msg);
+				alert(data.msg);
 			}
 		});
 	}
@@ -87,17 +95,27 @@ function addDept(id){
 function verificationParam(deptData) {
 	var deptName = deptData.name;
 	if (deptName.replace("^[ ]+$", "").length == 0) {
-		$.dialog.alert("部们名不得为空！");
+		alert("部们名不得为空！");
 
 		return false;
 	}
 	if(checkDept()){
-		   $.dialog.alert("部门已存在！");
+		   alert("部门已存在！");
 		   return false;
 	 }
 	return true;
 }
+//修改时验证
+function verificationParam1(deptData) {
+	var deptName = deptData.name;
+	if (deptName.replace("^[ ]+$", "").length == 0) {
+		
+		alert("部们名不得为空！");
 
+		return false;
+	}
+	return true;
+}
    /*
 * 验证角色唯一性(添加时)
 */
@@ -124,11 +142,15 @@ if($("#name").val()==''){
 		}
 	},
 	error : function(msg){
-		$.dialog.alert("查询失败!");
+		alert("查询失败!");
 	}
    });
   return flag;
   }
+   
+function cl(){
+	api.close();			
+}
 </script>
 </body>
 </html>
