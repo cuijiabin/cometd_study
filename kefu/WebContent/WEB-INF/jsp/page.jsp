@@ -1,14 +1,10 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <!-- 翻页 -->
 <div id="kkpager" >每页
-	<select id="pageRecorders" name="pageRecorders" style="width:50px;" onchange="find(1)">
-		<option value="5">5</option>
-		<option value="10">10</option>
-		<option value="20">20</option>
-		<option value="100">100</option>
-	</select>
+	<xiaoma:select name="pageRecorders" dictName="d_pagesize" value="${pageBean.pageRecorders}" changeName="find(1)" />
 	条
 </div>
 <script type="text/javascript">

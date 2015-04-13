@@ -20,14 +20,14 @@
  	<attribute>
  		<name>value</name>
  		<required>false</required> 
- 		<rtexprvalue>false</rtexprvalue>
+ 		<rtexprvalue>true</rtexprvalue>
  		<description>值</description>
  	</attribute>
  	<attribute>
- 		<name>dataList</name>
+ 		<name>changeName</name>
  		<required>false</required> 
- 		<rtexprvalue>false</rtexprvalue>
- 		<description>集合</description>
+ 		<rtexprvalue>true</rtexprvalue>
+ 		<description>事件</description>
  	</attribute>
  	<attribute>
  		<name>dictName</name>
@@ -37,8 +37,8 @@
  	<attribute>
  		<name>all</name>
  		<required>false</required> 
- 		<rtexprvalue>true</rtexprvalue>
- 		<description>是否添加全部1:添加</description>
+ 		<rtexprvalue>false</rtexprvalue>
+ 		<description>添加选项为全部的value,不为空即为显示全部选项</description>
  	</attribute>
  	<attribute>
  		<name>allName</name>
@@ -60,7 +60,7 @@
  	<attribute>
  		<name>value</name>
  		<required>true</required> 
- 		<rtexprvalue>false</rtexprvalue>
+ 		<rtexprvalue>true</rtexprvalue>
  		<description>值</description>
  	</attribute>
  </tag>
