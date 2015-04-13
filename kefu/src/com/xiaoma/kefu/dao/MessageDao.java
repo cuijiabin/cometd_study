@@ -1,8 +1,10 @@
 package com.xiaoma.kefu.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xiaoma.kefu.model.Message;
+import com.xiaoma.kefu.util.PageBean;
 
 /**
  * @author frongji
@@ -27,5 +29,12 @@ public interface MessageDao extends BaseDao<Message> {
    */
 	public List<Message> getMessageByConditions(Integer start, Integer offset,
 			String customerName, String phone);
+   
+	/**
+	 * 条件查询
+	 * @param conditions
+	 * @param pageBean
+	 */
+   public void findByCondition(Map<String, String> conditions, PageBean<Message> pageBean);
 
 }

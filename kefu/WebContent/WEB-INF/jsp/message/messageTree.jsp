@@ -3,7 +3,9 @@
 <!doctype html>
 <html lang="zh-cn">
 <head>
+ 这里树快出来
  <SCRIPT >
+
 var zTree;
 	var demoIframe;
 
@@ -17,7 +19,7 @@ var zTree;
 		async:{
 			enable:false,  //是否启用异步加载
 			type:'get',
-			url:""
+			url:"/messageType/main.action"
 		},
 		data: {
 			simpleData: {

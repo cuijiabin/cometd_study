@@ -69,29 +69,14 @@ public class BlacklistController {
 	 * 保存黑名单实体
 	 * @throws ParseException 
 	 */
-  
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
 	public String save( @ModelAttribute("blacklist")Blacklist blacklist,String enddate,Model model) throws ParseException {
 		
-
-		System.out.println("888888888888888888888888888888888888888888888888");
-		
-		 try {
+		try {
 			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			  Date date = sdf.parse(enddate);
 			 blacklist.setEndDate(date);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	
-		try {
-			     
-			 
-		         
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
-		
-			 
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			  } else {
@@ -101,7 +86,6 @@ public class BlacklistController {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		 }
 		return "resultjson";
-
 	}
 	
 	/**

@@ -21,7 +21,7 @@ import com.xiaoma.kefu.service.MessageTypeService;
  *   常用语分类  Controller class
  */
 @Controller
-@RequestMapping(value = "messageType")
+@RequestMapping(value="messageType")
 public class MessageTypeController {
     
 	 @Autowired
@@ -29,15 +29,15 @@ public class MessageTypeController {
 	 
 		//查询各个级别的树
 	    @SuppressWarnings("static-access")
-		@RequestMapping(value = "main.action", method = RequestMethod.GET)
-		public String main(Model model,Integer typeId) {
-			if(typeId!=null){
-			List list = messageTypeService.findTree(typeId);
+		@RequestMapping(value="main.action", method = RequestMethod.GET)
+		public String main(Model model,Integer id) {
+			if(id !=null){
+			List list = messageTypeService.findTree(id);
 			
 			JSONArray json = new JSONArray().fromObject(list);
 			System.out.println(json);
 			model.addAttribute("json",json.toString());
-			return "/message/messageTree";
+			return "message/messageSet";
 			}else{
 				return "null";
 			}

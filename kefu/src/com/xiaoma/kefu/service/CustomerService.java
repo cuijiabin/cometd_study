@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.redis.JedisDao;
