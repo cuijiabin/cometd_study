@@ -54,7 +54,8 @@
 		    url: "/user/login.action",
 		    data: data,
 		    dataType: "json",
-		    success: function (d) {
+		    success: function (data) {
+		    	if(data.code==0){
 		    		window.location="/user/main.action";
 		    	}else{
 		    		alert(data.msg);
