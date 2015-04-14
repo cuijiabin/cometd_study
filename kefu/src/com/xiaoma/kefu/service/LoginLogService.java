@@ -1,11 +1,7 @@
 package com.xiaoma.kefu.service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +23,6 @@ public class LoginLogService {
 
 	/**
 	 * 分页查询
-	 * 
 	 * @param map
 	 * @param pageBean
 	 * @return

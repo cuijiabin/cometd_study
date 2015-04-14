@@ -12,8 +12,6 @@ package com.xiaoma.kefu.cache;
 
 import java.util.Date;
 
-import com.xiaoma.kefu.util.Md5Util;
-
 /**
  * <descption>缓存工具类</descption>
  * 
@@ -33,7 +31,8 @@ public class CacheUtil {
 	 * @return
 	 */
 	public static String getCacheName(Object cacheName, Object value) {
-		return Md5Util.MD5Encode(new StringBuilder((String) cacheName).append(value).toString());
+//		return Md5Util.MD5Encode(new StringBuilder((String) cacheName).append(value).toString());
+		return new StringBuilder((String) cacheName).append(value).toString();
 	}
 	/**
 	 * 转换缓存时间格式
