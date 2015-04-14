@@ -27,7 +27,7 @@
 				<td><a href="#" onClick="showDetail(${style.id})">获取代码</a></td>
 				<td><a href="#" onClick="showDetail(${style.id})">设置</a></td>
 				<td>
-					<a href="#" onClick="showDetail(${style.id})">业务分组</a>
+					<a href="#" onClick="fenzu(${style.id})">业务分组</a>
 					<a href="#" onClick="showDetail(${style.id})">业务分流</a>
 					<a href="#" onClick="showDetail(${style.id})">分配机制</a>
 				</td>

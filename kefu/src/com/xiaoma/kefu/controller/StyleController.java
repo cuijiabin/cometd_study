@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Style;
+import com.xiaoma.kefu.service.BusiGroupDetailService;
+import com.xiaoma.kefu.service.BusiGroupService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
@@ -29,6 +31,11 @@ public class StyleController {
 
 	@Autowired
 	private StyleService styleService;
+	@Autowired
+	private BusiGroupService busiGroupService;//业务分组
+	@Autowired
+	private BusiGroupDetailService busiGroupDetailService;//业务分组明细
+	
 	
 	/**
 	 * 查询所有风格
