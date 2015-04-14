@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
@@ -69,7 +70,7 @@ public class UserController {
 	    	 if(yzm.equals(yanzheng)){
 	 	    	User user=userService.login(loginName,password);
 	 	    	if(user!=null){
-	 	    		session.setAttribute("user", user);
+	 	    		session.setAttribute(CacheName.USER, user);
 	 	    		model.addAttribute("result", Ajax.JSONResult(0, "登陆成功!"));
 	 	    	}else{
 	 	    		model.addAttribute("result", Ajax.JSONResult(3, "登录名或者密码错误!"));

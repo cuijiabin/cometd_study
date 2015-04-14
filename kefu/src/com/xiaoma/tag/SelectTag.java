@@ -33,7 +33,7 @@ public class SelectTag extends BodyTagSupport {
 			if(StringHelper.isNotEmpty(name) || StringHelper.isNotEmpty(dictName)){
 				//如果typeId为空或者为1，即为字典表获取
 				List<DictItem> list = DictMan.getDictList(dictName);
-				tags.append("<select name='").append(name).append("' id='").append(name).append("' ");
+				tags.append("<select name='").append(name).append("' id='").append(name).append("' class='c-wdat' ");
 				if(StringHelper.isNotEmpty(changeName))
 					tags.append("onchange='").append(changeName).append("' ");
 				tags.append(">");

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import redis.clients.jedis.Jedis;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisDao;
@@ -63,6 +64,10 @@ public class DialogueController {
 	
 	@RequestMapping(value = "user.action", method = RequestMethod.GET)
 	public String user(HttpSession session, Model model) {
+		User user = (User)session.getAttribute(CacheName.USER);
+		if(user == null)
+			return "login";
+		model.addAttribute(CacheName.USER,user);
 		return "/dialogue/userChat";
 	}
 

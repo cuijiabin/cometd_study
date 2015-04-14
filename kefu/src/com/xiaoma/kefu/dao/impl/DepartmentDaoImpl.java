@@ -98,7 +98,7 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 	@Override
 	public Integer getMaxNum() {
 		Session session = getSession();
-		String hql = "select max(sortNum) from Department where isDel<>1 ";
+		String hql = "select max(a.sortNum) from Department a where a.isDel<>1 ";
 		Query query = session.createQuery(hql);
 		return ((Number) query.uniqueResult()).intValue();
 

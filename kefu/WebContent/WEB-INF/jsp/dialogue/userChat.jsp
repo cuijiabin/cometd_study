@@ -14,26 +14,31 @@
 </head>
 
 <body scroll="no" class="g-body">
-<jsp:include page="../top.jsp"></jsp:include>
+<div class="g-head fixed">
+	<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
+    <ul class="u-admin f-fr">
+        <li><a href="#"><i class="icon-user"></i>欢迎 ${user.loginName}</a>
+        	<select class="c-wdat">
+                 <option selected="selected">在线</option>
+                 <option value="离线">离线</option>
+             </select>
+        </li>
+        <li><a target="_blank" href="/user/main.action"><i class="icon-logout"></i>客服系统</a></li>
+        <li><a target="_blank" href="/user/main.action"><i class="icon-logout"></i>设置</a></li>
+        <li><a href="/user/logout.action"><i class="icon-logout"></i>退出</a></li>
+    </ul>
+</div>
 <div class="g-bd1 f-cb">
 	<div class="g-bd1c f-cb c-bor">
-        <div class="g-sd1 f-fl">
-            <ul class="f-cb">
+        <div class="g-mn1 f-fl">
+           
+        </div>
+        <div class="g-sd1 f-fr">
+         <ul class="f-cb">
                 <li><a href="#">添加工单</a></li>
                 <li><i>|</i><a href="#">访客阻止</a></li>
                 <li><i>|</i><a href="#"> 客服转接</a></li>
             </ul>
-        </div>
-        <div class="g-mn1 f-fr">
-            <div class="g-mn1c">
-                <a class="btn btn-primary btn-small" href="#">客服管理</a>
-                <a class="btn btn-primary btn-small" href="#"><i class="icon-cog icon-white"></i> 设置</a>
-                <select class="c-wd60">
-                    <option selected="selected">在线</option>
-                    <option value="离线">离线</option>
-                </select>
-                <a class="btn btn-danger btn-small" href="#">退出登录</a>
-            </div>
         </div>
     </div>
 </div>
