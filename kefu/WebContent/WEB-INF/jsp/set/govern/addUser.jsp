@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 </head>
 
 <body>
