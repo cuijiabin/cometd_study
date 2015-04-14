@@ -46,7 +46,8 @@
 	function login(){
 		var data = {
 			"loginName":$("#loginName").val(),
-			"password":$("#password").val()
+			"password":$("#password").val(),
+			"yzm":$("#yzm").val()
 		};
 		//alert(111);
 		$.ajax({
@@ -55,14 +56,14 @@
 		    data: data,
 		    dataType: "json",
 		    success: function (data) {
-		    	if(data.code==0){
+		    	if(data.result==0){
 		    		window.location="/user/main.action";
 		    	}else{
 		    		alert(data.msg);
 		    	}
 		    },
 		    error: function (data) {
-		    	alert(data.msg);
+		    	alert("出现错误,请重新登录");
 		    }
 		});
 	}
