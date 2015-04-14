@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="Keyboard")
+@Table(name="keyboard")
 public class Keyboard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
