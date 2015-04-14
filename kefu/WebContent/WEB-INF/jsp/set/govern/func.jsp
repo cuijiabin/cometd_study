@@ -106,10 +106,13 @@ function loadReady() {
 }
 
 function saveFunc(){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
-	alert(ids);
+	var treeObj = $.fn.zTree.getZTreeObj("tree");
+	var nodes = treeObj.getCheckedNodes(true);
+	for (var i = 0; i < nodes.length; i++) {
+		var  sd=nodes[i].id;
+		alert(sd);
+	}
+	alert(nodes);
 // 	$.ajax({
 // 		url:"/user/leave.action?status="+status+"",
 // 		type:"post",
