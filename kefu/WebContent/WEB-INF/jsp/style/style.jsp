@@ -95,6 +95,15 @@ function fenzu(id){
 	window.location = url;
 	return;
 }
+
+//设置
+function editCommon(id){
+	var url = '/style/editCommon.action?styleId='+id;
+	window.location = url;
+	return;
+}
+
+styleSet
 </script>
 </body>
 </html>
