@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">
-                                    <textarea class="u-txtarea" id="inputbox"></textarea>
+                                    <textarea class="u-txtarea" id="inputbox" onkeypress="return onSendBoxEnter(event);"></textarea>
                                     <div class="u-send">
                                         <div class="btn-group">
                                             <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -219,15 +219,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var text = data.text || '';
 			text = text.HTMLEncode();
 			var t = data.transtime;
-			var str;
-			if (lastTalkId == id) {
-				str = [ '<p class="r-visitor-txt">',text,'</p>' ];
-			} else {
-				str = [ '<p class="r-visitor">',name,'&nbsp;', t,
+			var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
 				           '</p><p class="r-visitor-txt">',text,'</p>' ];
-			}
 			
-			alert(str);
+			console.log(str);
 			checkLogCount();
 			logbox.innerHTML += str.join('');
 			lastTalkId = id;
@@ -276,9 +271,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
+			console.log("回车发送！");
 			if (event.keyCode == 13) {
-				var text = inputbox.value;
-				send(text);
+				var message = inputbox.value;
+				sendMessage(message);
 				return false;
 			}
 		}

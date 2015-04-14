@@ -8,10 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import redis.clients.jedis.Jedis;
 
 public class JedisTalkDao {
+	
+	private static Logger logger = Logger.getLogger(JedisTalkDao.class);
 
 	// #############################
 	/**
@@ -45,7 +48,8 @@ public class JedisTalkDao {
 		Jedis jedis = JedisDao.getJedis();
 
 		String replay = jedis.set(key, userId);
-		System.out.println("redis set key:" + key +" value: "+ userId);
+		
+		logger.info("redis set key:" + key +" value: "+ userId);
 		
 		return StringUtils.isNotBlank(replay);
 	}
@@ -65,7 +69,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.del(key);
 		
-		System.out.println("redis del key:" + key +" value: "+ ccnId);
+		logger.info("redis del key:" + key +" value: "+ ccnId);
 
 		return (replay > 0);
 	}
@@ -104,7 +108,7 @@ public class JedisTalkDao {
 
 		Long id = jedis.zadd(key, System.currentTimeMillis(), ccnId);
 		
-		System.out.println("redis zadd key:" + key +" value: "+ ccnId);
+		logger.info("redis zadd key:" + key +" value: "+ ccnId);
 
 		return (id > 0);
 	}
@@ -124,7 +128,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.zrem(key, ccnId);
 		
-		System.out.println("redis zrem key:" + key +" value: "+ ccnId);
+		logger.info("redis zrem key:" + key +" value: "+ ccnId);
 
 		return (replay > 0);
 	}
@@ -163,7 +167,7 @@ public class JedisTalkDao {
 
 		Long id = jedis.zadd(key, System.currentTimeMillis(), ccnId);
 		
-		System.out.println("redis zadd key:" + key +" value: "+ ccnId);
+		logger.info("redis zadd key:" + key +" value: "+ ccnId);
 		
 		return (id > 0);
 	}
@@ -183,7 +187,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.zrem(key, ccnId);
 		
-		System.out.println("redis zrem key:" + key +" value: "+ ccnId);
+		logger.info("redis zrem key:" + key +" value: "+ ccnId);
 
 		return (replay > 0);
 	}
@@ -212,7 +216,7 @@ public class JedisTalkDao {
 
 		String replay = jedis.set(key, count.toString());
 
-		System.out.println("redis set key:" + key +" value: "+ count);
+		logger.info("redis set key:" + key +" value: "+ count);
 		
 		return StringUtils.isNotBlank(replay);
 	}
@@ -225,7 +229,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.incr(key);
 		
-		System.out.println("redis incr key:" + key);
+		logger.info("redis incr key:" + key);
 
 		return (replay > 0);
 	}
@@ -238,7 +242,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.decr(key);
 		
-		System.out.println("redis decr key:" + key);
+		logger.info("redis decr key:" + key);
 
 		return (replay > 0);
 	}
@@ -267,7 +271,7 @@ public class JedisTalkDao {
 
 		String replay = jedis.set(key, count.toString());
 		
-		System.out.println("redis set key:" + key +" value: "+ count);
+		logger.info("redis set key:" + key +" value: "+ count);
 
 		return StringUtils.isNotBlank(replay);
 	}
@@ -280,7 +284,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.incr(key);
 		
-		System.out.println("redis incr key:" + key);
+		logger.info("redis incr key:" + key);
 
 		return (replay > 0);
 	}
@@ -293,7 +297,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.decr(key);
 		
-		System.out.println("redis decr key:" + key);
+		logger.info("redis decr key:" + key);
 
 		return (replay > 0);
 	}
@@ -319,7 +323,7 @@ public class JedisTalkDao {
 
 		Long id = jedis.zadd(key, System.currentTimeMillis(), opeCcnId);
 		
-		System.out.println("redis zadd key:" + key +" value: "+ opeCcnId);
+		logger.info("redis zadd key:" + key +" value: "+ opeCcnId);
 
 		return (id > 0);
 	}
@@ -332,7 +336,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.zrem(key, opeCcnId);
 		
-		System.out.println("redis zrem key:" + key +" value: "+ opeCcnId);
+		logger.info("redis zrem key:" + key +" value: "+ opeCcnId);
 
 		return (replay > 0);
 	}
@@ -355,7 +359,7 @@ public class JedisTalkDao {
 
 		String replay = jedis.set(key, opeCcnId);
 		
-		System.out.println("redis set key:" + key +" value: "+ opeCcnId);
+		logger.info("redis set key:" + key +" value: "+ opeCcnId);
 
 		return StringUtils.isNotBlank(replay);
 	}
@@ -368,7 +372,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.del(key);
 		
-		System.out.println("redis del key:" + key );
+		logger.info("redis del key:" + key );
 
 		return (replay > 0);
 	}
@@ -398,7 +402,7 @@ public class JedisTalkDao {
 
 		String replay = jedis.set(key, opeCcnId);
 		
-		System.out.println("redis set key:" + key +" value: "+ opeCcnId);
+		logger.info("redis set key:" + key +" value: "+ opeCcnId);
 
 		return StringUtils.isNotBlank(replay);
 	}
@@ -411,7 +415,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.del(key);
 		
-		System.out.println("redis del key:" + key);
+		logger.info("redis del key:" + key);
 
 		return (replay > 0);
 	}

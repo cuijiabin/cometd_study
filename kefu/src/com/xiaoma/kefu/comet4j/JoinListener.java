@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
 import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.ConnectEvent;
@@ -31,6 +32,7 @@ public class JoinListener extends ConnectListener {
 
 	private UserService userService = (UserService) SpringContextUtil
 			.getBean("userService");
+	private Logger logger = Logger.getLogger(JoinListener.class);
 
 	public boolean handleEvent(ConnectEvent anEvent) {
 
@@ -39,21 +41,21 @@ public class JoinListener extends ConnectListener {
 
 		HttpSession session = request.getSession();
 
-		Object obj = session.getAttribute("user");
-		String sessionUserId = (obj == null) ? "" : obj.toString();
+		User user = (User) session.getAttribute("user");
+//		User user = (User) ((obj == null) ? null : obj);
 
 		
 		// 连接点
 		String ccnId = conn.getId();
 
 		// 优先使用userId
-		if (StringUtils.isNotBlank(sessionUserId)) {
-			
+		if (user != null) {
+			String userId = user.getId().toString();
 			// 添加至当前用户通信点
-			JedisTalkDao.setCnnUserId(JedisConstant.USER_TYPE, ccnId, sessionUserId);
-			JedisTalkDao.addUserCcnList(sessionUserId, ccnId);
+			JedisTalkDao.setCnnUserId(JedisConstant.USER_TYPE, ccnId, userId);
+			JedisTalkDao.addUserCcnList(userId, ccnId);
 			JedisTalkDao.addCcnList( JedisConstant.USER_TYPE, ccnId);
-			
+			logger.info("客服："+userId+" ,进入对话系统; 通信点id： "+ccnId);
 		} else {
 			try {
 				Customer customer = customerService.genCustomer(request);
@@ -74,6 +76,7 @@ public class JoinListener extends ConnectListener {
 				
 				//设置被谁接待
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
+				logger.info("前端用户："+customerId+" ,进入对话系统; 通信点id： "+ccnId+"被通知客服通信点id："+allocateCnnId);
 				// 写入cookie
 				// DesUtil.encrypt(userId,PropertiesUtil.getProperties(CacheName.SECRETKEY));
 				

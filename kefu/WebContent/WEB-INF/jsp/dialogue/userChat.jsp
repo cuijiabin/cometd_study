@@ -51,7 +51,7 @@
                 <input type="hidden" id="currentCcnId"/>
         		<h3 class="u-tit c-bg" id="contentTitle">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
-                    <div class="u-record r-sms-manager" >
+                    <div class="u-record r-sms-manager" id="logbox">
                         <p class="r-welcome">欢迎使用客服系统</p>
                     </div>
                     <div class="u-operate">
@@ -65,7 +65,7 @@
                             </ul>
                         </div>
                         <div class="u-input f-cb">
-                            <textarea class="u-txtarea" id="inputbox" ></textarea>
+                            <textarea class="u-txtarea" id="inputbox" onkeypress="return onSendBoxEnter(event);"></textarea>
                             <div class="u-send">
                                 <div class="btn-group">
                                     <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -140,6 +140,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script language="javascript" for="window" event="onload"> 
 	console.log("init");
+	var lastTalkId = null ;
+	var maxLogCount = 100;
 	// 引擎事件绑定
 	JS.Engine.on({
 		start : function(cId, aml, engine) {
@@ -149,9 +151,10 @@
 		},
 		stop : function(cause, url, cId, engine) {
 		},
-		dialogue : function(data, timespan, engine) {
+		dialogue : function(data, engine) {
 			switch (data.type) {
 			case 'on_message': // 收到聊天消息
+				onMessage(data);
 				break;
 			case 'update_list': //
 				userList(data);
@@ -220,13 +223,80 @@
 			return;
 		var userCId = JS.Engine.getId();
 		var cusCId = $("#currentCcnId").val();
-		alert(cusCId);
+		console.log("发送对象："+cusCId);
 		var param = "userCId=" + userCId + '&cusCId='+cusCId+'&message=' + encodeURIComponent(message);
 		JS.AJAX.post('/chat/toCustomer.action', param, function() {
 			inputbox.value = '';
 		});
 	}
+	// 回车事件
+	function onSendBoxEnter(event) {
+		console.log("回车发送！");
+		if (event.keyCode == 13) {
+			var message = inputbox.value;
+			sendMessage(message);
+			return false;
+		}
+	}
 	
+	// 用户聊天通知
+	function onMessage(data) {
+		data = data.obj
+		console.log("收到消息了！");
+		var id = data.id;
+		console.log(id);
+		var name = data.name || '';
+		name = name.HTMLEncode();
+		var text = data.text || '';
+		text = text.HTMLEncode();
+		var t = data.transtime;
+		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
+			           '</p><p class="r-visitor-txt">',text,'</p>' ];
+		
+		console.log(str);
+		checkLogCount();
+		logbox.innerHTML += str.join('');
+		lastTalkId = id;
+		moveScroll();
+	}
+	
+	// HTML编码
+	String.prototype.HTMLEncode = function() {
+		var temp = document.createElement("div");
+		(temp.textContent != null) ? (temp.textContent = this)
+				: (temp.innerText = this);
+		var output = temp.innerHTML;
+		temp = null;
+		return output;
+	};
+	// HTML解码
+	String.prototype.HTMLDecode = function() {
+		var temp = document.createElement("div");
+		temp.innerHTML = this;
+		var output = temp.innerText || temp.textContent;
+		temp = null;
+		return output;
+	};
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+	// 检测输出长度
+	function checkLogCount() {
+		var count = logbox.childNodes.length;
+		if (count > maxLogCount) {
+			var c = count - maxLogCount;
+			for ( var i = 0; i < c; i++) {
+				logbox.removeChild(logbox.firstChild);
+			}
+	
+		}
+	}
+	
+	// 移动滚动条
+	function moveScroll() {
+		logbox.scrollTop = logbox.scrollHeight;
+		inputbox.focus();
+	}
 </script>
 </body>
 </html>
