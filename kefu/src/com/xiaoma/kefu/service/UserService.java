@@ -203,18 +203,10 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 		}
 	}
 	//通过部门查询员工
-	public PageBean<User> getResultDept(Integer currentPage, Integer pageRecorders, Integer deptId) {
+	public List getResultDept(Integer deptId) {
 			
-		Integer totalCount = userDaoImpl.getDeptUserCount(deptId);
-		PageBean<User> result = new PageBean<User>();
-		result.setCurrentPage(currentPage);
-		result.setPageRecorders(pageRecorders);
-		result.setTotalRows(totalCount);
-		Integer start = result.getStartRow();
-	      List<User> list =userDaoImpl.getUsertByDeptId(start,pageRecorders,deptId);
-		result.setObjList(list);
-		
-		return result;
+	      List<User> list =userDaoImpl.getUsertByDeptId(deptId);
+		return list;
 	}
 
 }

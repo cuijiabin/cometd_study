@@ -42,6 +42,7 @@ function find(currentPage){
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
+			"map[typeId]":1
 	};
 	$.ajax({
 	    type: "get",
@@ -59,25 +60,25 @@ function find(currentPage){
 }
 
 function addDept(){
-	var d = $.dialog({content:'url:/dept/addDept.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'dept',content:'url:/dept/addDept.action',lock:true, width:	500,height: 300,});
 }
 function updateDept(id){
 
-	var d = $.dialog({content:'url:/dept/detail.action?id='+id+'',lock:true, width: 
+	var d = $.dialog({id:'dept',content:'url:/dept/detail.action?id='+id+'',lock:true, width: 
 
 		500,height: 300,});
 
 }
 function findUser(id){
 
-	var d = $.dialog({content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
+	var d = $.dialog({id:'dept',content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
 		600,height: 600,});
 
 }
 
 function callback(){
-	$.dialog({id:'role'}).close();
+	$.dialog({id:'dept'}).close();
 	find();
 }
 </script>

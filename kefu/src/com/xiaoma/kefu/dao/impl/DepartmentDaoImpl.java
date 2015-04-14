@@ -52,8 +52,8 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 	public Integer getAllDeptCount() {
 
 		Session session = getSession();
-		String hql = "select count(1) from Department c where isDel<>1 ";
-		Query query = session.createSQLQuery(hql);
+		String hql = "select count(1) from Department c where c.isDel<>1 ";
+		Query query = session.createQuery(hql);
 		return ((Number) query.uniqueResult()).intValue();
 
 	}
@@ -77,11 +77,11 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 	public Integer checkDept(Department dept) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(a.id) from Department a where isDel<>1");
+				"select count(a.id) from Department a where a.isDel<>1");
 		if (StringUtils.isNotBlank(dept.getName())) {
 			hqlBf.append(" and a.name  = '" + dept.getName() + "' ");
 		}
-		Query query = session.createSQLQuery(hqlBf.toString());
+		Query query = session.createQuery(hqlBf.toString());
 		Object obj = query.uniqueResult();
 		return Integer.parseInt(obj.toString());
 	}
@@ -98,8 +98,8 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 	@Override
 	public Integer getMaxNum() {
 		Session session = getSession();
-		String hql = "select max(sortNum) from Department c where isDel<>1 ";
-		Query query = session.createSQLQuery(hql);
+		String hql = "select max(sortNum) from Department where isDel<>1 ";
+		Query query = session.createQuery(hql);
 		return ((Number) query.uniqueResult()).intValue();
 
 	}

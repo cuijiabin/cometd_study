@@ -55,10 +55,7 @@ public interface UserDao extends BaseDao<User> {
 	public Integer checkUser(User user);
 
 	// 查询部门里的员工
-	public abstract Integer getDeptUserCount(Integer deptId);
-
-	public abstract List<User> getUsertByDeptId(Integer start,
-			Integer pageRecorders, Integer deptId);
+	public abstract List<User> getUsertByDeptId(Integer deptId);
 
 	/**
 	 * 分页查询

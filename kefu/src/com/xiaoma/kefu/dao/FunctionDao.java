@@ -12,4 +12,5 @@ public interface FunctionDao extends BaseDao<Function>{
 
 	List findTree(int tid);
 
+	List findAll();
 }

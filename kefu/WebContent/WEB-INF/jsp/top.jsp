@@ -13,10 +13,10 @@
 <div class="g-head fixed">
 	<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
     <ul class="u-admin f-fr">
-        <li><a href="#"><i class="icon-user"></i>欢迎 ${session.user.loginName}</a></li>
+        <li><a href="#"><i class="icon-user"></i>欢迎 ${Session.user.loginName}</a></li>
         <li><a href="#"><i class="icon-home"></i>首页</a></li>
-        <li><a href="/user/logout.action"><i class="icon-lock"></i>锁屏</a></li>
-        <li><a href="#"><i class="icon-logout"></i>退出</a></li>
+        <li><a href="#"><i class="icon-lock"></i>锁屏</a></li>
+        <li><a href="/user/demo.action"><i class="icon-logout"></i>退出</a></li>
         <li><a target="_blank" href="/dialogue/user.action"><i class="icon-logout"></i>对话</a></li>
     </ul>
 </div>

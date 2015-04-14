@@ -104,20 +104,11 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value = "findDeptUser.action", method = RequestMethod.GET)
-	public String querydeptUser(Model model, Integer deptId,
-			Integer currentPage, Integer pageRecorders) {
+	public String querydeptUser(Model model, Integer deptId) {
 		try {
-			currentPage = (currentPage == null) ? 1 : currentPage;
-			pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-			PageBean<User> pageBean = userService.getResultDept(currentPage,
-					pageRecorders, deptId);
-			System.out.println(pageBean.getObjList());
-			model.addAttribute("list", pageBean.getObjList());
-			model.addAttribute("pageBean", pageBean);
-			System.out.println(pageBean.getObjList());
-			System.out.println(pageBean);
+			List list= userService.getResultDept(deptId);
+            model.addAttribute("list",list);
 			return "/set/govern/deptUser";
-
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
