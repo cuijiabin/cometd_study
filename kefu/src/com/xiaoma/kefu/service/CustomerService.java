@@ -43,6 +43,27 @@ public class CustomerService {
 		customerDaoImpl.findByCondition(conditions,pageBean);
 
 	 }
+	
+	/**
+	 * 条件查询
+	 */
+	 public PageBean<Customer> getResultByLoginNameOrPhone(Integer currentPage,Integer pageRecorders,String loginName ,String phone){
+			
+			Integer totalCount = customerDaoImpl.getAllCustomerCount();
+			PageBean<Customer> result = new PageBean<Customer>();
+			
+			result.setCurrentPage(currentPage);
+			result.setPageRecorders(pageRecorders);
+			result.setTotalRows(totalCount);
+			
+			Integer start = result.getStartRow();
+			
+			  List<Customer> list =customerDaoImpl.getCustomerByCon(start,pageRecorders,loginName ,phone);
+			result.setObjList(list);
+			
+			return result;
+	 }
+
 		/**
 		 * 添加
 		 */

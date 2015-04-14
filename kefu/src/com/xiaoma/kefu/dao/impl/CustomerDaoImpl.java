@@ -55,35 +55,41 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 		return (List<Customer>) query.list();
 	}
 	
-	   /**
-	    * 条件查询
-	    */
+	   
 		
-		@SuppressWarnings("unchecked")
-		@Override	
-	    public List<Customer> getCustomerByConditions(Integer start, Integer offset ,String customerName,String phone,Long customerId) {
+		   /**
+		    * 条件查询(测试)
+		    */
 			
-			//参数检查
-			start = (start == null)? 0 :start;
-			offset = (offset == null)? 20 :offset;
-			
-			Session session = getSession();
-			
-			String hql = "from Customer c where 1=1 and c.status<>1";
-			if(customerId !=null)
-			{
-				hql += " and c.id ="+customerId;
+			@SuppressWarnings("unchecked")
+			@Override
+		    public List<Customer> getCustomerByCon(Integer start, Integer offset ,String loginName,String phone) {
+				
+				//参数检查
+				start = (start == null)? 0 :start;
+				offset = (offset == null)? 20 :offset;
+				
+				Session session = getSession();
+				
+				String hql = "from Customer c where 1=1 and c.status<>1 ";
+				
+				String hqli ="SELECT DISTINCT s.name,lin.id,lin.customerName,lin.phone,lin.status,lin.consultPage,lin.keywords FROM "
+						+ "(SELECT c.id,c.customerName,c.phone,c.status,d.consultPage,d.keywords,c.styleId FROM "
+						+ "customer c LEFT JOIN dialogue d ON c.id=d.customerId)  lin LEFT JOIN style s ON lin.styleId=s.id where 1=1 and lin.status<>1;";
+
+				if(StringHelper.isNotEmpty(loginName)){
+					hql += " and c.loginName like '"+"%"+loginName+"%"+"'";
+				}
+				if(StringHelper.isNotEmpty(phone)){
+					hql += " and c.phone like '"+"%"+phone+"%"+"'";
+				}
+				Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
+				 Customer customer =	new Customer();
+					String name = customer.getCustomerName();
+					System.out.println("============"+name+"=======test====");
+				return (List<Customer>) query.list();
 			}
-			if(StringHelper.isNotEmpty(customerName)){
-				hql += " and c.customerName like ' "+"%"+customerName+"%"+"'";// "'"连接的是'
-			}
-			if(StringHelper.isNotEmpty(phone)){
-				hql += " and c.phone like '"+"%"+phone+"%"+"'";
-			}
-			
-			Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
-			return (List<Customer>) query.list();
-		}
+
         /**
          * 查询
          * @param conditions
@@ -102,11 +108,9 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 					role.add(Restrictions.like("customerName",
 							"%" + conditions.get("customerName").trim() + "%"));
 				}
-			
 				if (StringHelper.isNotEmpty(customerId) ){   
 					role.add(Restrictions.eq("id", Long.parseLong(customerId))  );
-			 }
-				
+			    }
 				if (StringHelper.isNotEmpty(conditions.get("phone"))) {
 					
 					role.add(Restrictions.eq("phone", conditions.get("phone").trim()));
@@ -135,8 +139,6 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 			logger.info("search Customer by conditions!");
 		}
 
-		
-		
 	/**
 	 * 添加一条
 	 */
@@ -212,4 +214,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 		Query query = session.createQuery(hql);
 		return (Customer) query.uniqueResult();
 	}
+
+	
+
 }

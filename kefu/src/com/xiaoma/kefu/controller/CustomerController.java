@@ -1,7 +1,11 @@
 package com.xiaoma.kefu.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +26,7 @@ import com.xiaoma.kefu.util.PageBean;
 /**
  * @author frongji
  * @time 2015年4月2日上午9:54:59
- *
+ *   访客管理--控制层
  */
 @Controller
 @RequestMapping(value = "customer")
@@ -42,21 +46,75 @@ public class CustomerController {
 	 * @param pageBean
 	 * @return
 	 */
+//	@RequestMapping(value = "find.action", method = RequestMethod.GET)
+//	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Customer> pageBean,Model model,String beginDate,
+//			String endDate) {
+//		try {
+//			
+//			customerService.getResult(conditions.getMap(), pageBean);
+//			model.addAttribute("beginDate", initDate(beginDate));
+//			model.addAttribute("endDate", initDate(endDate));
+//			if (conditions == null || conditions.getMap() == null
+//					|| conditions.getMap().get("typeId") == null)
+//				return "customer/customer";
+//			else
+//				return "customer/customerList";
+//		} catch (Exception e) {
+//			return "/error500";
+//		}
+//	}
+	
+	
+	/**
+	 * 查询所有、条件查询
+	 * 
+	 * @param conditions
+	 * @param pageBean
+	 * @return
+	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Customer> pageBean) {
+	public String queryAll(Model model, String loginName, String phone,
+			Integer currentPage, Integer pageRecorders) {
 
-		try {
-			customerService.getResult(conditions.getMap(), pageBean);
-			if (conditions == null || conditions.getMap() == null
-					|| conditions.getMap().get("typeId") == null)
-				return "customer/customer";
-			else
-				return "customer/customerList";
-		} catch (Exception e) {
-			return "/error500";
-		}
+		currentPage = (currentPage == null) ? 1 : currentPage;
+		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
+		PageBean<Customer> pageBean = customerService
+				.getResultByLoginNameOrPhone(currentPage, pageRecorders,
+						loginName, phone);
 
+		model.addAttribute("list", pageBean.getObjList());
+		model.addAttribute("pageBean", pageBean);
+		model.addAttribute("loginName", loginName);
+		model.addAttribute("phone", phone);
+
+		return "customer/customer";
 	}
+
+	/**
+	 * 封装查询条件
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	private StringBuilder getCustCondition(String beginDate,String endDate){
+		
+		StringBuilder condition = new StringBuilder();
+		
+		if(StringUtils.isBlank(beginDate)){
+		  SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+		  beginDate = sdf.format(new Date());
+		  condition.append(" and t1.beginDate >= '" + beginDate + " 00:00:00'");
+		
+		}
+		  if(StringUtils.isBlank(endDate)){
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				endDate = sdf.format(new Date());
+			}
+			condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
+			
+			return condition;
+	}
+	
 	/**
 	 * 查询所有
 	 * 
@@ -233,7 +291,22 @@ public class CustomerController {
 		}
 	}
 	
-
+	/**
+	 * 初始化查询日期, 如果为空,则默认当天
+	* @Description: TODO
+	* @param beginDate
+	* @return
+	* @Author:frongji
+	* @Date: 2015年4月14日
+	 */
+	private String initDate(String beginDate) {
+		String result = beginDate;
+		if(StringUtils.isBlank(beginDate)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			result = sdf.format(new Date());
+		}
+		return result;
+	}
 
 
 }

@@ -34,7 +34,7 @@
             <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
-           <label>添加时间：</label><input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" onClick="WdatePicker()" />
+           <label>添加时间：</label><input class="c-wd80 Wdate" type="text" value="${beginDate }" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" value="${endDate }" onClick="WdatePicker()" />
             <label>咨询页面：</label><input class="c-wd150" type="text" />
             <label>网站关键词：</label><input class="c-wd150" type="text" />
              <label></label>

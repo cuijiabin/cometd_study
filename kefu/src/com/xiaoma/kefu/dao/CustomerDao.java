@@ -56,16 +56,7 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 */
 	public Customer getByIp(String ip);
     
-	/**
-	 * 条件查询
-	 * @param start
-	 * @param offset
-	 * @param customerName
-	 * @param phone
-	 * @return
-	 */
-	public List<Customer> getCustomerByConditions(Integer start, Integer offset,
-			String customerName, String phone ,Long customerId);
+
 
 	
 	public Long getMaxCustomerId();
@@ -77,4 +68,8 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 */
 	public void findByCondition(Map<String, String> conditions,
 			PageBean<Customer> pageBean);
+    
+
+	List<Customer> getCustomerByCon(Integer start, Integer offset,
+			String loginName, String phone);
 }
