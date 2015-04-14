@@ -2,6 +2,7 @@ package com.test;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.redis.JedisDao;
-
-//@Ignore
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class) 
 @ContextConfiguration(locations="file:src/application-context.xml")  
 public class CustomerDaoTest {
@@ -46,8 +46,8 @@ public class CustomerDaoTest {
 //		
 //		System.out.println(customer.getRemark());
 		
-		List<Customer> list = customerDao.getCustomerByConditions(null, null, "你妹", null, 3L);
-		System.out.println(list);
+//		List<Customer> list = customerDao.getCustomerByConditions(null, null, "你妹", null, 3L);
+//		System.out.println(list);
 		
 	}
 }
