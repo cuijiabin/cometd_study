@@ -5,10 +5,10 @@ package com.xiaoma.kefu.comet4j;
  * @author cuijiabin
  */
 public class Constant {
-	public static final String APP_CHANNEL = "talker";
-	public static final String UP = "up";
-	public static final String DOWN = "down";
-	public static final String LIST = "list";
-	public static final String TALK = "talk";
-	public static final String HEALTH = "health";
+	public static final String CHANNEL = "dialogue";
+	public static final String ON_OPEN = "on_open";
+	public static final String ON_CLOSE = "on_close";
+	public static final String ON_MESSAGE = "on_message";
+	public static final String UPDATE_LIST = "update_list";
+
 }

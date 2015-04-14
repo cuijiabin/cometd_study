@@ -30,8 +30,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Query query = session.createQuery(hql);
 		// 设置参数,使用MD5对密码进行加密
 		try {
-			password = new String(
-					DigestUtils.md5Hex(password.getBytes("UTF-8")));
+			password = new String(DigestUtils.md5Hex(password.getBytes("UTF-8")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +47,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
 		Session session = getSession();
 		String hql = "select count(1) from User where status<>2 ";
-		Query query = session.createSQLQuery(hql);
+		Query query = session.createQuery(hql);
 
 		return ((Number) query.uniqueResult()).intValue();
 
@@ -113,7 +112,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		}
 		if (user.getId() != null && user.getId() > 0)
 			hqlBf.append(" and a.id != " + user.getId() + " ");
-		Query query = session.createSQLQuery(hqlBf.toString());
+		Query query = session.createQuery(hqlBf.toString());
 		Object obj = query.uniqueResult();
 		return Integer.parseInt(obj.toString());
 	}
@@ -129,33 +128,17 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		if (StringUtils.isNotBlank(phone)) {
 			hqlBf.append(" and phone like '%" + phone + "%'");
 		}
-		Query query = session.createSQLQuery(hqlBf.toString());
+		Query query = session.createQuery(hqlBf.toString());
 
 		return ((Number) query.uniqueResult()).intValue();
 	}
 
 	@Override
-	public Integer getDeptUserCount(Integer deptId) {
+	public List<User> getUsertByDeptId(Integer deptId) {
 		Session session = getSession();
-		String hql = "select count(1) from User where status<>2 and deptId ="
-				+ deptId;
-		Query query = session.createSQLQuery(hql);
-		return ((Number) query.uniqueResult()).intValue();
-	}
-
-	@Override
-	public List<User> getUsertByDeptId(Integer start, Integer offset,
-			Integer deptId) {
-		// 参数检查
-		start = (start == null) ? 0 : start;
-		offset = (offset == null) ? 20 : offset;
-
-		Session session = getSession();
-		String hql = "from User u where u.status<>2 and u.deptId =" + deptId
+		String hql = "from User u where u.status<>2 and u.deptId ="+deptId
 				+ " order by u.id asc";
-		Query query = session.createQuery(hql).setFirstResult(start)
-				.setMaxResults(offset);
-
+		Query query = session.createQuery(hql);
 		return (List<User>) query.list();
 	}
 

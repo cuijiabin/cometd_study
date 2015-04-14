@@ -8,7 +8,7 @@ import com.xiaoma.kefu.util.PageBean;
 
 /**
  * User DAO interface
- * @author tanzhipeng
+ * @author hanyu
  *
  */
 public interface LoginLogDao extends BaseDao<LoginLog>{

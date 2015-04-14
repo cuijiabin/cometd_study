@@ -35,6 +35,14 @@ public class FunctionDaoImpl  extends BaseDaoImpl<Function> implements FunctionD
 		return query.list();
 	}
 
+	@Override
+	public List findAll() {
+		Session session = getSession();
+		String hql = "from Function c where 1=1";
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
+
 
 
 }

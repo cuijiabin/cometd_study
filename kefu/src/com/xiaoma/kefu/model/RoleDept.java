@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="Role_dept")
+@Table(name="role_dept")
 public class RoleDept implements Serializable {
 
 	private static final long serialVersionUID = 1L;

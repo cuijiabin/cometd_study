@@ -82,7 +82,7 @@ function addDept(id){
 			dataType : "json",
 			success : function(data) {
 					alert(data.msg);
-					cl();
+					W.callback();
 			},
 			error : function(msg) {
 				alert(data.msg);

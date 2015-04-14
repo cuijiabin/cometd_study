@@ -48,8 +48,8 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 	public Integer getAllRoleCount() {
 
 		Session session = getSession();
-		String hql = "select count(1) from Role c where isDel<>1 ";
-		Query query = session.createSQLQuery(hql);
+		String hql = "select count(1) from Role where isDel<>1 ";
+		Query query = session.createQuery(hql);
 		return ((Number) query.uniqueResult()).intValue();
 
 	}
@@ -73,11 +73,11 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 	public Integer checkRole(Role role) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(a.id) from Role a where isDel<>1");
+				"select count(a.id) from Role a where a.isDel<>1");
 		if (StringUtils.isNotBlank(role.getName())) {
 			hqlBf.append(" and a.name  = '" + role.getName() + "' ");
 		}
-		Query query = session.createSQLQuery(hqlBf.toString());
+		Query query = session.createQuery(hqlBf.toString());
 		Object obj = query.uniqueResult();
 		return Integer.parseInt(obj.toString());
 	}

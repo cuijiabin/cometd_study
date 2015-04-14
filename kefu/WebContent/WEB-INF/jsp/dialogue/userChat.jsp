@@ -14,37 +14,7 @@
 </head>
 
 <body scroll="no" class="g-body">
-<div class="g-head fixed">
-	<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
-    <ul class="u-admin f-fr">
-        <li><a href="#"><i class="icon-user"></i>欢迎 Dobao</a></li>
-        <li><a href="#"><i class="icon-home"></i>首页</a></li>
-        <li><a href="#"><i class="icon-lock"></i>锁屏</a></li>
-        <li><a href="#"><i class="icon-logout"></i>退出</a></li>
-    </ul>
-</div>
-<div class="m-nav">
-    <ul>
-        <li id="_M1" class="nLi on">
-            <h3><a href="javascript:_M(1,'iframe7.html')">首页</a></h3>
-        </li>
-        <li id="_M2" class="nLi">
-            <h3><a href="javascript:_M(2,'')">产品价格</a></h3>
-        </li>
-        <li id="_M3" class="nLi">
-            <h3><a href="javascript:_M(3,'')">产品特性</a></h3>
-        </li>
-        <li id="_M4" class="nLi">
-            <h3><a href="javascript:_M(4,'')">客户案例</a></h3>
-        </li>
-        <li id="_M5" class="nLi">
-            <h3><a href="javascript:_M(5,'">文档中心</a></h3>
-        </li>
-        <li id="_M6" class="nLi">
-            <h3><a href="javascript:_M(6,'')">关于我们</a></h3>
-        </li>
-    </ul>
-</div>
+<jsp:include page="../top.jsp"></jsp:include>
 <div class="g-bd1 f-cb">
 	<div class="g-bd1c f-cb c-bor">
         <div class="g-sd1 f-fl">
@@ -78,10 +48,10 @@
         <div class="g-mn2c">
             <div class="u-state c-bor">等待咨询...</div>
             <div class="g-mn2c-cnt c-bor">
-                <input type="hidden" id="currentCustomerId"/>
+                <input type="hidden" id="currentCcnId"/>
         		<h3 class="u-tit c-bg" id="contentTitle">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
-                    <div class="u-record r-sms-manager" id="inputbox">
+                    <div class="u-record r-sms-manager" id="logbox">
                         <p class="r-welcome">欢迎使用客服系统</p>
                     </div>
                     <div class="u-operate">
@@ -95,10 +65,10 @@
                             </ul>
                         </div>
                         <div class="u-input f-cb">
-                            <textarea class="u-txtarea"></textarea>
+                            <textarea class="u-txtarea" id="inputbox" onkeypress="return onSendBoxEnter(event);"></textarea>
                             <div class="u-send">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="#">发送</a>
+                                    <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
                                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                     </button>
@@ -170,6 +140,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script language="javascript" for="window" event="onload"> 
 	console.log("init");
+	var lastTalkId = null ;
+	var maxLogCount = 100;
 	// 引擎事件绑定
 	JS.Engine.on({
 		start : function(cId, aml, engine) {
@@ -179,40 +151,46 @@
 		},
 		stop : function(cause, url, cId, engine) {
 		},
-		talker : function(data, timespan, engine) {
+		dialogue : function(data, engine) {
 			switch (data.type) {
-			case 'talk': // 收到聊天消息
+			case 'on_message': // 收到聊天消息
+				onMessage(data);
 				break;
-			case 'list': //
+			case 'update_list': //
 				userList(data);
 				break;
-			case 'up': // 上线
+			case 'on_open': // 上线
 			    //更新用户列表
-				updateCustomerList(data);
+				updateCustomerList();
 				break;
-			case 'down': // 下线
+			case 'on_close': // 下线
+				updateCustomerList();
 				break;
 			}
 		}
 	});
 	
 	start();
+	updateCustomerList();
+	
 	//开启连接
 	function start(){
 		JS.Engine.start('/conn');
 		inputbox.focus();
-	}
-	
-	//1.获取列表
-	function userList(data) {
-		console.log("用户："+data);
+		
+		
 	}
 	
 	
 	//更新用户列表
-	function updateCustomerList(data) {
+	function updateCustomerList() {
+		if (!JS.Engine.running)
+			return;
 		var id = JS.Engine.getId();
-		JS.AJAX.get('/chat/customerList.action?id='+id);
+		var param = "ccnId=" + id ;
+		JS.AJAX.post('/chat/receiveList.action', param, function() {
+			inputbox.value = '';
+		});
 	}
 	// 用户下线通知
 	function userList(data) {
@@ -220,21 +198,105 @@
 		console.log(list.length);
 		var html = "";
 		for(var i=0; i<list.length; i++){
-			var customer = list[i];
-			html += "<li class='on'><p>"+customer.customerName+customer.id
-			+"</p><p><a href='javascript:changeTitle("+customer.id+");'>"
-			+customer.ip+"</a></p><span class='u-close'>x</span></li>"
+			var dQuene = list[i];
+			var ccnId = '"'+dQuene.ccnId+'"';
+			html += "<li class='on'><p>"+dQuene.customerName
+			+"</p><p><a href='javascript:changeTitle("+dQuene.customerId+", "+ccnId+");'>"
+			+dQuene.ip+"</a></p><span class='u-close'>x</span></li>"
 		}
 		console.log(html);
 		 $("#customerList").html(html);
 	}
-	function changeTitle(id){
+	function changeTitle(customerId,ccnId){
 		
-		console.log("与客户"+id+"对话中");
-		$("#contentTitle").html("与客户"+id+"对话中");
-		$("#currentCustomerId").val(id);
+		console.log("与客户"+customerId+"对话中");
+		$("#contentTitle").html("与客户"+customerId+"对话中");
+		$("#currentCcnId").val(ccnId);
 	}
 	
+	// 发送聊天信息动作
+	function sendMessage(message) {
+		if (!JS.Engine.running)
+			return;
+		message = message.trim();
+		if (!message)
+			return;
+		var userCId = JS.Engine.getId();
+		var cusCId = $("#currentCcnId").val();
+		console.log("发送对象："+cusCId);
+		var param = "userCId=" + userCId + '&cusCId='+cusCId+'&message=' + encodeURIComponent(message);
+		JS.AJAX.post('/chat/toCustomer.action', param, function() {
+			inputbox.value = '';
+		});
+	}
+	// 回车事件
+	function onSendBoxEnter(event) {
+		console.log("回车发送！");
+		if (event.keyCode == 13) {
+			var message = inputbox.value;
+			sendMessage(message);
+			return false;
+		}
+	}
+	
+	// 用户聊天通知
+	function onMessage(data) {
+		data = data.obj
+		console.log("收到消息了！");
+		var id = data.id;
+		console.log(id);
+		var name = data.name || '';
+		name = name.HTMLEncode();
+		var text = data.text || '';
+		text = text.HTMLEncode();
+		var t = data.transtime;
+		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
+			           '</p><p class="r-visitor-txt">',text,'</p>' ];
+		
+		console.log(str);
+		checkLogCount();
+		logbox.innerHTML += str.join('');
+		lastTalkId = id;
+		moveScroll();
+	}
+	
+	// HTML编码
+	String.prototype.HTMLEncode = function() {
+		var temp = document.createElement("div");
+		(temp.textContent != null) ? (temp.textContent = this)
+				: (temp.innerText = this);
+		var output = temp.innerHTML;
+		temp = null;
+		return output;
+	};
+	// HTML解码
+	String.prototype.HTMLDecode = function() {
+		var temp = document.createElement("div");
+		temp.innerHTML = this;
+		var output = temp.innerText || temp.textContent;
+		temp = null;
+		return output;
+	};
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+	// 检测输出长度
+	function checkLogCount() {
+		var count = logbox.childNodes.length;
+		if (count > maxLogCount) {
+			var c = count - maxLogCount;
+			for ( var i = 0; i < c; i++) {
+				logbox.removeChild(logbox.firstChild);
+			}
+	
+		}
+	}
+	
+	// 移动滚动条
+	function moveScroll() {
+		logbox.scrollTop = logbox.scrollHeight;
+		inputbox.focus();
+	}
 </script>
 </body>
 </html>

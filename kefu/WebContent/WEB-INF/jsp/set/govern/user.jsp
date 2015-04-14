@@ -31,7 +31,7 @@
 	<jsp:include page="userList.jsp"></jsp:include>
 </div>
  <c:if test="${status==1}"> <button class="btn" id="leaves" onclick="userLeave(2)">员工离职</button>  
-  <select id="deptid">
+  <select id="dept" name="dept">
       <option value="0">转移部门</option>
       <option value="1">转移至客服部</option>
       <option value="2">转移至流量部</option>
@@ -39,7 +39,9 @@
       <option value="4">转移至好顾问</option>
       <option value="5">转移至随时学</option>
       <option value="6">转移至留学部</option>
-  </select></c:if>
+  </select>
+  <button class="btn" onclick="changeDept()">确认</button>
+  </c:if>
   <c:if test="${status==2}">
   <button class="btn" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
   </c:if>
@@ -53,10 +55,11 @@
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
 function find(currentPage){
-	var url="/user/find.action";
+	var url="/user/find.action?map[status]=1";
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
+			"map[typeId]":1
 	};
 	$.ajax({
 	    type: "get",
@@ -74,18 +77,18 @@ function find(currentPage){
 }
 
 function addUser(){
-	var d = $.dialog({content:'url:/user/add.action',lock:true, width:	800,height: 600,});
+	var d = $.dialog({id:'user',content:'url:/user/add.action',lock:true, width:	800,height: 600,});
 }
 function updateUser(id){
 
-	var d = $.dialog({content:'url:/user/detail.action?id='+id+'',lock:true, width: 
+	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'',lock:true, width: 
 
 		800,height: 600,});
 
 }
 function findUser(id){
 
-	var d = $.dialog({content:'url:/dept/detail.action?deptId='+id+'',lock:true, width: 
+	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'&type='+5+'',lock:true, width: 
 
 		800,height: 600,});
 
@@ -128,6 +131,33 @@ function deleteAll(){
 			alert("出现错误,请重试！");
 		}
 	});
+}
+function changeDept(){
+	var ids= $(":checkbox[checked='checked']").map(function(){
+		return $(this).val();
+	}).get();
+	var deptId=$("#dept option:selected").val()
+	if(deptId==0){
+		alert("请选择转移部门");
+		return;
+	}
+	$.ajax({
+		url:"/user/tradept.action?deptId="+deptId,
+		type:"post",
+		data:"ids="+ids,
+		dataType:"json",
+		success:function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(data) {
+			alert("出现错误,请重试！");
+		}
+	});
+}
+function callback(){
+	$.dialog({id:'user'}).close();
+	find();
 }
 </script>
 </body>

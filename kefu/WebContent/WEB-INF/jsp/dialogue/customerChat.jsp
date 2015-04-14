@@ -51,10 +51,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">
-                                    <textarea class="u-txtarea" id="inputbox"></textarea>
+                                    <textarea class="u-txtarea" id="inputbox" onkeypress="return onSendBoxEnter(event);"></textarea>
                                     <div class="u-send">
                                         <div class="btn-group">
-                                            <a class="btn btn-primary" href="javascript:send(inputbox.value);">发送</a>
+                                            <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
                                             <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="send(inputbox.value);">
                                             <span class="caret"></span>
                                             </button>
@@ -165,6 +165,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
    var maxLogCount = 100;
 			console.log("init");
+			
+			var lastTalkId = null ;
 			// 引擎事件绑定
 			JS.Engine.on({
 				start : function(cId, aml, engine) {
@@ -178,16 +180,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var str = ['<p class="r-welcome">※连接中断</p>'];
 					logbox.innerHTML += str.join('');
 				},
-				talker : function(data, timespan, engine) {
+				dialogue : function(data, engine) {
 					switch (data.type) {
-					case 'talk': // 收到聊天消息
-						onMessage(data, timespan);
+					case 'on_message': // 收到聊天消息
+						onMessage(data);
 						break;
-					case 'up': // 上线
-						onJoin(data, timespan);
+					case 'on_open': // 上线
+						onJoin(data);
 						break;
-					case 'down': // 下线
-						onLeft(data, timespan);
+					case 'on_close': // 下线
+						onLeft(data);
 						break;
 					default:
 					}
@@ -208,8 +210,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		
 		// 用户聊天通知
-		function onMessage(data, timespan) {
-			
+		function onMessage(data) {
+			data = data.obj
 			console.log("收到消息了！");
 			var id = data.id;
 			var name = data.name || '';
@@ -217,20 +219,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var text = data.text || '';
 			text = text.HTMLEncode();
 			var t = data.transtime;
-			var str;
-			if (lastTalkId == id) {
-				str = [ '<p class="r-visitor-txt">',text,'</p>' ];
-			} else {
-				str = [ '<p class="r-visitor">',name,'&nbsp;', t,
+			var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
 				           '</p><p class="r-visitor-txt">',text,'</p>' ];
-			}
+			
+			console.log(str);
 			checkLogCount();
 			logbox.innerHTML += str.join('');
 			lastTalkId = id;
 			moveScroll();
 		}
 		// 用户上线通知
-		function onJoin(data, timespan) {
+		function onJoin(data) {
 			var id = data.id;
 			var name = data.name || '';
 			name = name.HTMLEncode();
@@ -242,7 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			moveScroll();
 		}
 		// 用户下线通知
-		function onLeft(data, timespan) {
+		function onLeft(data) {
 			var id = data.id;
 			var name = data.name || '';
 			name = name.HTMLEncode();
@@ -260,7 +259,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			if (count > maxLogCount) {
 				var c = count - maxLogCount;
 				for ( var i = 0; i < c; i++) {
-					// logbox.removeChild(logbox.children[0]);
 					logbox.removeChild(logbox.firstChild);
 				}
 		
@@ -273,40 +271,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
+			console.log("回车发送！");
 			if (event.keyCode == 13) {
-				var text = inputbox.value;
-				send(text);
+				var message = inputbox.value;
+				sendMessage(message);
 				return false;
 			}
 		}
 		// 发送聊天信息动作
-		function send(text) {
+		function sendMessage(message) {
 			if (!JS.Engine.running)
 				return;
-			text = text.trim();
-			if (!text)
+			message = message.trim();
+			if (!message)
 				return;
-			var id = JS.Engine.getId();
-			var param = "id=" + id + '&text=' + encodeURIComponent(text);
-			JS.AJAX.post('/chat/talk.action?cmd=talk', param, function() {
+			var cusCId = JS.Engine.getId();
+			var param = "cusCId=" + cusCId + '&message=' + encodeURIComponent(message);
+			JS.AJAX.post('/chat/toUser.action', param, function() {
 				inputbox.value = '';
 			});
-		}
-		// 改名动作
-		function rename() {
-			if (!JS.Engine.running)
-				return;
-			var oldName = getCookie('userName') || '';
-			oldName = oldName.trim();
-			var userName = prompt("请输入姓名", oldName);
-			userName = userName ? userName.trim() : '';
-			var id = JS.Engine.getId();
-			if (!id || !userName || oldName == userName)
-				return;
-			var param = "id=" + id + '&newName=' + encodeURIComponent(userName)
-					+ '&oldName=' + encodeURIComponent(oldName);
-			setCookie('userName', userName, 365);
-			JS.AJAX.post('/chat/talk.action?cmd=rename', param);
 		}
 		
 		// 设置Cookie

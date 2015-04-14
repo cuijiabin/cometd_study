@@ -26,36 +26,42 @@ public class LoginLogDaoImpl extends BaseDaoImpl<LoginLog> implements
 		List<String> relation = new ArrayList<String>();
 		List<Criterion> role = new ArrayList<Criterion>();// 条件
 		List<Order> orders = new ArrayList<Order>();// 排序
-		if (conditions != null) {
-			if (StringHelper.isNotEmpty(conditions.get("loginName"))) {
-				role.add(Restrictions.like("loginName",
-						"%" + conditions.get("loginName").trim() + "%"));
-			}
-			if (StringHelper.isNotEmpty(conditions.get("deptId")) && !"0".equals(conditions.get("deptId"))) {
-				role.add(Restrictions.eq("deptId", Integer.parseInt(conditions.get("deptId"))));
-			}
-			if (StringHelper.isNotEmpty(conditions.get("userId"))&& !"0".equals(conditions.get("deptId"))) {
-				role.add(Restrictions.eq("userId", Integer.parseInt(conditions.get("userId"))));
-			}
-			if (conditions.get("startDate") != null
-					&& !conditions.get("startDate").isEmpty()
-					&& conditions.get("endDate") != null
-					&& !conditions.get("endDate").isEmpty()) {
-				SimpleDateFormat format = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
-				try {
+		try {
+			if (conditions != null) {
+				if (StringHelper.isNotEmpty(conditions.get("loginName"))) {
+					role.add(Restrictions.like("loginName", "%"
+							+ conditions.get("loginName").trim() + "%"));
+				}
+				if (StringHelper.isNotEmpty(conditions.get("deptId"))
+						&& !"0".equals(conditions.get("deptId"))) {
+					role.add(Restrictions.eq("deptId",
+							Integer.parseInt(conditions.get("deptId"))));
+				}
+				if (StringHelper.isNotEmpty(conditions.get("userId"))
+						&& !"0".equals(conditions.get("deptId"))) {
+					role.add(Restrictions.eq("userId",
+							Integer.parseInt(conditions.get("userId"))));
+				}
+				if (conditions.get("startDate") != null
+						&& !conditions.get("startDate").isEmpty()) {
+					SimpleDateFormat format = new SimpleDateFormat(
+							"yyyy-MM-dd HH:mm:ss");
+
 					role.add(Restrictions.between(
 							"createDate",
 							format.parse(conditions.get("startDate")
 									+ " 0:00:00"),
-							format.parse(conditions.get("endDate")
+							(StringHelper.isEmpty(conditions.get("endDate")) ? format
+									.parse(conditions.get("endDate")) : format
+									.parse(conditions.get("endDate"))
 									+ " 23:59:59")));
-				} catch (Exception e) {
-					logger.error(e.getMessage());
 				}
 			}
+
+			orders.add(Order.asc("createDate"));
+			find(LoginLog.class, relation, role, null, orders, pageBean);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
-		orders.add(Order.asc("createDate"));
-		find(LoginLog.class, relation, role, null, orders, pageBean);
 	}
 }

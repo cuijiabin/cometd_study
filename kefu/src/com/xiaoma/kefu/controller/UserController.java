@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -60,18 +61,30 @@ public class UserController {
 	 */
 	@RequestMapping(value = "login.action", method = RequestMethod.POST)
 	public String login(HttpSession session, String loginName, String password,String yzm,Model model) {
-	    System.out.println(loginName);
 	    String yanzheng=session.getAttribute("randomCode").toString();
-	    System.out.println(yanzheng);
-	    if(yzm.equals(yanzheng)){
-	    	//userService.checkLogin();
+	    Date oldTime= (Date) session.getAttribute("yzmtime");
+	    Date newTime= new Date();
+	     long count=newTime.getTime()-oldTime.getTime();
+	    if(count<400000){
+	    	 if(yzm.equals(yanzheng)){
+	 	    	User user=userService.login(loginName,password);
+	 	    	if(user!=null){
+	 	    		session.setAttribute("user", user);
+	 	    		model.addAttribute("result", Ajax.JSONResult(0, "登陆成功!"));
+	 	    	}else{
+	 	    		model.addAttribute("result", Ajax.JSONResult(3, "登录名或者密码错误!"));
+
+	 	    	}
+	 	    }else{
+		    	model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
+		    }	
 	    }else{
-	    	model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
+	    	model.addAttribute("result", Ajax.JSONResult(2, "验证码过期,请刷新重登!"));
 	    }
 		return "resultjson";
 	}
 	/**
-	 * User login
+	 *进入主页的树列表展示
 	 * 
 	 * @param name
 	 * @param password
@@ -146,12 +159,9 @@ public class UserController {
 	 */
 
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, Model model,
-			@ModelAttribute("pageBean") PageBean<User> pageBean) {
+	public String queryAll(MapEntity conditions, Model model, @ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
 			userService.getResult(conditions.getMap(), pageBean);
-			System.out.println(pageBean.getObjList());
-			System.out.println(conditions.getMap().get("status"));
 			model.addAttribute("status",conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null || conditions.getMap().get("typeId") == null)
 				return "/set/govern/user";
@@ -178,6 +188,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
 		}
 
 		return "/set/govern/addUser";
@@ -248,15 +259,20 @@ public class UserController {
 	 * 在弹出的对话框中显示详细信息
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
-	public String userDetail(Model model, Integer id) {
+	public String userDetail(Model model, Integer id,Integer type) {
+		System.out.println(type);
 		try {
 			User user = userService.getUserById(id);
 			List<Role> rlist = (List<Role>) roleService.findRole();
 			List<Department> dlist = deptService.findDept();
+			model.addAttribute("user", user);
 			model.addAttribute("deptList", dlist);
 			model.addAttribute("roleList", rlist);
-			model.addAttribute("user", user);
-			return "/set/govern/addUser";
+			if(type==null){
+				return "/set/govern/addUser";
+			}else{
+				return "/set/govern/checkUser";
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
@@ -319,14 +335,8 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "tradept.action", method = RequestMethod.GET)
+	@RequestMapping(value = "tradept.action", method = RequestMethod.POST)
 	public String updatedept(Model model, String ids, Integer deptId) {
-		if (ids == null) {
-			ids = "3";
-		}
-		if (deptId == null) {
-			deptId = 2;
-		}
 		try {
 			Integer isSuccess = userService.tradeUser(ids, deptId);
 
@@ -441,6 +451,18 @@ public class UserController {
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";
+	}
+	/**
+	 *退出系统
+	 * 
+	 * @param name
+	 * @param password
+	 * @param session
+	 */
+	@RequestMapping(value = "exit.action")
+	public String exit(HttpSession session,Model model) {
+	         session.removeAttribute("user");
+		return "login";
 	}
 
 }
