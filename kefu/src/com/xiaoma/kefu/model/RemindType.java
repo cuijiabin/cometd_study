@@ -2,7 +2,6 @@ package com.xiaoma.kefu.model;
 
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 
-@Table(name="Remind_type")
+@Table(name="remind_type")
     public class RemindType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
