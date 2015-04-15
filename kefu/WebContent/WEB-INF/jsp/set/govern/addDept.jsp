@@ -36,7 +36,7 @@
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
- <button style="float:right;margin-right:40px;" onclick="javascript:addDept(${dept.id});" class="btn" >确认</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:addDept(${dept.id});" class="btn btn-primary btn-small" >确认</button>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>

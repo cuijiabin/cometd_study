@@ -40,7 +40,6 @@
       <option value="5">转移至随时学</option>
       <option value="6">转移至留学部</option>
   </select>
-  <button class="btn btn-primary btn-small" onclick="changeDept()">确认</button>
   </c:if>
   <c:if test="${status==2}">
   <button class="btn btn-primary btn-small" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
