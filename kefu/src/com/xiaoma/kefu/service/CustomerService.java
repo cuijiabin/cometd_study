@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.service;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -150,7 +152,9 @@ public class CustomerService {
 		
 		public List<Customer> findByIds(List<Long> ids){
 			
-			return customerDaoImpl.findByIds(Customer.class, ids);
+			List<Serializable> idList = JsonUtil.convertLong2Serializable(ids);
+			
+			return customerDaoImpl.findByIds(Customer.class, idList);
 			
 		}
 }

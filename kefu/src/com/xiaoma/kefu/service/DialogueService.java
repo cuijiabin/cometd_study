@@ -37,7 +37,7 @@ import com.xiaoma.kefu.util.database.DataSet;
 * @createdAt: 2015年4月3日下午3:27:45
 **********************************
  */
-@Service
+@Service("dialogueService")
 public class DialogueService {
 	
 	@Autowired

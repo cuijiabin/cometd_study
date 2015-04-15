@@ -230,7 +230,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 	}
 	@Override
-	public List<T> findByIds(Class<T> clazz, List<Long> ids) {
+	public List<T> findByIds(Class<T> clazz, List<Serializable> ids) {
 		
 		List<T> result = new ArrayList<T>();
 		Session session = getSession(); 
@@ -238,7 +238,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	    T obj = null; 
         for (int i = 0; i < ids.size(); i++) {  
         	
-        	Long id= ids.get(i);
+        	Serializable id= ids.get(i);
         	obj = (T) session.get(clazz, id);
         	result.add(obj);
             if (i % 50 == 0) {  
@@ -247,6 +247,53 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             }  
         }  
 		return result;
+	}
+	@Override
+	public List<Serializable> batchAdd(List<T> list) {
+		List<Serializable> result = new ArrayList<Serializable>();
+		
+		Session session = getSession(); 
+		
+	    T obj = null; 
+        for (int i = 0; i < list.size(); i++) {  
+        	obj = (T) list.get(i);
+        	Serializable serializable = session.save(obj);
+        	result.add(serializable);
+            if (i % 50 == 0) {  
+                session.flush();  
+                session.clear();  
+            }  
+        }  
+		return result;
+	}
+	@Override
+	public Boolean batchUpdate(List<T> list) {
+		
+		Session session = getSession(); 
+        for (int i = 0; i < list.size(); i++) {  
+        	Object obj = (T) list.get(i);
+        	session.update(obj);
+            if (i % 50 == 0) {  
+                session.flush();  
+                session.clear();  
+            }  
+        }  
+		return true;
+	}
+	@Override
+	public Boolean batchDelete(Class<T> clazz, List<Serializable> ids) {
+		
+		List<T> list = findByIds(clazz, ids);
+		Session session = getSession(); 
+        for (int i = 0; i < list.size(); i++) {  
+        	Object obj = (T) list.get(i);
+        	session.delete(obj);
+            if (i % 50 == 0) {  
+                session.flush();  
+                session.clear();  
+            }  
+        }  
+		return true;
 	}
 }
 /**

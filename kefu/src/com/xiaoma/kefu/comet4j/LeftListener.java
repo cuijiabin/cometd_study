@@ -31,6 +31,7 @@ public class LeftListener extends DropListener {
 			
 			//移除缓存
 			if(StringUtils.isNotBlank(userId)){
+				
 				JedisTalkDao.remCcnList( JedisConstant.CUSTOMER_TYPE, ccnId);
 				JedisTalkDao.remUserCcnList(userId, ccnId);
 				JedisTalkDao.delCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
