@@ -25,7 +25,7 @@ import com.xiaoma.kefu.service.RoleService;
 @Controller
 @RequestMapping("function")
 public class FunctionController {
-	
+
 	private Logger logger = Logger.getLogger(FunctionController.class);
 
 	@Autowired
@@ -39,41 +39,45 @@ public class FunctionController {
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
 	public String tree(Model model, Integer id) {
-		try{
-		if (id != null) {
-			List list = funcService.findTree(id);
-			JSONArray json = new JSONArray().fromObject(list);
-			System.out.println(json);
-			model.addAttribute("json", json.toString());
-			return "left";
-		} else {
-			return "null";
-		}
-		}catch(Exception e){
+		try {
+			if (id != null) {
+				List list = funcService.findTree(id);
+				JSONArray json = new JSONArray().fromObject(list);
+				System.out.println(json);
+				model.addAttribute("json", json.toString());
+				return "left";
+			} else {
+				return "null";
+			}
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
 			return "error";
 		}
 	}
+
 	/**
 	 * 配置权限的查询
 	 */
 	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
 	@RequestMapping(value = "permit.action", method = RequestMethod.GET)
 	public String permit(Model model, Integer id) {
-		try{
-		if (id != null) {
-			 Role role = roleService.getRoleById(id);
-			 List<Department> deptlist = deptService.findDept();
-            List list=funcService.findFunction();
-			JSONArray json = new JSONArray().fromObject(list);
-			System.out.println(json);
-			model.addAttribute("json", json.toString());
-			return "left";
-		   } else {
-			return "null";
-		 }
-		              }catch(Exception e){
+		try {
+			if (id != null) {
+				Role role = roleService.getRoleById(id);
+				List<Department> deptlist = deptService.findDept();
+				List list = funcService.findFunction();
+				//List list = funcService.findTree(5);
+				JSONArray json = new JSONArray().fromObject(list);
+				System.out.println(json);
+				model.addAttribute("role",role);
+				model.addAttribute("list",deptlist);
+				model.addAttribute("json", json.toString());
+				return "/set/govern/func";
+			} else {
+				return "null";
+			}
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
 			return "error";

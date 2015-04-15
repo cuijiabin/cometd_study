@@ -13,6 +13,8 @@ package com.xiaoma.kefu.cache;
  *         Templates
  */
 public class CacheName {
+	public static final String USER="user";
+	
 	public static final String SHORTMESSAGE="SHORTMESSAGE";
 	public static final String DICTLIST="DICTLIST";
 	public static final String DICTITEM="DICTITEM";

@@ -145,4 +145,25 @@ public class StyleController {
 		return "resultjson";
 	}
 	
+	/**
+	 * 跳转到	界面样式设置 界面
+	* @Description: TODO
+	* @param model
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月14日
+	 */
+	@RequestMapping(value = "editCommon.action", method = RequestMethod.GET)
+	public String editCommon(Model model,Integer styleId) {
+		try {
+			Style style = styleService.get(styleId);
+			model.addAttribute("style", style);
+			return "/style/editCommon";
+		} catch (Exception e) {
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+	}
+	
 }

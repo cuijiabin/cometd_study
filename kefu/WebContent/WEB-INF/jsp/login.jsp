@@ -15,7 +15,7 @@
 <body style="background:#dfdfdf;">
 <div class="m-login">
 		<div class="login_form">
-			<div class="m-login-info"></div>
+			<div class="m-login-info" id="err"></div>
 			<div class="form_info">
 				<div class="field">
 					<label>用户名：</label>
@@ -59,11 +59,11 @@
 		    	if(data.result==0){
 		    		window.location="/user/main.action";
 		    	}else{
-		    		alert(data.msg);
+		    		$("#err").text(data.msg);
 		    	}
 		    },
 		    error: function (data) {
-		    	alert("出现错误,请重新登录");
+		    	$("#err").text("出现错误,请重新登录");
 		    }
 		});
 	}

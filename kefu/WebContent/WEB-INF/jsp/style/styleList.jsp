@@ -3,8 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript"
-	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
+<script type="text/javascript"src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 <link rel="stylesheet" type="text/css"
 	href="/jsplugin/kkpager/src/kkpager.css" />
@@ -25,7 +24,7 @@
 				<td>${style.name}</td>
 				<td><a href="#" onClick="rename(${style.id})">重命名</a></td>
 				<td><a href="#" onClick="showDetail(${style.id})">获取代码</a></td>
-				<td><a href="#" onClick="showDetail(${style.id})">设置</a></td>
+				<td><a href="#" onClick="editCommon(${style.id})">设置</a></td>
 				<td>
 					<a href="#" onClick="fenzu(${style.id})">业务分组</a>
 					<a href="#" onClick="showDetail(${style.id})">业务分流</a>

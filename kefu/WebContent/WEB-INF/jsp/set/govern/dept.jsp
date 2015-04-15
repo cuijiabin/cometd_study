@@ -25,7 +25,7 @@
 </div>
 
 <!-- 表格有边框 -->
-<button style="float:right;margin-right:5px;" onclick="javascript:addDept()" class="btn" >添加部门</button>
+<button style="float:right;margin-right:5px;" onclick="javascript:addDept()" class="btn btn-primary btn-small" >添加部门</button>
 <div id="table_data" style="margin-top: 30px">
 	<jsp:include page="deptList.jsp"></jsp:include>
 </div>

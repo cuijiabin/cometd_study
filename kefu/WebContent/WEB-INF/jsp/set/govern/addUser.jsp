@@ -80,7 +80,7 @@
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
- <button style="float:right;margin-right:40px;" onclick="javascript:saveUser(${user.id});" class="btn" >确认</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:saveUser(${user.id});" class="btn btn-primary btn-small" >确认</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

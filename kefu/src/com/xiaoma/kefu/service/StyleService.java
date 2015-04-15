@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.StyleDao;
 import com.xiaoma.kefu.model.Style;
-import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -24,7 +23,7 @@ public class StyleService {
 	@Autowired
 	private StyleDao styleDaoImpl;
 
-	public List<WaitList> findByNameLike(String styleName) {
+	public List<Style> findByNameLike(String styleName) {
 		return styleDaoImpl.findByNameLike(styleName);
 	}
 	

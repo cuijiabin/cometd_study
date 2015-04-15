@@ -25,13 +25,13 @@
 
 <!-- 表格有边框 -->
 <a href="/user/find.action?map[status]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2"style="font-size:18px">离职员工</a>
-<button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn" >添加工号</button>
+<button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
 
 <div id="table_data" style="margin-top: 10px">
 	<jsp:include page="userList.jsp"></jsp:include>
 </div>
- <c:if test="${status==1}"> <button class="btn" id="leaves" onclick="userLeave(2)">员工离职</button>  
-  <select id="dept" name="dept">
+ <c:if test="${status==1}"> <button class="btn btn-primary btn-small" id="leaves" onclick="userLeave(2)">员工离职</button>  
+  <select id="dept" name="dept" onchange="changeDept()">
       <option value="0">转移部门</option>
       <option value="1">转移至客服部</option>
       <option value="2">转移至流量部</option>
@@ -40,10 +40,9 @@
       <option value="5">转移至随时学</option>
       <option value="6">转移至留学部</option>
   </select>
-  <button class="btn" onclick="changeDept()">确认</button>
   </c:if>
   <c:if test="${status==2}">
-  <button class="btn" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
+  <button class="btn btn-primary btn-small" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
   </c:if>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -83,14 +82,14 @@ function updateUser(id){
 
 	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'',lock:true, width: 
 
-		800,height: 600,});
+		1000,height: 600,});
 
 }
 function findUser(id){
 
 	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'&type='+5+'',lock:true, width: 
 
-		800,height: 600,});
+		1000,height: 600,});
 
 }
 
@@ -98,6 +97,10 @@ function userLeave(status){
 	var ids= $(":checkbox[checked='checked']").map(function(){
 		return $(this).val();
 	}).get();
+	if(ids==""||ids==null){
+		alert("请选择离职人员!");
+		return;
+	}
 	$.ajax({
 		url:"/user/leave.action?status="+status+"",
 		type:"post",
@@ -141,6 +144,11 @@ function changeDept(){
 		alert("请选择转移部门");
 		return;
 	}
+	alert(ids);
+	if(ids==""||ids==null){
+		alert("请选择转移人员!");
+		return;
+	}
 	$.ajax({
 		url:"/user/tradept.action?deptId="+deptId,
 		type:"post",
@@ -158,6 +166,17 @@ function changeDept(){
 function callback(){
 	$.dialog({id:'user'}).close();
 	find();
+}
+
+function checkAll() {
+	var value=$('[name=all]:checked').val();
+	if(value==0){
+          $("input:checkbox").attr("checked","true");
+	}else{
+		  $("input:checkbox").each(function(){
+		        this.checked=false;
+		   });
+	}
 }
 </script>
 </body>

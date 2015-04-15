@@ -23,7 +23,7 @@
         <li><i>&gt;</i>角色管理</li>
     </ul>
 </div>
-<button style="float:right;margin-right:5px;" onclick="javascript:addRole()" class="btn" >添加角色</button>
+<button style="float:right;margin-right:5px;" onclick="javascript:addRole()" class="btn btn-primary btn-small" >添加角色</button>
 <!-- 表格有边框 -->
 
 <div id="table_data" style="margin-top: 30px">

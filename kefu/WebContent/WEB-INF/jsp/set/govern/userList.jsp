@@ -4,12 +4,13 @@
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>
          
-            <td>多选</td>
+            <td><input type="checkbox" id="all" name="all" value="0" onclick="checkAll()"/></td>
             <td>工号</td>
             <td>姓名</td>
             <td>身份</td>

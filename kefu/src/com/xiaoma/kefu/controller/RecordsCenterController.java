@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.redis.SystemConfiguration;
@@ -863,13 +864,11 @@ public class RecordsCenterController {
 	* @Date: 2015年4月7日
 	 */
 	private String getStyleIds(String styleName) {
-		StringBuilder sbd = new StringBuilder();
+		StringBuilder sbd = new StringBuilder("0");
 		if(StringUtils.isNotBlank(styleName)){
-			List<WaitList> list = styleService.findByNameLike(styleName);
+			List<Style> list = styleService.findByNameLike(styleName);
 			for(int i=0;i<list.size();i++){
-				if(i>0){
-					sbd.append(",");
-				}
+				sbd.append(",");
 				sbd.append(list.get(i).getId());
 			}
 		}
@@ -885,13 +884,11 @@ public class RecordsCenterController {
 	* @Date: 2015年4月7日
 	 */
 	private String getWaitIds(String waitListName) {
-		StringBuilder sbd = new StringBuilder();
+		StringBuilder sbd = new StringBuilder("0");
 		if(StringUtils.isNotBlank(waitListName)){
 			List<WaitList> list = waitListService.findByNameLike(waitListName);
 			for(int i=0;i<list.size();i++){
-				if(i>0){
-					sbd.append(",");
-				}
+				sbd.append(",");
 				sbd.append(list.get(i).getId());
 			}
 		}

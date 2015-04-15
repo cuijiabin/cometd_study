@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.xiaoma.kefu.model.Style;
-import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -24,7 +23,7 @@ public interface StyleDao extends BaseDao<Style>{
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	public List<WaitList> findByNameLike(String styleName);
+	public List<Style> findByNameLike(String styleName);
 	
 	/**
 	 * 查询所有风格

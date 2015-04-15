@@ -20,10 +20,14 @@ public interface BaseDao<T> {
 	public List<T> findAll(Class<T> clazz);
 	public int findRowCount(Class<T> clazz,List<String> relation,List<Criterion> role,ProjectionList projList);
 	public T findById(Class<T> clazz,Integer id);
-	public List<T> findByIds(Class<T> clazz,List<Long> ids);
+	public List<T> findByIds(Class<T> clazz,List<Serializable> ids);
 	public T findById(Class<T> clazz,Long id);
 	public T findById(Class<T> clazz,String id);
 	public Serializable add(T obj);
+	public List<Serializable> batchAdd(List<T> list);
 	public int update(T obj);
+	public Boolean batchUpdate(List<T> list);
 	public int delete(T obj);
+	public Boolean batchDelete(Class<T> clazz, List<Serializable> ids);
+	
 }
