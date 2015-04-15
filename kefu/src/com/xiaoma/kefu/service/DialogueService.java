@@ -277,5 +277,9 @@ public class DialogueService {
 		return false;
 	}
 
+	public Long add(Dialogue dialogue){
+		
+		return (Long) dialogueDaoImpl.add(dialogue);
+	}
 
 }

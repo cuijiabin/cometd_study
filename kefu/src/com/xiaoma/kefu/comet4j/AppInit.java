@@ -27,7 +27,7 @@ public class AppInit implements ServletContextListener {
 		//删除时监听
 		engine.addDropListener(new LeftListener());
         
-		//全程监听
+		//全程监听 清理缓存内容
 //		Thread healthSender = new Thread(new HealthSender(), "HealthSender");
 //		healthSender.setDaemon(true);
 //		healthSender.start();

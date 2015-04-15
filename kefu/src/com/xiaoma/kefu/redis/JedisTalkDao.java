@@ -3,6 +3,7 @@ package com.xiaoma.kefu.redis;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,7 +70,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.del(key);
 		
-		logger.info("redis del key:" + key +" value: "+ ccnId);
+		logger.info("redis del key:" + key);
 
 		return (replay > 0);
 	}
@@ -372,7 +373,7 @@ public class JedisTalkDao {
 
 		Long replay = jedis.del(key);
 		
-		logger.info("redis del key:" + key );
+		logger.info("redis del key:" + key);
 
 		return (replay > 0);
 	}
@@ -419,6 +420,51 @@ public class JedisTalkDao {
 
 		return (replay > 0);
 	}
+	
+	// #################################
+	/**
+	 * 对话内容列表操作 get
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public static List<String> getDialogueList(String uccnId, String cccnId) {
+
+		String key = JedisConstant.getDialogueListKey(uccnId,cccnId);
+
+		Jedis jedis = JedisDao.getJedis();
+
+		List<String> list = jedis.lrange(key, 0, -1);
+
+		return list;
+	}
+
+	public static Boolean addDialogueList(String uccnId, String cccnId,String message) {
+
+		String key = JedisConstant.getDialogueListKey(uccnId,cccnId);
+
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.rpush(key, message);
+		
+		logger.info("redis rpush key:" + key +" value: "+ message);
+
+		return (id > 0);
+	}
+
+	public static Boolean delDialogueList(String uccnId, String cccnId) {
+
+		String key = JedisConstant.getDialogueListKey(uccnId,cccnId);
+
+		Jedis jedis = JedisDao.getJedis();
+
+		Long replay = jedis.del(key);
+		
+		logger.info("redis del key:" + key);
+
+		return (replay > 0);
+	}
+
 
 	// ######################补充服务
 
@@ -431,36 +477,48 @@ public class JedisTalkDao {
 	public static String allocateCcnId() {
 
 		List<String> cnnList = getCcnList(JedisConstant.USER_TYPE);
-		Set<String> userList = new HashSet<String>();
-		Map<String, Integer> userCountMap = new HashMap<String, Integer>();
-		for (String ccnId : cnnList) {
-			String userId = getCnnUserId(JedisConstant.USER_TYPE, ccnId);
-			if (StringUtils.isNotBlank(userId)) {
-				Integer num = getCurrentReceiveCount(userId);
-				userList.add(userId);
-				Integer count = userCountMap.get(userId);
-				count = (count == null) ? num : (num + count);
-				userCountMap.put(userId, count);
-			}
-		}
+//		Set<String> userList = new HashSet<String>();
+//		Map<String, Integer> userCountMap = new HashMap<String, Integer>();
+//		for (String ccnId : cnnList) {
+//			String userId = getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+//			if (StringUtils.isNotBlank(userId)) {
+//				Integer num = getCurrentReceiveCount(userId);
+//				userList.add(userId);
+//				Integer count = userCountMap.get(userId);
+//				count = (count == null) ? num : (num + count);
+//				userCountMap.put(userId, count);
+//			}
+//		}
+//
+//		String result = null;
+//		Integer maxLastCount = null;
+//		for (String userId : userList) {
+//			Integer lastCount = getMaxReceiveCount(userId)
+//					- userCountMap.get(userId);
+//			if (maxLastCount == null || maxLastCount < lastCount) {
+//				maxLastCount = lastCount;
+//				result = userId;
+//			}
+//		}
+//		if (result == null) {
+//			return result;
+//		}
+//
+//		result = getUserCcnList(result).get(0);
+		
+		String key = JedisConstant.genCcnListKey(JedisConstant.USER_TYPE);
 
-		String result = null;
-		Integer maxLastCount = null;
-		for (String userId : userList) {
-			Integer lastCount = getMaxReceiveCount(userId)
-					- userCountMap.get(userId);
-			if (maxLastCount == null || maxLastCount < lastCount) {
-				maxLastCount = lastCount;
-				result = userId;
-			}
-		}
-		if (result == null) {
-			return result;
-		}
+		Jedis jedis = JedisDao.getJedis();
+		
+		Long size = jedis.zcount(key, Long.MIN_VALUE, Long.MAX_VALUE);
+		size = (size == 0) ? 0L : size-1;
+		
 
-		result = getUserCcnList(result).get(0);
+		Set<String> set = jedis.zrange(key, Integer.parseInt(size.toString()), -1);
+		Iterator<String> it = set.iterator();
+		
 
-		return result;
+		return it.next();
 
 	}
 

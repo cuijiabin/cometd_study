@@ -9,6 +9,8 @@ public class TimeHelper {
 	public static String NORMAL_PATTERN = "MM/dd/yyyy";
 	
 	public static String OTHER_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
+	public static String Time_PATTERN = "HH:mm:ss";
 
 	public static String convertMillisecondToStr(Long milliSecond,
 			String pattern) {
