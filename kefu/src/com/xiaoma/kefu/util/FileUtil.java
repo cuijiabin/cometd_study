@@ -20,7 +20,7 @@ public class FileUtil {
 	 * 保存文件到服务器
 	* @Description: TODO
 	* @param savePath	保存的路径,结尾不需要带 /
-	* @param fileName	文件名
+	* @param fileName	文件名 ,需要带后缀名
 	* @param fileData	文件
 	 * @throws IOException 
 	* @Author: wangxingfei

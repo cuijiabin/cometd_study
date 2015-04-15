@@ -36,6 +36,18 @@ public class WaitListService {
 		return waitListDaoImpl.findByNameLike(waitListName);
 	}
 	
+	/**
+	 * 根据主键id查询
+	* @Description: TODO
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月14日
+	 */
+	public WaitList get(Integer id) {
+		return waitListDaoImpl.findById(WaitList.class, id);
+	}
+	
 
 
 }

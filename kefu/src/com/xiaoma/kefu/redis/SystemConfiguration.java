@@ -17,6 +17,7 @@ public class SystemConfiguration {
 	private String mailAddress;
 	private String mailCount;
 	private String mailPassword;
+	private String picPrefix;//图片访问前缀
 	
 	static synchronized public SystemConfiguration getInstance() {
 		//if (instance == null) 
@@ -40,6 +41,7 @@ public class SystemConfiguration {
 			this.mailAddress = PropertiesHelper.getString("mail.mailAddress", dbProps, "");
 			this.mailCount = PropertiesHelper.getString("mail.mailCount", dbProps, "");
 			this.mailPassword = PropertiesHelper.getString("mail.mailPassword", dbProps, "");
+			this.picPrefix = PropertiesHelper.getString("pic.prefix", dbProps, "/pic");
 			fin.close();
 		} catch (Exception e) {
 		}
@@ -81,6 +83,9 @@ public class SystemConfiguration {
 	}
 	public String getFileUrl() {
 		return fileUrl;
+	}
+	public String getPicPrefix() {
+		return picPrefix;
 	}
 	public static void main(String[] args) throws Exception {
 		SystemConfiguration sc = SystemConfiguration.getInstance();
