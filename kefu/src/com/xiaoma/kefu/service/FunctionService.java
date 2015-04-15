@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.FunctionDao;
+import com.xiaoma.kefu.model.Function;
 
 /**
  * 
@@ -31,6 +32,10 @@ public class FunctionService {
 	public List findFunction() {
 		
 		return funcDao.findAll();
+	}
+	
+	public Function findById(Integer id){
+		return funcDao.findById(Function.class, id);
 	}
 
 }

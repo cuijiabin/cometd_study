@@ -13,10 +13,17 @@ package com.xiaoma.kefu.cache;
  *         Templates
  */
 public class CacheName {
+	//系统session
 	public static final String USER="user";
-	
+	//短信
 	public static final String SHORTMESSAGE="SHORTMESSAGE";
+	//字典表list
 	public static final String DICTLIST="DICTLIST";
+	//单条字典信息
 	public static final String DICTITEM="DICTITEM";
+	//单条功能
+	public static final String FUNCTION="FUNCTION";
+	
+	
 	
 }
