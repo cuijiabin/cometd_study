@@ -58,9 +58,9 @@
             <label>访问来源：</label><input class="c-wd150" type="text" id="keywords" name="keywords" />
             <label>交谈条数：</label>
             <div class="u-subsec">
-                <label><input type="radio" name="numCondition" value='XY' />小于</label>
-                <label><input type="radio" name="numCondition" value='EQ' />等于</label>
                 <label><input type="radio" name="numCondition" value='DY' />大于</label>
+                <label><input type="radio" name="numCondition" value='EQ' />等于</label>
+                <label><input type="radio" name="numCondition" value='XY' />小于</label>
             </div>
             <div class="input-append">
               	<input class="c-wd30" type="text" id="totalNum" name="totalNum" >
@@ -113,9 +113,12 @@
 <script type="text/javascript">
 
 function find(currentPage){
-// 	var s = $("#deptId").val();
-// 	alert(s);
-// 	return;
+	
+	if(isNaN($("#totalNum").val())){
+		$.dialog.alert("交谈条数请填写数字!");
+		return;
+	}
+	
 	
 	var isTalk = 0 ;
 	if(($("#isTalk").is(":checked"))){
