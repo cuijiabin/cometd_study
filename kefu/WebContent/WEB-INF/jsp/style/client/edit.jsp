@@ -93,7 +93,7 @@
 	                </tr>
 	                <tr>
 	                    <td class="c-wd100">等待列表</td>
-	                    <td class="f-txtl"><a href="#">配置</a></td>
+	                    <td class="f-txtl"><a href="#" onclick="editWait(${clientStyle.styleId})">配置</a></td>
 	                    <td class="f-txtl"></td>
 	                </tr>
 	            </tbody>
@@ -121,6 +121,18 @@ $('#btn_save').on('click',function(){
 	var path = "/clientStyle/save.action";  
     $('#mainForm').attr("action", path).submit();
 });
+
+//等待列表
+function editWait(styleId){
+ 	var url = '/waitList/edit.action?styleId='+styleId;
+ 	window.location = url;
+ 	return;
+	$.dialog({content:'url:/style/edit.action',
+		id: 'add',
+		width: 400,height: 80,
+		title:'添加风格'
+	});
+}
 
 </script>
 </body>

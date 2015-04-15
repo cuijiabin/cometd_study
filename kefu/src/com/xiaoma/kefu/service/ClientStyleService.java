@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.dao.ClientStyleDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.ClientStyle;
-import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
@@ -112,7 +112,9 @@ public class ClientStyleService {
 	 */
 	private String getStyleRootPath(Integer styleId) {
 		if(styleId==null) styleId=0;
-		return SystemConfiguration.getInstance().getFileUrl()
+		return 
+//				SystemConfiguration.getInstance().getFileUrl()
+				DictMan.getDictItem("d_sys_param", 1).getItemName()
 				+"/" + SysConst.STYLE_PATH
 				+"/" + styleId;
 	}

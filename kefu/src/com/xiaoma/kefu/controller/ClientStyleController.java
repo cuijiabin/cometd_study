@@ -2,6 +2,8 @@ package com.xiaoma.kefu.controller;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.ClientStyle;
-import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.ClientStyleService;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
@@ -73,15 +75,15 @@ public class ClientStyleController {
 	* @Date: 2015年4月13日
 	 */
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Model model,MultipartFile fileYs,
+	public String save(HttpServletRequest request,Model model,MultipartFile fileYs,
 			MultipartFile fileYx,
 			@ModelAttribute("clientStyle") ClientStyle clientStyle) {
 		try {
 			//保存文件 ys
 			clientStyleService.saveUplaodFile(fileYs,clientStyle,StylePicName.访问端右上);
 			clientStyleService.saveUplaodFile(fileYx,clientStyle,StylePicName.访问端右下);
-			
-			//拿出旧的创建时间, 别的全用新的
+//			
+//			//拿出旧的创建时间, 别的全用新的
 			ClientStyle oldModel = clientStyleService.get(clientStyle.getId());
 			clientStyle.setCreateDate(oldModel.getCreateDate());
 			clientStyle.setUpdateDate(new Date());
@@ -112,7 +114,9 @@ public class ClientStyleController {
 			if(StringUtils.isBlank(fileName)) return extensionName;
 			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
 		}
-		return SystemConfiguration.getInstance().getPicPrefix() //前缀
+		return 
+//				SystemConfiguration.getInstance().getPicPrefix() //前缀
+				DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
 				+ "/"+clientStyle.getStyleId()	//风格id
 				+ "/"+type.getCode()	//类别
