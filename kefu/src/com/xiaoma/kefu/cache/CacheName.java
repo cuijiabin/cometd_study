@@ -23,7 +23,8 @@ public class CacheName {
 	public static final String DICTITEM="DICTITEM";
 	//单条功能
 	public static final String FUNCTION="FUNCTION";
-	
+	//系统用户
+	public static final String SUSER="SUSER";
 	
 	
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -63,5 +65,15 @@ public class LoginLogDaoImpl extends BaseDaoImpl<LoginLog> implements
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
+	}
+	public List<LoginLog> findByUserId(Integer userId) {
+		try {
+			Session session = getSession();
+			List<LoginLog> list = session.createQuery("from LoginLog a where a.userId="+userId+" order by a.createDate desc").setMaxResults(1).list();
+			return list;
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 }
