@@ -145,6 +145,8 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 		if(ids.length()>2){
 			String[] array = ids.split(",");
 			for (String str : array) {
+				if(Integer.parseInt(str)==0)
+					continue;
 			     User user= new User();
 			      user.setId(Integer.parseInt(str));
 			      val=userDaoImpl.delete(user);
@@ -169,6 +171,8 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 		if(ids.length()>2){
 			String[] array = ids.split(",");
 			for (String str : array) {
+				if(Integer.parseInt(str)==0)
+					continue;
 			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
 			       leup.setStatus(status);
 			       leup.setEndDate(time);
@@ -191,6 +195,8 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 		if(ids.length()>2){
 			String[] array = ids.split(",");
 			for (String str : array) {
+				if(Integer.parseInt(str)==0)
+					continue;
 			   User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
 			       leup.setDeptId(deptId);
 			       return userDaoImpl.update(leup);

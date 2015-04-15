@@ -9,7 +9,7 @@
     <thead>
         <tr>
          
-            <td>多选</td>
+            <td><input type="checkbox" id="all" name="all" value="0" onclick="checkAll()"/></td>
             <td>工号</td>
             <td>姓名</td>
             <td>身份</td>
