@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
@@ -92,9 +94,17 @@ public class UserController {
 	 * @param session
 	 */
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
-	public String main(HttpSession session,Model model) {
+	public String main(HttpSession session,Model model,Integer typeId) {
+		User user = (User)session.getAttribute(CacheName.USER);
+		if(user == null)
+			return "login";
 		List list = funcService.findFuncOne();
 		model.addAttribute("topList", list);
+		//根据typeId判断初始加载哪个页面。哪个顶部标签选中。
+		if(typeId==null)
+			typeId=2;
+		Function function = (Function)CacheMan.getObject(CacheName.FUNCTION, typeId);
+		model.addAttribute("func",function);
 		return "index";
 	}
 

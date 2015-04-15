@@ -9,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -20,25 +19,23 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
-import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
  * @author frongji
- * @time 2015年4月2日上午9:54:59
- *   访客管理--控制层
+ * @time 2015年4月2日上午9:54:59 访客管理--控制层
  */
 @Controller
 @RequestMapping(value = "customer")
 public class CustomerController {
-	
+
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private DialogueService dialogueService;//对话信息
+	private DialogueService dialogueService;// 对话信息
 	@Autowired
-	private MessageRecordsService messageRecordsService;//留言信息
-	
+	private MessageRecordsService messageRecordsService;// 留言信息
+
 	/**
 	 * 查询所有、条件查询
 	 * 
@@ -46,25 +43,25 @@ public class CustomerController {
 	 * @param pageBean
 	 * @return
 	 */
-//	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-//	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Customer> pageBean,Model model,String beginDate,
-//			String endDate) {
-//		try {
-//			
-//			customerService.getResult(conditions.getMap(), pageBean);
-//			model.addAttribute("beginDate", initDate(beginDate));
-//			model.addAttribute("endDate", initDate(endDate));
-//			if (conditions == null || conditions.getMap() == null
-//					|| conditions.getMap().get("typeId") == null)
-//				return "customer/customer";
-//			else
-//				return "customer/customerList";
-//		} catch (Exception e) {
-//			return "/error500";
-//		}
-//	}
-	
-	
+	// @RequestMapping(value = "find.action", method = RequestMethod.GET)
+	// public String queryAll(MapEntity conditions, @ModelAttribute("pageBean")
+	// PageBean<Customer> pageBean,Model model,String beginDate,
+	// String endDate) {
+	// try {
+	//
+	// customerService.getResult(conditions.getMap(), pageBean);
+	// model.addAttribute("beginDate", initDate(beginDate));
+	// model.addAttribute("endDate", initDate(endDate));
+	// if (conditions == null || conditions.getMap() == null
+	// || conditions.getMap().get("typeId") == null)
+	// return "customer/customer";
+	// else
+	// return "customer/customerList";
+	// } catch (Exception e) {
+	// return "/error500";
+	// }
+	// }
+
 	/**
 	 * 查询所有、条件查询
 	 * 
@@ -75,46 +72,44 @@ public class CustomerController {
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
 	public String queryAll(Model model, String loginName, String phone,
 			Integer currentPage, Integer pageRecorders) {
-
 		currentPage = (currentPage == null) ? 1 : currentPage;
 		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean<Customer> pageBean = customerService
-				.getResultByLoginNameOrPhone(currentPage, pageRecorders,
-						loginName, phone);
-
+		PageBean pageBean = customerService.getResultByCon(
+				currentPage, pageRecorders, loginName, phone);
 		model.addAttribute("list", pageBean.getObjList());
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("loginName", loginName);
 		model.addAttribute("phone", phone);
-
 		return "customer/customer";
 	}
 
 	/**
 	 * 封装查询条件
+	 * 
 	 * @param beginDate
 	 * @param endDate
 	 * @return
 	 */
-	private StringBuilder getCustCondition(String beginDate,String endDate){
-		
+	private StringBuilder getCustCondition(String beginDate, String endDate) {
+
 		StringBuilder condition = new StringBuilder();
-		
-		if(StringUtils.isBlank(beginDate)){
-		  SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
-		  beginDate = sdf.format(new Date());
-		  condition.append(" and t1.beginDate >= '" + beginDate + " 00:00:00'");
-		
+
+		if (StringUtils.isBlank(beginDate)) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			beginDate = sdf.format(new Date());
+			condition.append(" and t1.beginDate >= '" + beginDate
+					+ " 00:00:00'");
+
 		}
-		  if(StringUtils.isBlank(endDate)){
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				endDate = sdf.format(new Date());
-			}
-			condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
-			
-			return condition;
+		if (StringUtils.isBlank(endDate)) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			endDate = sdf.format(new Date());
+		}
+		condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
+
+		return condition;
 	}
-	
+
 	/**
 	 * 查询所有
 	 * 
@@ -123,30 +118,32 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "getLeft.action", method = RequestMethod.GET)
-	public String getLeft(Model model,Integer funcId) {
-		
+	public String getLeft(Model model, Integer funcId) {
+
 		return "customer/left";
 	}
-//	 /**
-//     * 保存前页面跳转
-//     * 
-//     * @return 返回值
-//     */
-//    @RequestMapping(value = "/new.action")
-//    public String toSave() {
-//
-//        return "customer/addBlacklist";
-//    }
+
+	// /**
+	// * 保存前页面跳转
+	// *
+	// * @return 返回值
+	// */
+	// @RequestMapping(value = "/new.action")
+	// public String toSave() {
+	//
+	// return "customer/addBlacklist";
+	// }
 
 	/**
 	 * 添加
 	 */
 
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
-	public String addCustomer(HttpSession session, Model model, Customer customer) {
+	public String addCustomer(HttpSession session, Model model,
+			Customer customer) {
 
 		try {
-		
+
 			boolean isSuccess = customerService.createNewCustomer(customer);
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
@@ -160,7 +157,7 @@ public class CustomerController {
 		return "resultjson";
 
 	}
-	
+
 	/**
 	 * 修改
 	 * 
@@ -170,11 +167,11 @@ public class CustomerController {
 	public String updateCustomer(Model model, Customer customer) {
 
 		try {
-			
-			Customer toUpdate = customerService.getCustomerById(customer.getId());
+
+			Customer toUpdate = customerService.getCustomerById(customer
+					.getId());
 			toUpdate.setPhone(customer.getCustomerName());
-			
-			
+
 			boolean isSuccess = customerService.updateCustomer(toUpdate);
 
 			if (isSuccess) {
@@ -211,22 +208,24 @@ public class CustomerController {
 
 	}
 
-	
 	/**
 	 * 编辑用户信息页面(用于记录中心-聊天记录)
-	* @Description: TODO
-	* @param model
-	* @param customerId
-	* @param dialogueId
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月10日
+	 * 
+	 * @Description: TODO
+	 * @param model
+	 * @param customerId
+	 * @param dialogueId
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月10日
 	 */
 	@RequestMapping(value = "editCus.action", method = RequestMethod.GET)
-	public String editCus(Model model,String customerId,String dialogueId) {
+	public String editCus(Model model, String customerId, String dialogueId) {
 		try {
-			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
-			Dialogue dialogue = dialogueService.findById(Long.valueOf(dialogueId));
+			Customer customer = customerService.getCustomerById(Long
+					.valueOf(customerId));
+			Dialogue dialogue = dialogueService.findById(Long
+					.valueOf(dialogueId));
 			model.addAttribute("customer", customer);
 			model.addAttribute("dialogue", dialogue);
 			return "/customer/editCus";
@@ -235,21 +234,23 @@ public class CustomerController {
 			return "error500";
 		}
 	}
-	
+
 	/**
 	 * 更新用户信息,用于记录中心
-	* @Description: TODO
-	* @param model
-	* @param customer
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月12日
+	 * 
+	 * @Description: TODO
+	 * @param model
+	 * @param customer
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月12日
 	 */
 	@RequestMapping(value = "updateCus.action", method = RequestMethod.POST)
 	public String updateCus(Model model, Customer customer) {
 		try {
-			
-			Customer toUpdate = customerService.getCustomerById(customer.getId());
+
+			Customer toUpdate = customerService.getCustomerById(customer
+					.getId());
 			toUpdate.setCustomerName(customer.getCustomerName());
 			toUpdate.setPhone(customer.getCustomerName());
 			toUpdate.setEmail(customer.getEmail());
@@ -265,24 +266,27 @@ public class CustomerController {
 		}
 		return "resultjson";
 	}
-	
+
 	/**
 	 * 编辑用户信息页面(用于记录中心留言记录)
-	* @Description: TODO
-	* @param model
-	* @param customerId
-	* @param dialogueId
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月10日
+	 * 
+	 * @Description: TODO
+	 * @param model
+	 * @param customerId
+	 * @param dialogueId
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月10日
 	 */
 	@RequestMapping(value = "editCus4Msg.action", method = RequestMethod.GET)
-	public String editCus4Msg(Model model,String customerId,Integer msgId) {
+	public String editCus4Msg(Model model, String customerId, Integer msgId) {
 		try {
-			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
-			MessageRecords msg = messageRecordsService.findById(Integer.valueOf(msgId));
+			Customer customer = customerService.getCustomerById(Long
+					.valueOf(customerId));
+			MessageRecords msg = messageRecordsService.findById(Integer
+					.valueOf(msgId));
 			model.addAttribute("customer", customer);
-			model.addAttribute("dialogue", msg);//和聊天记录用一个
+			model.addAttribute("dialogue", msg);// 和聊天记录用一个
 			return "/customer/editCus";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -290,23 +294,23 @@ public class CustomerController {
 			return "error500";
 		}
 	}
-	
+
 	/**
 	 * 初始化查询日期, 如果为空,则默认当天
-	* @Description: TODO
-	* @param beginDate
-	* @return
-	* @Author:frongji
-	* @Date: 2015年4月14日
+	 * 
+	 * @Description: TODO
+	 * @param beginDate
+	 * @return
+	 * @Author:frongji
+	 * @Date: 2015年4月14日
 	 */
 	private String initDate(String beginDate) {
 		String result = beginDate;
-		if(StringUtils.isBlank(beginDate)){
+		if (StringUtils.isBlank(beginDate)) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			result = sdf.format(new Date());
 		}
 		return result;
 	}
-
 
 }

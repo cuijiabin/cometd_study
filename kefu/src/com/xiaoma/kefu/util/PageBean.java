@@ -14,7 +14,7 @@ public class PageBean <T>{
     private Integer pageRecorders = 20; //每页记录数,默认为10,可以在初始化的时候修改
     private boolean hasNextPage = false; //是否有下一页:自己运算
     private boolean hasPreviousPage = false; //是否有前一页 :自己运算
-    private List<T> objList = new ArrayList<T>();//存放欲展示的对象列表
+    private List objList = new ArrayList();//存放欲展示的对象列表
     private Integer totalRows = 0;//总记录数,由底层service提供
     private Integer startRow = 0;//起始行号
     //获取起始行号
@@ -90,7 +90,7 @@ public class PageBean <T>{
         return pageRecorders;
     }
 
-    public void setObjList(List<T> objList) {
+    public void setObjList(List objList) {
         this.objList = objList;
     }
 
@@ -118,7 +118,7 @@ public class PageBean <T>{
         this.pageRecorders = pageRecorders;
     }
 
-    public List<T> getObjList() {
+    public List getObjList() {
         return objList;
     }
     

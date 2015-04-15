@@ -15,138 +15,126 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
-
 
 /**
  * @author frongji
  * @time 2015年4月1日下午4:57:03
- *
+ * 
  */
 @Repository("customerDaoImpl")
-public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDao{
-	
-	  private static Logger logger   = Logger.getLogger(CustomerDaoImpl.class);
-	
+public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
+		CustomerDao {
+
+	private static Logger logger = Logger.getLogger(CustomerDaoImpl.class);
+
 	@Override
-	public Integer getAllCustomerCount(){
+	public Integer getAllCustomerCount() {
 		Session session = getSession();
 		String hql = "select count(1) from Customer  ";
 
-	 Query query = session.createSQLQuery(hql);
-	 
-	 return ((Number)query.uniqueResult()).intValue();
-		
- 	}
-	
+		Query query = session.createSQLQuery(hql);
+
+		return ((Number) query.uniqueResult()).intValue();
+
+	}
+
 	@SuppressWarnings("unchecked")
-	@Override	
-    public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
-		
-		//参数检查
-		start = (start == null)? 0 :start;
-		offset = (offset == null)? 20 :offset;
-		
+	@Override
+	public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
+
+		// 参数检查
+		start = (start == null) ? 0 : start;
+		offset = (offset == null) ? 20 : offset;
+
 		Session session = getSession();
 		String hql = "from Customer limit order by id asc";
-		Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
-		
+		Query query = session.createQuery(hql).setFirstResult(start)
+				.setMaxResults(offset);
+
 		return (List<Customer>) query.list();
 	}
-	
-	   
-		
-		   /**
-		    * 条件查询(测试)
-		    */
-			
-			@SuppressWarnings("unchecked")
-			@Override
-		    public List<Customer> getCustomerByCon(Integer start, Integer offset ,String loginName,String phone) {
-				
-				//参数检查
-				start = (start == null)? 0 :start;
-				offset = (offset == null)? 20 :offset;
-				
-				Session session = getSession();
-				
-				String hql = "from Customer c where 1=1 and c.status<>1 ";
-				
-				String hqli ="SELECT DISTINCT s.name,lin.id,lin.customerName,lin.phone,lin.status,lin.consultPage,lin.keywords FROM "
-						+ "(SELECT c.id,c.customerName,c.phone,c.status,d.consultPage,d.keywords,c.styleId FROM "
-						+ "customer c LEFT JOIN dialogue d ON c.id=d.customerId)  lin LEFT JOIN style s ON lin.styleId=s.id where 1=1 and lin.status<>1;";
 
-				if(StringHelper.isNotEmpty(loginName)){
-					hql += " and c.loginName like '"+"%"+loginName+"%"+"'";
-				}
-				if(StringHelper.isNotEmpty(phone)){
-					hql += " and c.phone like '"+"%"+phone+"%"+"'";
-				}
-				Query query = session.createQuery(hql).setFirstResult(start).setMaxResults(offset);
-				 Customer customer =	new Customer();
-					String name = customer.getCustomerName();
-					System.out.println("============"+name+"=======test====");
-				return (List<Customer>) query.list();
+	/**
+	 * 条件查询(测试)
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List getCustomerByCon(Integer start, Integer offset,
+			String loginName, String phone) {
+		// 参数检查
+		start = (start == null) ? 0 : start;
+		offset = (offset == null) ? 20 : offset;
+		Session session = getSession();
+//		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE a.status<>1 AND a.customerName='冯榕基' GROUP BY a.id ;";
+		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1 GROUP BY a.id ;";
+		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class);
+		List list = query.list();
+		return list;
+	}
+
+	/**
+	 * 查询
+	 * 
+	 * @param conditions
+	 * @param pageBean
+	 */
+	@Override
+	public void findByCondition(Map<String, String> conditions,
+			PageBean<Customer> pageBean) {
+
+		List<String> relation = new ArrayList<String>();
+		List<Criterion> role = new ArrayList<Criterion>();// 条件
+		List<Order> orders = new ArrayList<Order>();// 排序
+		if (conditions != null) {
+			String customerId = conditions.get("id").trim();// 去掉输入的访客编号左右的空格
+			if (StringHelper.isNotEmpty(conditions.get("customerName"))) {
+				role.add(Restrictions.like("customerName", "%"
+						+ conditions.get("customerName").trim() + "%"));
 			}
+			if (StringHelper.isNotEmpty(customerId)) {
+				role.add(Restrictions.eq("id", Long.parseLong(customerId)));
+			}
+			if (StringHelper.isNotEmpty(conditions.get("phone"))) {
 
-        /**
-         * 查询
-         * @param conditions
-         * @param pageBean
-         */
-		@Override
-		public void findByCondition(Map<String, String> conditions,
-				PageBean<Customer> pageBean) {
-		      
-			List<String> relation = new ArrayList<String>();
-			List<Criterion> role = new ArrayList<Criterion>();// 条件
-			List<Order> orders = new ArrayList<Order>();// 排序
-			if (conditions != null) {
-				String customerId= conditions.get("id").trim();//去掉输入的访客编号左右的空格
-				if (StringHelper.isNotEmpty(conditions.get("customerName"))) {
-					role.add(Restrictions.like("customerName",
-							"%" + conditions.get("customerName").trim() + "%"));
-				}
-				if (StringHelper.isNotEmpty(customerId) ){   
-					role.add(Restrictions.eq("id", Long.parseLong(customerId))  );
-			    }
-				if (StringHelper.isNotEmpty(conditions.get("phone"))) {
-					
-					role.add(Restrictions.eq("phone", conditions.get("phone").trim()));
-				}
-				if (conditions.get("startDate") != null
-						&& !conditions.get("startDate").isEmpty()
-						&& conditions.get("endDate") != null
-						&& !conditions.get("endDate").isEmpty()) {
-					SimpleDateFormat format = new SimpleDateFormat(
-							"yyyy-MM-dd HH:mm:ss");
-					try {
-						role.add(Restrictions.between(
-								"createDate",
-								format.parse(conditions.get("startDate")
-										+ " 0:00:00"),
-								format.parse(conditions.get("endDate")
-										+ " 23:59:59")));
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error(e.getMessage());
-					}
+				role.add(Restrictions.eq("phone", conditions.get("phone")
+						.trim()));
+			}
+			if (conditions.get("startDate") != null
+					&& !conditions.get("startDate").isEmpty()
+					&& conditions.get("endDate") != null
+					&& !conditions.get("endDate").isEmpty()) {
+				SimpleDateFormat format = new SimpleDateFormat(
+						"yyyy-MM-dd HH:mm:ss");
+				try {
+					role.add(Restrictions.between(
+							"createDate",
+							format.parse(conditions.get("startDate")
+									+ " 0:00:00"),
+							format.parse(conditions.get("endDate")
+									+ " 23:59:59")));
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
-			orders.add(Order.asc("createDate"));
-			find(Customer.class, relation, role, null, orders, pageBean);
-			logger.info("search Customer by conditions!");
 		}
+		orders.add(Order.asc("createDate"));
+		find(Customer.class, relation, role, null, orders, pageBean);
+		logger.info("search Customer by conditions!");
+	}
 
 	/**
 	 * 添加一条
 	 */
 	@Override
-	public boolean createNewCustomer(Customer customer){
-		
+	public boolean createNewCustomer(Customer customer) {
+
 		try {
-			 add(customer);
+			add(customer);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,10 +142,11 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 		return false;
 
 	}
-	
+
 	/**
 	 * 修改
-	 * @param 
+	 * 
+	 * @param
 	 * @return
 	 */
 	@Override
@@ -170,20 +159,16 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 		}
 		return false;
 	}
-	
 
-
-	
-    /**
-     * 查询一条
-     */
+	/**
+	 * 查询一条
+	 */
 	@Override
 	public Customer getCustomerById(Long id) {
-		if(id==null)
-		{
+		if (id == null) {
 			return null;
 		}
-		return findById(Customer.class,id);
+		return findById(Customer.class, id);
 	}
 
 	@Override
@@ -210,11 +195,9 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDa
 	@Override
 	public Customer getByIp(String ip) {
 		Session session = getSession();
-		String hql = "from Customer c where c.ip= '"+ip+"'";
+		String hql = "from Customer c where c.ip= '" + ip + "'";
 		Query query = session.createQuery(hql);
 		return (Customer) query.uniqueResult();
 	}
-
-	
 
 }

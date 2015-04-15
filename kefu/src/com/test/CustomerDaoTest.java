@@ -1,6 +1,6 @@
 package com.test;
 
-import org.junit.Ignore;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +38,7 @@ public class CustomerDaoTest {
 		JedisDao.setKOT("customer:2", customer, 600);
 	}
 	
+
 	@Test
 	public void testJedisCRUD(){
 		
@@ -49,4 +50,5 @@ public class CustomerDaoTest {
 //		System.out.println(list);
 		
 	}
+
 }

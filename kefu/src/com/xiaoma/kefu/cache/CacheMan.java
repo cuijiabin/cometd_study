@@ -13,7 +13,13 @@ public class CacheMan {
 	public static Object getObject(String cacheName, Object value) {
 		try {
 			String key = CacheUtil.getCacheName(cacheName, value);
-			return JedisDao.getObject(key);
+			Object obj = JedisDao.getObject(key);
+			if(obj == null){
+				obj = CacheFactory.factory(cacheName,value);
+				if(obj != null)
+					JedisDao.setKO(key,obj);
+			}
+			return obj;
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 			return null;

@@ -27,7 +27,7 @@
             <td>${blacklist.ip}</td>
             <td>${blacklist.ipInfo}</td>
             <td>${blacklist.endDate}</td>
-            <td>${blacklist.id}</td>
+            <td>${blacklist.userName}</td>
             <td>${blacklist.description}</td>
             <td><a href="javascript:toUpdate('${blacklist.id}')">编辑</a></td>
         </tr>

@@ -31,7 +31,7 @@
     <div class="m-query-bd">
         <div class="f-mbm">
             <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" />
-            <label>添加工号：</label><input  id="userId" name="userId" class="c-wd150" type="text" />
+            <label>添加工号：</label><input  id="userName" name="userName" class="c-wd150" type="text" />
             <label>阻止原因：</label><input id="description" name="description" value="${description}" class="c-wd150" type="text" />
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
         </div>
@@ -65,6 +65,7 @@ function find(currentPage){
 			"currentPage":currentPage,
 			"map[customerId]":$("#customerId").val(),
 			"map[description]":$("#description").val(),
+			"map[userName]":$("#userName").val(),
 			"map[typeId]":1
 	};
 	$.ajax({
@@ -85,29 +86,7 @@ function find(currentPage){
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-	
-	  var str='<table><tr><td>客户编号<input type="text" name="customerId" id="customerId" value="1234567890" /></td></tr>'+
-	               '<tr><td>IP地址<input type="text" name="ip" id="ip" value="192.168.1.102" /></td></tr>'+
-	               '<tr><td>失效时间<input type="text" name="endDate" id="endDate"  value="2015-01-28 23:58:29"/></td></tr>'+
-	               '<tr><td>阻止原因<input type="text" name="description" id="description" value="骂人"/></td></tr></table>';
-	               
-    	$.dialog({
-		content:str,
-		width: 900,height: 500,
-		button: [
-			        {
-			            name: '确认',
-			            callback: function () {
-			               save(); 
-			                return false;
-			            },
-			            focus: true
-			        },
-			        {
-			            name: '取消'
-			        }
-			    ]
-		});
+    	var d = $.dialog({id:'blacklist',content:'url:/blacklist/new.action',lock:true, width:	500,height: 300,});
     }
     /**
     *新增的方法

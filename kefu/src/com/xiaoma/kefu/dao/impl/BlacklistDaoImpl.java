@@ -113,16 +113,22 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			List<Criterion> role = new ArrayList<Criterion>();// 条件
 			List<Order> orders = new ArrayList<Order>();// 排序
 			if (conditions != null) {
-				String customerId= conditions.get("customerId").trim();//去掉输入的访客编号左右的空格
+				
 				if (StringHelper.isNotEmpty(conditions.get("description"))) {
 					role.add(Restrictions.like("description",
 							"%" + conditions.get("description").trim() + "%"));
 				}
-				 
+				String customerId= conditions.get("customerId").trim();//去掉输入的访客编号左右的空格
 				if (StringHelper.isNotEmpty(customerId) ){   
 						role.add(Restrictions.eq("customerId", Long.parseLong(customerId))  );
 				 }
-
+				
+                 String userName= conditions.get("userName").trim();
+				if (StringHelper.isNotEmpty(userName)) {
+					role.add(Restrictions.like("userName",
+							"%" + conditions.get("userName").trim() + "%"));
+				}
+				
 				if (conditions.get("startDate") != null
 						&& !conditions.get("startDate").isEmpty()
 						&& conditions.get("endDate") != null
