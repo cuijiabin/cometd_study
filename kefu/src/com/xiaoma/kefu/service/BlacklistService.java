@@ -53,7 +53,6 @@ public class BlacklistService {
 		 */
 		public void getResult(Map<String, String> conditions,PageBean<Blacklist> pageBean){
 			blacklistDaoImpl.findByCondition(conditions,pageBean);
-
 		 }
 
 			/**

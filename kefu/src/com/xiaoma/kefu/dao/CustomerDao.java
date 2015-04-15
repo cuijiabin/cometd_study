@@ -70,6 +70,7 @@ public interface CustomerDao extends BaseDao<Customer>{
 			PageBean<Customer> pageBean);
     
 
-	List<Customer> getCustomerByCon(Integer start, Integer offset,
+	public List getCustomerByCon(Integer start, Integer offset,
 			String loginName, String phone);
+
 }

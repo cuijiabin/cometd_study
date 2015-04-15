@@ -69,6 +69,9 @@ public class Customer implements Serializable {
 	@Column(name = "firstLandingPage")
 	private String firstLandingPage;
 	
+	@Column(name = "styleName")
+	private String styleName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -186,6 +189,15 @@ public class Customer implements Serializable {
 		
 		return JsonUtil.toJson(this);
 	}
+
+	public String getStyleName() {
+		return styleName;
+	}
+
+	public void setStyleName(String styleName) {
+		this.styleName = styleName;
+	}
+	
 	
 	
 }

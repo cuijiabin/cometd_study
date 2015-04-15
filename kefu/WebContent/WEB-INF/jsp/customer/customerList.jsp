@@ -18,14 +18,14 @@
         </tr>
     </thead>
     <tbody>
-    <c:forEach var="customer" items="${pageBean.objList}"> 
+    <c:forEach var="obj" items="${pageBean.objList}"> 
         <tr>
-            <td>风格</td>
-            <td>${customer.id}</td>
-            <td>${customer.customerName}</td>
-            <td>${customer.phone}</td>
-            <td>咨询页面</td>
-            <td>${customer.createDate}</td>
+            <td>${obj[0].styleName}</td>
+            <td>${obj[0].id}</td>
+            <td>${obj[0].customerName}</td>
+            <td>${obj[0].phone}</td>
+            <td>${obj[1].consultPage }</td>
+            <td>${obj[1].keywords}</td>
         </tr>
     </c:forEach>
     </tbody>

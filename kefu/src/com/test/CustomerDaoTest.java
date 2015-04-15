@@ -1,7 +1,5 @@
 package com.test;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +37,5 @@ public class CustomerDaoTest {
 		JedisDao.setKOT("customer:2", customer, 600);
 	}
 	
-	@Test
-	public void testJedisCRUD(){
-		
-//		Customer customer = (Customer) JedisDao.getObject("customer:2");
-//		
-//		System.out.println(customer.getRemark());
-		
-		List<Customer> list = customerDao.getCustomerByConditions(null, null, "你妹", null, 3L);
-		System.out.println(list);
-		
-	}
+
 }

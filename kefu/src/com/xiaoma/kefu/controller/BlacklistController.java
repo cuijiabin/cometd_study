@@ -40,7 +40,6 @@ public class BlacklistController {
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
 	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ){
-
 		try {
 			blacklistService.getResult(conditions.getMap(), pageBean);
 			if (conditions == null || conditions.getMap() == null
@@ -58,10 +57,9 @@ public class BlacklistController {
      * 
      * @return 返回值
      */
-    @RequestMapping(value = "new.action")
-    public String toSave() {
+    @RequestMapping(value = "new.action",method=RequestMethod.GET)
+    public String toSave(Model model,Blacklist blacklist) {
 
-    	
         return "customer/addBlacklist";
       }
 
@@ -70,7 +68,7 @@ public class BlacklistController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save( @ModelAttribute("blacklist")Blacklist blacklist,String enddate,Model model) throws ParseException {
+	public String save(Blacklist blacklist,String enddate,Model model) throws ParseException {
 		
 		try {
 			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -95,7 +93,7 @@ public class BlacklistController {
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.POST)
 	public String updateBlacklist(Model model, @ModelAttribute("blacklist")Blacklist blacklist ,String enddate) {
-      System.out.println("========进入修改方法==========");
+    
 		try {
 
 			Blacklist toUpdateBlacklist = blacklistService.getBlacklistById(blacklist.getId());
