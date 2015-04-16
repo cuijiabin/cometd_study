@@ -17,9 +17,9 @@
         <c:forEach var="dept" items="${pageBean.objList}">
         <tr>
             <td>${dept.name}</td>
-            <td><a href="javascript:findUser(${dept.id})">查看<a/>&nbsp;&nbsp;<a href="javascript:updateDept(${dept.id})">编辑<a/>&nbsp;&nbsp;<a href="javascript:if(confirm('确实要删除吗?'))location='/dept/delete.action?id=${dept.id}'">删除<a/></td>
+            <td><a href="javascript:findUser(${dept.id})">查看<a/>&nbsp;&nbsp;<a href="javascript:updateDept(${dept.id})">编辑<a/>&nbsp;&nbsp;<a href="javascript:deleteDept(${dept.id})">删除<a/></td>
         </tr>
         </c:forEach>
     </tbody>
 </table>
-<jsp:include page="../../page.jsp"></jsp:include>
+<jsp:include page="../../../page.jsp"></jsp:include>

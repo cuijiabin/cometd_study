@@ -30,9 +30,11 @@
             <td>${user.onLineStatus}</td>
             <td>${user.deptId}</td>
             <td>${user.maxListen}</td>
-            <td><a href="javascript:findUser(${user.id})">查看<a/>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:updateUser(${user.id})">编辑<a/></td>
+            <td><a href="javascript:findUser(${user.id})">查看<a/>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <c:if test="${status==1}"><a href="javascript:updateUser(${user.id})">编辑<a/></c:if>
+            </td>
         </tr>
         </c:forEach>
     </tbody>
 </table>
-<jsp:include page="../../page.jsp"></jsp:include>
+<jsp:include page="../../../page.jsp"></jsp:include>

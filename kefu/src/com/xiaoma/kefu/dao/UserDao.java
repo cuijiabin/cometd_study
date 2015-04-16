@@ -65,6 +65,12 @@ public interface UserDao extends BaseDao<User> {
 	 */
 	public abstract void findByCondition(Map<String, String> conditions,
 			PageBean<User> pageBean);
+    /**
+     * 查询角色下的员工
+     * @param id
+     * @return
+     */
+	public abstract List<User> getUsertByRoleId(Integer id);
 
 
 }

@@ -30,4 +30,7 @@
 	<!-- 声明视图解析器,JSP专用 -->
 	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
 	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
+	
+	<!--	upload	 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" /> 
 </beans>

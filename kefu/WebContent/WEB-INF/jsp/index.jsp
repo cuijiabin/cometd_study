@@ -95,7 +95,8 @@ $("#openClose").click(function(){
 });
 
 $(function(){
-	$("#leftMain").load("/function/tree.action?id=2");
+	var funcId = '${func.id}';
+	$("#leftMain").load("/function/tree.action?id="+funcId);
 	$("#rightMain").attr("src", "/welcome.html");
 })
 

@@ -77,9 +77,9 @@ public class RoleController {
 			roleService.getResult(conditions.getMap(), pageBean);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
-				return "/set/govern/role";
+				return "/set/govern/role/role";
 			else
-				return "/set/govern/roleList";
+				return "/set/govern/role/roleList";
 		} catch (Exception e) {
 			model.addAttribute("message", "查询失败,请刷新重试!");
 			logger.error(e.getMessage());
@@ -97,7 +97,7 @@ public class RoleController {
 	@RequestMapping(value = "addRole.action", method = RequestMethod.GET)
 	public String addRole(Model model, Role role) {
 
-		return "/set/govern/addRole";
+		return "/set/govern/role/addRole";
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class RoleController {
 		System.out.println(role);
 		model.addAttribute("role", role);
 
-		return "/set/govern/addRole";
+		return "/set/govern/role/addRole";
 	}
 
 	/**
@@ -186,24 +186,24 @@ public class RoleController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
+	@RequestMapping(value = "delete.action", method = RequestMethod.POST)
 	public String deleteProduct(Model model, Integer id) {
 
 		try {
-			// boolean isSuccess = roleService.deleteRoleById(id);
-			System.out.println(id);
 			Integer isSuccess = roleService.deleteRoleById(id);
 			if (isSuccess == 1) {
-				model.addAttribute("result", Ajax.JSONResult(0, "删除产品成功!"));
-			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else if(isSuccess==3){
+				model.addAttribute("result", Ajax.JSONResult(3, "该角色有员工在使用,不能删除!"));
+			}else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
 
-		return "redirect:/role/list.action";
+		return "resultjson";
 	}
 
 }

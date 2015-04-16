@@ -120,11 +120,11 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 	    */
 	   public Integer updateUser(User user) throws UnsupportedEncodingException{
 		   User toUpdateUser = userDaoImpl.findById(User.class,user.getId());
-		   if(user.getPassword()!=""||user.getPassword()!=null){
-			String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
-			  toUpdateUser.setPassword(password);
-		   }else{
+		   if(user.getPassword()==""||user.getPassword()==null){
 			   toUpdateUser.setPassword(toUpdateUser.getPassword());
+		   }else{
+			   String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
+			   toUpdateUser.setPassword(password);
 		   }
 		    toUpdateUser.setLoginName(user.getLoginName());
 		    toUpdateUser.setCardName(user.getCardName());
@@ -133,6 +133,7 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 		    toUpdateUser.setStatus(toUpdateUser.getStatus());
 		    toUpdateUser.setListenLevel(user.getListenLevel());
 		    toUpdateUser.setEmail(user.getEmail());
+		    toUpdateUser.setMaxListen(user.getMaxListen());
 		    toUpdateUser.setCreateDate(user.getCreateDate());
 		  return userDaoImpl.update(toUpdateUser); 
 	   }

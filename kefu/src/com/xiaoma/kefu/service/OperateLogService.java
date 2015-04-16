@@ -31,6 +31,14 @@ public class OperateLogService {
 	public void getResult(Map<String, String> conditions,PageBean<OperateLog> pageBean){
 		operateLogDaoImpl.findByCondition(conditions,pageBean);	
 	}
-
+	/**
+	 * 保存log
+	 * @param log
+	 * @return
+	 */
+	public Integer addLog(OperateLog log){
+		return (Integer)operateLogDaoImpl.add(log);	
+	}
+	
 
 }

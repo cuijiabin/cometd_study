@@ -12,8 +12,8 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/jsplugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
 <div class="m-crumb">
     <ul class="f-cb">
@@ -25,22 +25,36 @@
     </ul>
 </div>
 <h4>角色： ${role.name}</h4>
-<table  border="1">
-<c:forEach items="${list}" var="dept">
-    <tr>
-    	<td><a href="#" style="font-size: 16px">${dept.name}</a></td>
-    </tr>
-</c:forEach>
-</table>
-<table border=1 height=600px align=center>
-	<tr>
-		<td width=260px align=left valign=top>
-			<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
-		</td>
-		<TD width=0px align=left valign=top></td>
-	</tr>
-	<button class="btn" onclick="saveFunc()">保存</button>
-</table>  		
+    	<!-- 表格有边框 -->
+        <table class="table m-table c-wdat f-mar0">
+            <tbody>
+                <tr>
+                   <td class="c-wd150 f-vat">
+					 
+                    	<ul class="e_tit c-bor">
+                            <c:forEach items="${list}" var="dept">
+                        	     <li id="dept${dept.id}" name="deptcss" class="" value="${dept.id}" onclick="checkde(this)">
+                            	    <a><b class="c-colf00"></b>${dept.name}</a>
+                                 </li>
+					        </c:forEach>
+                        </ul>
+                    </td>
+                    <td>
+                    <div class="g-cnt">
+                    <table class="table table-bordered m-table c-wdat f-mar0">
+							<tr>
+								<td width=260px align=left valign=top>
+									<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
+								</td>
+								<TD width=0px align=left valign=top></td>
+							</tr>
+							<button class="btn" onclick="saveFunc()">保存</button>
+					</table>
+					</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table> 		
 </body>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -110,6 +124,8 @@ function saveFunc(){
 		return $(this).val();
 	}).get();
 	alert(ids);
+	var treeObj = $.fn.zTree.getZTreeObj("tree");
+	var nodes = treeObj.getCheckedNodes(true);
 // 	$.ajax({
 // 		url:"/user/leave.action?status="+status+"",
 // 		type:"post",
@@ -124,6 +140,26 @@ function saveFunc(){
 // 		}
 // 	});
 	
+}
+
+function checkde(obj){
+	var val=obj.value;
+	alert(val);
+	$("li").removeClass();
+	$("#dept"+val+"").addClass("on");
+	$.ajax({
+		url:"/user/leave.action",
+		type:"post",
+		data:"deptId="+val,
+		dataType:"json",
+		success:function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(data) {
+			alert("出现错误,请重试！");
+		}
+	});
 }
 </script>
 

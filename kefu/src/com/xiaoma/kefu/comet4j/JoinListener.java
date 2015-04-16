@@ -87,6 +87,15 @@ public class JoinListener extends ConnectListener {
 				//通知数据
 				NoticeData nd = new NoticeData(Constant.ON_OPEN, null);
 		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
+		        
+		        String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, allocateCnnId);
+		        User allocateUser = userService.getUserById(Integer.valueOf(uId));
+		        
+		        //告知自己已经连接上
+		        CometConnection myCcn = engine.getConnection(ccnId);
+		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, allocateUser);
+		        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
+		        
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

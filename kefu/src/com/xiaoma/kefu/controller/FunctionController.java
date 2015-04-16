@@ -73,7 +73,7 @@ public class FunctionController {
 				model.addAttribute("role",role);
 				model.addAttribute("list",deptlist);
 				model.addAttribute("json", json.toString());
-				return "/set/govern/func";
+				return "/set/govern/func/func";
 			} else {
 				return "null";
 			}

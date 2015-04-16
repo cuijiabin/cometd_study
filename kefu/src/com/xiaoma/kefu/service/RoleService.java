@@ -1,15 +1,23 @@
 package com.xiaoma.kefu.service;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.dao.DepartmentDao;
+import com.xiaoma.kefu.dao.FunctionDao;
 import com.xiaoma.kefu.dao.RoleDao;
+import com.xiaoma.kefu.dao.RoleDeptDao;
+import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.Role;
+import com.xiaoma.kefu.model.RoleDept;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -20,7 +28,9 @@ import com.xiaoma.kefu.util.PageBean;
 @Service
 public class RoleService {
 	@Autowired RoleDao roleDaoImpl;
-	
+	@Autowired DepartmentDao deptDaoImpl;
+	@Autowired RoleDeptDao roleDeptDao;
+	@Autowired UserDao userDaoImpl;
 	/**
 	 * 查询所有
 	 * @param currentPage
@@ -62,7 +72,17 @@ public class RoleService {
 	public Integer createNewUser(Role role) {
 		role.setCreateDate(new Date());
 		role.setIsDel(0);
-		return (Integer) roleDaoImpl.add(role);
+		int roleId=(Integer) roleDaoImpl.add(role);
+		List<Department> list = deptDaoImpl.findDept();
+		for (Department dept : list) {
+			RoleDept rd=new RoleDept();
+			rd.setRoleId(roleId);
+			rd.setDeptId(dept.getId());
+			rd.setCreateDate(new Date());
+			rd.setIsDel(0);
+			roleDeptDao.add(rd);
+		}
+		return roleId;
 	}
 
 	  /**
@@ -89,9 +109,13 @@ public class RoleService {
 	 * @return
 	 */
 	public Integer deleteRoleById(Integer id){
+		List<User> user=userDaoImpl.getUsertByRoleId(id);
+		if(user.isEmpty() || user==null){
 		Role role =roleDaoImpl.findById(Role.class, id);
 		role.setIsDel(1);
            return roleDaoImpl.update(role);
+		}
+		return 3;
 	}
 
 	public Integer checkRole(Role role) {

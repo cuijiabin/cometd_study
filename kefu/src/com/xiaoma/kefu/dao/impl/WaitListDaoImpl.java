@@ -29,6 +29,41 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 		query.setString("waitListName", "%" + waitListName + "%");
 		return	query.list();
 	}
+	
+	/**
+	 * 查找风格下的 一级菜单
+	* @Description: TODO
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月15日
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WaitList> findOneLev(Integer styleId) {
+		Session session = getSession();
+		String hql = "from WaitList t where t.styleId = :styleId ";
+		Query query = session.createQuery(hql);
+		query.setInteger("styleId", styleId);
+		return	query.list();
+	}
+	/**
+	 * 根据pid,查找二级菜单
+	* @Description: TODO
+	* @param pId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月15日
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WaitList> findByPid(Integer pId){
+		Session session = getSession();
+		String hql = "from WaitList t where t.pId = :pId ";
+		Query query = session.createQuery(hql);
+		query.setInteger("pId", pId);
+		return	query.list();
+	}
 
 	
 }

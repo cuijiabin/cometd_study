@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.xiaoma.kefu.model.LoginLog;
@@ -13,4 +14,5 @@ import com.xiaoma.kefu.util.PageBean;
  */
 public interface LoginLogDao extends BaseDao<LoginLog>{
 	public void findByCondition(Map<String, String> conditions,	PageBean<LoginLog> pageBean);
+	public List<LoginLog> findByUserId(Integer userId);
 }

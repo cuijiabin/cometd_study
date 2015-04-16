@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="bd">
                     <div class="g-mn5c c-bor">
-                        <h3 class="u-tit c-bg f-txtl">等待咨询...</h3>
+                        <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             </div>
@@ -186,7 +186,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						onMessage(data);
 						break;
 					case 'on_open': // 上线
-						onJoin(data);
+						onOpen(data.obj);
 						break;
 					case 'on_close': // 下线
 						onLeft(data);
@@ -229,15 +229,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			moveScroll();
 		}
 		// 用户上线通知
-		function onJoin(data) {
-			var id = data.id;
-			var name = data.name || '';
+		function onOpen(data) {
+			var name = data.cardName || '';
 			name = name.HTMLEncode();
-			var t = data.transtime;
-			var str = ['<p class="r-visitor">',name,'&nbsp;',t,'&nbsp;上线了</p>'];
-			checkLogCount();
-			logbox.innerHTML += str.join('');
-			lastTalkId = null;
+			var str = '<p class="r-visitor">成功建立连接</p>';
+			var html='与'+name+'对话中...';
+			$("#dialogueTitle").html(html);
+			logbox.innerHTML += str;
 			moveScroll();
 		}
 		// 用户下线通知

@@ -36,6 +36,42 @@ public class WaitListService {
 		return waitListDaoImpl.findByNameLike(waitListName);
 	}
 	
+	/**
+	 * 根据主键id查询
+	* @Description: TODO
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月14日
+	 */
+	public WaitList get(Integer id) {
+		return waitListDaoImpl.findById(WaitList.class, id);
+	}
+	
+	/**
+	 * 查找风格下的 一级菜单
+	* @Description: TODO
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月15日
+	 */
+	public List<WaitList> getOneLev(Integer styleId) {
+		return waitListDaoImpl.findOneLev(styleId);
+	}
+
+	/**
+	 * 根据pid,查找二级菜单
+	* @Description: TODO
+	* @param pId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月15日
+	 */
+	public List<WaitList> getByPid(Integer pId) {
+		return waitListDaoImpl.findByPid(pId);
+	}
+	
 
 
 }

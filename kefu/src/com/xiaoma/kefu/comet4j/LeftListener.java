@@ -12,6 +12,7 @@ import org.comet4j.core.listener.DropListener;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.thread.SaveDialogueThread;
 
 /**
  * @description LeftListener
@@ -34,7 +35,7 @@ public class LeftListener extends DropListener {
 				
 				JedisTalkDao.remCcnList( JedisConstant.CUSTOMER_TYPE, ccnId);
 				JedisTalkDao.remUserCcnList(userId, ccnId);
-				JedisTalkDao.delCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+				
 				
 				String opeCcnId = JedisTalkDao.getCcnPassiveId(ccnId);
 				JedisTalkDao.remCcnReceiveList(ccnId, opeCcnId);
@@ -54,13 +55,16 @@ public class LeftListener extends DropListener {
 				//通知数据
 				NoticeData nd = new NoticeData(Constant.ON_CLOSE, null);
 		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
+		        
+		      //保存会话
+				SaveDialogueThread sdt = new SaveDialogueThread(null,ccnId);
+				Thread th = new Thread(sdt);
+				th.start();
 				
 			}else{
 				userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
 				JedisTalkDao.remCcnList( JedisConstant.USER_TYPE, ccnId);
 				JedisTalkDao.remUserCcnList(userId, ccnId);
-				JedisTalkDao.delCnnUserId(JedisConstant.USER_TYPE, ccnId);
-				
 				
 				List<String> receiveCnnIds = JedisTalkDao.getCcnReceiveList(ccnId);
 				for(String rCnnId : receiveCnnIds){
@@ -73,6 +77,19 @@ public class LeftListener extends DropListener {
 				
 				logger.info("客服userId："+userId+" ,退出联接; 通信点id："+ccnId+" ,清空接待列表key："+ccnReceiveListKey
 						+" ,清空接待列表数量key: "+currentReceiveCountKey);
+				
+				//通知前端用户对话结束！
+				NoticeData nd = new NoticeData(Constant.ON_CLOSE, null);
+				CometEngine engine = (CometEngine) anEvent.getTarget();
+		        for(String rCnnId : receiveCnnIds){
+		        	CometConnection ccn = engine.getConnection(rCnnId);
+		        	 engine.sendTo(Constant.CHANNEL, ccn, nd);
+				}
+		        
+		      //保存会话
+		     SaveDialogueThread sdt = new SaveDialogueThread(ccnId,null);
+		     Thread th = new Thread(sdt);
+			 th.start();
 			}
 			
 		}

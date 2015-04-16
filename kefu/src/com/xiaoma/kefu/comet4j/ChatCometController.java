@@ -2,6 +2,7 @@ package com.xiaoma.kefu.comet4j;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.StudyMapUtil;
+import com.xiaoma.kefu.util.TimeHelper;
 
 @Controller
 @RequestMapping(value = "chat")
@@ -46,6 +50,8 @@ public class ChatCometController {
 	@RequestMapping(value = "toCustomer.action", method = RequestMethod.POST)
 	public void talkToCustomer(HttpServletRequest request,HttpServletResponse response, String userCId, String cusCId,String message) throws IOException {
 
+		Long sendTime = System.currentTimeMillis();
+		
 		CometEngine engine = context.getEngine();
 		String toId = JedisTalkDao.getTalkerCcnId(JedisConstant.USER_TYPE,userCId);
 
@@ -55,10 +61,25 @@ public class ChatCometController {
 			JedisTalkDao.setTalkerCcnId(JedisConstant.CUSTOMER_TYPE, cusCId,userCId);
 		}
 		
-		Message umessage = new Message(userCId,"我",message,"15:03");
+		//把消息放入redis
+		DialogueDetail dialogueDetail = new DialogueDetail();
+		dialogueDetail.setContent(message);
+		dialogueDetail.setDialogueType(2);
+		dialogueDetail.setCreateDate(new Date(sendTime));
+		dialogueDetail.setUserId(null);
+		dialogueDetail.setCustomerId(null);
+		dialogueDetail.setCardName(null);
+		String strMessage = JsonUtil.toJson(dialogueDetail);
+		
+		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
+		
+		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
+		
+		//包装消息并发送
+		Message umessage = new Message(userCId,"我",message,messageTime);
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(cusCId,"客服",message,"15:03");
+		Message cmessage = new Message(cusCId,"客服",message,messageTime);
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
@@ -82,7 +103,8 @@ public class ChatCometController {
 	 */
 	@RequestMapping(value = "toUser.action", method = RequestMethod.POST)
 	public void talkToUser(HttpServletRequest request,HttpServletResponse response, String cusCId, String message) throws IOException {
-
+        
+		Long sendTime = System.currentTimeMillis();
 		CometEngine engine = context.getEngine();
 		
 		String userCId = JedisTalkDao.getCcnPassiveId(cusCId);
@@ -95,10 +117,25 @@ public class ChatCometController {
 			
 		}
 		
-		Message umessage = new Message(userCId,"客户",message,"15:03");
+		//把消息放入redis
+		DialogueDetail dialogueDetail = new DialogueDetail();
+		dialogueDetail.setContent(message);
+		dialogueDetail.setDialogueType(1);
+		dialogueDetail.setCreateDate(new Date(sendTime));
+		dialogueDetail.setUserId(null);
+		dialogueDetail.setCustomerId(null);
+		dialogueDetail.setCardName(null);
+		String strMessage = JsonUtil.toJson(dialogueDetail);
+		
+		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
+		
+		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
+		
+		//包装消息并发送
+		Message umessage = new Message(userCId,"客户",message,messageTime);
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(cusCId,"我",message,"15:03");
+		Message cmessage = new Message(cusCId,"我",message,messageTime);
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);

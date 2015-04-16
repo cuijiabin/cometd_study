@@ -163,4 +163,13 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		find(User.class, relation, role, null, orders, pageBean);
 	}
 
+	@Override
+	public List<User> getUsertByRoleId(Integer roleId) {
+		Session session = getSession();
+		String hql = "from User u where u.status<>2 and u.roleId ="+roleId
+				+ " order by u.id asc";
+		Query query = session.createQuery(hql);
+		return (List<User>) query.list();
+	}
+
 }

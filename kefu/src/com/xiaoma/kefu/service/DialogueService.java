@@ -140,9 +140,9 @@ public class DialogueService {
 	 */
 	private void createExcel(List<String> title, List<List<String>> contentList) throws Exception {
 		String basePath = SystemConfiguration.getInstance().getFileUrl()
-				+File.separator + SysConst.EXP_TALK_PATH ;
+				+"/" + SysConst.EXP_TALK_PATH ;
 		String fileName = getFileName();
-		String path = basePath + File.separator + fileName + ".xlsx";
+		String path = basePath + "/" + fileName + ".xlsx";
 		File file = new File(path);
 		createFileWithDirs(file);//创建目录
 		
@@ -277,5 +277,9 @@ public class DialogueService {
 		return false;
 	}
 
+	public Long add(Dialogue dialogue){
+		
+		return (Long) dialogueDaoImpl.add(dialogue);
+	}
 
 }

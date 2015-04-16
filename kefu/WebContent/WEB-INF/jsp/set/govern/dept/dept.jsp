@@ -54,29 +54,46 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        alert("出现错误,请重试!");
 	    }
 	});
 }
 
 function addDept(){
-	var d = $.dialog({id:'dept',content:'url:/dept/addDept.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'dept',title:"添加部门",content:'url:/dept/addDept.action',lock:true, width:	500,height: 300,});
 }
 function updateDept(id){
 
-	var d = $.dialog({id:'dept',content:'url:/dept/detail.action?id='+id+'',lock:true, width: 
+	var d = $.dialog({id:'dept',title:"修改部门",content:'url:/dept/detail.action?id='+id+'',lock:true, width: 
 
 		500,height: 300,});
 
 }
 function findUser(id){
 
-	var d = $.dialog({id:'dept',content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
+	var d = $.dialog({id:'dept',title:"查看部门员工",content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
 		600,height: 600,});
 
 }
-
+function deleteDept(id){
+	if(confirm('确实要删除吗?')){
+	var url="/dept/delete.action";
+	$.ajax({
+		type : "get",
+		url : url,
+		data : {"id":id},
+		dataType : "json",
+		success : function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(msg) {
+			alert("出现错误,请重试!");
+		}
+	});
+	}
+}
 function callback(){
 	$.dialog({id:'dept'}).close();
 	find();

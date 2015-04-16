@@ -18,9 +18,10 @@
         <tr>
             <td>${role.name}</td>
             <td><a href="">查看<a/>&nbsp;&nbsp;<a href="javascript:updateRole(${role.id})">编辑<a/>&nbsp;&nbsp;
-            <a href="javascript:if(confirm('确实要删除吗?'))location='/role/delete.action?id=${role.id}'">删除<a/>&nbsp;&nbsp;<a href="/function/permit.action?id=${role.id}">权限配置<a/></td>
+            <a href="javascript:deleteRole(${role.id});" >删除<a/>&nbsp;&nbsp;<a href="/function/permit.action?id=${role.id}">权限配置<a/></td>
         </tr>
         </c:forEach>
     </tbody>
 </table>
-<jsp:include page="../../page.jsp"></jsp:include>
+<jsp:include page="../../../page.jsp"></jsp:include>
+<!-- javascript:if(confirm('确实要删除吗?'))location='/role/delete.action?id=${role.id}' -->

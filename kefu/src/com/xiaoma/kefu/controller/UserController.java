@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
@@ -17,15 +18,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.FunctionService;
 import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.service.UserService;
+import com.xiaoma.kefu.thread.AddLoginLogThread;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
@@ -61,40 +67,55 @@ public class UserController {
 	 * @param session
 	 */
 	@RequestMapping(value = "login.action", method = RequestMethod.POST)
-	public String login(HttpSession session, String loginName, String password,String yzm,Model model) {
-	    String yanzheng=session.getAttribute("randomCode").toString();
-	    Date oldTime= (Date) session.getAttribute("yzmtime");
-	    Date newTime= new Date();
-	     long count=newTime.getTime()-oldTime.getTime();
-	    if(count<400000){
-	    	 if(yzm.equals(yanzheng)){
-	 	    	User user=userService.login(loginName,password);
-	 	    	if(user!=null){
-	 	    		session.setAttribute(CacheName.USER, user);
-	 	    		model.addAttribute("result", Ajax.JSONResult(0, "登陆成功!"));
-	 	    	}else{
-	 	    		model.addAttribute("result", Ajax.JSONResult(3, "登录名或者密码错误!"));
-
-	 	    	}
-	 	    }else{
-		    	model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
-		    }	
-	    }else{
-	    	model.addAttribute("result", Ajax.JSONResult(2, "验证码过期,请刷新重登!"));
-	    }
+	public String login(HttpSession session, HttpServletRequest request,
+			String loginName, String password, String yzm, Model model) {
+		String yanzheng = session.getAttribute("randomCode").toString();
+		Date oldTime = (Date) session.getAttribute("yzmtime");
+		Date newTime = new Date();
+		long count = newTime.getTime() - oldTime.getTime();
+		if (count < 400000) {
+			if (yzm.equals(yanzheng)) {
+				User user = userService.login(loginName, password);
+				if (user != null) {
+					session.setAttribute(CacheName.USER, user);
+					model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
+					Thread thread = new AddLoginLogThread(user.getId(),
+							CookieUtil.getIpAddr(request));
+					if (thread != null)
+						thread.start();
+				} else {
+					model.addAttribute("result",
+							Ajax.JSONResult(3, "登录名或者密码错误!"));
+				}
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
+			}
+		} else {
+			model.addAttribute("result", Ajax.JSONResult(2, "验证码过期,请刷新重登录!"));
+		}
 		return "resultjson";
 	}
+
 	/**
-	 *进入主页的树列表展示
+	 * 进入主页的树列表展示
 	 * 
 	 * @param name
 	 * @param password
 	 * @param session
 	 */
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
-	public String main(HttpSession session,Model model) {
+	public String main(HttpSession session, Model model, Integer typeId) {
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null)
+			return "login";
 		List list = funcService.findFuncOne();
 		model.addAttribute("topList", list);
+		// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
+		if (typeId == null)
+			typeId = 2;
+		Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
+				typeId);
+		model.addAttribute("func", function);
 		return "index";
 	}
 
@@ -160,14 +181,16 @@ public class UserController {
 	 */
 
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, Model model, @ModelAttribute("pageBean") PageBean<User> pageBean) {
+	public String queryAll(MapEntity conditions, Model model,
+			@ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
 			userService.getResult(conditions.getMap(), pageBean);
-			model.addAttribute("status",conditions.getMap().get("status"));
-			if (conditions == null || conditions.getMap() == null || conditions.getMap().get("typeId") == null)
-				return "/set/govern/user";
+			model.addAttribute("status", conditions.getMap().get("status"));
+			if (conditions == null || conditions.getMap() == null
+					|| conditions.getMap().get("typeId") == null)
+				return "/set/govern/user/user";
 			else
-				return "/set/govern/userList";
+				return "/set/govern/user/userList";
 		} catch (Exception e) {
 			model.addAttribute("message", "查询失败,请刷新重试!");
 			logger.error(e.getMessage());
@@ -192,7 +215,7 @@ public class UserController {
 			return "error";
 		}
 
-		return "/set/govern/addUser";
+		return "/set/govern/user/addUser";
 	}
 
 	/**
@@ -230,11 +253,11 @@ public class UserController {
 			System.out.println(list);
 			JSONArray json = JSONArray.fromObject(list);
 			model.addAttribute("result", json.toString());
-			return "views/resultjson";
+			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error";
 		}
 	}
 
@@ -252,7 +275,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error500";
 		}
 	}
 
@@ -260,7 +283,7 @@ public class UserController {
 	 * 在弹出的对话框中显示详细信息
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
-	public String userDetail(Model model, Integer id,Integer type) {
+	public String userDetail(Model model, Integer id, Integer type) {
 		System.out.println(type);
 		try {
 			User user = userService.getUserById(id);
@@ -269,15 +292,15 @@ public class UserController {
 			model.addAttribute("user", user);
 			model.addAttribute("deptList", dlist);
 			model.addAttribute("roleList", rlist);
-			if(type==null){
-				return "/set/govern/addUser";
-			}else{
-				return "/set/govern/checkUser";
+			if (type == null) {
+				return "/set/govern/user/addUser";
+			} else {
+				return "/set/govern/user/checkUser";
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error500";
 		}
 	}
 
@@ -311,14 +334,13 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "leave.action", method = RequestMethod.POST)
-	public String updateLeave(Model model, String ids,Integer status) {
-		if(ids==null ||status==null){
+	public String updateLeave(Model model, String ids, Integer status) {
+		if (ids == null || status == null) {
 			model.addAttribute("error", "出错了,请刷新页面重试！");
 			return "resultjson";
 		}
 		try {
-			Integer isSuccess = userService.leaveUser(ids,status);
-
+			Integer isSuccess = userService.leaveUser(ids, status);
 			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
@@ -362,16 +384,16 @@ public class UserController {
 		try {
 			Integer isSuccess = userService.deleteUserById(ids);
 
-				if (isSuccess == 1) {
-					model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
-				} else {
-					model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
-				}
-			} catch (Exception e) {
+			if (isSuccess == 1) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
 
-			return "resultjson";
+		return "resultjson";
 
 	}
 
@@ -400,12 +422,6 @@ public class UserController {
 
 		return "resultjson";
 
-	}
-
-	@RequestMapping(value = "logout.action", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
-		session.removeAttribute("currentUser");
-		return "/views/login";
 	}
 
 	/**
@@ -453,17 +469,32 @@ public class UserController {
 		}
 		return "resultjson";
 	}
+
 	/**
-	 *退出系统
+	 * 退出系统
 	 * 
 	 * @param name
 	 * @param password
 	 * @param session
 	 */
 	@RequestMapping(value = "exit.action")
-	public String exit(HttpSession session,Model model) {
-	         session.removeAttribute("user");
+	public String exit(HttpSession session, Model model) {
+		session.removeAttribute("user");
 		return "login";
+	}
+
+	/**
+	 * 退出系统
+	 * 
+	 * @param name
+	 * @param password
+	 * @param session
+	 */
+	@RequestMapping(value = "clear.action")
+	public String clearTable(Model model, String name) {
+		DictMan.clearTableCache(name);
+		model.addAttribute("result", Ajax.toJson(0, "清除成功!"));
+		return "resultjson";
 	}
 
 }
