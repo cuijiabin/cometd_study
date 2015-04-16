@@ -28,48 +28,56 @@ public class LeftListener extends DropListener {
 			
 			String ccnId = conn.getId();
 			
-			String userId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+			String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+			Boolean isCustomer = StringUtils.isNotBlank(customerId);
 			
 			//移除缓存
-			if(StringUtils.isNotBlank(userId)){
+			if(isCustomer){
 				
 				JedisTalkDao.remCcnList( JedisConstant.CUSTOMER_TYPE, ccnId);
-				JedisTalkDao.remUserCcnList(userId, ccnId);
+				JedisTalkDao.remUserCcnList(customerId, ccnId);
+				JedisTalkDao.delCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
 				
-				
-				String opeCcnId = JedisTalkDao.getCcnPassiveId(ccnId);
-				JedisTalkDao.remCcnReceiveList(ccnId, opeCcnId);
-				JedisTalkDao.decrCurrentReceiveCount(opeCcnId);
-				
+				//获取通话对话点并删除
+				String toUserCcnId = JedisTalkDao.getCcnPassiveId(ccnId);
 				JedisTalkDao.delCcnPassiveId(ccnId);
+				JedisTalkDao.remCcnReceiveList(ccnId, toUserCcnId);
+				JedisTalkDao.decrCurrentReceiveCount(toUserCcnId);
 				
-				logger.info("前端用户customerId："+userId+" ,退出联接; 通信点id："+ccnId+" ,关联客服通信点id："+opeCcnId
-						+" ,客服id: "+JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, opeCcnId));
+				//保存会话
+		        String key = JedisConstant.getDialogueListKey(toUserCcnId,ccnId);
+		        JedisTalkDao.lpushSaveDialogue(key);
+				
+				logger.info("前端用户customerId："+customerId+" ,退出联接; 通信点id："+ccnId+" ,关联客服通信点id："+toUserCcnId
+						+" ,客服id: "+JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, toUserCcnId));
 				// 写入cookie
 				// DesUtil.encrypt(userId,PropertiesUtil.getProperties(CacheName.SECRETKEY));
 				
 				//通知客更新后台列表
 				CometEngine engine = (CometEngine) anEvent.getTarget();
-		        CometConnection ccn = engine.getConnection(opeCcnId);
+		        CometConnection ccn = engine.getConnection(toUserCcnId);
 		        
 				//通知数据
 				NoticeData nd = new NoticeData(Constant.ON_CLOSE, null);
 		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
 		        
-		      //保存会话
-				SaveDialogueThread sdt = new SaveDialogueThread(null,ccnId);
-				Thread th = new Thread(sdt);
-				th.start();
+		        
 				
 			}else{
-				userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+				String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+				
 				JedisTalkDao.remCcnList( JedisConstant.USER_TYPE, ccnId);
 				JedisTalkDao.remUserCcnList(userId, ccnId);
+				JedisTalkDao.delCnnUserId(JedisConstant.USER_TYPE, ccnId);
 				
 				List<String> receiveCnnIds = JedisTalkDao.getCcnReceiveList(ccnId);
 				for(String rCnnId : receiveCnnIds){
 					JedisTalkDao.delCcnPassiveId(rCnnId);
+					//保存会话
+			        String key = JedisConstant.getDialogueListKey(ccnId,rCnnId);
+			        JedisTalkDao.lpushSaveDialogue(key);
 				}
+				
 				//清空
 				String ccnReceiveListKey = JedisConstant.genCcnReceiveListKey(ccnId);
 				String currentReceiveCountKey = JedisConstant.genCurrentReceiveCountKey(ccnId);
@@ -86,10 +94,6 @@ public class LeftListener extends DropListener {
 		        	 engine.sendTo(Constant.CHANNEL, ccn, nd);
 				}
 		        
-		      //保存会话
-		     SaveDialogueThread sdt = new SaveDialogueThread(ccnId,null);
-		     Thread th = new Thread(sdt);
-			 th.start();
 			}
 			
 		}

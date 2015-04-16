@@ -102,8 +102,6 @@ function editCommon(id){
 	window.location = url;
 	return;
 }
-
-styleSet
 </script>
 </body>
 </html>

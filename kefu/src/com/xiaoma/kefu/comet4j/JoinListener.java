@@ -1,12 +1,9 @@
 package com.xiaoma.kefu.comet4j;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
 import org.comet4j.core.CometEngine;
@@ -27,11 +24,9 @@ import com.xiaoma.kefu.service.UserService;
  */
 public class JoinListener extends ConnectListener {
 
-	private CustomerService customerService = (CustomerService) SpringContextUtil
-			.getBean("customerService");
+	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
 
-	private UserService userService = (UserService) SpringContextUtil
-			.getBean("userService");
+	private UserService userService = (UserService) SpringContextUtil.getBean("userService");
 	private Logger logger = Logger.getLogger(JoinListener.class);
 
 	public boolean handleEvent(ConnectEvent anEvent) {
@@ -42,7 +37,6 @@ public class JoinListener extends ConnectListener {
 		HttpSession session = request.getSession();
 
 		User user = (User) session.getAttribute("user");
-//		User user = (User) ((obj == null) ? null : obj);
 
 		
 		// 连接点
@@ -70,7 +64,7 @@ public class JoinListener extends ConnectListener {
 
 				// 分配客服
 				String allocateCnnId = JedisTalkDao.allocateCcnId();
-
+				
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
 				JedisTalkDao.incrCurrentReceiveCount(allocateCnnId);
 				
@@ -102,9 +96,6 @@ public class JoinListener extends ConnectListener {
 
 		}
 
-		
-
-		// 对所有后台用户广播
 
 		return true;
 	}

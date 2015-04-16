@@ -30,11 +30,11 @@ public class DictMan {
 	public static String CahceNameItem = "DictionaryCacheItem";
 	public static void clearTableCache(String table) {
 		table = table.toLowerCase();
-		CacheMan.remove(CacheName.DICTITEM, table);
+		CacheMan.remove(CacheName.DICTLIST, table);
 	}
 	public static void clearItemCache(String table, String key) {
 		table = table.toLowerCase();
-		CacheMan.remove(CahceNameItem + table, key);
+		CacheMan.remove(CacheName.DICTITEM + table, key);
 	}
 	public static void addItemCache(String cacheName,String table, Object obj) {
 		table = table.toLowerCase();

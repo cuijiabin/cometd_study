@@ -10,12 +10,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,7 +26,6 @@ import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.JsonUtil;
-import com.xiaoma.kefu.util.StudyMapUtil;
 import com.xiaoma.kefu.util.TimeHelper;
 
 @Controller
@@ -34,6 +34,8 @@ public class ChatCometController {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	private Logger logger = Logger.getLogger(ChatCometController.class);
 
 	private static final CometContext context = CometContext.getInstance();
 
@@ -50,27 +52,31 @@ public class ChatCometController {
 	@RequestMapping(value = "toCustomer.action", method = RequestMethod.POST)
 	public void talkToCustomer(HttpServletRequest request,HttpServletResponse response, String userCId, String cusCId,String message) throws IOException {
 
-		Long sendTime = System.currentTimeMillis();
-		
-		CometEngine engine = context.getEngine();
-		String toId = JedisTalkDao.getTalkerCcnId(JedisConstant.USER_TYPE,userCId);
-
-		// 添加对话链接
-		if (toId == null) {
-			JedisTalkDao.setTalkerCcnId(JedisConstant.USER_TYPE, userCId, cusCId);
-			JedisTalkDao.setTalkerCcnId(JedisConstant.CUSTOMER_TYPE, cusCId,userCId);
+		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
+		//参数检查
+		if(StringUtils.isBlank(userCId) || StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
+			
+			return ;
 		}
+		
+		Long sendTime = System.currentTimeMillis();
+		CometEngine engine = context.getEngine();
+		
+		//获取用户id
+		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCId);
+		String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cusCId);
+		Integer uId = Integer.valueOf(userId);
+		Long cId = Long.valueOf(customerId);
 		
 		//把消息放入redis
 		DialogueDetail dialogueDetail = new DialogueDetail();
 		dialogueDetail.setContent(message);
 		dialogueDetail.setDialogueType(2);
 		dialogueDetail.setCreateDate(new Date(sendTime));
-		dialogueDetail.setUserId(null);
-		dialogueDetail.setCustomerId(null);
-		dialogueDetail.setCardName(null);
-		String strMessage = JsonUtil.toJson(dialogueDetail);
+		dialogueDetail.setUserId(uId);
+		dialogueDetail.setCustomerId(cId);
 		
+		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
 		
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
@@ -104,29 +110,31 @@ public class ChatCometController {
 	@RequestMapping(value = "toUser.action", method = RequestMethod.POST)
 	public void talkToUser(HttpServletRequest request,HttpServletResponse response, String cusCId, String message) throws IOException {
         
+		//参数检查
+		if(StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
+			return ;
+		}
 		Long sendTime = System.currentTimeMillis();
 		CometEngine engine = context.getEngine();
 		
 		String userCId = JedisTalkDao.getCcnPassiveId(cusCId);
-		String toId = JedisTalkDao.getTalkerCcnId(JedisConstant.USER_TYPE,cusCId);
-
-		// 添加对话链接
-		if (toId == null) {
-			JedisTalkDao.setTalkerCcnId(JedisConstant.CUSTOMER_TYPE, cusCId,userCId);
-			JedisTalkDao.setTalkerCcnId(JedisConstant.USER_TYPE, userCId, cusCId);
-			
-		}
+		logger.info("send message to user info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
+		
+		//获取用户id
+		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCId);
+		String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cusCId);
+		Integer uId = Integer.valueOf(userId);
+		Long cId = Long.valueOf(customerId);
 		
 		//把消息放入redis
 		DialogueDetail dialogueDetail = new DialogueDetail();
 		dialogueDetail.setContent(message);
 		dialogueDetail.setDialogueType(1);
 		dialogueDetail.setCreateDate(new Date(sendTime));
-		dialogueDetail.setUserId(null);
-		dialogueDetail.setCustomerId(null);
-		dialogueDetail.setCardName(null);
-		String strMessage = JsonUtil.toJson(dialogueDetail);
+		dialogueDetail.setUserId(uId);
+		dialogueDetail.setCustomerId(cId);
 		
+		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
 		
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);

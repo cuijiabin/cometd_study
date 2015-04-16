@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.redis;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 只存放与对话有关的redis常量
  * 
@@ -73,6 +75,11 @@ public class JedisConstant {
 	 * 对话列表( 客服ccnId+客户ccnId --> list)
 	 */
 	public static final String DIALOGUE_LIST = "dialogue_list:";
+	
+	/**
+	 * 待保存对话队列
+	 */
+	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
 
 	// #######生成key方法
 	/**
@@ -174,4 +181,50 @@ public class JedisConstant {
 
 		return DIALOGUE_LIST + uccnId + CCN_ID + cccnId;
 	}
+	
+	/**
+	 * 检查对话列key表格式是否正确
+	 * @param dialogueListKey
+	 * @return
+	 */
+	public static Boolean checkDialogueListKey(String dialogueListKey){
+		
+		if(StringUtils.isBlank(dialogueListKey)){
+			return false;
+		}
+		
+		int start = dialogueListKey.indexOf(DIALOGUE_LIST);
+		if(start < 0){
+			return false;
+		}
+		
+		int end = dialogueListKey.indexOf(CCN_ID);
+		if(end <= start+DIALOGUE_LIST.length()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static String getUccnIdFromKey(String dialogueListKey){
+		int start = dialogueListKey.indexOf(DIALOGUE_LIST)+DIALOGUE_LIST.length();
+		int end = dialogueListKey.indexOf(CCN_ID);
+		
+		return dialogueListKey.substring(start, end);
+	}
+	
+	public static String getCccnIdFromKey(String dialogueListKey){
+		
+		int start = dialogueListKey.indexOf(CCN_ID)+CCN_ID.length();
+		
+		return dialogueListKey.substring(start);
+	}
+	
+	public static void main(String[] args) {
+		String demo = "dialogue_list:7e3f5bd8-6da1-4e77-be0f-d5b830dad76dccn_id:1c92dbe4-5ea7-4826-91fd-5ee71ee14e2e";
+		Boolean start = checkDialogueListKey(demo);
+		
+		System.out.println(start);
+	}
+	
 }

@@ -6,6 +6,8 @@ import javax.servlet.ServletContextListener;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 
+import com.xiaoma.kefu.thread.SaveDialogueThread;
+
 /**
  * @description AppInit
  * @author cuijiabin
@@ -27,10 +29,10 @@ public class AppInit implements ServletContextListener {
 		//删除时监听
 		engine.addDropListener(new LeftListener());
         
-		//全程监听 清理缓存内容
-//		Thread healthSender = new Thread(new HealthSender(), "HealthSender");
-//		healthSender.setDaemon(true);
-//		healthSender.start();
+		//全程监听 保存对话内容
+		Thread saveDialogueThread = new Thread(new SaveDialogueThread(), "SaveDialogueThread");
+		saveDialogueThread.setDaemon(true);
+		saveDialogueThread.start();
 	}
 
 	public void contextDestroyed(ServletContextEvent arg0) {

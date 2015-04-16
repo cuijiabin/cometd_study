@@ -124,17 +124,20 @@ $('#btn_save').on('click',function(){
 
 //等待列表
 function editWait(styleId){
- 	var url = '/waitList/edit.action?styleId='+styleId;
- 	window.location = url;
- 	return;
-	$.dialog({content:'url:/style/edit.action',
-		id: 'add',
-		width: 400,height: 80,
-		title:'添加风格'
+//  	var url = '/waitList/edit.action?styleId='+styleId;
+//  	window.location = url;
+//  	return;
+	$.dialog({content:'url:/waitList/edit.action?styleId='+styleId,
+		id: 'wait',
+		width: 900,height: 600,
+		title:'等待列表配置',
+		lock:true
 	});
 }
+
 
 </script>
 </body>
 </html>
+
 

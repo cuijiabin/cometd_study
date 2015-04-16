@@ -42,7 +42,7 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 	@Override
 	public List<WaitList> findOneLev(Integer styleId) {
 		Session session = getSession();
-		String hql = "from WaitList t where t.styleId = :styleId ";
+		String hql = "from WaitList t where (t.pId is null or t.pId = 0) and  t.styleId = :styleId ";
 		Query query = session.createQuery(hql);
 		query.setInteger("styleId", styleId);
 		return	query.list();
@@ -63,6 +63,80 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 		Query query = session.createQuery(hql);
 		query.setInteger("pId", pId);
 		return	query.list();
+	}
+	
+	/**
+	 * 校验名称是否存在
+	 * @param waitList
+	 * @return
+	 */
+	public Integer validateName(WaitList waitList){
+		Integer result = 1 ;
+		Session session = getSession();
+		if(waitList==null) return result;
+		if(waitList.getId()!=null){
+			//更新校验
+			String hql = " from WaitList t where t.id != :id and t.styleId = :styleId and t.name = :name ";
+			Query query = session.createQuery(hql);
+			query.setInteger("id", waitList.getId());
+			query.setInteger("styleId", waitList.getStyleId());
+			query.setString("name", waitList.getName());
+			result = query.list().size();
+		}else{
+			//新增
+			String hql = " from WaitList t where t.styleId = :styleId and t.name = :name ";
+			Query query = session.createQuery(hql);
+			query.setInteger("styleId", waitList.getStyleId());
+			query.setString("name", waitList.getName());
+			result = query.list().size();
+		}
+		return	result;
+	}
+	
+	/**
+	 * 校验名称是否存在(二级菜单)
+	 * @param waitList
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月16日
+	 */
+	public Integer validateName2(WaitList waitList){
+		Integer result = 1 ;
+		Session session = getSession();
+		if(waitList==null) return result;
+		if(waitList.getId()!=null){
+			//更新校验
+			String hql = " from WaitList t where t.id != :id and t.pId = :pId and t.name = :name ";
+			Query query = session.createQuery(hql);
+			query.setInteger("id", waitList.getId());
+			query.setInteger("pId", waitList.getpId());
+			query.setString("name", waitList.getName());
+			result = query.list().size();
+		}else{
+			//新增
+			String hql = " from WaitList t where t.pId = :pId and t.name = :name ";
+			Query query = session.createQuery(hql);
+			query.setInteger("pId", waitList.getpId());
+			query.setString("name", waitList.getName());
+			result = query.list().size();
+		}
+		return	result;
+	}
+	
+	/**
+	 * 根据父id,删除菜单
+	* @Description: TODO
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月16日
+	 */
+	public int deleteByPid(Integer id){
+		Session session = getSession();
+		String hql = "delete WaitList t where t.pId = :id ";
+		Query query = session.createQuery(hql);
+		query.setInteger("id", id);
+		return query.executeUpdate();
 	}
 
 	

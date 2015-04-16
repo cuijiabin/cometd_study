@@ -70,7 +70,7 @@ public class StyleDaoImpl extends BaseDaoImpl<Style> implements StyleDao {
 	* @Date: 2015年4月13日
 	 */
 	public Integer validateName(Style style){
-		Integer result = 0 ;
+		Integer result = 1 ;
 		Session session = getSession();
 		if(style==null) return result;
 		if(style.getId()!=null){
