@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
@@ -514,8 +515,8 @@ public class RecordsCenterController {
 	@RequestMapping(value = "/expTalk", method = RequestMethod.GET)
 	public void expTalk(String date,HttpServletResponse response) throws IOException {
 		String basePath = SystemConfiguration.getInstance().getFileUrl()
-				+File.separator + SysConst.EXP_TALK_PATH ;
-		String path = basePath + File.separator + date + ".xlsx";
+				+"/" + SysConst.EXP_TALK_PATH ;
+		String path = basePath + "/" + date + ".xlsx";
 		response.setContentType("application/octet-stream");// 二进制流
 		response.setHeader("Content-Disposition", "attachment;filename=\"" + date + ".xlsx\"");
 		OutputStream out = response.getOutputStream();
@@ -744,7 +745,8 @@ public class RecordsCenterController {
 		String sql = " SELECT t1.id dialogueId,IFNULL(t2.customerName,t1.customerId) customerName "
 				+ " , CASE WHEN t2.customerName IS NULL THEN 0 ELSE 1 END hasName,t1.customerId "
 				+ " , t1.ipInfo, t1.consultPage, t1.keywords  "
-				+ " , t1.styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
+				+ " , case when t1.isWait=1 then '是' else '否' end isWait "
+				+ " , IFNULL(t1.styleId,0) styleId, t1.openType, t1.closeType, IFNULL(t1.waitListId,0) waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
 				+ " , t1.landingPage, t1.durationTime, t1.btnCode "
 				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
@@ -766,7 +768,41 @@ public class RecordsCenterController {
 				String key = entry.getKey();
 				if(key.equals(SysConst.CHAT_CONTENT)){//如果需要展示聊天记录
 					hm.put(key, getChatContent(ds.getRow(i).getString("dialogueId")));
-				}else{
+				}else if(key.equals("styleId")){//风格
+					hm.put(key, "");
+					String temp = ds.getRow(i).getString("styleId");
+					if(!temp.equals("0")){
+						Style style = styleService.get(Integer.valueOf(temp));
+						if(style!=null){
+							hm.put(key, style.getName());
+						}
+					}
+				}else if(key.equals("openType")){//开始方式
+					hm.put(key, DictMan.getDictItem("d_open_type", ds.getRow(i).getString("openType")).getItemName());
+				}else if(key.equals("closeType")){//结束方式
+					hm.put(key, DictMan.getDictItem("d_close_type", ds.getRow(i).getString("closeType")).getItemName());
+				}else if(key.equals("waitListId")){//考试项目
+					hm.put(key, "");
+					String temp = ds.getRow(i).getString("waitListId");
+					if(!temp.equals("0")){
+						WaitList waitList = waitListService.get(Integer.valueOf(temp));
+						if(waitList!=null){
+							if(waitList.getpId()!=null){//如果有父级,则取父级
+								waitList = waitListService.get(waitList.getpId());
+							}
+							hm.put(key, waitList.getName());
+						}
+					}
+				}else if(key.equals("waitListId2")){//需求
+					hm.put(key, "");
+					String temp = ds.getRow(i).getString("waitListId");
+					if(!temp.equals("0")){
+						WaitList waitList = waitListService.get(Integer.valueOf(temp));
+						if(waitList!=null && waitList.getpId()!=null){//如果没有父级,则只有考试,没有需求
+							hm.put(key, waitList.getName());
+						}
+					}
+				}else {
 					hm.put(key, ds.getRow(i).getString(key));
 				}
 			}

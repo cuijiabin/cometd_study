@@ -48,4 +48,34 @@ public interface WaitListDao extends BaseDao<WaitList>{
 	 */
 	public List<WaitList> findByPid(Integer pId);
 	
+	/**
+	 * 校验名称是否存在(一级菜单)
+	 * @param waitList
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月16日
+	 */
+	public Integer validateName(WaitList waitList);
+	
+	/**
+	 * 校验名称是否存在(二级菜单)
+	 * @param waitList
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年4月16日
+	 */
+	public Integer validateName2(WaitList waitList);
+	
+	/**
+	 * 根据父id,删除菜单
+	* @Description: TODO
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月16日
+	 */
+	public int deleteByPid(Integer id);
+
+	
+	
 }
