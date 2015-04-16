@@ -53,22 +53,40 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	    	alert("出现错误,请重试!");
 	    }
 	});
 }
 
 function addRole(){
-	var d = $.dialog({id:'role',content:'url:/role/addRole.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'role',title:"添加角色",content:'url:/role/addRole.action',lock:true, width:	500,height: 300,});
 }
 function updateRole(id){
 
-	var d = $.dialog({id:'role',content:'url:/role/detail.action?id='+id+'',lock:true, width: 
+	var d = $.dialog({id:'role',title:"修改角色",content:'url:/role/detail.action?id='+id+'',lock:true, width: 
 
 		500,height: 300,});
 
 }
-
+//javascript:if(confirm('确实要删除吗?'))location='/role/delete.action?id=${role.id}
+function deleteRole(id){
+	if(confirm('确实要删除吗?')){
+	var url="/role/delete.action";
+	$.ajax({
+		type : "post",
+		url : url,
+		data : {"id":id},
+		dataType : "json",
+		success : function(data) {
+			alert(data.msg);
+			location.reload();
+		},
+		error : function(msg) {
+			alert("出现错误,请重试!");
+		}
+	});
+	}
+}
 function callback(){
 	$.dialog({id:'role'}).close();
 	find();

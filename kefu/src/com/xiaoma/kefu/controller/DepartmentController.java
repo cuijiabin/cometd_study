@@ -83,9 +83,9 @@ public class DepartmentController {
 			deptService.getResult(conditions.getMap(), pageBean);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
-				return "/set/govern/dept";
+				return "/set/govern/dept/dept";
 			else
-				return "/set/govern/deptList";
+				return "/set/govern/dept/deptList";
 		} catch (Exception e) {
 			model.addAttribute("message", "查询失败,请刷新重试!");
 			logger.error(e.getMessage());
@@ -108,7 +108,7 @@ public class DepartmentController {
 		try {
 			List list= userService.getResultDept(deptId);
             model.addAttribute("list",list);
-			return "/set/govern/deptUser";
+			return "/set/govern/dept/deptUser";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
@@ -147,7 +147,7 @@ public class DepartmentController {
 		System.out.println(num);
 		dept.setSortNum(num + 1);
 		model.addAttribute("dept", dept);
-		return "/set/govern/addDept";
+		return "/set/govern/dept/addDept";
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class DepartmentController {
 		System.out.println(dept);
 		model.addAttribute("dept", dept);
 
-		return "/set/govern/addDept";
+		return "/set/govern/dept/addDept";
 	}
 
 	/**
@@ -242,16 +242,18 @@ public class DepartmentController {
 		try {
 			Integer isSuccess = deptService.deleteDeptById(id);
 			if (isSuccess == 1) {
-				model.addAttribute("result", Ajax.JSONResult(0, "删除产品成功!"));
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			}else if(isSuccess==3){
+				model.addAttribute("result", Ajax.JSONResult(3, "该部门有员工在,不能删除!"));
 			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("result", Ajax.JSONResult(1, "删除产品失败!"));
+			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
 
-		return "redirect:/dept/list.action";
+		return "resultjson";
 	}
 
 }

@@ -188,9 +188,9 @@ public class UserController {
 			model.addAttribute("status", conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
-				return "/set/govern/user";
+				return "/set/govern/user/user";
 			else
-				return "/set/govern/userList";
+				return "/set/govern/user/userList";
 		} catch (Exception e) {
 			model.addAttribute("message", "查询失败,请刷新重试!");
 			logger.error(e.getMessage());
@@ -215,7 +215,7 @@ public class UserController {
 			return "error";
 		}
 
-		return "/set/govern/addUser";
+		return "/set/govern/user/addUser";
 	}
 
 	/**
@@ -253,11 +253,11 @@ public class UserController {
 			System.out.println(list);
 			JSONArray json = JSONArray.fromObject(list);
 			model.addAttribute("result", json.toString());
-			return "views/resultjson";
+			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error";
 		}
 	}
 
@@ -275,7 +275,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error500";
 		}
 	}
 
@@ -293,14 +293,14 @@ public class UserController {
 			model.addAttribute("deptList", dlist);
 			model.addAttribute("roleList", rlist);
 			if (type == null) {
-				return "/set/govern/addUser";
+				return "/set/govern/user/addUser";
 			} else {
-				return "/set/govern/checkUser";
+				return "/set/govern/user/checkUser";
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");
-			return "/views/error500";
+			return "error500";
 		}
 	}
 
@@ -341,7 +341,6 @@ public class UserController {
 		}
 		try {
 			Integer isSuccess = userService.leaveUser(ids, status);
-
 			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
@@ -423,12 +422,6 @@ public class UserController {
 
 		return "resultjson";
 
-	}
-
-	@RequestMapping(value = "logout.action", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
-		session.removeAttribute("currentUser");
-		return "/views/login";
 	}
 
 	/**

@@ -76,18 +76,18 @@ function find(currentPage){
 }
 
 function addUser(){
-	var d = $.dialog({id:'user',content:'url:/user/add.action',lock:true, width:	800,height: 600,});
+	var d = $.dialog({id:'user',title:"添加工号",content:'url:/user/add.action',lock:true, width:	1000,height: 600,});
 }
 function updateUser(id){
 
-	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'',lock:true, width: 
+	var d = $.dialog({id:'user',title:"修改工号",content:'url:/user/detail.action?id='+id+'',lock:true, width: 
 
 		1000,height: 600,});
 
 }
 function findUser(id){
 
-	var d = $.dialog({id:'user',content:'url:/user/detail.action?id='+id+'&type='+5+'',lock:true, width: 
+	var d = $.dialog({id:'user',title:"查看所在部门员工",content:'url:/user/detail.action?id='+id+'&type='+5+'',lock:true, width: 
 
 		1000,height: 600,});
 
@@ -97,8 +97,8 @@ function userLeave(status){
 	var ids= $(":checkbox[checked='checked']").map(function(){
 		return $(this).val();
 	}).get();
-	if(ids==""||ids==null){
-		alert("请选择离职人员!");
+	if(ids==""||ids==null||ids==0){
+		alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -121,6 +121,10 @@ function deleteAll(){
 	var ids= $(":checkbox[checked='checked']").map(function(){
 		return $(this).val();
 	}).get();
+	if(ids==""||ids==null||ids==0){
+		alert("请选择人员!");
+		return;
+	}
 	$.ajax({
 		url:"/user/delete.action",
 		type:"post",
@@ -144,9 +148,8 @@ function changeDept(){
 		alert("请选择转移部门");
 		return;
 	}
-	alert(ids);
-	if(ids==""||ids==null){
-		alert("请选择转移人员!");
+	if(ids==""||ids==null||ids==0){
+		alert("请选择人员!");
 		return;
 	}
 	$.ajax({

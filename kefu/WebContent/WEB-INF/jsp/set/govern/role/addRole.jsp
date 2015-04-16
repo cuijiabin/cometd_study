@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>    
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>  
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
@@ -20,23 +21,20 @@
 <!--         <li><b>位置：</b></li> -->
 <!--         <li><a href="#">设置中心</a></li> -->
 <!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
-<!--         <li><i>&gt;</i>部门管理</li> -->
+<!--         <li><i>&gt;</i>角色管理</li> -->
 <!--     </ul> -->
 <!-- </div> -->
-<c:if test="${empty dept.id}"><h2>添加部门</h2></c:if> <c:if test="${not empty dept.id}"><h2>修改部门</h2></c:if>
 <!-- 表格有边框 -->
-<table class="table table-bordered table-striped table-hover m-table">
+<c:if test="${empty role.id}"><h2>添加角色</h2></c:if> <c:if test="${not empty role.id}"><h2>修改角色</h2></c:if>
+<table  border="1" aglin="centert" class="table">
         <tr>
-            <td>部门名称</td>
-            <td><input type="text" id="name" name="name" value="${dept.name}"/></td>
-        </tr>
-            <tr>
-            <td>排序</td>
-            <td><input type ="text" id="sortNum" name="sortNum" value="${dept.sortNum}" readonly="readonly"/></td>
+           <td>角色名称</td>
+           <td><input type ="text" id ="name" name="name" value="${role.name}" maxlength="10"/><td>
         </tr>
 </table>
-<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
- <button style="float:right;margin-right:40px;" onclick="javascript:addDept(${dept.id});" class="btn btn-primary btn-small" >确认</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:addRole(${role.id});" class="btn btn-primary btn-small" >确认</button>
+
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -47,33 +45,33 @@
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
 var api = frameElement.api,W=api.opener;
-
-function addDept(id){
+function addRole(id){
 	var url="";
 	var data="";
   if(id!=undefined){
-	   url="/dept/update.action";
+	   url="/role/update.action";
 	   data = {
 			   "id":id,
-				"name" : $("#name").val(),
-				"sortNum": $("#sortNum").val()
+				"name" : $("#name").val(),	    
 			};
-		//新增时验证参数
-		if (!verificationParam1(data)) {		
+		//修改时验证参数
+		if (!verificationParam1(data)) {
+			
 			return;
 		}
   }else{
-      url="/dept/save.action";
+      url="/role/save.action";
       data = {
-  			"name" : $("#name").val(),
-  			"sortNum": $("#sortNum").val()
+  			"name" : $("#name").val(),	    
   		};
-  	//新增时验证参数
-		if (!verificationParam(data)) {		
+      
+		//新增时验证参数
+		if (!verificationParam(data)) {
+			
 			return;
 		}
    }
-	
+		
 		$.ajax({
 			type : "get",
 			url : url,
@@ -85,50 +83,57 @@ function addDept(id){
 					W.callback();
 			},
 			error : function(msg) {
-				alert(data.msg);
+				alert("出现错误,请重试!");
 			}
 		});
 	}
 /**
  *  js 校验添加
  */
-function verificationParam(deptData) {
-	var deptName = deptData.name;
-	if (deptName.replace("^[ ]+$", "").length == 0) {
-		alert("部们名不得为空！");
+function verificationParam(roleData) {
+	var roleName = roleData.name;
+	if (roleName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+		
+		alert("角色名不得为空！");
 
 		return false;
 	}
-	if(checkDept()){
-		   alert("部门已存在！");
+	if(checkRole()){
+		
+		   alert("角色名已存在！");
 		   return false;
 	 }
 	return true;
 }
-//修改时验证
-function verificationParam1(deptData) {
-	var deptName = deptData.name;
-	if (deptName.replace("^[ ]+$", "").length == 0) {
+
+function verificationParam1(roleData) {
+	var roleName = roleData.name;
+	if (roleName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		
-		alert("部们名不得为空！");
+		alert("角色名不得为空！");
 
 		return false;
 	}
+	if(checkRole()){
+		
+		   alert("角色名已存在！");
+		   return false;
+	 }
 	return true;
 }
    /*
 * 验证角色唯一性(添加时)
 */
 
-function checkDept(){
+function checkRole(){
 	var flag = false;
 if($("#name").val()==''){
-	$("#info").html("部门名不能为空!");
+	$("#info").html("角色名不能为空!");
 	return true;
      }
   $.ajax({
 	type : "get",
-	url : "/dept/check.action",
+	url : "/role/check.action",
 	data : {'name':$("#name").val()},
 	contentType : "application/json; charset=utf-8",
 	dataType : "json",
@@ -137,19 +142,19 @@ if($("#name").val()==''){
 		if(data.code==0)
 			$("#info").html("");
 		else{
-			$("#info").html("该部门名已存在!");
+			$("#info").html("该角色名已存在!");
 		 	flag = true;
 		}
 	},
 	error : function(msg){
-		alert("查询失败!");
+		alert("出现错误,请重试!");
 	}
    });
   return flag;
   }
    
 function cl(){
-	api.close();			
+		api.close();			
 }
 </script>
 </body>

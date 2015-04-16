@@ -30,7 +30,7 @@
             <td>工号</td>
             <td><input type="text" id="loginName" name="loginName" value="${user.loginName}"/></td>
             <td>姓名</td>
-            <td><input type="text" id="userName" name="userName" value="${user.userName}"/></td>
+            <td><input type="text" id="userName" name="userName" value="${user.userName}" maxlength="16"/></td>
         </tr>
         <tr>
          
@@ -70,11 +70,11 @@
                 </select>
             </td>
             <td>最大接听数</td>
-            <td><input type="text" id="maxListen" name="maxListen" value="${user.maxListen}"/></td>
+            <td><input type="text" id="maxListen" name="maxListen" value="${user.maxListen}" maxlength="6"/></td>
         </tr>
         <tr>       
             <td>工号名片</td>
-            <td><input type="text" id="cardName" name="cardName" value="${user.maxListen}"/></td>
+            <td><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10"/></td>
             <td>入职日期</td>
             <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker()" class="c-wd120 Wdate" /></td>
         </tr>
@@ -136,14 +136,13 @@ function saveUser(id){
 		data : data,
 		dataType : "json",
 		success : function(data) {
-
 				alert(data.msg);
 				W.callback();
 				
 		},
 		error : function(msg) {
 
-			alert(data.msg);
+			alert("出现错误,请重试!");
 		}
 	});
 }
@@ -152,7 +151,7 @@ function saveUser(id){
  */
 function verificationParam(userData) {
 	var loginName = userData.loginName;
-	if (loginName.replace("^[ ]+$", "").length == 0) {
+	if (loginName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("工号不得为空！");
 		return false;
 	}
@@ -163,12 +162,12 @@ function verificationParam(userData) {
 	}
 	
 	 if(checkUser()){
-		    alert("登录名已存在！");
+		    alert("工号已存在！");
 		   return false;
 	   }
 	
 	var userName = userData.userName;
-	if (userName.replace("^[ ]+$", "").length == 0) {
+	if (userName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("用户名不得为空！");
 		return false;
 	}
@@ -187,19 +186,23 @@ function verificationParam(userData) {
 	}
 	
 	var maxListen = userData.maxListen;
-	if (maxListen.replace("^[ ]+$", "").length == 0) {
+	if (maxListen.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("请填写最大接听数！");
 		return false;
 	}
-	
+	var checkListen = /^[\d]$/;
+	if(!checkListen.test(maxListen)){
+		alert("接听数为数字！");
+		return false;
+	}
 	var cardName = userData.cardName;
-	if (cardName.replace("^[ ]+$", "").length == 0) {
+	if (cardName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
-	if (createDate.replace("^[ ]+$", "").length == 0) {
+	if (createDate.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("请填写入职时间！");
 		return false;
 	}
@@ -210,7 +213,7 @@ function verificationParam(userData) {
 //修改时验证
 function verificationParam1(userData) {
 	var loginName = userData.loginName;
-	if (loginName.replace("^[ ]+$", "").length == 0) {
+	if (loginName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("工号不得为空！");
 		return false;
 	}
@@ -221,13 +224,13 @@ function verificationParam1(userData) {
 	}
 		
 	var userName = userData.userName;
-	if (userName.replace("^[ ]+$", "").length == 0) {
-		 alert("用户名不得为空！");
+	if (userName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+		 alert("姓名不得为空！");
 		return false;
 	}
 	
 	var password = userData.password;
-	if(password.replace("^[ ]+$", "").length !=0){
+	if(password.replace(/(^\s*)|(\s*$)/g, "").length !=0){
 		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 		if (!patrn.test(password)) {
 			alert("密码格式不正确");
@@ -241,19 +244,23 @@ function verificationParam1(userData) {
 		}
 	}
 	var maxListen = userData.maxListen;
-	if (maxListen.replace("^[ ]+$", "").length == 0) {
+	if (maxListen.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		alert("请填写最大接听数！");
 		return false;
 	}
-	
+	var checkListen =/^\d+$/;
+	if(!checkListen.test(maxListen)){
+		alert("接听数为数字！");
+		return false;
+	}
 	var cardName = userData.cardName;
-	if (cardName.replace("^[ ]+$", "").length == 0) {
+	if (cardName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
-	if (createDate.replace("^[ ]+$", "").length == 0) {
+	if (createDate.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		alert("请填写入职时间！");
 		return false;
 	}
@@ -283,7 +290,7 @@ function checkUser(){
 			}
 		},
 		error : function(msg){
-			alert("查询失败!");
+			alert("出现错误,请重试!");
 		}
 	});
 	return flag;
