@@ -2,6 +2,7 @@ package com.xiaoma.kefu.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -45,17 +46,12 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, Model model,String beginDate,
-			String endDate,
-			Integer currentPage, Integer pageRecorders) {
-	
+	public String queryAll(MapEntity conditions, Model model,String beginDate,String endDate,PageBean pageBean) {
 		try {
-			currentPage = (currentPage == null) ? 1 : currentPage;
-			pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-			 model.addAttribute("beginDate", initDate(beginDate));
-			 model.addAttribute("endDate", initDate(endDate));
-			PageBean pageBean = customerService.getResultByCon(conditions.getMap(), currentPage, pageRecorders);
-			model.addAttribute("list", pageBean.getObjList());
+			List list = customerService.getResultByCon(conditions.getMap(),beginDate,endDate,pageBean);
+		    model.addAttribute("beginDate", initDate(beginDate));
+			model.addAttribute("endDate", initDate(endDate));
+			model.addAttribute("list", list);
 			model.addAttribute("pageBean", pageBean);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null){
@@ -69,32 +65,6 @@ public class CustomerController {
 		}
 	}
 
-	/**
-	 * 封装查询条件
-	 * 
-	 * @param beginDate
-	 * @param endDate
-	 * @return
-	 */
-	private StringBuilder getCustCondition(String beginDate, String endDate) {
-
-		StringBuilder condition = new StringBuilder();
-
-		if (StringUtils.isBlank(beginDate)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			beginDate = sdf.format(new Date());
-			condition.append(" and t1.beginDate >= '" + beginDate
-					+ " 00:00:00'");
-
-		}
-		if (StringUtils.isBlank(endDate)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			endDate = sdf.format(new Date());
-		}
-		condition.append(" and t1.endDate <= '" + endDate + " 23:59:59'");
-
-		return condition;
-	}
 
 	/**
 	 * 查询所有

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.util.PageBean;
 
 /**
  * @author frongji
@@ -13,10 +14,10 @@ import com.xiaoma.kefu.model.Customer;
 public interface CustomerDao extends BaseDao<Customer>{
     
 	/**
-	 * 获取全部数据
+	 * 获取全部数据的条数
 	 * @return
 	 */
-	public Integer getAllCustomerCount();
+	public Integer getAllCustomerCount(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean);
 
 	public List<Customer> getCustomerOrderById(Integer start, Integer offset);
       
@@ -68,7 +69,6 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @param conditions
 	 * @param pageBean
 	 */
-	public List getCustomerByCon(Map<String, String> conditions, Integer start,
-			Integer offset);
+	public List getCustomerByCon(Map<String, String> conditions,String beginDate,String endDate,PageBean pageBean);
 
 }

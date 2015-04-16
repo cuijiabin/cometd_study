@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-    <c:forEach var="obj" items="${pageBean.objList}"> 
+    <c:forEach var="obj" items="${list}"> 
         <tr>
             <td>${obj[0].styleName}</td>
             <td>${obj[0].id}</td>

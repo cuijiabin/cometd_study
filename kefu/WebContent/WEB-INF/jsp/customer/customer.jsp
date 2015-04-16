@@ -34,7 +34,7 @@
             <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
-           <label>添加时间：</label><input class="c-wd80 Wdate" type="text" value="${beginDate }" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" value="${endDate }" onClick="WdatePicker()" />
+           <label>添加时间：</label><input readonly="readonly" id="beginDate" name="beginDate" class="c-wd80 Wdate" type="text" value="${beginDate }" onClick="WdatePicker()" /> - <input id="endDate" name="endDate" class="c-wd80 Wdate" type="text" readonly="readonly" value="${endDate }" onClick="WdatePicker()" />
             <label>咨询页面：</label><input class="c-wd150" type="text" id="consultPage" name="consultPage"/>
             <label>网站关键词：</label><input class="c-wd150" type="text" id="keywords" name="keywords"/>
              <label></label>
@@ -55,13 +55,19 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-
+/**
+ *查询
+ */
 function find(currentPage){
 	var url="/customer/find.action";
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
+			"beginDate" :$("#beginDate").val(),
+			"endDate" :$("#endDate").val(),
 			"map[customerName]":$("#customerName").val(),
 			"map[id]":$("#customerId").val(),
 			"map[phone]":$("#phone").val(),
@@ -70,6 +76,11 @@ function find(currentPage){
 			"map[keywords]":$("#keywords").val(),
 			"map[typeId]":1
 	};
+	//检验日期
+	if (!checkdate(data)) {
+		return;
+	}
+	
 	$.ajax({
 	    type: "get",
 	    url: url,
@@ -83,6 +94,25 @@ function find(currentPage){
 	        alert(msg);
 	    }
 	});
+}
+  /**
+  *检验日期
+  */
+  function checkdate(userData){
+	  var beginDate = userData.beginDate;
+	  var endDate = userData.endDate;
+	  var pageRecorders = userData.pageRecorders;
+	  console.log(beginDate);
+	  console.log(endDate);
+	  console.log(pageRecorders);
+	  beginDate = beginDate.replace("-","/").replace("-","/");
+	  endDate = endDate.replace("-","/").replace("-","/");
+	  if(Date.parse(endDate) < Date.parse(beginDate))   {                           
+           alert('结束日期不能小于开始日期',this);
+	  	   return false;
+	  }else{
+		  return true;
+	  }
 }
 </script>
 </body>

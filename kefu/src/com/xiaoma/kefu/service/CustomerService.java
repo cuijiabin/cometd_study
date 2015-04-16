@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 
+import com.sun.org.apache.xpath.internal.operations.And;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.redis.JedisDao;
@@ -40,21 +42,16 @@ public class CustomerService {
 	/**
 	 * 条件查询
 	 */
-	public PageBean getResultByCon(Map<String, String> conditions ,Integer currentPage,
-			Integer pageRecorders) {
-		PageBean pageBean = new PageBean();
+	public List getResultByCon(Map<String, String> conditions ,String beginDate,String endDate, PageBean pageBean) {
 		try {
-			Integer totalCount = customerDaoImpl.getAllCustomerCount();
-			pageBean.setCurrentPage(currentPage);
-			pageBean.setPageRecorders(pageRecorders);
+			Integer totalCount = customerDaoImpl.getAllCustomerCount(conditions,beginDate ,endDate,pageBean);
 			pageBean.setTotalRows(totalCount);
-			Integer start = pageBean.getStartRow();
-			List list = customerDaoImpl.getCustomerByCon(conditions, start, pageRecorders);
-			pageBean.setObjList(list);
+			List list = customerDaoImpl.getCustomerByCon(conditions,beginDate ,endDate,pageBean);
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return pageBean;
+		return null;
 	}
 
 	/**

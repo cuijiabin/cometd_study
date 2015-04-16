@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
+import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
 
 /**
@@ -25,47 +26,28 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 
 	private static Logger logger = Logger.getLogger(CustomerDaoImpl.class);
 
-	@Override
-	public Integer getAllCustomerCount() {
-		Session session = getSession();
-		String hql = "select count(1) from Customer  ";
-
-		Query query = session.createSQLQuery(hql);
-
-		return ((Number) query.uniqueResult()).intValue();
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
-
-		// 参数检查
-		start = (start == null) ? 0 : start;
-		offset = (offset == null) ? 20 : offset;
-
-		Session session = getSession();
-		String hql = "from Customer limit order by id asc";
-		Query query = session.createQuery(hql).setFirstResult(start)
-				.setMaxResults(offset);
-
-		return (List<Customer>) query.list();
-	}
-
+//	@Override
+//	public Integer getAllCustomerCount(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
+//		Session session = getSession();
+//		String hql = "select count(1) from Customer  ";
+//
+//		Query query = session.createSQLQuery(hql);
+//
+//		return ((Number) query.uniqueResult()).intValue();
+//
+//	}
 	/**
-	 * 条件查询(测试)
+	 * 查询总条数（测试）
 	 */
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public List getCustomerByCon(Map<String, String> conditions, Integer start, Integer offset) {
-		// 参数检查
-		start = (start == null) ? 0 : start;
-		offset = (offset == null) ? 20 : offset;
+	public Integer getAllCustomerCount(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
 		Session session = getSession();
-//		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE a.status<>1 AND a.customerName='冯榕基' GROUP BY a.id ;";
-		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
-		 if (conditions !=null) {
+
+		String hql = "select  COUNT(DISTINCT(a.id)) FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		if(beginDate!=null && endDate!=null){
+			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
+		}
+		if (conditions !=null) {
 			   String customerName =  conditions.get("customerName").trim();
 			if(StringHelper.isNotEmpty(customerName)){
 				hql += " and a.customerName like '"+"%"+customerName+"%"+"'";
@@ -92,8 +74,70 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 				hql += " and b.keywords like '"+"%"+keywords+"%"+"'";
 			}
 		}
-		 hql += "GROUP BY a.id";
-		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class);
+		Query query = session.createSQLQuery(hql);
+		return ((Number) query.uniqueResult()).intValue();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Customer> getCustomerOrderById(Integer start, Integer offset) {
+
+		// 参数检查
+		start = (start == null) ? 0 : start;
+		offset = (offset == null) ? 20 : offset;
+
+		Session session = getSession();
+		String hql = "from Customer limit order by id asc";
+		Query query = session.createQuery(hql).setFirstResult(start)
+				.setMaxResults(offset);
+
+		return (List<Customer>) query.list();
+	}
+
+	/**
+	 * 条件查询(测试)
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List getCustomerByCon(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
+		
+	
+		Session session = getSession();
+		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		if(beginDate!=null && endDate!=null){
+			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
+		}
+		if (conditions !=null) {
+			   String customerName =  conditions.get("customerName").trim();
+			if(StringHelper.isNotEmpty(customerName)){
+				hql += " and a.customerName like '"+"%"+customerName+"%"+"'";
+			}	
+		         String customerId =  conditions.get("id").trim();
+			if(StringHelper.isNotEmpty(customerId)){
+				hql += " and a.id = "+customerId+" " ;
+			}	
+			    String phone = conditions.get("phone").trim();
+			if(StringHelper.isNotEmpty(phone)){
+				hql += " and a.phone = "+phone+" " ;
+			}
+			   String styleName =  conditions.get("styleName").trim();
+			if(StringHelper.isNotEmpty(styleName)){
+				hql += " and a.styleName like '"+"%"+styleName+"%"+"'";
+			}
+			  String consultPage =  conditions.get("consultPage").trim();
+			if(StringHelper.isNotEmpty(consultPage)){
+				hql += " and b.consultPage like '"+"%"+consultPage+"%"+"'";
+			}
+				
+			 String keywords =  conditions.get("keywords").trim();
+			if(StringHelper.isNotEmpty(keywords)){
+				hql += " and b.keywords like '"+"%"+keywords+"%"+"'";
+			}
+		}
+		 hql += "GROUP BY a.id ORDER BY createDate desc";
+		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class).setFirstResult(pageBean.getStartRow()).setMaxResults(pageBean.getPageRecorders());
 		List list = query.list();
 		return list;
 	}
