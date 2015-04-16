@@ -1,22 +1,17 @@
 package com.xiaoma.kefu.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
-import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
 
 /**
@@ -63,69 +58,46 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List getCustomerByCon(Integer start, Integer offset,
-			String loginName, String phone) {
+	public List getCustomerByCon(Map<String, String> conditions, Integer start, Integer offset) {
 		// 参数检查
 		start = (start == null) ? 0 : start;
 		offset = (offset == null) ? 20 : offset;
 		Session session = getSession();
 //		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE a.status<>1 AND a.customerName='冯榕基' GROUP BY a.id ;";
-		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1 GROUP BY a.id ;";
+		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		 if (conditions !=null) {
+			   String customerName =  conditions.get("customerName").trim();
+			if(StringHelper.isNotEmpty(customerName)){
+				hql += " and a.customerName like '"+"%"+customerName+"%"+"'";
+			}	
+		         String customerId =  conditions.get("id").trim();
+			if(StringHelper.isNotEmpty(customerId)){
+				hql += " and a.id = "+customerId+" " ;
+			}	
+			    String phone = conditions.get("phone").trim();
+			if(StringHelper.isNotEmpty(phone)){
+				hql += " and a.phone = "+phone+" " ;
+			}
+			   String styleName =  conditions.get("styleName").trim();
+			if(StringHelper.isNotEmpty(styleName)){
+				hql += " and a.styleName like '"+"%"+styleName+"%"+"'";
+			}
+			  String consultPage =  conditions.get("consultPage").trim();
+			if(StringHelper.isNotEmpty(consultPage)){
+				hql += " and b.consultPage like '"+"%"+consultPage+"%"+"'";
+			}
+				
+			 String keywords =  conditions.get("keywords").trim();
+			if(StringHelper.isNotEmpty(keywords)){
+				hql += " and b.keywords like '"+"%"+keywords+"%"+"'";
+			}
+		}
+		 hql += "GROUP BY a.id";
 		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class);
 		List list = query.list();
 		return list;
 	}
 
-	/**
-	 * 查询
-	 * 
-	 * @param conditions
-	 * @param pageBean
-	 */
-	@Override
-	public void findByCondition(Map<String, String> conditions,
-			PageBean<Customer> pageBean) {
-
-		List<String> relation = new ArrayList<String>();
-		List<Criterion> role = new ArrayList<Criterion>();// 条件
-		List<Order> orders = new ArrayList<Order>();// 排序
-		if (conditions != null) {
-			String customerId = conditions.get("id").trim();// 去掉输入的访客编号左右的空格
-			if (StringHelper.isNotEmpty(conditions.get("customerName"))) {
-				role.add(Restrictions.like("customerName", "%"
-						+ conditions.get("customerName").trim() + "%"));
-			}
-			if (StringHelper.isNotEmpty(customerId)) {
-				role.add(Restrictions.eq("id", Long.parseLong(customerId)));
-			}
-			if (StringHelper.isNotEmpty(conditions.get("phone"))) {
-
-				role.add(Restrictions.eq("phone", conditions.get("phone")
-						.trim()));
-			}
-			if (conditions.get("startDate") != null
-					&& !conditions.get("startDate").isEmpty()
-					&& conditions.get("endDate") != null
-					&& !conditions.get("endDate").isEmpty()) {
-				SimpleDateFormat format = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
-				try {
-					role.add(Restrictions.between(
-							"createDate",
-							format.parse(conditions.get("startDate")
-									+ " 0:00:00"),
-							format.parse(conditions.get("endDate")
-									+ " 23:59:59")));
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error(e.getMessage());
-				}
-			}
-		}
-		orders.add(Order.asc("createDate"));
-		find(Customer.class, relation, role, null, orders, pageBean);
-		logger.info("search Customer by conditions!");
-	}
 
 	/**
 	 * 添加一条

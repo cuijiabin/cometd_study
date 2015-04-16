@@ -86,7 +86,7 @@ function find(currentPage){
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-    	var d = $.dialog({id:'blacklist',content:'url:/blacklist/new.action',lock:true, width:	500,height: 300,});
+    	var d = $.dialog({id:'blacklist',content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,});
     }
     /**
     *新增的方法

@@ -19,6 +19,7 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -43,44 +44,29 @@ public class CustomerController {
 	 * @param pageBean
 	 * @return
 	 */
-	// @RequestMapping(value = "find.action", method = RequestMethod.GET)
-	// public String queryAll(MapEntity conditions, @ModelAttribute("pageBean")
-	// PageBean<Customer> pageBean,Model model,String beginDate,
-	// String endDate) {
-	// try {
-	//
-	// customerService.getResult(conditions.getMap(), pageBean);
-	// model.addAttribute("beginDate", initDate(beginDate));
-	// model.addAttribute("endDate", initDate(endDate));
-	// if (conditions == null || conditions.getMap() == null
-	// || conditions.getMap().get("typeId") == null)
-	// return "customer/customer";
-	// else
-	// return "customer/customerList";
-	// } catch (Exception e) {
-	// return "/error500";
-	// }
-	// }
-
-	/**
-	 * 查询所有、条件查询
-	 * 
-	 * @param conditions
-	 * @param pageBean
-	 * @return
-	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(Model model, String loginName, String phone,
+	public String queryAll(MapEntity conditions, Model model,String beginDate,
+			String endDate,
 			Integer currentPage, Integer pageRecorders) {
-		currentPage = (currentPage == null) ? 1 : currentPage;
-		pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-		PageBean pageBean = customerService.getResultByCon(
-				currentPage, pageRecorders, loginName, phone);
-		model.addAttribute("list", pageBean.getObjList());
-		model.addAttribute("pageBean", pageBean);
-		model.addAttribute("loginName", loginName);
-		model.addAttribute("phone", phone);
-		return "customer/customer";
+	
+		try {
+			currentPage = (currentPage == null) ? 1 : currentPage;
+			pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
+			 model.addAttribute("beginDate", initDate(beginDate));
+			 model.addAttribute("endDate", initDate(endDate));
+			PageBean pageBean = customerService.getResultByCon(conditions.getMap(), currentPage, pageRecorders);
+			model.addAttribute("list", pageBean.getObjList());
+			model.addAttribute("pageBean", pageBean);
+			if (conditions == null || conditions.getMap() == null
+					|| conditions.getMap().get("typeId") == null){
+				return "customer/customer";
+			}else {
+				return "customer/customerList";
+			}
+			
+		} catch (Exception e) {
+			return "/error500";
+		}
 	}
 
 	/**

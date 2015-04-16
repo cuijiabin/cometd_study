@@ -30,23 +30,23 @@
 
         <tr>
            <td></td>
-           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><td>
+           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><span id="blacklistIdInfo" style = "color: red;">*</span><td>
         </tr>
         <tr>
            <td>客户编号</td>
-           <td><input type ="text" id ="customerId" name="customerId" value="${blacklist.customerId}"/><td>
+           <td><input type ="text" readonly="readonly" id ="customerId" name="customerId" value="${blacklist.customerId}"/><span id="customerIdInfo" style = "color: red">*</span><td>
         </tr>
          <tr>
            <td>IP地址</td>
-           <td><input type ="text" id ="ip" name="ip" value="${blacklist.ip}"/><td>
+           <td><input type ="text" id ="ip" readonly="readonly" name="ip" value="${blacklist.ip}"/><span id="ipInfo" style = "color: red;">*</span><td>
         </tr>
          <tr>
            <td>失效时间</td>
-           <td><input type ="text" id ="endDate" name="endDate" value="${blacklist.endDate}"/><td>
+           <td><input type ="text" id ="endDate" name="endDate" value="${blacklist.endDate}"/><span id="endDateInfo" style = "color: red;">*</span><td>
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><td>
+           <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><span id="descriptionInfo" style = "color: red;">*</span><td>
         </tr>
    </table>
    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
@@ -61,20 +61,10 @@
 
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
-// //以下代码为弹出层页面添加按钮  
-// api.button({  
-//     id:'valueOk',  
-//     name:'确定'    
-// });  
-// api.button({  
-//     id:'cancel',  
-//     name:'关闭'  
-// }); 
 
-//取消
 $('#btn_cancel').on('click',function(){
 	 api.close();
-// 	 frameElement.lhgDG.cancel();
+
 });
 
 //保存
@@ -87,6 +77,10 @@ $('#btn_save').on('click',function(){
 		"enddate" : $("#endDate").val(),
 		"description" : $("#description").val()
 	};
+	//修改时参数验证
+	if (!updateParam(data)) {
+		return;
+	}
 	$.ajax({
 		type : 'post',
 		url : "/blacklist/update.action",
@@ -110,7 +104,6 @@ $('#btn_save').on('click',function(){
 
 
 function update(){
-	alert("修改确定钱");
 	url : "/blacklist/update.action";
 	var data = {
 			"id"  : $("#blacklistId").val(),
@@ -143,6 +136,42 @@ function update(){
 		}
 	});
   }
+  
+/**
+ *  js 校验
+ */
+function updateParam(userData) {
+	var customerId = userData.customerId;
+	if (customerId.replace("^[ ]+$", "").length == 0) {
+		 alert("客户编号不得为空！");
+		return false;
+	}
+	
+	var ip = userData.ip;
+	if (ip.replace("^[ ]+$", "").length == 0) {
+		 alert("IP地址不得为空！");
+		return false;
+	}
+	
+
+
+	var enddate = userData.enddate;
+	if (enddate.replace("^[ ]+$", "").length == 0) {
+		 alert("失效时间不得为空！");
+		return false;
+	}
+
+	var description	 = userData.description;
+	if (description.replace("^[ ]+$", "").length == 0) {
+		 alert("阻止原因不得为空！");
+		return false;
+	}
+
+	return true;
+}
+
+
+
 
 </script>
 </body>

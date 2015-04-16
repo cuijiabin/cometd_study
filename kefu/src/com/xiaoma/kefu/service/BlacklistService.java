@@ -11,6 +11,7 @@ import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.MessageRecords;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -102,5 +103,15 @@ public class BlacklistService {
 				return blacklistDaoImpl.getBlacklistByBlacklistId(id);
 			}
 			
+			 /**
+		     * 精确查询黑名单（frongji）
+		     */
+		   public Integer checkBlacklist (Blacklist blacklist){
+				
+			Integer totalCount = blacklistDaoImpl.checkBlacklist(blacklist);
+			
+			return totalCount;
+			
+			}
 
 }

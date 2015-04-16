@@ -28,15 +28,15 @@
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
-            <label>客户姓名：</label><input id="customerName" name="customerName" value="${customerName}" class="c-wd150" type="text" />
+            <label>客户姓名：</label><input id="customerName" name="customerName"class="c-wd150" type="text" />
             <label>客户编号：</label><input id="customerId" name="customerId"  class="c-wd150" type="text" />
-            <label>联系方式：</label><input id="phone" name="phone" value="${phone }" class="c-wd150" type="text" />
+            <label>联系方式：</label><input id="phone" name="phone"  class="c-wd150" type="text" />
             <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
         <div class="f-mbm">
            <label>添加时间：</label><input class="c-wd80 Wdate" type="text" value="${beginDate }" onClick="WdatePicker()" /> - <input class="c-wd80 Wdate" type="text" value="${endDate }" onClick="WdatePicker()" />
-            <label>咨询页面：</label><input class="c-wd150" type="text" />
-            <label>网站关键词：</label><input class="c-wd150" type="text" />
+            <label>咨询页面：</label><input class="c-wd150" type="text" id="consultPage" name="consultPage"/>
+            <label>网站关键词：</label><input class="c-wd150" type="text" id="keywords" name="keywords"/>
              <label></label>
               <label></label>
                <label></label>
@@ -61,9 +61,13 @@ function find(currentPage){
 	var url="/customer/find.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"map[customerName]":$("#customerName").val(),
 			"map[id]":$("#customerId").val(),
 			"map[phone]":$("#phone").val(),
+			"map[styleName]":$("#customerStyle").val(),
+			"map[consultPage]":$("#consultPage").val(),
+			"map[keywords]":$("#keywords").val(),
 			"map[typeId]":1
 	};
 	$.ajax({

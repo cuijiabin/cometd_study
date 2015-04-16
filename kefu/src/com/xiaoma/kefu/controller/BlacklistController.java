@@ -1,9 +1,11 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * @author frongji
@@ -26,11 +29,11 @@ import com.xiaoma.kefu.util.PageBean;
 @RequestMapping(value = "blacklist")
 public class BlacklistController {
    
+	private Logger logger = Logger.getLogger(BlacklistController.class);
+	
 	@Autowired
 	private BlacklistService blacklistService;
 	
-//	@Autowired
-//	private User user;
 	/**
 	 * 查询所有、条件查询
 	 * 
@@ -178,6 +181,30 @@ public class BlacklistController {
 			return "error500";
 		}
 
+	}
+	
+	/**
+	 * 检查IP地址是否已存在
+	 */
+	@RequestMapping(value = "check.action", method = RequestMethod.GET)
+	public String queryByCheck(Model model, Blacklist blacklist)
+			throws UnsupportedEncodingException {
+		try {
+			if (blacklist == null || (StringHelper.isEmpty(blacklist.getIp()))) {
+				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
+				return "resultjson";
+			}
+			Integer count = blacklistService.checkBlacklist(blacklist);
+			if (count != null && count == 0) {
+				model.addAttribute("result", Ajax.toJson(0, "该IP地址可以被添加！"));
+			} else {
+				model.addAttribute("result", Ajax.toJson(1, "该IP地址已存在！"));
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
+		}
+		return "resultjson";
 	}
 
 

@@ -38,33 +38,23 @@ public class CustomerService {
 	private Jedis jedis = JedisDao.getJedis();
 
 	/**
-	 * 查询所有、 条件查询
-	 */
-	public void getResult(Map<String, String> conditions,
-			PageBean<Customer> pageBean) {
-		customerDaoImpl.findByCondition(conditions, pageBean);
-
-	}
-
-	/**
 	 * 条件查询
 	 */
-	public PageBean getResultByCon(Integer currentPage,
-			Integer pageRecorders, String loginName, String phone) {
-		PageBean result = new PageBean();
+	public PageBean getResultByCon(Map<String, String> conditions ,Integer currentPage,
+			Integer pageRecorders) {
+		PageBean pageBean = new PageBean();
 		try {
 			Integer totalCount = customerDaoImpl.getAllCustomerCount();
-			result.setCurrentPage(currentPage);
-			result.setPageRecorders(pageRecorders);
-			result.setTotalRows(totalCount);
-			Integer start = result.getStartRow();
-			List list = customerDaoImpl.getCustomerByCon(start, pageRecorders,
-					loginName, phone);
-			result.setObjList(list);
+			pageBean.setCurrentPage(currentPage);
+			pageBean.setPageRecorders(pageRecorders);
+			pageBean.setTotalRows(totalCount);
+			Integer start = pageBean.getStartRow();
+			List list = customerDaoImpl.getCustomerByCon(conditions, start, pageRecorders);
+			pageBean.setObjList(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return pageBean;
 	}
 
 	/**

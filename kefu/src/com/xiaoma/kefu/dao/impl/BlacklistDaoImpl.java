@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
 
@@ -200,6 +202,27 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			}
 			return false;
 			
+		}
+		
+		/**
+		 * 精确查询数据库中的信息
+		 */
+		@Override
+		public Integer checkBlacklist(Blacklist blacklist) {
+			Session session = getSession();
+			StringBuffer hqlBf = new StringBuffer(
+					"select count(a.id) from Blacklist a where 1 = 1");
+			if (StringUtils.isNotBlank(blacklist.getIp())) {
+				hqlBf.append(" and a.ip  = '" + blacklist.getIp() + "' ");
+			}
+			
+			if(blacklist.getId()!=null && blacklist.getId()>0){
+				hqlBf.append(" and a.id  != " + blacklist.getId() + "  ");
+			}
+		
+			Query query = session.createQuery(hqlBf.toString());
+			Object obj = query.uniqueResult();
+			return Integer.parseInt(obj.toString());
 		}
 
 	

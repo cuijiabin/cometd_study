@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.xiaoma.kefu.model.Customer;
-import com.xiaoma.kefu.util.PageBean;
 
 /**
  * @author frongji
@@ -60,17 +59,16 @@ public interface CustomerDao extends BaseDao<Customer>{
 
 	
 	public Long getMaxCustomerId();
+
+
    
+    
 	/**
 	 * 查询
 	 * @param conditions
 	 * @param pageBean
 	 */
-	public void findByCondition(Map<String, String> conditions,
-			PageBean<Customer> pageBean);
-    
-
-	public List getCustomerByCon(Integer start, Integer offset,
-			String loginName, String phone);
+	public List getCustomerByCon(Map<String, String> conditions, Integer start,
+			Integer offset);
 
 }
