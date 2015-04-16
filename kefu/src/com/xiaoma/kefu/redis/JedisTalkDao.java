@@ -277,6 +277,11 @@ public class JedisTalkDao {
 		return StringUtils.isNotBlank(replay);
 	}
 
+	/**
+	 * 通信点接待数量自增
+	 * @param ccnId
+	 * @return
+	 */
 	public static Boolean incrCurrentReceiveCount(String ccnId) {
 
 		String key = JedisConstant.genCurrentReceiveCountKey(ccnId);
@@ -316,6 +321,12 @@ public class JedisTalkDao {
 		return new ArrayList<String>(set);
 	}
 
+	/**
+	 * 为通信点 添加接待通信点
+	 * @param ccnId
+	 * @param opeCcnId
+	 * @return
+	 */
 	public static Boolean addCcnReceiveList(String ccnId, String opeCcnId) {
 
 		String key = JedisConstant.genCcnReceiveListKey(ccnId);
@@ -352,6 +363,12 @@ public class JedisTalkDao {
 		return jedis.get(key);
 	}
 
+	/**
+	 * 设置通信点被谁接待
+	 * @param ccnId
+	 * @param opeCcnId
+	 * @return
+	 */
 	public static Boolean setCcnPassiveId(String ccnId, String opeCcnId) {
 
 		String key = JedisConstant.genCcnPassiveKey(ccnId);
@@ -464,6 +481,31 @@ public class JedisTalkDao {
 
 		return (replay > 0);
 	}
+	
+	// #################################
+	/**
+	 * 队尾弹出需要保存的消息
+	 */
+	public static String rpopSaveDialogue() {
+
+		Jedis jedis = JedisDao.getJedis();
+
+		return jedis.rpop(JedisConstant.SAVE_DIALOGUE_LIST);
+	}
+
+	/**
+	 * 队头插入需要保存的消息
+	 */
+	public static Boolean lpushSaveDialogue(String value) {
+
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.lpush(JedisConstant.SAVE_DIALOGUE_LIST, value);
+		
+		logger.info("redis lpush key:" + JedisConstant.SAVE_DIALOGUE_LIST +" value: "+ value);
+
+		return (id > 0);
+	}
 
 
 	// ######################补充服务
@@ -521,5 +563,6 @@ public class JedisTalkDao {
 		return it.next();
 
 	}
+	
 
 }
