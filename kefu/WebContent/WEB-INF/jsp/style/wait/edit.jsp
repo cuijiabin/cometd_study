@@ -51,6 +51,11 @@
 			</div>
         </div>
     </div>
+    
+</div>
+
+<div style="float:right;margin-right: 30px;height: 24px">
+    <button type="button" class="btn btn-primary btn-small" onclick="cancel();">关闭</button>
 </div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -193,6 +198,11 @@ function save(postData,td,txt){
     		});
 	    }
 	});
+}
+
+//关闭
+function cancel(){
+	api.close();
 }
 
 </script>

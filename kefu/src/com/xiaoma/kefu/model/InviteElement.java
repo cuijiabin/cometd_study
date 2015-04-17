@@ -33,10 +33,14 @@ public class InviteElement implements Serializable {
 	private Integer inviteId;
 	@Column(name="name")
 	private String name;
-	@Column(name="size")
-	private String size;
-	@Column(name="site")
-	private String site;
+	@Column(name="width")
+	private Integer width;
+	@Column(name="height")
+	private Integer height;
+	@Column(name="siteLeft")
+	private Integer siteLeft;
+	@Column(name="siteTop")
+	private Integer siteTop;
 	@Column(name="picUrl")
 	private String picUrl;
 	@Column(name="level")
@@ -70,17 +74,29 @@ public class InviteElement implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getSize() {
-		return size;
+	public Integer getWidth() {
+		return width;
 	}
-	public void setSize(String size) {
-		this.size = size;
+	public void setWidth(Integer width) {
+		this.width = width;
 	}
-	public String getSite() {
-		return site;
+	public Integer getHeight() {
+		return height;
 	}
-	public void setSite(String site) {
-		this.site = site;
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+	public Integer getSiteLeft() {
+		return siteLeft;
+	}
+	public void setSiteLeft(Integer siteLeft) {
+		this.siteLeft = siteLeft;
+	}
+	public Integer getSiteTop() {
+		return siteTop;
+	}
+	public void setSiteTop(Integer siteTop) {
+		this.siteTop = siteTop;
 	}
 	public String getPicUrl() {
 		return picUrl;

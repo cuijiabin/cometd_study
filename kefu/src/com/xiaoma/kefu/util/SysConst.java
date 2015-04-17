@@ -77,12 +77,32 @@ public class SysConst {
 	**********************************
 	 */
 	public enum StylePicName{
-		访问端右上("clientYs"),访问端右下("clientYx");
+		访问端右上("clientYs"),访问端右下("clientYx")
+		,客服图标PC在线("servicePCon"),客服图标PC离线("servicePCoff");
 		private String value;
 		StylePicName(String value){
 			this.value = value;
 		}
 		public String getCode(){
+			return this.value;
+		}
+	}
+	
+	/**
+	 * 设备类型
+	 * *********************************
+	* @Description: TODO
+	* @author: wangxingfei
+	* @createdAt: 2015年4月17日下午2:46:32
+	**********************************
+	 */
+	public enum DeviceType{
+		PC(1),移动(2);
+		private Integer value;
+		DeviceType(Integer value){
+			this.value = value;
+		}
+		public Integer getCode(){
 			return this.value;
 		}
 	}

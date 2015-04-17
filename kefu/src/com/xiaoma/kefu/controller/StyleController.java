@@ -82,7 +82,7 @@ public class StyleController {
 				style = new Style();
 			}
 			model.addAttribute("style", style);
-			return "/style/edit";
+			return "/style/editStyle";
 		} catch (Exception e) {
 			model.addAttribute("error", "对不起出错了");
 			return "error500";

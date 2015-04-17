@@ -37,10 +37,14 @@ public class InviteIcon implements Serializable {
 	private String truePic;
 	@Column(name="locationMode")
 	private Integer locationMode;
-	@Column(name="siteLevel")
-	private String siteLevel;
-	@Column(name="siteVertical")
-	private String siteVertical;
+	@Column(name="siteZy")
+	private String siteZy;
+	@Column(name="siteZyPx")
+	private Integer siteZyPx;
+	@Column(name="siteDd")
+	private String siteDd;
+	@Column(name="siteDdPx")
+	private Integer siteDdPx;
 	@Column(name="buttonId")
 	private Integer buttonId;
 	@Column(name="updateDate")
@@ -78,17 +82,29 @@ public class InviteIcon implements Serializable {
 	public void setLocationMode(Integer locationMode) {
 		this.locationMode = locationMode;
 	}
-	public String getSiteLevel() {
-		return siteLevel;
+	public String getSiteZy() {
+		return siteZy;
 	}
-	public void setSiteLevel(String siteLevel) {
-		this.siteLevel = siteLevel;
+	public void setSiteZy(String siteZy) {
+		this.siteZy = siteZy;
 	}
-	public String getSiteVertical() {
-		return siteVertical;
+	public Integer getSiteZyPx() {
+		return siteZyPx;
 	}
-	public void setSiteVertical(String siteVertical) {
-		this.siteVertical = siteVertical;
+	public void setSiteZyPx(Integer siteZyPx) {
+		this.siteZyPx = siteZyPx;
+	}
+	public String getSiteDd() {
+		return siteDd;
+	}
+	public void setSiteDd(String siteDd) {
+		this.siteDd = siteDd;
+	}
+	public Integer getSiteDdPx() {
+		return siteDdPx;
+	}
+	public void setSiteDdPx(Integer siteDdPx) {
+		this.siteDdPx = siteDdPx;
 	}
 	public Integer getButtonId() {
 		return buttonId;

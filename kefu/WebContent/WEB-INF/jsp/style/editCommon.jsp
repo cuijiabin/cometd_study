@@ -45,12 +45,12 @@
                 <tr>
                     <td class="c-wd150">客服图标</td>
                     <td class="f-txtl"><img src="http://oc2.xiaoma.com/img/upload/53lx/zdytb/on_53lx1406714337.png" alt="" /></td>
-                    <td class="c-wd120"><button type="button" class="btn btn-small">设置</button></td>
+                    <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editServicePC(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">对话邀请框</td>
                     <td class="f-txtl"><img src="http://oc2.xiaoma.com/img/upload/53lx/zdyivt/zdyivt_53kf_1427443841.jpg" alt="" /></td>
-                    <td class="c-wd120"><button type="button" class="btn btn-small">设置</button></td>
+                    <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editInvitePC(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">手机端客服图标</td>
@@ -82,6 +82,20 @@
 //访客端界面
 function editClient(styleId){
 	var url = '/clientStyle/edit.action?styleId='+styleId;
+	window.location = url;
+	return;
+}
+
+//客服图标 PC
+function editServicePC(styleId){
+	var url = '/serviceIcon/editPC.action?styleId='+styleId;
+	window.location = url;
+	return;
+}
+
+//对话邀请框设置 PC
+function editInvitePC(styleId){
+	var url = '/serviceIcon/editPC.action?styleId='+styleId;
 	window.location = url;
 	return;
 }
