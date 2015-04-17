@@ -22,6 +22,7 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
@@ -450,14 +451,16 @@ public class UserController {
 	}
 
 	/**
-	 * 退出系统
-	 * 
-	 * @param name
-	 * @param password
-	 * @param session
+	 * 缓存清除
+	 * @param name 表名
 	 */
 	@RequestMapping(value = "clear.action")
 	public String clearTable(Model model, String name) {
+		List<DictItem> list = DictMan.getDictList(name);
+		if(list != null && list.size()>0){
+			for(DictItem item : list)
+				DictMan.clearItemCache(item.getCode(), item.getItemCode());
+		}
 		DictMan.clearTableCache(name);
 		model.addAttribute("result", Ajax.toJson(0, "清除成功!"));
 		return "resultjson";
