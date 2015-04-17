@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -57,6 +58,35 @@ public class CustomerController {
 			e.printStackTrace();
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 修改客户名称
+	 * @param model
+	 * @param customerId
+	 * @param customerName
+	 * @return
+	 */
+	@RequestMapping(value = "upName.action", method = RequestMethod.GET)
+	public String updateCustomerName(Model model, Long customerId, String customerName) {
+		
+		try {
+			Customer customer = customerService.getCustomerById(customerId);
+			
+			customer.setCustomerName(customerName);
+			
+			boolean isSuccess = customerService.updateCustomer(customer);
+			if (isSuccess) {
+				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			}
+			model.addAttribute("result",JsonUtil.toJson(customer));
+			
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";
 	}

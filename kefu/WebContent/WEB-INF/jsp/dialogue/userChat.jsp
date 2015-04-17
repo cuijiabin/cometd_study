@@ -54,6 +54,7 @@
             <div class="u-state c-bor">等待咨询...</div>
             <div class="g-mn2c-cnt c-bor">
                 <input type="hidden" id="currentCcnId"/>
+                <input type="hidden" id="currentCustomerId"/>
         		<h3 class="u-tit c-bg" id="contentTitle">欢迎 xxx 使用客服系统，与客服系统连接成功</h3>
                 <div class="m-dialog2">
                     <div class="u-record r-sms-manager" id="logbox">
@@ -93,7 +94,7 @@
     	<div class="m-visitor c-bor">
         	<h3 class="u-tit c-bg">访客信息</h3>
         	<div class="f-padd10 f-oh" id="customerInfo">
-            	<p class="f-mbn f-cb"><a class="f-fl" name="customerId">12315645</a><a class="f-fr" >修改姓名</a></p>
+            	<p class="f-mbn f-cb"><a class="f-fl" name="customerId">12315645</a><a class="f-fr" onclick="javascript:updateCustomerName()">修改姓名</a></p>
             	<p class="f-mbm" name="customerIpInfo">北京市 [ 北京长城 ]</p>
                 <p class="m-from-sm"><button class="btn btn-small" type="button">查看聊天记录</button></p>
             </div>
@@ -146,6 +147,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 
 <script type="text/javascript" src="/js/comet4j.js"></script>
 
@@ -202,6 +204,7 @@
 	}
 
 	start();
+	$("#customerInfo").hide();
 	updateCustomerList();
 	
 	
@@ -215,6 +218,7 @@
 		//对话标题
 		$("#currentDialogueNum").html("当前共有"+listSize+"个对话");
 		if(listSize > 0){
+			$("#customerInfo").show();
 			var dq = list[0];
 			changeCustomerInfo(dq);
 		}
@@ -237,6 +241,9 @@
 		console.log("与客户"+customerId+"对话中");
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
+		$("#currentCustomerId").val(customerId);
+		
+		getCustomerById(customerId);
 	}
 	
 	// 显示客户信息
@@ -246,8 +253,9 @@
 		
 		$("#contentTitle").html("与客户"+customer.id+"对话中");
 		$("#currentCcnId").val(ccnId);
+		$("#currentCustomerId").val(customer.id);
 		
-		$("#customerInfo a[name$='customerId']").html(customer.id);
+		$("#customerInfo a[name$='customerId']").html(customer.customerName);
 		$("#customerInfo p[name$='customerIpInfo']").html(customer.ip);
 		
 	}
@@ -297,6 +305,90 @@
 		moveScroll();
 	}
 	
+	//获取客户信息
+	function getCustomerById(customerId){
+		var url="/customer/info.action";
+		var data = {
+				"customerId":customerId
+		};
+		$.ajax({
+		    type: "get",
+		    url: url,
+		    data: data,
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function (data) {
+		    	var customerName = (data.customerName == null ) ? "--" : data.customerName;
+		    	$("#customerInfo a[name$='customerId']").html(customerName);
+				$("#customerInfo p[name$='customerIpInfo']").html(data.ip);
+		    	return data;
+		    },
+		    error: function (msg) {
+		        console.log("getCustomerById Error");
+		    }
+		});
+	}
+	
+	//修改客户姓名
+	function updateCustomerName(){
+		var customerId = $("#currentCustomerId").val();
+		var name = $("#customerInfo a[name$='customerId']").html();
+		var content ='<table>'
+		                  +'<tr>'
+		                  +' <td>客服编号：'+customerId+'</td>'
+		                  +'</tr>'
+		                  +'<tr>'
+		                  +'<td>姓名：<input id="updateName" type="text" value="'+name+'" /></td>'
+		                  +'</tr>'
+		                  +'</table>';
+		
+		var d = $.dialog({
+		    id: 'updateCustomerName',
+		    title:"修改客户姓名",
+		    content:content,
+		    button: [
+		        {
+		            name: '确定',
+		            callback: function () {
+		            	name = $("#updateName").val();
+		            	console.log("param: "+customerId+" ,name: "+name);
+		            	updateName(customerId, name);
+		                //return false;
+		            },
+		            focus: true
+		        },
+		        {
+		            name: '取消',
+		            callback: function () {
+		            }
+		        }
+		    ]
+		});
+	}
+	
+	function updateName(customerId,name){
+		
+		console.log("updateName param: "+customerId+" ,name: "+name);
+		var url="/customer/upName.action";
+		var data = {
+				"customerId":customerId,
+				"customerName":name
+		};
+		$.ajax({
+		    type: "get",
+		    url: url,
+		    data: data,
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function (data) {
+		    	$.dialog.alert("修改成功");
+		    	getCustomerById(customerId);
+		    },
+		    error: function (msg) {
+		    	$.dialog.alert("修改失败");
+		    }
+		});
+	}
 	
 	// 检测输出长度
 	function checkLogCount() {
