@@ -12,7 +12,6 @@ import org.comet4j.core.listener.DropListener;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.JedisTalkDao;
-import com.xiaoma.kefu.thread.SaveDialogueThread;
 
 /**
  * @description LeftListener

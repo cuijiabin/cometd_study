@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
@@ -26,6 +29,7 @@ import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.StudyMapUtil;
 import com.xiaoma.kefu.util.TimeHelper;
 
 @Controller
@@ -174,20 +178,45 @@ public class ChatCometController {
 
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
-
-		List<String> ccnIds = JedisTalkDao.getCcnReceiveList(ccnId);
-		Map<String, Long> ccnIdCustomerMap = new HashMap<String, Long>();
-		for (String cId : ccnIds) {
-			String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cId);
-			if (customerId != null) {
-				ccnIdCustomerMap.put(cId, Long.parseLong(customerId));
-			}
-
-		}
-		List<Long> customerIds = new ArrayList<Long>(ccnIdCustomerMap.values());
-		List<Customer> customers = customerService.findByIds(customerIds);
 		
-		List<DealQuene> list = DealQuene.buildDealQuenes(ccnIdCustomerMap, customers);
+		List<DialogueQuene> list = new ArrayList<DialogueQuene>();
+		List<String> ccnIds = JedisTalkDao.getCcnReceiveList(ccnId);
+		
+		if(CollectionUtils.isNotEmpty(ccnIds)){
+			
+			Map<String, Long> ccnIdCustomerMap = new HashMap<String, Long>();
+			
+			for (String cId : ccnIds) {
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cId);
+				if (customerId != null) {
+					ccnIdCustomerMap.put(cId, Long.parseLong(customerId));
+				}
+			}
+			List<Long> customerIds = new ArrayList<Long>(ccnIdCustomerMap.values());
+			List<Customer> customers = new ArrayList<Customer>();
+			Map<Long, Customer> customerMap = new HashMap<Long, Customer>();
+			if(CollectionUtils.isNotEmpty(customerIds)){
+				customers = customerService.findByIds(customerIds);
+				customerMap = StudyMapUtil.convertList2Map(customers, Customer.class.getDeclaredField("id"));
+			}
+			
+			for (String cId : ccnIds) {
+				DialogueQuene dialogueQuene = new DialogueQuene();
+				dialogueQuene.setCcnId(cId);
+				
+				Long customerId = ccnIdCustomerMap.get(cId);
+				Customer customer = customerMap.get(customerId);
+				if(customer != null){
+					dialogueQuene.setCustomer(customer);
+				}
+				Long millTime = JedisTalkDao.getCcnReceiveScore(ccnId,cId);
+				if(millTime != null){
+					dialogueQuene.setEnterTime(new Date(millTime));
+				}
+				
+				list.add(dialogueQuene);
+			}
+		}
 		
 		CometEngine engine = context.getEngine();
 		CometConnection ccn = engine.getConnection(ccnId);

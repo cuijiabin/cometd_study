@@ -20,6 +20,7 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -37,6 +38,28 @@ public class CustomerController {
 	private DialogueService dialogueService;// 对话信息
 	@Autowired
 	private MessageRecordsService messageRecordsService;// 留言信息
+	
+	/**
+	 * 获取客户详细信息
+	 * @param model
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "info.action", method = RequestMethod.GET)
+	public String getCustomerInfo(Model model, Long customerId) {
+		
+		try {
+			Customer customer = customerService.getCustomerById(customerId);
+			
+			model.addAttribute("result",JsonUtil.toJson(customer));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+		return "resultjson";
+	}
 
 	/**
 	 * 查询所有、条件查询

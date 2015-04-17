@@ -45,7 +45,7 @@
 <div class="clear"></div>
 <div class="g-bd2 f-cb">
     <div class="g-sd2l c-bor">
-        <h3 class="u-tit c-bg">当前共有0个对话</h3>
+        <h3 class="u-tit c-bg" id="currentDialogueNum">当前共有0个对话</h3>
         <ul class="m-talk" id="customerList">
         </ul>
     </div>
@@ -92,6 +92,11 @@
     <div class="g-sd2r">
     	<div class="m-visitor c-bor">
         	<h3 class="u-tit c-bg">访客信息</h3>
+        	<div class="f-padd10 f-oh" id="customerInfo">
+            	<p class="f-mbn f-cb"><a class="f-fl" name="customerId">12315645</a><a class="f-fr" >修改姓名</a></p>
+            	<p class="f-mbm" name="customerIpInfo">北京市 [ 北京长城 ]</p>
+                <p class="m-from-sm"><button class="btn btn-small" type="button">查看聊天记录</button></p>
+            </div>
         </div>
         <div class="m-sidemenu">
         	<div class="c-bor">
@@ -143,71 +148,86 @@
 <script type="text/javascript" src="/js/app.js"></script>
 
 <script type="text/javascript" src="/js/comet4j.js"></script>
+
 <script language="javascript" for="window" event="onload"> 
-	console.log("init");
+
 	var lastTalkId = null ;
 	var maxLogCount = 100;
+	
 	// 引擎事件绑定
 	JS.Engine.on({
 		start : function(cId, aml, engine) {
 			var style = engine.getConnector().workStyle;
 			style = style === 'stream'?'长连接':'长轮询';
-			console.log("style: "+ style);
+			console.log("连接方式style: "+ style);
 		},
 		stop : function(cause, url, cId, engine) {
 		},
 		dialogue : function(data, engine) {
 			switch (data.type) {
-			case 'on_message': // 收到聊天消息
+			case 'on_message': 
+				//收到聊天消息
 				onMessage(data);
 				break;
-			case 'update_list': //
-				userList(data);
+			case 'update_list':
+				//更新接听列表
+				userList(data.obj);
 				break;
-			case 'on_open': // 上线
-			    //更新用户列表
+			case 'on_open': 
+			    //上线 发送更新用户列表请求
 				updateCustomerList();
 				break;
-			case 'on_close': // 下线
+			case 'on_close': 
+				//下线 发送更新用户列表请求
 				updateCustomerList();
 				break;
 			}
 		}
 	});
 	
-	start();
-	updateCustomerList();
 	
-	//开启连接
+	// 开启连接
 	function start(){
 		JS.Engine.start('/conn');
 		inputbox.focus();
-		
-		
 	}
-	
-	
-	//更新用户列表
+	// 更新用户列表请求
 	function updateCustomerList() {
 		if (!JS.Engine.running)
 			return;
 		var id = JS.Engine.getId();
 		var param = "ccnId=" + id ;
 		JS.AJAX.post('/chat/receiveList.action', param, function() {
-			inputbox.value = '';
 		});
 	}
-	// 用户下线通知
+
+	start();
+	updateCustomerList();
+	
+	
+	
+	//更新用户列表操作
 	function userList(data) {
-		var list = data.obj
-		console.log(list.length);
+		var list = data;
+		var listSize = list.length;
+		console.log("对话列表长度："+listSize);
+		
+		//对话标题
+		$("#currentDialogueNum").html("当前共有"+listSize+"个对话");
+		if(listSize > 0){
+			var dq = list[0];
+			changeCustomerInfo(dq);
+		}
 		var html = "";
 		for(var i=0; i<list.length; i++){
 			var dQuene = list[i];
+			//连接点id
 			var ccnId = '"'+dQuene.ccnId+'"';
-			html += "<li class='on'><p>"+dQuene.customerName
-			+"</p><p><a href='javascript:changeTitle("+dQuene.customerId+", "+ccnId+");'>"
-			+dQuene.ip+"</a></p><span class='u-close'>x</span></li>"
+			var customer = dQuene.customer;
+			
+			html += "<li class='on'><p>客户："+customer.id
+			+"</p><p><a href='javascript:changeTitle("+customer.id+","+ccnId+");'>"
+			+customer.ip+"</a></p><p>上线时间："+getTimeByPattern(dQuene.enterTime)+"</p><span class='u-close'>x</span></li>";
 		}
 		console.log(html);
 		 $("#customerList").html(html);
@@ -217,6 +237,19 @@
 		console.log("与客户"+customerId+"对话中");
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
+	}
+	
+	// 显示客户信息
+	function changeCustomerInfo(dQuene){
+		var ccnId = dQuene.ccnId;
+		var customer = dQuene.customer;
+		
+		$("#contentTitle").html("与客户"+customer.id+"对话中");
+		$("#currentCcnId").val(ccnId);
+		
+		$("#customerInfo a[name$='customerId']").html(customer.id);
+		$("#customerInfo p[name$='customerIpInfo']").html(customer.ip);
+		
 	}
 	
 	// 发送聊天信息动作
@@ -234,6 +267,7 @@
 			inputbox.value = '';
 		});
 	}
+	
 	// 回车事件
 	function onSendBoxEnter(event) {
 		console.log("回车发送！");
@@ -255,9 +289,7 @@
 		var text = data.text || '';
 		text = text.HTMLEncode();
 		var t = data.transtime;
-		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
-			           '</p><p class="r-visitor-txt">',text,'</p>' ];
-		
+		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',text,'</p>' ];
 		console.log(str);
 		checkLogCount();
 		logbox.innerHTML += str.join('');
@@ -265,26 +297,7 @@
 		moveScroll();
 	}
 	
-	// HTML编码
-	String.prototype.HTMLEncode = function() {
-		var temp = document.createElement("div");
-		(temp.textContent != null) ? (temp.textContent = this)
-				: (temp.innerText = this);
-		var output = temp.innerHTML;
-		temp = null;
-		return output;
-	};
-	// HTML解码
-	String.prototype.HTMLDecode = function() {
-		var temp = document.createElement("div");
-		temp.innerHTML = this;
-		var output = temp.innerText || temp.textContent;
-		temp = null;
-		return output;
-	};
-	String.prototype.trim = function() {
-		return this.replace(/^\s+|\s+$/g, '');
-	};
+	
 	// 检测输出长度
 	function checkLogCount() {
 		var count = logbox.childNodes.length;
@@ -302,6 +315,76 @@
 		logbox.scrollTop = logbox.scrollHeight;
 		inputbox.focus();
 	}
+	
+	// 时间格式化
+	function getTimeByPattern(date,pattern){
+		pattern = (pattern == null) ? "HH:mm:ss" : pattern;
+		var d = new Date(date);
+		console.log("构造后："+d);
+		return d.pattern(pattern);
+	}
+	
+	
+	
+</script>
+<script type="text/javascript">
+	
+    // 去空格操作
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+	
+	// HTML编码
+	String.prototype.HTMLEncode = function() {
+		var temp = document.createElement("div");
+		(temp.textContent != null) ? (temp.textContent = this): (temp.innerText = this);
+		var output = temp.innerHTML;
+		temp = null;
+		return output;
+	};
+	// HTML解码
+	String.prototype.HTMLDecode = function() {
+		var temp = document.createElement("div");
+		temp.innerHTML = this;
+		var output = temp.innerText || temp.textContent;
+		temp = null;
+		return output;
+	};
+	
+	// 日期格式化函数
+	Date.prototype.pattern=function(fmt) {         
+	    var o = {         
+	    "M+" : this.getMonth()+1, //月份         
+	    "d+" : this.getDate(), //日         
+	    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时         
+	    "H+" : this.getHours(), //小时         
+	    "m+" : this.getMinutes(), //分         
+	    "s+" : this.getSeconds(), //秒         
+	    "q+" : Math.floor((this.getMonth()+3)/3), //季度         
+	    "S" : this.getMilliseconds() //毫秒         
+	    };         
+	    var week = {         
+	    "0" : "/u65e5",         
+	    "1" : "/u4e00",         
+	    "2" : "/u4e8c",         
+	    "3" : "/u4e09",         
+	    "4" : "/u56db",         
+	    "5" : "/u4e94",         
+	    "6" : "/u516d"        
+	    };         
+	    if(/(y+)/.test(fmt)){         
+	        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));         
+	    }         
+	    if(/(E+)/.test(fmt)){         
+	        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);         
+	    }         
+	    for(var k in o){         
+	        if(new RegExp("("+ k +")").test(fmt)){         
+	            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));         
+	        }         
+	    }         
+	    return fmt;         
+	}  
 </script>
 </body>
 </html>
