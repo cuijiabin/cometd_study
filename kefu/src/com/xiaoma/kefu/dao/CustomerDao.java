@@ -79,8 +79,8 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @param pageBean
 	 * @return
 	 */
-	public List getCustomerByConExl(
-			Map<String, String> conditions, String beginDate, String endDate,
-			PageBean pageBean);
+	public List getCustomerByConExl(String beginDate, String endDate,
+			String customerName, String id, String phone, String styleName,
+			String consultPage, String keywords);
 
 }

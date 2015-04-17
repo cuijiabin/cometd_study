@@ -56,11 +56,10 @@ public class CustomerService {
 	/**
 	 * 条件查询(用于导出报表)
 	 */
-	public List  getResultByConExl(Map<String, String> conditions ,String beginDate,String endDate, PageBean pageBean) {
+	public List  getResultByConExl(String beginDate,String endDate,String customerName,String id,String phone, String styleName,String consultPage,
+			   String keywords) {
 		try {
-			Integer totalCount = customerDaoImpl.getAllCustomerCount(conditions,beginDate ,endDate,pageBean);
-			pageBean.setTotalRows(totalCount);
-			List  list = customerDaoImpl.getCustomerByConExl(conditions,beginDate ,endDate,pageBean);
+			List  list = customerDaoImpl.getCustomerByConExl(beginDate,endDate,customerName,id,phone,styleName,consultPage,keywords);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,11 +151,6 @@ public class CustomerService {
 		return customer;
 	}
 
-
-		
-		
-
-		
 		public List<Customer> findByIds(List<Long> ids){
 			
 			List<Serializable> idList = JsonUtil.convertLong2Serializable(ids);

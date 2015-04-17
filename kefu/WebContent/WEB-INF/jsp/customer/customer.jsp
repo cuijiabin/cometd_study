@@ -12,7 +12,6 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
 <!-- 面包屑 -->
 <div class="m-crumb">
@@ -42,13 +41,12 @@
                <label></label>
             <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
             <label></label>
-            <button type="button" target="_blank"  class="btn btn-primary btn-small" onclick="window.open('/customer/exportExcel.action')" >导出</button>
+                 <button type="button" target="_blank"  class="btn btn-primary btn-small" onclick="javascript:exportExcel();" >导出</button>
         </div>
         <div class="m-query-hd">
     </div>
     </div>
 </div>
-
 <div id="table_data">
 	<jsp:include page="customerList.jsp"></jsp:include>
 </div>
@@ -80,6 +78,10 @@ function find(currentPage){
 	if (!checkdate(data)) {
 		return;
 	}
+	//校验搜索框中的参数
+	if (!checkParam()) {
+			return;
+		}
 	
 	$.ajax({
 	    type: "get",
@@ -113,43 +115,51 @@ function find(currentPage){
 	  }else{
 		  return true;
 	  }
+ }
+  /**
+  * js校验搜索参数
+  */
+  function checkParam() {
+	  var customerId = $("#customerId").val();
+		var chinesePatrn = /[\u4E00-\u9FA5]/g;
+		if(chinesePatrn.test(customerId)){
+			alert("客户编号不得是汉字！");
+			return false;
+		}
+		return true;
 }
   
   /**
    *导出满足查询条件的所有数据
    */
   function exportExcel(){
-  	var url="/customer/exportExcel.action";
-  	var data = {
-  			"beginDate" :$("#beginDate").val(),
-  			"endDate" :$("#endDate").val(),
-  			"map[customerName]":$("#customerName").val(),
-  			"map[id]":$("#customerId").val(),
-  			"map[phone]":$("#phone").val(),
-  			"map[styleName]":$("#customerStyle").val(),
-  			"map[consultPage]":$("#consultPage").val(),
-  			"map[keywords]":$("#keywords").val(),
-  			"map[typeId]":1
-  	};
-  	//检验日期
-  	if (!checkdate(data)) {
-  		return;
-  	}
-  	
-  	$.ajax({
-  	    type: "get",
-  	    url: url,
-  	    data: data,
-  	    contentType: "application/json; charset=utf-8",
-  	    dataType: "html",
-  	    success: function (data) {
-  	       $("#table_data").html(data);
-  	    },
-  	    error: function (msg) {
-  	        alert(msg);
-  	    }
-  	});
-  }
+	    //校验搜索框中的参数
+	    var customerId = $("#customerId").val();
+        var chinesePatrn = /[\u4E00-\u9FA5]/g;
+		if(chinesePatrn.test(customerId)){
+			alert("客户编号不得是汉字！");
+			return false;
+		}
+	     //校验日期
+	     var beginDate =$("#beginDate").val();
+		 var endDate=$("#endDate").val();
+		  beginDate = beginDate.replace("-","/").replace("-","/");
+		  endDate = endDate.replace("-","/").replace("-","/");
+		  if(Date.parse(endDate) < Date.parse(beginDate))   {                           
+	           alert('结束日期不能小于开始日期',this);
+		  	   return false;
+		  }else{
+			  console.log(beginDate);
+			  console.log(endDate);
+		  }
+ 	 window.open("/customer/exportExcel.action?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()
+ 			       +"&customerName="+$("#customerName").val()
+ 			       +"&id="+$("#customerId").val()
+ 			       +"&phone="+$("#phone").val()
+ 			       +"&styleName="+$("#customerStyle").val()
+ 			       +"&consultPage="+$("#consultPage").val()
+ 			       +"&keywords="+$("#keywords").val()+" ");
+ }
 </script>
 </body>
 </html>

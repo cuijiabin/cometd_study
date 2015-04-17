@@ -161,48 +161,42 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List  getCustomerByConExl(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
+	public List  getCustomerByConExl(String beginDate,String endDate,String customerName,String id,String phone, String styleName,String consultPage,
+			   String keywords) {
 		
-	
 		Session session = getSession();
 		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
-		}else {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String today = sdf.format(new Date());
-			hql +="and  a.createDate BETWEEN '"+ today+" "+"00:00:00"+"' " +"AND"+" '" +today+" "+"23:59:59"+"' ";
 		}
-		if (conditions !=null) {
-			   String customerName =  conditions.get("customerName").trim();
-			if(StringHelper.isNotEmpty(customerName)){
-				hql += " and a.customerName like '"+"%"+customerName+"%"+"'";
-			}	
-		         String customerId =  conditions.get("id").trim();
-			if(StringHelper.isNotEmpty(customerId)){
-				hql += " and a.id = "+customerId+" " ;
-			}	
-			    String phone = conditions.get("phone").trim();
-			if(StringHelper.isNotEmpty(phone)){
-				hql += " and a.phone = "+phone+" " ;
-			}
-			   String styleName =  conditions.get("styleName").trim();
-			if(StringHelper.isNotEmpty(styleName)){
-				hql += " and a.styleName like '"+"%"+styleName+"%"+"'";
-			}
-			  String consultPage =  conditions.get("consultPage").trim();
-			if(StringHelper.isNotEmpty(consultPage)){
-				hql += " and b.consultPage like '"+"%"+consultPage+"%"+"'";
-			}
-				
-			 String keywords =  conditions.get("keywords").trim();
-			if(StringHelper.isNotEmpty(keywords)){
-				hql += " and b.keywords like '"+"%"+keywords+"%"+"'";
-			}
+		   String name = customerName.trim();
+		if(StringHelper.isNotEmpty(name)){
+			hql += " and a.customerName like '"+"%"+name+"%"+"'";
+		}	
+	         String customerId =  id.trim();
+		if(StringHelper.isNotEmpty(customerId)){
+			hql += " and a.id = "+customerId+" " ;
+		}	
+		    String pho = phone.trim();
+		if(StringHelper.isNotEmpty(pho)){
+			hql += " and a.phone = "+pho+" " ;
 		}
+		   String styleNa =  styleName.trim();
+		if(StringHelper.isNotEmpty(styleNa)){
+			hql += " and a.styleName like '"+"%"+styleNa+"%"+"'";
+		}
+		  String consultPa =  consultPage.trim();
+		if(StringHelper.isNotEmpty(consultPa)){
+			hql += " and b.consultPage like '"+"%"+consultPa+"%"+"'";
+		}
+		 String keywo =  keywords.trim();
+		if(StringHelper.isNotEmpty(keywo)){
+			hql += " and b.keywords like '"+"%"+keywo+"%"+"'";
+		}
+		
 		 hql += "GROUP BY a.id ORDER BY createDate desc";
 	
-		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class).setFirstResult(pageBean.getStartRow()).setMaxResults(pageBean.getPageRecorders());
+		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class);
 		List list = query.list();
 		return list;
 	}

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
@@ -326,8 +327,10 @@ public class CustomerController {
 	 * @throws IOException 
 	 */
 	 @RequestMapping(value= "exportExcel.action" ,method=RequestMethod.GET)  
-	 public void exportExcel(HttpServletRequest request, HttpServletResponse response,MapEntity conditions, Model model,String beginDate,String endDate,PageBean pageBean)  
-	 {  
+	 public void exportExcel(HttpServletRequest request, HttpServletResponse response, Model model,
+			 String beginDate,String endDate,String customerName,String id,String phone, 
+			 String styleName,String consultPage,String keywords){  
+		
 	     // 生成提示信息，  
 	     response.setContentType("application/vnd.ms-excel");  
 	     String codedFileName = null;  
@@ -346,7 +349,7 @@ public class CustomerController {
 	         HSSFSheet sheet = workbook.createSheet();  
 	         HSSFRow rows = sheet.createRow(0);//创建一行  
 	         HSSFCell cell0 = rows.createCell(0);//创建一列  
-	          cell0.setCellValue("添加时间"); 
+	          cell0.setCellValue("访问时间"); 
 	         HSSFCell cell1 = rows.createCell(1);//创建一列  
             cell1.setCellValue("风格"); 
             HSSFCell cell2 = rows.createCell(2);//创建一列  
@@ -362,21 +365,21 @@ public class CustomerController {
             HSSFCell cell7 = rows.createCell(7);//创建一列  
             cell7.setCellValue("备注");  
             
-	         List list = customerService.getResultByConExl(conditions.getMap(),beginDate,endDate,pageBean);
-	         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-	         
+	         List list = customerService.getResultByConExl(beginDate,endDate,customerName,id,phone,styleName,consultPage,keywords);
+	         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	         for (int i = 0; i < list.size() ; i++){
-	 
+	        	 
 	         Object [] obj = (Object[])list.get(i);
 	         Customer customer =(Customer)obj[0];
 	         Dialogue dialogue = (Dialogue)obj[1];
+	         String createDate = formatter.format(customer.getCreateDate());//创建当前条黑名单的时间
 	        	 rows = sheet.createRow(i+1);//创建一行  
 		         cell0 = rows.createCell(0);//创建一列  
-	             cell0.setCellValue(customer.getCreateDate()); 
+	             cell0.setCellValue(createDate); 
 	             cell1 = rows.createCell(1);//创建一列  
 	             cell1.setCellValue(customer.getStyleName());  
 	             cell2 = rows.createCell(2);//创建一列  
-	             cell2.setCellValue(customer.getId());  
+	             cell2.setCellValue(Long.toString(customer.getId()));  
 	             cell3 = rows.createCell(3);//创建一列  
 	             cell3.setCellValue(customer.getCustomerName());  
 	             cell4 = rows.createCell(4);//创建一列  
@@ -409,5 +412,4 @@ public class CustomerController {
 	     System.out.println("文件生成...");  
 	 }  
 	
-
 }
