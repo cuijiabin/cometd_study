@@ -21,7 +21,7 @@
         <li><b>位置：</b></li>
         <li><a href="#">首页</a></li>
         <li><i>&gt;</i><a href="#">系统设置</a></li>
-        <li><i>&gt;</i><a href="#">风格管理</a></li>
+        <li><i>&gt;</i><a href="/style/find.action">风格管理</a></li>
         <li><i>&gt;</i><a href="/style/editCommon.action?styleId=${clientStyle.styleId }">界面样式设置</a></li>
         <li><i>&gt;</i>访问端广告设置</li>
     </ul>
@@ -37,7 +37,7 @@
     
     <div class="f-padd10">
     	<!-- 表格有边框 -->
-    	<form id="mainForm" enctype="multipart/form-data" method="post" action="/clientStyle/uploadYs.action">
+    	<form id="mainForm" enctype="multipart/form-data" method="post" >
     		<input type="hidden" id="id" name="id" value="${clientStyle.id }"/>
     		<input type="hidden" id="styleId" name="styleId" value="${clientStyle.styleId }" />
 	        <table class="table table-bordered m-table c-wdat">
@@ -129,7 +129,7 @@ function editWait(styleId){
 //  	return;
 	$.dialog({content:'url:/waitList/edit.action?styleId='+styleId,
 		id: 'wait',
-		width: 900,height: 600,
+		width: 900,height: 700,
 		title:'等待列表配置',
 		lock:true
 	});

@@ -71,7 +71,7 @@ function updateDept(id){
 }
 function findUser(id){
 
-	var d = $.dialog({id:'dept',title:"查看部门员工",content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
+	var d = $.dialog({id:'dept',title:"查看部门成员",content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
 		600,height: 600,});
 

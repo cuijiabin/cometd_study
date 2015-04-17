@@ -28,7 +28,7 @@
             <td>${user.userName}</td>
             <td>${user.cardName}</td>
             <td>${user.onLineStatus}</td>
-            <td>${user.deptId}</td>
+            <td><a href="javascript:deptUser(${user.deptId})">${user.deptId}<a></a></td>
             <td>${user.maxListen}</td>
             <td><a href="javascript:findUser(${user.id})">查看<a/>&nbsp;&nbsp;&nbsp;&nbsp;
                    <c:if test="${status==1}"><a href="javascript:updateUser(${user.id})">编辑<a/></c:if>

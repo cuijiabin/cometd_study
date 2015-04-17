@@ -15,45 +15,13 @@
 <link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="m-crumb">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">设置中心</a></li>
-        <li><i>&gt;</i><a href="#">管理设置</a></li>
-        <li><i>&gt;</i><a href="#">角色管理</a></li>
-        <li><i>&gt;</i>权限配置</li>
-    </ul>
-</div>
-<h4>角色： ${role.name}</h4>
-    	<!-- 表格有边框 -->
-        <table class="table m-table c-wdat f-mar0">
-            <tbody>
-                <tr>
-                   <td class="c-wd150 f-vat">
-					 
-                    	<ul class="e_tit c-bor">
-                            <c:forEach items="${list}" var="dept">
-                        	     <li id="dept${dept.id}" name="deptcss" class="" value="${dept.id}" onclick="checkde(this)">
-                            	    <a><b class="c-colf00"></b>${dept.name}</a>
-                                 </li>
-					        </c:forEach>
-                        </ul>
-                    </td>
-                    <td>
-                    <div class="g-cnt">
-                    <table class="table table-bordered m-table c-wdat f-mar0">
-							<tr>
-								<td width=260px align=left valign=top>
-									<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
-								</td>
-								<TD width=0px align=left valign=top></td>
-							</tr>
-							<button class="btn" onclick="saveFunc()">保存</button>
-					</table>
-					</div>
-                    </td>
-                </tr>
-            </tbody>
+       <table class="table table-bordered m-table c-wdat f-mar0">
+			<tr>
+				<td width=260px align=left valign=top>
+					<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
+				</td>
+				<TD width=0px align=left valign=top></td>
+			</tr>
         </table> 		
 </body>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -117,34 +85,6 @@ function loadReady() {
 	h = demoIframe.height() >= maxH ? minH:maxH ;
 	if (h < 530) h = 530;
 	demoIframe.height(h);
-}
-
-function saveFunc(){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
-	alert(ids);
-// 	$.ajax({
-// 		url:"/user/leave.action?status="+status+"",
-// 		type:"post",
-// 		data:"ids="+ids,
-// 		dataType:"json",
-// 		success:function(data) {
-// 			alert(data.msg);
-// 			location.reload();
-// 		},
-// 		error : function(data) {
-// 			alert("出现错误,请重试！");
-// 		}
-// 	});
-	
-}
-
-function checkde(obj){
-	var val=obj.value;
-	alert(val);
-	$("li").removeClass();
-	$("#dept"+val+"").addClass("on");
 }
 </script>
 

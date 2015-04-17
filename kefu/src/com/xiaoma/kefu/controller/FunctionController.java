@@ -16,6 +16,7 @@ import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.FunctionService;
 import com.xiaoma.kefu.service.RoleService;
+import com.xiaoma.kefu.util.Ajax;
 
 /**
  * 
@@ -56,27 +57,84 @@ public class FunctionController {
 		}
 	}
 
+//	/**
+//	 * 进入全新配置页面的查询
+//	 */
+//	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
+//	@RequestMapping(value = "permit.action", method = RequestMethod.GET)
+//	public String permit(Model model, Integer id ) {
+//		try {
+//			if (id != null) {
+//				Role role = roleService.getRoleById(roleId);
+//				List<Department> deptlist = deptService.findDept();
+//				List list = funcService.findFunction();
+//				JSONArray json = new JSONArray().fromObject(list);
+//				System.out.println(json);
+//				model.addAttribute("role", role);
+//				model.addAttribute("list", deptlist);
+//				model.addAttribute("json", json.toString());
+//				return "/set/govern/func/func";
+//			} else {
+//				return "null";
+//			}
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			model.addAttribute("error", "出错了,请刷新页面重试！");
+//			return "error";
+//		}
+//	}
+
 	/**
 	 * 配置权限的查询
 	 */
 	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
 	@RequestMapping(value = "permit.action", method = RequestMethod.GET)
-	public String permit(Model model, Integer id) {
+	public String findFunc(Model model, Integer roleId ,Integer deptId,Integer status) {
 		try {
-			if (id != null) {
-				Role role = roleService.getRoleById(id);
+			  if(status==null)
+				  status=1;
+			if (roleId != null && deptId !=null) {
+				if(status==3){
+					model.addAttribute("status",status);
+				}
+				Role role = roleService.getRoleById(roleId);
 				List<Department> deptlist = deptService.findDept();
 				List list = funcService.findFunction();
-				//List list = funcService.findTree(5);
+				String strs=funcService.checkedFunc(roleId,deptId);
 				JSONArray json = new JSONArray().fromObject(list);
 				System.out.println(json);
-				model.addAttribute("role",role);
-				model.addAttribute("list",deptlist);
+				model.addAttribute("deptId",deptId);
+				model.addAttribute("role", role);
+				model.addAttribute("list", deptlist);
+				model.addAttribute("strs",strs);
 				model.addAttribute("json", json.toString());
 				return "/set/govern/func/func";
 			} else {
 				return "null";
 			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
+		}
+	}
+	
+	/**
+	 * 保存权限的配置
+	 */
+	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
+	@RequestMapping(value = "saveFunc.action", method = RequestMethod.POST)
+	public String saveFunc(Model model, Integer roleId ,Integer deptId,String ids) {
+		try {
+			if (roleId != null && deptId !=null && ids!=null) {
+	            Integer isSuccess = funcService.saveFunc(roleId,deptId,ids);
+				if (isSuccess !=0) {
+					model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
+				} else {
+					model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
+				}
+			}
+			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");

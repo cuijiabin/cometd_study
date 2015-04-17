@@ -72,8 +72,8 @@ public class DictitemController {
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
 	public String addDictitem(Model model, DictItem dictitem) {
 		try {
-			boolean isSuccess = dictitemService.createNewDictitem(dictitem);
-			if (isSuccess) {
+			Integer id = dictitemService.add(dictitem);
+			if (id!=null && id>0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
@@ -93,9 +93,9 @@ public class DictitemController {
 	@RequestMapping(value = "update.action", method = RequestMethod.GET)
 	public String updateDict(Model model, DictItem dictitem) {
 		try {
-			boolean isSuccess = dictitemService.updateDictitem(dictitem);
+			Integer flag = dictitemService.update(dictitem);
 			
-			if (isSuccess) {
+			if (flag!=null && flag>0) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
@@ -114,12 +114,12 @@ public class DictitemController {
 	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
 	public String deleteDict(Model model, Integer id) {
 		try {
-			boolean isSuccess = dictitemService.deleteDictitemById(id);
-			if (isSuccess) {
-				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
-			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
-			}
+//			Integer flag  = dictitemService.delete(id);
+//			if (flag!=null && id>0) {
+//				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+//			} else {
+//				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+//			}
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}

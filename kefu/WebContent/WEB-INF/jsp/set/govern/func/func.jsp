@@ -24,7 +24,8 @@
         <li><i>&gt;</i>权限配置</li>
     </ul>
 </div>
-<h4>角色： ${role.name}</h4>
+<h4>角色： ${role.name}</h4><input type="hidden" id="roleId" name="roleId" value="${role.id}"/><input type="hidden" id="deptId" name="deptId" value="${deptId}"/>
+<input type="hidden" id="strings" name="strings" value="${strs}"/>
     	<!-- 表格有边框 -->
         <table class="table m-table c-wdat f-mar0">
             <tbody>
@@ -33,7 +34,7 @@
 					 
                     	<ul class="e_tit c-bor">
                             <c:forEach items="${list}" var="dept">
-                        	     <li id="dept${dept.id}" name="deptcss" class="" value="${dept.id}" onclick="checkde(this)">
+                        	     <li id="dept${dept.id}" name="deptcss" class="" value="${dept.id}" onclick="findPermit(this)">
                             	    <a><b class="c-colf00"></b>${dept.name}</a>
                                  </li>
 					        </c:forEach>
@@ -48,10 +49,11 @@
 								</td>
 								<TD width=0px align=left valign=top></td>
 							</tr>
-							<button class="btn" onclick="saveFunc()">保存</button>
 					</table>
+					<c:if test="${status==3}"><button class="btn btn-primary btn-small" onclick="saveFunc()">保存</button></c:if>
 					</div>
                     </td>
+                    <td><src href="/tree.jsp"/></td>
                 </tr>
             </tbody>
         </table> 		
@@ -81,6 +83,9 @@ var setting = {
 		chkboxType: { "Y": "p", "N": "s" }
 	},
 	data: {
+		key: {
+			url: "xUrl"
+		},
 		simpleData: {
 			enable:true,
 			idKey: "id",
@@ -101,6 +106,17 @@ var setting = {
 
 var str ='${json}';
 var zNodes = eval('('+ str +')');
+var str = $("#strings").val();
+var ids=str.split(",");
+for (var i = 0; i < zNodes.length; i++) {
+	for (var t = 0; t < ids.length; t++) {
+		var yy=parseInt(ids[t]);
+		if(zNodes[i].id==yy){
+			zNodes[i].checked = true;
+			break;
+		}
+	}
+}
 $(document).ready(function(){
 	var t = $("#tree");
 	t = $.fn.zTree.init(t, setting, zNodes);
@@ -120,46 +136,40 @@ function loadReady() {
 }
 
 function saveFunc(){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
-	alert(ids);
 	var treeObj = $.fn.zTree.getZTreeObj("tree");
 	var nodes = treeObj.getCheckedNodes(true);
-// 	$.ajax({
-// 		url:"/user/leave.action?status="+status+"",
-// 		type:"post",
-// 		data:"ids="+ids,
-// 		dataType:"json",
-// 		success:function(data) {
-// 			alert(data.msg);
-// 			location.reload();
-// 		},
-// 		error : function(data) {
-// 			alert("出现错误,请重试！");
-// 		}
-// 	});
-	
-}
-
-function checkde(obj){
-	var val=obj.value;
-	alert(val);
-	$("li").removeClass();
-	$("#dept"+val+"").addClass("on");
+	var ids="";
+	for (var i = 0; i < nodes.length; i++) {
+		 ids+=nodes[i].id+",";
+		 
+	    }
+	  var data = {
+		    "ids":ids,
+		    "roleId":$("#roleId").val(),
+		    "deptId":$("#deptId").val()
+	  };
 	$.ajax({
-		url:"/user/leave.action",
+		url:"/function/saveFunc.action",
 		type:"post",
-		data:"deptId="+val,
+		data:data,
 		dataType:"json",
 		success:function(data) {
 			alert(data.msg);
-			location.reload();
 		},
 		error : function(data) {
 			alert("出现错误,请重试！");
 		}
 	});
+	
+}
+if($("#deptId").val()!=undefined){
+	var deptId=$("#deptId").val();
+	$("li").removeClass();
+	$("#dept"+deptId+"").addClass("on");
+}
+function findPermit(obj){
+	var val=obj.value;
+     location.href="/function/permit.action?deptId="+val+"&roleId="+$("#roleId").val()+"";
 }
 </script>
 

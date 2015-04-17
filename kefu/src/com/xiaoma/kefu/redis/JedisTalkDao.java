@@ -320,6 +320,19 @@ public class JedisTalkDao {
 
 		return new ArrayList<String>(set);
 	}
+	
+	public static Long getCcnReceiveScore(String ccnId,String member) {
+
+		String key = JedisConstant.genCcnReceiveListKey(ccnId);
+
+		Jedis jedis = JedisDao.getJedis();
+		Double socre = jedis.zscore(key, member);
+        if(socre == null){
+        	return null;
+        }
+
+		return socre.longValue();
+	}
 
 	/**
 	 * 为通信点 添加接待通信点

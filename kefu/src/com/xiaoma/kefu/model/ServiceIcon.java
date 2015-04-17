@@ -37,16 +37,22 @@ public class ServiceIcon implements Serializable {
 	private Integer isDisplay;
 	@Column(name="displayMode")
 	private Integer displayMode;
-	@Column(name="siteLevel")
-	private String siteLevel;
-	@Column(name="siteVertical")
-	private String siteVertical;
+	@Column(name="siteZy")
+	private String siteZy;
+	@Column(name="siteZyPx")
+	private Integer siteZyPx;
+	@Column(name="siteDd")
+	private String siteDd;
+	@Column(name="siteDdPx")
+	private Integer siteDdPx;
 	@Column(name="onlinePic")
 	private String onlinePic;
 	@Column(name="offlinePic")
 	private String offlinePic;
-	@Column(name="rule")
-	private String rule;
+	@Column(name="width")
+	private Integer width;
+	@Column(name="height")
+	private Integer height;
 	@Column(name="buttonId")
 	private Integer buttonId;
 	@Column(name="updateDate")
@@ -84,17 +90,41 @@ public class ServiceIcon implements Serializable {
 	public void setDisplayMode(Integer displayMode) {
 		this.displayMode = displayMode;
 	}
-	public String getSiteLevel() {
-		return siteLevel;
+	public String getSiteZy() {
+		return siteZy;
 	}
-	public void setSiteLevel(String siteLevel) {
-		this.siteLevel = siteLevel;
+	public void setSiteZy(String siteZy) {
+		this.siteZy = siteZy;
 	}
-	public String getSiteVertical() {
-		return siteVertical;
+	public Integer getSiteZyPx() {
+		return siteZyPx;
 	}
-	public void setSiteVertical(String siteVertical) {
-		this.siteVertical = siteVertical;
+	public void setSiteZyPx(Integer siteZyPx) {
+		this.siteZyPx = siteZyPx;
+	}
+	public String getSiteDd() {
+		return siteDd;
+	}
+	public void setSiteDd(String siteDd) {
+		this.siteDd = siteDd;
+	}
+	public Integer getSiteDdPx() {
+		return siteDdPx;
+	}
+	public void setSiteDdPx(Integer siteDdPx) {
+		this.siteDdPx = siteDdPx;
+	}
+	public Integer getWidth() {
+		return width;
+	}
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+	public Integer getHeight() {
+		return height;
+	}
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 	public String getOnlinePic() {
 		return onlinePic;
@@ -107,12 +137,6 @@ public class ServiceIcon implements Serializable {
 	}
 	public void setOfflinePic(String offlinePic) {
 		this.offlinePic = offlinePic;
-	}
-	public String getRule() {
-		return rule;
-	}
-	public void setRule(String rule) {
-		this.rule = rule;
 	}
 	public Integer getButtonId() {
 		return buttonId;

@@ -15,6 +15,7 @@
 
 <body>
 <!-- 表格有边框 -->
+<h3>查看工号</h3>
 <table class="table table-bordered table-striped table-hover m-table">
         <tr>
             <td>工号</td>

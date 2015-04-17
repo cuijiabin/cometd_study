@@ -19,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -29,6 +30,7 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -46,6 +48,57 @@ public class CustomerController {
 	private DialogueService dialogueService;// 对话信息
 	@Autowired
 	private MessageRecordsService messageRecordsService;// 留言信息
+	
+	/**
+	 * 获取客户详细信息
+	 * @param model
+	 * @param customerId
+	 * @return
+	 */
+	@RequestMapping(value = "info.action", method = RequestMethod.GET)
+	public String getCustomerInfo(Model model, Long customerId) {
+		
+		try {
+			Customer customer = customerService.getCustomerById(customerId);
+			
+			model.addAttribute("result",JsonUtil.toJson(customer));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+		return "resultjson";
+	}
+	
+	/**
+	 * 修改客户名称
+	 * @param model
+	 * @param customerId
+	 * @param customerName
+	 * @return
+	 */
+	@RequestMapping(value = "upName.action", method = RequestMethod.GET)
+	public String updateCustomerName(Model model, Long customerId, String customerName) {
+		
+		try {
+			Customer customer = customerService.getCustomerById(customerId);
+			
+			customer.setCustomerName(customerName);
+			
+			boolean isSuccess = customerService.updateCustomer(customer);
+			if (isSuccess) {
+				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			}
+			model.addAttribute("result",JsonUtil.toJson(customer));
+			
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+		}
+		return "resultjson";
+	}
 
 	/**
 	 * 查询所有、条件查询

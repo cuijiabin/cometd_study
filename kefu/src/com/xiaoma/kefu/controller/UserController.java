@@ -22,6 +22,7 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
@@ -71,6 +72,10 @@ public class UserController {
 			String loginName, String password, String yzm, Model model) {
 		String yanzheng = session.getAttribute("randomCode").toString();
 		Date oldTime = (Date) session.getAttribute("yzmtime");
+		if(yanzheng==null || oldTime==null){
+			model.addAttribute("result", Ajax.JSONResult(3, "请刷新验证码重新输入!"));
+			return "resultjson";
+		}
 		Date newTime = new Date();
 		long count = newTime.getTime() - oldTime.getTime();
 		if (count < 400000) {
@@ -120,7 +125,7 @@ public class UserController {
 	}
 
 	/**
-	 * User login
+	 * 进入demo处理页面
 	 * 
 	 * @param name
 	 * @param password
@@ -128,49 +133,9 @@ public class UserController {
 	 */
 	@RequestMapping(value = "demo.action", method = RequestMethod.GET)
 	public String demo(HttpSession session) {
-		// Assert.notNull(name, "userName can not be null!");
-		// Assert.notNull(password, "password can not be null!");
-		// model.addAttribute("msg", "登录名或者密码为空!");
-		// User user = userService.login(name, password);
-		// model.addAttribute("msg", "登录名或者密码不正确!");
-		// if (user != null) {
-		// session.setAttribute("currentUser", user);
-		// return "/views/welcome";
-		// } else {
-		// logger.debug("login failed!username or password is incorrect.");
-		// return "/views/login";
-		// }
 		return "demo";
 	}
 
-	/**
-	 * 查询
-	 * 
-	 * @param conditions
-	 * @param pageBean
-	 * @return
-	 */
-
-	// @RequestMapping(value = "find.action", method = RequestMethod.GET)
-	// public String queryAll(Model model, String userName, String phone,
-	// Integer currentPage, Integer pageRecorders) {
-	// try{
-	// currentPage = (currentPage == null) ? 1 : currentPage;
-	// pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-	// PageBean<User> pageBean = userService.getResultByuserNameOrPhone(
-	// currentPage, pageRecorders, userName, phone);
-	//
-	// model.addAttribute("list", pageBean.getObjList());
-	// model.addAttribute("pageBean", pageBean);
-	// model.addAttribute("phone", phone);
-	// model.addAttribute("userName", userName);
-	// return "/set/govern/userList";
-	// }catch(Exception e){
-	// logger.error(e.getMessage());
-	// model.addAttribute("error","出错了,请刷新页面重试！");
-	// return "/views/error500";
-	// }
-	// }
 
 	/**
 	 * 查询
@@ -184,7 +149,9 @@ public class UserController {
 	public String queryAll(MapEntity conditions, Model model,
 			@ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
+			List<Department> list = deptService.findDept();
 			userService.getResult(conditions.getMap(), pageBean);
+			model.addAttribute("deptList",list);
 			model.addAttribute("status", conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
@@ -484,14 +451,16 @@ public class UserController {
 	}
 
 	/**
-	 * 退出系统
-	 * 
-	 * @param name
-	 * @param password
-	 * @param session
+	 * 缓存清除
+	 * @param name 表名
 	 */
 	@RequestMapping(value = "clear.action")
 	public String clearTable(Model model, String name) {
+		List<DictItem> list = DictMan.getDictList(name);
+		if(list != null && list.size()>0){
+			for(DictItem item : list)
+				DictMan.clearItemCache(item.getCode(), item.getItemCode());
+		}
 		DictMan.clearTableCache(name);
 		model.addAttribute("result", Ajax.toJson(0, "清除成功!"));
 		return "resultjson";
