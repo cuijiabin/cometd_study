@@ -1,12 +1,21 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -268,5 +277,95 @@ public class CustomerController {
 		}
 		return result;
 	}
+	/**
+	 * 导出报表的方法
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	 @RequestMapping(value= "exportExcel.action" ,method=RequestMethod.GET)  
+	 public void exportExcel(HttpServletRequest request, HttpServletResponse response,MapEntity conditions, Model model,String beginDate,String endDate,PageBean pageBean)  
+	 {  
+	     // 生成提示信息，  
+	     response.setContentType("application/vnd.ms-excel");  
+	     String codedFileName = null;  
+	     OutputStream fOut = null;  
+	     try  
+	     {  
+	    	 Date d = new Date();
+	    	 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	         // 进行转码，使其支持中文文件名  
+	         codedFileName = java.net.URLEncoder.encode("中文", "UTF-8");  
+	         response.setHeader("content-disposition", "attachment;filename=" + "customer_"+format.format(d)  + ".xls");  
+	         // response.addHeader("Content-Disposition", "attachment;   filename=" + codedFileName + ".xls");  
+	         // 产生工作簿对象  
+	         HSSFWorkbook workbook = new HSSFWorkbook();  
+	         //产生工作表对象  
+	         HSSFSheet sheet = workbook.createSheet();  
+	         HSSFRow rows = sheet.createRow(0);//创建一行  
+	         HSSFCell cell0 = rows.createCell(0);//创建一列  
+	          cell0.setCellValue("添加时间"); 
+	         HSSFCell cell1 = rows.createCell(1);//创建一列  
+            cell1.setCellValue("风格"); 
+            HSSFCell cell2 = rows.createCell(2);//创建一列  
+            cell2.setCellValue("客户编号");  
+            HSSFCell cell3 = rows.createCell(3);//创建一列  
+            cell3.setCellValue("客户姓名");  
+            HSSFCell cell4 = rows.createCell(4);//创建一列  
+            cell4.setCellValue("联系方式");  
+            HSSFCell cell5 = rows.createCell(5);//创建一列  
+            cell5.setCellValue("咨询页面");  
+            HSSFCell cell6 = rows.createCell(6);//创建一列  
+            cell6.setCellValue("关键词");  
+            HSSFCell cell7 = rows.createCell(7);//创建一列  
+            cell7.setCellValue("备注");  
+            
+	         List list = customerService.getResultByConExl(conditions.getMap(),beginDate,endDate,pageBean);
+	         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+	         
+	         for (int i = 0; i < list.size() ; i++){
+	 
+	         Object [] obj = (Object[])list.get(i);
+	         Customer customer =(Customer)obj[0];
+	         Dialogue dialogue = (Dialogue)obj[1];
+	        	 rows = sheet.createRow(i+1);//创建一行  
+		         cell0 = rows.createCell(0);//创建一列  
+	             cell0.setCellValue(customer.getCreateDate()); 
+	             cell1 = rows.createCell(1);//创建一列  
+	             cell1.setCellValue(customer.getStyleName());  
+	             cell2 = rows.createCell(2);//创建一列  
+	             cell2.setCellValue(customer.getId());  
+	             cell3 = rows.createCell(3);//创建一列  
+	             cell3.setCellValue(customer.getCustomerName());  
+	             cell4 = rows.createCell(4);//创建一列  
+	             cell4.setCellValue(customer.getPhone());  
+	             cell5 = rows.createCell(5);//创建一列  
+	             cell5.setCellValue(dialogue.getConsultPage());  
+	             cell6 = rows.createCell(6);//创建一列  
+	             cell6.setCellValue(dialogue.getKeywords());  
+	             cell7 = rows.createCell(7);//创建一列  
+	             cell7.setCellValue(customer.getRemark());  
+	         }  
+	         fOut = response.getOutputStream();  
+	         workbook.write(fOut);  
+	     }  
+	     catch (UnsupportedEncodingException e1){
+	    	 e1.printStackTrace();
+	     }catch (Exception e){
+	    	 e.printStackTrace();
+	     }  
+	     finally  
+	     {  
+	         try  
+	         {  
+	             fOut.flush();  
+	             fOut.close();  
+	         }  
+	         catch (IOException e)  
+	         {}  
+	     }  
+	     System.out.println("文件生成...");  
+	 }  
+	
 
 }

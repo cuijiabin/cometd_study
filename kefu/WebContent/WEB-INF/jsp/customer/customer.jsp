@@ -42,7 +42,7 @@
                <label></label>
             <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
             <label></label>
-            <button type="button" class="btn btn-primary btn-small" >导出</button>
+            <button type="button" target="_blank"  class="btn btn-primary btn-small" onclick="window.open('/customer/exportExcel.action')" >导出</button>
         </div>
         <div class="m-query-hd">
     </div>
@@ -114,6 +114,42 @@ function find(currentPage){
 		  return true;
 	  }
 }
+  
+  /**
+   *导出满足查询条件的所有数据
+   */
+  function exportExcel(){
+  	var url="/customer/exportExcel.action";
+  	var data = {
+  			"beginDate" :$("#beginDate").val(),
+  			"endDate" :$("#endDate").val(),
+  			"map[customerName]":$("#customerName").val(),
+  			"map[id]":$("#customerId").val(),
+  			"map[phone]":$("#phone").val(),
+  			"map[styleName]":$("#customerStyle").val(),
+  			"map[consultPage]":$("#consultPage").val(),
+  			"map[keywords]":$("#keywords").val(),
+  			"map[typeId]":1
+  	};
+  	//检验日期
+  	if (!checkdate(data)) {
+  		return;
+  	}
+  	
+  	$.ajax({
+  	    type: "get",
+  	    url: url,
+  	    data: data,
+  	    contentType: "application/json; charset=utf-8",
+  	    dataType: "html",
+  	    success: function (data) {
+  	       $("#table_data").html(data);
+  	    },
+  	    error: function (msg) {
+  	        alert(msg);
+  	    }
+  	});
+  }
 </script>
 </body>
 </html>

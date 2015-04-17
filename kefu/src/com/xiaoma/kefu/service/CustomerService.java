@@ -53,7 +53,20 @@ public class CustomerService {
 		}
 		return null;
 	}
-
+	/**
+	 * 条件查询(用于导出报表)
+	 */
+	public List  getResultByConExl(Map<String, String> conditions ,String beginDate,String endDate, PageBean pageBean) {
+		try {
+			Integer totalCount = customerDaoImpl.getAllCustomerCount(conditions,beginDate ,endDate,pageBean);
+			pageBean.setTotalRows(totalCount);
+			List  list = customerDaoImpl.getCustomerByConExl(conditions,beginDate ,endDate,pageBean);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * 添加
 	 */

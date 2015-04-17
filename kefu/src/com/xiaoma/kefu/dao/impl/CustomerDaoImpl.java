@@ -1,12 +1,16 @@
 package com.xiaoma.kefu.dao.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.formula.functions.Today;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
@@ -46,6 +50,10 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 		String hql = "select  COUNT(DISTINCT(a.id)) FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
+		}else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String today = sdf.format(new Date());
+			hql +="and  a.createDate BETWEEN '"+ today+" "+"00:00:00"+"' " +"AND"+" '" +today+" "+"23:59:59"+"' ";
 		}
 		if (conditions !=null) {
 			   String customerName =  conditions.get("customerName").trim();
@@ -108,6 +116,10 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
+		}else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String today = sdf.format(new Date());
+			hql +="and  a.createDate BETWEEN '"+ today+" "+"00:00:00"+"' " +"AND"+" '" +today+" "+"23:59:59"+"' ";
 		}
 		if (conditions !=null) {
 			   String customerName =  conditions.get("customerName").trim();
@@ -143,6 +155,58 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 	}
 
 
+	/**
+	 * 条件查询(测试导出报表)
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List  getCustomerByConExl(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
+		
+	
+		Session session = getSession();
+		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		if(beginDate!=null && endDate!=null){
+			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
+		}else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String today = sdf.format(new Date());
+			hql +="and  a.createDate BETWEEN '"+ today+" "+"00:00:00"+"' " +"AND"+" '" +today+" "+"23:59:59"+"' ";
+		}
+		if (conditions !=null) {
+			   String customerName =  conditions.get("customerName").trim();
+			if(StringHelper.isNotEmpty(customerName)){
+				hql += " and a.customerName like '"+"%"+customerName+"%"+"'";
+			}	
+		         String customerId =  conditions.get("id").trim();
+			if(StringHelper.isNotEmpty(customerId)){
+				hql += " and a.id = "+customerId+" " ;
+			}	
+			    String phone = conditions.get("phone").trim();
+			if(StringHelper.isNotEmpty(phone)){
+				hql += " and a.phone = "+phone+" " ;
+			}
+			   String styleName =  conditions.get("styleName").trim();
+			if(StringHelper.isNotEmpty(styleName)){
+				hql += " and a.styleName like '"+"%"+styleName+"%"+"'";
+			}
+			  String consultPage =  conditions.get("consultPage").trim();
+			if(StringHelper.isNotEmpty(consultPage)){
+				hql += " and b.consultPage like '"+"%"+consultPage+"%"+"'";
+			}
+				
+			 String keywords =  conditions.get("keywords").trim();
+			if(StringHelper.isNotEmpty(keywords)){
+				hql += " and b.keywords like '"+"%"+keywords+"%"+"'";
+			}
+		}
+		 hql += "GROUP BY a.id ORDER BY createDate desc";
+	
+		Query query = session.createSQLQuery(hql).addEntity("a", Customer.class).addEntity("b", Dialogue.class).setFirstResult(pageBean.getStartRow()).setMaxResults(pageBean.getPageRecorders());
+		List list = query.list();
+		return list;
+	}
+	
 	/**
 	 * 添加一条
 	 */

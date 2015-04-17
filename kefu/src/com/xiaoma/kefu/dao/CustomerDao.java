@@ -70,5 +70,17 @@ public interface CustomerDao extends BaseDao<Customer>{
 	 * @param pageBean
 	 */
 	public List getCustomerByCon(Map<String, String> conditions,String beginDate,String endDate,PageBean pageBean);
+    
+	/**
+	 * 导出报表
+	 * @param conditions
+	 * @param beginDate
+	 * @param endDate
+	 * @param pageBean
+	 * @return
+	 */
+	public List getCustomerByConExl(
+			Map<String, String> conditions, String beginDate, String endDate,
+			PageBean pageBean);
 
 }
