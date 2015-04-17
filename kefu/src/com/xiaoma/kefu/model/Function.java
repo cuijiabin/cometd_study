@@ -43,7 +43,6 @@ public class Function implements Serializable {
 	
 	@Column(name="funcLevel")
 	private Integer funcLevel;
-	
 	public Integer getId() {
 		return id;
 	}

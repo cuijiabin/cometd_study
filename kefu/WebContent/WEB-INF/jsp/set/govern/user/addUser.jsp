@@ -14,17 +14,8 @@
 </head>
 
 <body>
-<!-- 面包屑 -->
-<div class="m-crumb" style="margin-bottom: 20px">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">设置中心</a></li>
-        <li><i>&gt;</i><a href="#">管理设置</a></li>
-        <li><i>&gt;</i>工号管理</li>
-    </ul>
-</div>
-
 <!-- 表格有边框 -->
+<c:if test="${empty user.id}"><h3>添加工号</h2></c:if> <c:if test="${not empty user.id}"><h3>修改工号</h2></c:if>
 <table class="table table-bordered table-striped table-hover m-table">
         <tr>
             <td>工号</td>
@@ -76,7 +67,7 @@
             <td>工号名片</td>
             <td><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10"/></td>
             <td>入职日期</td>
-            <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker()" class="c-wd120 Wdate" /></td>
+            <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker({maxDate:'%d'})" class="c-wd120 Wdate" /></td>
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
@@ -138,7 +129,6 @@ function saveUser(id){
 		success : function(data) {
 				alert(data.msg);
 				W.callback();
-				
 		},
 		error : function(msg) {
 
@@ -168,7 +158,7 @@ function verificationParam(userData) {
 	
 	var userName = userData.userName;
 	if (userName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("用户名不得为空！");
+		 alert("姓名不得为空！");
 		return false;
 	}
 	
@@ -190,9 +180,9 @@ function verificationParam(userData) {
 		 alert("请填写最大接听数！");
 		return false;
 	}
-	var checkListen = /^[\d]$/;
-	if(!checkListen.test(maxListen)){
-		alert("接听数为数字！");
+	var checkListen = /^\d+$/;
+	if(!checkListen.test(maxListen)||maxListen==0){
+		alert("请输入大于0的正整数！");
 		return false;
 	}
 	var cardName = userData.cardName;
@@ -249,8 +239,8 @@ function verificationParam1(userData) {
 		return false;
 	}
 	var checkListen =/^\d+$/;
-	if(!checkListen.test(maxListen)){
-		alert("接听数为数字！");
+	if(!checkListen.test(maxListen)||maxListen==0){
+		alert("请输入大于0的正整数！");
 		return false;
 	}
 	var cardName = userData.cardName;

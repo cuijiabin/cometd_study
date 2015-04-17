@@ -103,7 +103,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	public Integer checkUser(User user) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(a.id) from User a where 1 = 1 and a.status<>2");
+				"select count(a.id) from User a where 1 = 1");
 		if (StringUtils.isNotBlank(user.getLoginName())) {
 			hqlBf.append(" and a.loginName  = '" + user.getLoginName() + "' ");
 		}
