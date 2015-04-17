@@ -52,8 +52,8 @@ public class BlacklistService {
 		 * @param pageBean
 		 * @return
 		 */
-		public void getResult(Map<String, String> conditions,PageBean<Blacklist> pageBean){
-			blacklistDaoImpl.findByCondition(conditions,pageBean);
+		public void getResult(Map<String, String> conditions,PageBean<Blacklist> pageBean,String createDate){
+			blacklistDaoImpl.findByCondition(conditions,pageBean,createDate);
 		 }
 
 			/**

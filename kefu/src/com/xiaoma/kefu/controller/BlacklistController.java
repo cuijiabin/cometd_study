@@ -42,9 +42,9 @@ public class BlacklistController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ){
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ,String createDate){
 		try {
-			blacklistService.getResult(conditions.getMap(), pageBean);
+			blacklistService.getResult(conditions.getMap(), pageBean,createDate);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
 				return "customer/black";

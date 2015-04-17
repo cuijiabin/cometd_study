@@ -19,7 +19,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -141,16 +140,6 @@ public class CustomerController {
 		return "customer/left";
 	}
 
-	// /**
-	// * 保存前页面跳转
-	// *
-	// * @return 返回值
-	// */
-	// @RequestMapping(value = "/new.action")
-	// public String toSave() {
-	//
-	// return "customer/addBlacklist";
-	// }
 
 	/**
 	 * 添加

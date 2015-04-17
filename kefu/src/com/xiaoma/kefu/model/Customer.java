@@ -33,6 +33,9 @@ public class Customer implements Serializable {
 	@Column(name = "ip")
 	private String ip;
 	
+	@Column(name = "ipInfo")
+	private String ipInfo;
+	
 	@Column(name = "styleId")
 	private Integer styleId;
 	
@@ -87,6 +90,15 @@ public class Customer implements Serializable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+
+	public String getIpInfo() {
+		return ipInfo;
+	}
+
+	public void setIpInfo(String ipInfo) {
+		this.ipInfo = ipInfo;
 	}
 
 	public Integer getStyleId() {

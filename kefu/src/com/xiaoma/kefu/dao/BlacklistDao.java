@@ -65,12 +65,12 @@ public interface BlacklistDao extends BaseDao<Blacklist>{
 	public boolean deleteBlacklistById(Integer id);
    
 	/**
-	 * 查询
+	 * 查询(frongji)
 	 * @param conditions
 	 * @param pageBean
 	 */
 	public void findByCondition(Map<String, String> conditions,
-			PageBean<Blacklist> pageBean);
+			PageBean<Blacklist> pageBean,String createDate);
     /**
      * 精确匹配
      * @param blacklist

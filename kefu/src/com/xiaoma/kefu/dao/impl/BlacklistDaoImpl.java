@@ -2,6 +2,7 @@ package com.xiaoma.kefu.dao.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
-import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
 
@@ -109,13 +109,13 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
          */
 		@Override
 		public void findByCondition(Map<String, String> conditions,
-				PageBean<Blacklist> pageBean) {
+				PageBean<Blacklist> pageBean,String createDate) {
 		     try{ 
 			List<String> relation = new ArrayList<String>();
 			List<Criterion> role = new ArrayList<Criterion>();// 条件
 			List<Order> orders = new ArrayList<Order>();// 排序
+			
 			if (conditions != null) {
-				
 				if (StringHelper.isNotEmpty(conditions.get("description"))) {
 					role.add(Restrictions.like("description",
 							"%" + conditions.get("description").trim() + "%"));
@@ -130,6 +130,7 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 					role.add(Restrictions.like("userName",
 							"%" + conditions.get("userName").trim() + "%"));
 				}
+			
 				
 				if (conditions.get("startDate") != null
 						&& !conditions.get("startDate").isEmpty()
@@ -150,7 +151,7 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 					}
 				}
 			}
-			orders.add(Order.asc("createDate"));
+			orders.add(Order.desc("createDate"));
 			find(Blacklist.class, relation, role, null, orders, pageBean);
 			logger.info("search Blacklist by conditions!");
 		     }catch(Exception e){
