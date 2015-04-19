@@ -16,13 +16,14 @@
 <body>
 
 <!-- 表格有边框 -->
-<form id="mainForm">
+<form id="mainForm1">
 <table class="table table-bordered m-table">
     <tbody>
         <tr>
             <td class="f-txtr tdbg">
-            	<input type="hidden" id="id" name="id" value="${style.id}"/>
-            	<input type="text" id="name" name="name" value="${style.name}"/>
+            	<input type="hidden" id="id" name="id" value="${inviteElement.id}"/>
+            	<input type="hidden" id="inviteId" name="inviteId" value="${inviteElement.inviteId}"/>
+            	<input type="text" id="name" name="name" value="${inviteElement.name}" maxlength="20"/>
             </td>
             <td class="f-txtr tdbg">
             	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
@@ -39,17 +40,29 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 
 <script type="text/javascript">
+(function($){
+	$(window).load(function(){
+		var oInput = document.getElementById("name");
+		oInput.focus();
+	});
+})(jQuery);
+
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
 
 //先检验,后保存
 $('#btn_save').on('click',function(){
+	if($.trim($("#name").val()) == ''){
+		W.$.dialog.alert('元素名称不能为空!',function(){
+			return;
+		});
+	}
+	
 	$.ajax({
 	    type: "post",
-	    url: "/style/validate.action",
+	    url: "/inviteElement/validate.action",
 	    dataType: "json",
-	    data : $('#mainForm').serialize(),
-// 	    contentType: "application/json; charset=utf-8",
+	    data : $('#mainForm1').serialize(),
 	    async:false,
 	    success: function (data) {
 	    	if(data.result==0){
@@ -67,16 +80,21 @@ $('#btn_save').on('click',function(){
 
 //保存
 function save(){
+	var name = $("#name").val();
 	$.ajax({
 		type : 'post',
-		url :  "/style/save.action",
+		url :  "/inviteElement/saveName.action",
 		dataType : 'json',
-		data : $('#mainForm').serialize(),
+		data : $('#mainForm1').serialize(),
 		async:false,
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		W.$.dialog.alert('操作成功!',function(){
-	    			W.editCallback();
+	    			if($("#id").val() == ''){
+	    				W.addCallback(data.msg,name);
+	    			}else{
+		    			W.editCallback(data.msg,name);
+	    			}
 	    		});
 	    	}else{
 	    		W.$.dialog.alert(data.msg);

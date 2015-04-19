@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.dao.ServiceIconDao;
-import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
@@ -80,7 +79,7 @@ public class ServiceIconService {
 	public void saveUplaodFile(MultipartFile file, ServiceIcon serviceIcon,
 			StylePicName type) throws IOException {
         if (file != null && !file.isEmpty()) {
-        	String savePath = getStyleRootPath(serviceIcon.getStyleId());//获取需要保存的路径
+        	String savePath = FileUtil.getStyleRootPath(serviceIcon.getStyleId());//获取需要保存的路径
             String saveName = type.getCode();
             String fileName = file.getOriginalFilename();//名称
             String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
@@ -104,23 +103,6 @@ public class ServiceIconService {
 		
 	}
 	
-	/**
-	 * 风格上传图片的	根路径
-	 * @param styleId 	风格id
-	* @Description: TODO
-	* @return	root/style/styleId
-	* @Author: wangxingfei
-	* @Date: 2015年4月14日
-	 */
-	private String getStyleRootPath(Integer styleId) {
-		if(styleId==null) styleId=0;
-		return 
-//				SystemConfiguration.getInstance().getFileUrl()
-				DictMan.getDictItem("d_sys_param", 1).getItemName()
-				+"/" + SysConst.STYLE_PATH
-				+"/" + styleId;
-	}
-
 
 
 }

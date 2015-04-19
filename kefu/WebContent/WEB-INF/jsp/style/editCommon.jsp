@@ -95,7 +95,7 @@ function editServicePC(styleId){
 
 //对话邀请框设置 PC
 function editInvitePC(styleId){
-	var url = '/serviceIcon/editPC.action?styleId='+styleId;
+	var url = '/inviteIcon/editPC.action?styleId='+styleId;
 	window.location = url;
 	return;
 }
