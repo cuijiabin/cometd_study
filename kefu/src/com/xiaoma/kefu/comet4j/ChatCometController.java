@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.StudyMapUtil;
 import com.xiaoma.kefu.util.TimeHelper;
@@ -36,6 +38,9 @@ public class ChatCometController {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	@Autowired
+	private UserService userService;
 	
 	private Logger logger = Logger.getLogger(ChatCometController.class);
 
@@ -78,6 +83,8 @@ public class ChatCometController {
 		dialogueDetail.setUserId(uId);
 		dialogueDetail.setCustomerId(cId);
 		
+		User user = userService.getUserById(uId);
+		
 		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
 		
@@ -87,7 +94,7 @@ public class ChatCometController {
 		Message umessage = new Message(userCId,"我",message,messageTime);
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(cusCId,"客服",message,messageTime);
+		Message cmessage = new Message(cusCId, user.getCardName(), message, messageTime);
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
@@ -141,11 +148,14 @@ public class ChatCometController {
 		
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
 		
+		Customer customer  = customerService.getCustomerById(cId);
+		String customerName = StringUtils.isEmpty(customer.getCustomerName()) ? ("客户："+cId) : customer.getCustomerName();
+		
 		//包装消息并发送
-		Message umessage = new Message(userCId,"客户",message,messageTime);
+		Message umessage = new Message(cusCId, customerName, message, messageTime);
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(cusCId,"我",message,messageTime);
+		Message cmessage = new Message(userCId,"我",message,messageTime);
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);

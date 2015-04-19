@@ -43,6 +43,15 @@ public class FunctionDaoImpl  extends BaseDaoImpl<Function> implements FunctionD
 		return query.list();
 	}
 
+	@Override
+	public List getUserFuc(Integer id) {
+		Session session = getSession();
+		String hql="";
+			 hql = "from Function c where c.id in (select d.funcId from RoleDeptFunc d where d.roleDeptId="+id+")";
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
+
 
 
 }

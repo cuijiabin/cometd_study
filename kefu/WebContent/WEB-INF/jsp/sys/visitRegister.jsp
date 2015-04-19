@@ -32,8 +32,8 @@
         <tr>
             <td width="200px" class="f-txtr tdbg">客户注册：</td>
             <td class="f-txtl">
-            		<label><input type="checkbox" name="message" id="message" <c:if test="${'1'.equals(message.itemName) }"> checked </c:if> />${message.description }</label></br>
-            		<label><input type="checkbox" name="dialog" id="dialog" <c:if test="${'1'.equals(dialog.itemName) }"> checked </c:if>  />${dialog.description }</label>
+            		<label><input type="checkbox" name="message" id="message" <c:if test="${message.itemName == '1' }"> checked </c:if> />${message.description }</label>
+            		<label><input type="checkbox" name="dialog" id="dialog" <c:if test="${dialog.itemName == '1'}"> checked </c:if>  />${dialog.description }</label>
             </td>
         </tr>
         <tr>

@@ -43,35 +43,35 @@
 <script type="text/javascript" src="../../js/bootstrap.js"></script>
 <script type="text/javascript" src="../../js/app.js"></script>
 <script type="text/javascript">
-	function login(){
-		var data = {
-			"loginName":$("#loginName").val(),
-			"password":$("#password").val(),
-			"yzm":$("#yzm").val()
-		};
-		//alert(111);
-		$.ajax({
-			type: "post",
-		    url: "/user/login.action",
-		    data: data,
-		    dataType: "json",
-		    success: function (data) {
-		    	if(data.result==0){
-		    		window.location="/user/main.action";
-		    	}else{
-		    		$("#err").text(data.msg);
-		    	}
-		    },
-		    error: function (data) {
-		    	$("#err").text("出现错误,请重新登录");
-		    }
-		});
-	}
-	
-	  function reloadImage(imgurl){
-          var getimagecode=document.getElementById("pic");
-          getimagecode.src= imgurl + "?id=" + Math.random();
-      }
+function login(){
+	var data = {
+		"loginName":$("#loginName").val(),
+		"password":$("#password").val(),
+		"yzm":$("#yzm").val()
+	};
+	//alert(111);
+	$.ajax({
+		type: "post",
+	    url: "/user/login.action",
+	    data: data,
+	    dataType: "json",
+	    success: function (data) {
+	    	if(data.result==0){
+	    		window.location="/user/main.action";
+	    	}else{
+	    		$("#err").text(data.msg);
+	    	}
+	    },
+	    error: function (data) {
+	    	$("#err").text("出现错误,请重新登录");
+	    }
+	});
+}
+
+  function reloadImage(imgurl){
+      var getimagecode=document.getElementById("pic");
+      getimagecode.src= imgurl + "?id=" + Math.random();
+  }
 </script>
 </body>
 </html>

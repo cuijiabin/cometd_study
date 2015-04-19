@@ -13,7 +13,7 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<h3>部门里所有员工</h3>
+<h3>查看部门成员</h3>
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>

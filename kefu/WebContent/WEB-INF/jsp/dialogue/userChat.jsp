@@ -11,6 +11,14 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/jsplugin/exp/css/style.css" />
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/comet4j.js"></script>
+<script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
+
 </head>
 
 <body scroll="no" class="g-body">
@@ -63,7 +71,7 @@
                     <div class="u-operate">
                         <div class="u-operatebar c-bg">
                         	<ul class="u-operatebar-btn">
-                            	<li><img src="/img/icon_01.png" alt="" /></li>
+                            	<li><a class="exp-block-trigger" href="javascript:;"><img src="/img/icon_01.png" alt="" /></a></li>
                             	<li><img src="/img/icon_02.png" alt="" /></li>
                             	<li><img src="/img/icon_03.png" alt="" /></li>
                             	<li><img src="/img/icon_04.png" alt="" /></li>
@@ -143,14 +151,6 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/app.js"></script>
-<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
-
-<script type="text/javascript" src="/js/comet4j.js"></script>
-
 <script language="javascript" for="window" event="onload"> 
 
 	var lastTalkId = null ;
@@ -229,7 +229,7 @@
 			var ccnId = '"'+dQuene.ccnId+'"';
 			var customer = dQuene.customer;
 			
-			html += "<li class='on'><p>客户："+customer.id
+			html += "<li id='li:"+dQuene.ccnId+"'><p>客户："+customer.id
 			+"</p><p><a href='javascript:changeTitle("+customer.id+","+ccnId+");'>"
 			+customer.ip+"</a></p><p>上线时间："+getTimeByPattern(dQuene.enterTime)+"</p><span class='u-close'>x</span></li>";
 		}
@@ -239,10 +239,14 @@
 	function changeTitle(customerId,ccnId){
 		
 		console.log("与客户"+customerId+"对话中");
+		
+		$("li[id^='li:']").attr("class", null);
+		$("#li:"+ccnId).attr("class", "on");
+		
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
 		$("#currentCustomerId").val(customerId);
-		
+		switchDialogue(ccnId);
 		getCustomerById(customerId);
 	}
 	
@@ -251,9 +255,15 @@
 		var ccnId = dQuene.ccnId;
 		var customer = dQuene.customer;
 		
+		console.log("收到通知后刷新列表，与客户"+customer.id+"对话中");
+		
+		//$("li[id^='li:']").attr("class", null);
+		$("#li:"+ccnId).attr("class", "on");
+		
 		$("#contentTitle").html("与客户"+customer.id+"对话中");
 		$("#currentCcnId").val(ccnId);
 		$("#currentCustomerId").val(customer.id);
+		switchDialogue(ccnId);
 		
 		$("#customerInfo a[name$='customerId']").html(customer.customerName);
 		$("#customerInfo p[name$='customerIpInfo']").html(customer.ip);
@@ -292,17 +302,35 @@
 		console.log("收到消息了！");
 		var id = data.id;
 		console.log(id);
+		createHiddenDiv(id);
 		var name = data.name || '';
 		name = name.HTMLEncode();
 		var text = data.text || '';
 		text = text.HTMLEncode();
 		var t = data.transtime;
-		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',text,'</p>' ];
+		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',$.expBlock.textFormat(text),'</p>' ];
 		console.log(str);
 		checkLogCount();
-		logbox.innerHTML += str.join('');
+		$("#"+id).append(str.join(''));
+		
+		//logbox.innerHTML = $("#"+id).html();
+		//$("#currentCcnId").val(id);
+		switchDialogue(id);
 		lastTalkId = id;
 		moveScroll();
+	}
+	//切换对话框
+	function switchDialogue(ccnId){
+		logbox.innerHTML = $("#"+ccnId).html();
+		$("#currentCcnId").val(ccnId);
+	}
+	
+	function createHiddenDiv(ccnId){
+		if ($("#"+ccnId).length > 0){ 
+			return;
+		}else{
+			$("#logbox").after("<div id='"+ccnId+"' style='display: none;'></div>");
+		}
 	}
 	
 	//获取客户信息
@@ -477,6 +505,52 @@
 	    }         
 	    return fmt;         
 	}  
+	
+	
+	/***
+	 *加载表情
+	 */
+	$(document).ready(function(){
+		$.expBlock.initExp({
+			/*
+			//用户表情结构数据
+			expData: [{name: '默认',icons:[{url:"../resources/js/plugins/exp/img/zz2_thumb.gif",title:"织"},{url:"../resources/js/plugins/exp/img/horse2_thumb.gif",title:"神马"}]}]
+			//包含textarea和表情触发的exp-holder
+			holder: '.exp-holder',
+			//exp-holder中的textarea输入dom，默认为textarea,
+			textarea : 'textarea',
+			//触发dom
+			trigger : '.exp-block-trigger',
+			//每页显示表情的组数
+			grpNum : 5,
+			//位置相对页面固定(absolute)||窗口固定(fixed)
+			posType : 'absolute',
+			//表情层数
+			zIndex : '100'
+			*/
+		});
+		
+		//使表情失效
+		$.expBlock.disableExp();
+		//使表情重新启动
+		$.expBlock.enableExp();
+		
+		$('#J_sbt').click(function(){
+			var s, ta = $('#inputbox'), val = ta.val();
+			//将字符串中如"[微笑]"类的表情代号替换为<img/>标签
+			s = $.expBlock.textFormat(val);
+			alert(s);
+			//console.log(s);
+			$('#J_resulte').val(s);
+		})
+		
+		/*
+		 * ajax远程获取表情,注意同源策略
+		 * 要求返回的数据格式如:[{name: groupname,icons:[{url:'imgurl',title:"iconname"},{url:'imgurl',title:"iconname"}]},{name: groupname,icons:[{url:'imgurl',title:"iconname"},{url:'imgurl',title:"iconname"}]},...]
+		 */
+		//$.expBlock.getRemoteExp(url);
+		
+	})
 </script>
 </body>
 </html>

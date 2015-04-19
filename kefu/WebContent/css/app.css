@@ -241,8 +241,8 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .m-talk,.m-talk li{margin:0;padding:0;list-style:none;}
 .m-talk{overflow-y:scroll;}
 .m-talk li{position:relative;padding:5px 0;text-align:center;line-height:20px;background:#fafafb;border-bottom:1px solid #d9d9d9;font-size:12px;cursor:pointer;}
-.m-talk li:hover{background:#f7eeff;}
-.m-talk .on{background:#eff6ff;}
+.m-talk li:hover{background:#ff8080;}
+.m-talk .on{background:#ffff00;}
 .m-talk li p{margin-bottom:0;color:#808080;}
 .m-talk .on p{color:#2786e4;}
 .m-talk li .u-close{display:block;position:absolute;top:0;right:0;width:13px;height:13px;text-align:center;line-height:16px;background:#f60;color:#fff;font-size:13px;cursor:pointer;font-family:\5b8b\4f53;}
