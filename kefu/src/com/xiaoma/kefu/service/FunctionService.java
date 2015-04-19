@@ -1,17 +1,24 @@
 package com.xiaoma.kefu.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheFactory;
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.FunctionDao;
 import com.xiaoma.kefu.dao.RoleDeptDao;
 import com.xiaoma.kefu.dao.RoleDeptFuncDao;
+import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.RoleDept;
 import com.xiaoma.kefu.model.RoleDeptFunc;
+import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * 
@@ -27,6 +34,8 @@ public class FunctionService {
 	private RoleDeptDao roleDeptDao;
 	@Autowired
 	private RoleDeptFuncDao roleDeptFuncDao;
+	@Autowired
+	private UserDao userDao;
 
 	public List findFuncOne() {
 
@@ -48,7 +57,7 @@ public class FunctionService {
 	}
 
 	/**
-	 * 找到唯一的部门角色对应的id
+	 * 保存权限
 	 * 
 	 * @param roleId
 	 * @param deptId
@@ -91,4 +100,46 @@ public class FunctionService {
 		}
 		return 0 + ",";
 	}
+	
+    public Object userFuncs(Integer id){
+    	User user = userDao.findById(User.class, id);
+    	RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(), user.getDeptId());
+		List<Function> list= funcDao.getUserFuc(roleDept.getId());
+		String userFunc="";
+		for (Function func : list) {
+			userFunc+=","+func.getCode()+",";
+		}
+		return userFunc;
+    }
+
+	public List checkFuncOne(List<Function> list, String codes) {
+		List listFunc = new ArrayList();
+		for (Function func : list) {
+			int count = codes.indexOf(","+func.getCode()+",");
+			if(count>=0){
+				listFunc.add(func);
+			}
+		}
+		return listFunc;
+	}
+    
+//	public boolean checkedFunc(Integer id, String code) {
+//		boolean flag=false;
+//		String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id);
+//		if(StringHelper.isEmpty(codes)){
+//			CacheFactory.factory(CacheName.USERFUNCTION, id);
+//		
+//			for (Function func : list) {
+//				if(code.equals(func.getCode())){
+//					flag=true;
+//				}
+//			}
+//		}else{
+//			int count = codes.indexOf(code);
+//			if(count>=0){
+//				return true;
+//			}
+//		}
+//		return flag;
+//	}
 }

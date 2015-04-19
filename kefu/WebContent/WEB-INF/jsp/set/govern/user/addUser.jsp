@@ -67,7 +67,7 @@
             <td>工号名片</td>
             <td><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10"/></td>
             <td>入职日期</td>
-            <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker({maxDate:'%d'})" class="c-wd120 Wdate" /></td>
+            <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker({maxDate:'%y-%M-%d'})" class="c-wd120 Wdate" /></td>
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>

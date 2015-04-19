@@ -115,14 +115,18 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 	   }
 	   
 	   /**
-	    * 修改
+	    * 修改或者重置密码
 	 * @throws UnsupportedEncodingException 
 	    */
-	   public Integer updateUser(User user) throws UnsupportedEncodingException{
+	   public Integer updateUser(String pass,User user) throws UnsupportedEncodingException{
 		   User toUpdateUser = userDaoImpl.findById(User.class,user.getId());
+	
 		   if(user.getPassword()==""||user.getPassword()==null){
 			   toUpdateUser.setPassword(toUpdateUser.getPassword());
-		   }else{
+		   }else if(pass!=null){
+			   String password = new String(DigestUtils.md5Hex(pass.getBytes("UTF-8")));
+			   toUpdateUser.setPassword(password);
+		   }else {
 			   String password = new String(DigestUtils.md5Hex(user.getPassword().getBytes("UTF-8")));
 			   toUpdateUser.setPassword(password);
 		   }

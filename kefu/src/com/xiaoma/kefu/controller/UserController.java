@@ -72,7 +72,7 @@ public class UserController {
 			String loginName, String password, String yzm, Model model) {
 		String yanzheng = session.getAttribute("randomCode").toString();
 		Date oldTime = (Date) session.getAttribute("yzmtime");
-		if(yanzheng==null || oldTime==null){
+		if (yanzheng == null || oldTime == null) {
 			model.addAttribute("result", Ajax.JSONResult(3, "请刷新验证码重新输入!"));
 			return "resultjson";
 		}
@@ -83,6 +83,7 @@ public class UserController {
 				User user = userService.login(loginName, password);
 				if (user != null) {
 					session.setAttribute(CacheName.USER, user);
+					CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
 					model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
 					Thread thread = new AddLoginLogThread(user.getId(),
 							CookieUtil.getIpAddr(request));
@@ -113,8 +114,10 @@ public class UserController {
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null)
 			return "login";
-		List list = funcService.findFuncOne();
-		model.addAttribute("topList", list);
+		String codes=(String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
+		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "");
+	    List newList = funcService.checkFuncOne(list,codes);
+		model.addAttribute("topList", newList);
 		// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
 		if (typeId == null)
 			typeId = 2;
@@ -136,7 +139,6 @@ public class UserController {
 		return "demo";
 	}
 
-
 	/**
 	 * 查询
 	 * 
@@ -151,7 +153,7 @@ public class UserController {
 		try {
 			List<Department> list = deptService.findDept();
 			userService.getResult(conditions.getMap(), pageBean);
-			model.addAttribute("deptList",list);
+			model.addAttribute("deptList", list);
 			model.addAttribute("status", conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
@@ -280,7 +282,7 @@ public class UserController {
 	public String updateUser(Model model, @ModelAttribute("user") User user) {
 
 		try {
-			Integer isSuccess = userService.updateUser(user);
+			Integer isSuccess = userService.updateUser(null,user);
 
 			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
@@ -370,19 +372,22 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "repass.action", method = RequestMethod.GET)
-	public String updateUser(Model model, Integer id, String password) {
+	public String updateUser(Model model, HttpSession session,
+			String password, String oldpass) {
 		try {
-
-			User toUpdateUser = userService.getUserById(id);
-			toUpdateUser.setPassword(DigestUtils.md5Hex(password
-					.getBytes("UTF-8")));
-			Integer isSuccess = userService.updateUser(toUpdateUser);
-
-			if (isSuccess == 1) {
-				model.addAttribute("result", Ajax.JSONResult(0, "密码重置成功!"));
-			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
-			}
+			User user = (User) session.getAttribute("user");
+			if (user == null)
+				return"login";
+			if (password != null) {
+					Integer isSuccess = userService.updateUser(password,user);
+					if (isSuccess == 1) {
+						model.addAttribute("result", Ajax.JSONResult(0, "密码重置成功!"));
+					} else {
+						model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
+					}
+				}else{
+					model.addAttribute("result", Ajax.JSONResult(2, "密码为空请重新输入"));
+				}
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
 		}
@@ -392,9 +397,7 @@ public class UserController {
 	}
 
 	/**
-	 * 
-	 * 精确查询
-	 * 
+	 * 工号验证
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
@@ -420,7 +423,35 @@ public class UserController {
 		}
 		return "resultjson";
 	}
+	/**
+	 * 用户的旧密码验证
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 
+	@RequestMapping(value = "checkPass.action", method = RequestMethod.GET)
+	public String checkPass(Model model, HttpSession session,String oldpass)
+			throws UnsupportedEncodingException {
+
+		try {
+			User user = (User) session.getAttribute("user");
+			if (user == null)
+				return"login";
+			if ( oldpass != null) {
+				String password1 = user.getPassword();
+				String mdpass=DigestUtils.md5Hex(oldpass.getBytes("UTF-8"));
+				if(password1.equals(mdpass)){
+					model.addAttribute("result", Ajax.toJson(0, "验证正确！"));
+			     }else{
+			    	 model.addAttribute("result", Ajax.toJson(1, "旧密码输入不正确！")); 
+			     }
+		   }
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
+		}
+		return "resultjson";
+	}
 	@RequestMapping(value = "checkMsg.action", method = RequestMethod.GET)
 	public String checkMsg(Model model, String ln, Integer uId, String phone,
 			String msg) throws UnsupportedEncodingException {
@@ -466,4 +497,26 @@ public class UserController {
 		return "resultjson";
 	}
 
+	/**
+	 * 个人信息展示
+	 * 
+	 * @param name
+	 * @param password
+	 * @param session
+	 */
+	@RequestMapping(value = "person.action")
+	public String person(HttpSession session, Model model) {
+		User user = (User) session.getAttribute("user");
+		model.addAttribute("user", user);
+		return "set/person/person";
+	}
+
+	/**
+	 * 个人信息展示
+	 * 
+	 */
+	@RequestMapping(value = "password.action")
+	public String password(HttpSession session, Model model) {
+		return "set/person/pass";
+	}
 }

@@ -12,40 +12,39 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-<h3>查看部门成员</h3>
-<table class="table table-bordered table-striped table-hover m-table">
-    <thead>
-        <tr>
-            <td>工号</td>
-            <td>姓名</td>
-            <td>身份</td>
-            <td>状态</td>
-            <td>部门</td>
-            <td>接听数</td>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="user" items="${list}">
-        <tr>
-            <td>${user.loginName}</td>
-            <td>${user.userName}</td>
-            <td>${user.cardName}</td>
-            <td>${user.onLineStatus}</td>
-            <td>${user.deptId}</td>
-            <td>${user.maxListen}</td>
-        </tr>
-        </c:forEach>
-    </tbody>
-</table>
 
+<body>
+<!-- 面包屑 -->
+<div class="m-crumb">
+    <ul class="f-cb">
+        <li><b>位置：</b></li>
+        <li><a href="#">设置中心</a></li>
+        <li><i>&gt;</i><a href="#">管理设置</a></li>
+        <li><i>&gt;</i>角色管理</li>
+    </ul>
+</div>
+<!-- 表格有边框 -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+function addRole(){
+	var d = $.dialog({id:'role',title:"添加角色",content:'url:/role/addRole.action',lock:true, width:	500,height: 300,});
+}
+function updateRole(id){
 
+	var d = $.dialog({id:'role',title:"修改角色",content:'url:/role/detail.action?id='+id+'',lock:true, width: 
+
+		500,height: 300,});
+
+}
+
+function callback(){
+	$.dialog({id:'role'}).close();
+	find();
+}
 </script>
 </body>
 </html>

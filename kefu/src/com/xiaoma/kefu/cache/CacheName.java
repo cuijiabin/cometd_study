@@ -25,6 +25,11 @@ public class CacheName {
 	public static final String FUNCTION="FUNCTION";
 	//系统用户
 	public static final String SUSER="SUSER";
-	
+	//系统人员的所有的功能串
+	public static final String USERFUNCTION="userFunction";
+	//头部的功能树的列表
+	public static final String SYSFUNCTIONONE="sysfunctionOne";
+	//根据父节点id左侧树状
+	public static final String FUNCTIONTREEBYID="functionTreeById";
 	
 }
