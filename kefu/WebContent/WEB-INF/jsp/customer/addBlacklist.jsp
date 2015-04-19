@@ -17,7 +17,6 @@
 <!-- 表格有边框 -->
 <h2>添加黑名单</h2>
 <table  border="1" aglin="centert" class="table">
-
         <tr>
           <td>客户编号</td>
            <td><input type ="text" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span><td>
@@ -35,7 +34,7 @@
            <td><input type ="text" id ="description" name="description" /><span id="descriptionInfo" style = "color: red;">*</span><td>
         </tr>
    </table>
- <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
+<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
 <button style="float:right;margin-right:40px;" onclick="javascript:addBlacklist(${blacklist.id});"  class="btn" >保存</button>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -66,9 +65,7 @@ function addBlacklist(id){
 		if (!verificationParam(data)) {
 			return;
 		}
-	  
      }
-    
        $.ajax({
     		type : "post",
     		url : url,
@@ -78,7 +75,7 @@ function addBlacklist(id){
     		success : function(data) {
     			if (data.result == 0) {
     				W.$.dialog.alert('操作成功!',function(){
-    	    			api.close();			
+    					W.addCallback();		
     	    		});
 
     			} else {
@@ -89,7 +86,7 @@ function addBlacklist(id){
     			W.$.dialog.alert(data.msg);
     		}
     	});
-	}
+}
 	
 	
 /**
@@ -101,11 +98,19 @@ function verificationParam(userData) {
 		 alert("客户编号不得为空！");
 		return false;
 	}
+	
 	var   customerIdParam =/^(-|\+)?\d+$/;
 	if (!customerIdParam.test(customerId)) {
-		alert("请输入有效的客户编号");
+		alert("客户编号不得为中文");
 		return false;
 	}
+	
+//      //校验访客是否存在
+// 	if(checkCustomer()){
+// 	    alert("此IP地址已存在！");
+// 	   return false;
+//    }
+	
 	var ip = userData.ip;
 	if (ip.replace("^[ ]+$", "").length == 0) {
 		 alert("IP地址不得为空！");
@@ -133,11 +138,10 @@ function verificationParam(userData) {
 		 alert("阻止原因不得为空！");
 		return false;
 	}
-
 	return true;
 }
 /*
- * 校验黑名单的唯一性(添加)
+ * 校验黑名单iP的唯一性(添加)
  */
 function checkBlacklist(){
 	var flag = false;
@@ -161,7 +165,7 @@ function checkBlacklist(){
 			}
 			else{
 				alert(flag);
-				$("#ipInfo").html("该IP地址已存在!");
+				$("#ipInfo").html("该IP地址已在黑名单中！");
 			 	flag = true;
 			}
 		},
@@ -171,7 +175,6 @@ function checkBlacklist(){
 	});
 	return flag;
 }
-
 
 function cl(){
 	api.close();			

@@ -26,7 +26,6 @@
 </div>
 <!-- 查询条件 -->
 <div class="m-query f-mar10">
-	
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
@@ -36,14 +35,12 @@
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
         </div>
         <div class="f-mbm">
-         
-        <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
+           <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
             <label></label>
             <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">删除</button>
         </div>
         <div class="m-query-hd">
     </div>
-      
     </div>
 </div>
 
@@ -59,7 +56,7 @@
 /*
  * 条件查询
  */
-function find(currentPage){
+  function find(currentPage){
 	var url="/blacklist/find.action";
 	var data = {
 			"currentPage":currentPage,
@@ -82,58 +79,21 @@ function find(currentPage){
 	        alert(msg);
 	    }
 	});
-   }
+  }
 	  /**
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-    	var d = $.dialog({id:'blacklist',title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,});
-    }
-    /**
-    *新增的方法
-    */
-    function save(){
-	var url = "/blacklist/save.action";
-	var data = {
-		"customerId" : $("#customerId").val(),
-		"ip" : $("#ip").val(),
-		"description" : $("#description").val(),
-		"enddate" : $("#endDate").val()
-	};
-	$.ajax({
-		type : "post",
-		url : url,
-		data : data,
-		dataType : "json",
-		async:false,
-		success : function(data) {
-			if (data.result == 0) {
-				alert(data.msg);
-				$("#customerId").val('');
-				$("#ip").val('');
-				$("#endDate").val('');
-				$("#description").val('');
-				location.reload();
-			} else {
-				alert(data.msg);
-			}
-		},
-		error : function(msg) {
-			alert(data.msg);
-		}
-	});
-  }
+    	var d = $.dialog({id:'blacklist',title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,id:'addBlackList'});
+ }
+
     /**
     *修改前的页面跳转
     */
     function toUpdate(blacklistId){
-    	
-    		$.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
-    			width: 400,height: 450,});
-    	}
-
-
-	
+    	var c= $.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
+    			width: 400,height: 450,id:'editBlackList'});
+ }
 	/*
 	* 彻底删除
 	*/
@@ -170,7 +130,20 @@ function find(currentPage){
 			    }
 			});
 		});
+  }
+	
+	//编辑黑名单回调
+	function editCallback(){
+		$.dialog({id:'editBlackList'}).close();
+		var pageNo = '${pageBean.currentPage}';
+		find(pageNo);
 	}
+
+	//新增黑名单回调
+	function addCallback(){
+		$.dialog({id:'addBlackList'}).close();
+		find(1);
+  }
 </script>
 </body>
 </html>

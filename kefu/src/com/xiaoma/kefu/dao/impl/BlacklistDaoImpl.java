@@ -197,10 +197,14 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 		@Override
 		public Integer checkBlacklist(Blacklist blacklist) {
 			Session session = getSession();
+			 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			 Date now=  new Date();
+			 String nowTime = f.format(now);
 			StringBuffer hqlBf = new StringBuffer(
 					"select count(a.id) from Blacklist a where 1 = 1");
 			if (StringUtils.isNotBlank(blacklist.getIp())) {
 				hqlBf.append(" and a.ip  = '" + blacklist.getIp() + "' ");
+				hqlBf.append(" and  a.endDate > '"+nowTime+"'  ");
 			}
 			
 			if(blacklist.getId()!=null && blacklist.getId()>0){

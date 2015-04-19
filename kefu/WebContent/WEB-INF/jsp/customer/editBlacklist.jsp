@@ -12,14 +12,10 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
-
 <!-- 表格有边框 -->
 <h2>修改黑名单</h2>
-
 <table  border="1" aglin="centert" class="table">
-
         <tr>
            <td></td>
            <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><span id="blacklistIdInfo" style = "color: red;"></span><td>
@@ -42,15 +38,12 @@
         </tr>
    </table>
    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
-<!--        <button type="submit" class="btn btn-primary" onclick="update()">保存<i class="icon-ok icon-white"></i></button> -->
-                    <button type="reset" class="btn btn-primary" id="btn_cancel">取消</button>
+   <button type="reset" class="btn btn-primary" id="btn_cancel">取消</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-
-
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
 
@@ -59,7 +52,7 @@ $('#btn_cancel').on('click',function(){
 
 });
 
-//保存
+//保存按钮触发
 $('#btn_save').on('click',function(){
 	var data = {
 		"id"  : $("#blacklistId").val(),
@@ -81,9 +74,7 @@ $('#btn_save').on('click',function(){
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		W.$.dialog.alert('操作成功!',function(){
-	    		
-	    			api.close();
-	    		
+	    			W.editCallback();
 	    		});
 	    	}else{
 	    		$.dialog.alert(data.msg);
@@ -95,40 +86,6 @@ $('#btn_save').on('click',function(){
 	});
 });
 
-
-function update(){
-	url : "/blacklist/update.action";
-	var data = {
-			"id"  : $("#blacklistId").val(),
-		"customerId" : $("#customerId").val(),
-		"ip" : $("#ip").val(),
-		"description" : $("#description").val(),
-		"enddate" : $("#endDate").val()
-	};
-	alert("修改确定hou");
-	$.ajax({
-		type : "post",
-		url : url,
-		data : data,
-		dataType : "json",
-		async:false,
-		success : function(data) {
-			if (data.result == 0) {
-				alert(data.msg);
-				$("#customerId").val('');
-				$("#ip").val('');
-				$("#endDate").val('');
-				$("#description").val('');
-				location.reload();
-			} else {
-				alert(data.msg);
-			}
-		},
-		error : function(msg) {
-			alert(data.msg);
-		}
-	});
-  }
   
 /**
  *  js 校验
@@ -145,8 +102,6 @@ function updateParam(userData) {
 		 alert("IP地址不得为空！");
 		return false;
 	}
-	
-
 
 	var enddate = userData.enddate;
 	if (enddate.replace("^[ ]+$", "").length == 0) {
@@ -159,13 +114,8 @@ function updateParam(userData) {
 		 alert("阻止原因不得为空！");
 		return false;
 	}
-
 	return true;
 }
-
-
-
-
 </script>
 </body>
 </html>
