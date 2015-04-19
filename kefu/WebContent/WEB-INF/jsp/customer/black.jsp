@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
- 
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -92,7 +91,7 @@
     */
     function toUpdate(blacklistId){
     	var c= $.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
-    			width: 400,height: 450,id:'editBlackList'});
+    			width: 400,height: 300,id:'editBlackList'});
  }
 	/*
 	* 彻底删除

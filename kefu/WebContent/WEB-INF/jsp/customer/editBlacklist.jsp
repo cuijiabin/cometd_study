@@ -14,31 +14,37 @@
 </head>
 <body>
 <!-- 表格有边框 -->
-<h2>修改黑名单</h2>
-<table  border="1" aglin="centert" class="table">
+<div style="margin:30px;">
+<table class="table table-bordered m-table">
+    <tbody>
         <tr>
-           <td></td>
-           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><span id="blacklistIdInfo" style = "color: red;"></span><td>
+           <td style="width:100px"></td>
+           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/></td>
         </tr>
         <tr>
            <td>客户编号</td>
-           <td><input type ="text" readonly="readonly" id ="customerId" name="customerId" value="${blacklist.customerId}"/><span id="customerIdInfo" style = "color: red">*</span><td>
+           <td><input type ="text" readonly="readonly" id ="customerId" name="customerId" value="${blacklist.customerId}"/><span id="customerIdInfo" style = "color: red">*</span></td>
         </tr>
          <tr>
            <td>IP地址</td>
-           <td><input type ="text" id ="ip" readonly="readonly" name="ip" value="${blacklist.ip}"/><span id="ipInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" id ="ip" readonly="readonly" name="ip" value="${blacklist.ip}"/><span id="ipInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td>失效时间</td>
-           <td><input type ="text" readonly="readonly" id ="endDate" name="endDate" value="${blacklist.endDate}"/><span id="endDateInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" readonly="readonly" id ="endDate" name="endDate" value="${blacklist.endDate}"/><span id="endDateInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><span id="descriptionInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><span id="descriptionInfo" style = "color: red;">*</span></td>
         </tr>
+         <tr>
+           <td colspan="2" align="right">   <button type="submit" class="btn btn-primary" id="btn_save">保存</button>
+           <button type="reset" class="btn btn-primary" id="btn_cancel">取消</button></td>
+        </tr>
+        </tbody>
    </table>
-   <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
-   <button type="reset" class="btn btn-primary" id="btn_cancel">取消</button>
+   </div>
+
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

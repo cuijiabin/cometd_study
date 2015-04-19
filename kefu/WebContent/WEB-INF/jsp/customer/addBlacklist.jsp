@@ -15,27 +15,36 @@
 </head>
 <body>
 <!-- 表格有边框 -->
-<h2>添加黑名单</h2>
-<table  border="1" aglin="centert" class="table">
+<div style="margin:30px;">
+<table class="table table-bordered m-table">
+    <tbody>
         <tr>
           <td>客户编号</td>
-           <td><input type ="text" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td>IP地址</td>
-           <td><input type ="text" id ="ip" name="ip" onblur="javascript:checkBlacklist();" /><span id="ipInfo" style = "color: red">*</span><td>
+           <td><input type ="text" id ="ip" name="ip" onblur="javascript:checkBlacklist();" /><span id="ipInfo" style = "color: red">*</span></td>
         </tr>
          <tr> 
            <td>失效时间</td>
-           <td><input id="endDate" name="endDate"  type="text"  readonly="readonly" value="${endDate }" /><span id="endDateInfo" style = "color: red;">*</span><td>
+           <td><input id="endDate" name="endDate"  type="text"  readonly="readonly" value="${endDate }" /><span id="endDateInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description" /><span id="descriptionInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" id ="description" name="description" /><span id="descriptionInfo" style = "color: red;">*</span></td>
         </tr>
+         <tr>
+          
+           <td colspan="2" align="right">
+            <button  onclick="javascript:addBlacklist(${blacklist.id});"  class="btn btn-primary" >保存</button>
+            <button  onclick="javascript:cl();" class="btn btn-primary" >取消</button>
+            </td>
+        </tr>
+        </tbody>
    </table>
-<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
-<button style="float:right;margin-right:40px;" onclick="javascript:addBlacklist(${blacklist.id});"  class="btn" >保存</button>
+   </div>
+
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -87,7 +96,6 @@ function addBlacklist(id){
     		}
     	});
 }
-	
 	
 /**
  *  js 校验添加
@@ -146,7 +154,7 @@ function verificationParam(userData) {
 function checkBlacklist(){
 	var flag = false;
 	if($("#ip").val()==''){
-		$("#ipInfo").html("IP地址不能为空!");
+		$("#ipInfo").html("*");
 		return true;
 	}else {
       	$("#ipInfo").html("*");
@@ -165,7 +173,7 @@ function checkBlacklist(){
 			}
 			else{
 				alert(flag);
-				$("#ipInfo").html("该IP地址已在黑名单中！");
+				$("#ipInfo").html("*");
 			 	flag = true;
 			}
 		},

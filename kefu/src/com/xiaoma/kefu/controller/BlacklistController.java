@@ -20,6 +20,7 @@ import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.BlacklistService;
+import com.xiaoma.kefu.util.AddressUtil;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
@@ -102,6 +103,9 @@ public class BlacklistController {
 			 blacklist.setStartDate(nowDate);
 			 blacklist.setCreateDate(nowDate);
 			 
+		    String ip = blacklist.getIp();
+			String address = AddressUtil.getAddresses("ip=" + ip, "utf-8");//调取分析出IP地址的方法
+			blacklist.setIpInfo(address);
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
@@ -128,7 +132,6 @@ public class BlacklistController {
 
 			toUpdateBlacklist.setCustomerId(blacklist.getCustomerId());
 			toUpdateBlacklist.setIp(blacklist.getIp());
-//			toUpdateBlacklist.setEndDate(blacklist.getEndDate());;
             toUpdateBlacklist.setDescription(blacklist.getDescription());
 			boolean isSuccess = blacklistService.updateBlacklist(toUpdateBlacklist);
 
