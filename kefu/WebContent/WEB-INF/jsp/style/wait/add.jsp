@@ -52,27 +52,32 @@ var W = api.opener;//获取父页面对象
 
 //先检验,后保存
 $('#btn_save').on('click',function(){
-	$.ajax({
-	    type: "post",
-	    url: "/waitList/validate.action",
-	    dataType: "json",
-	    data : $('#mainForm').serialize(),
-	    async:false,
-	    success: function (data) {
-	    	if(data.result==0){
-	    		save();
-	    	}else{
-	    		api.get('add').alert(data.msg);//丢失风格
-// 	    		api.get('add').$.dialog.alert(data.msg);//底层弹出
-// 	    		W.$.dialog.alert(data.msg);//丢失lock
-// 	    		return false;
-	    	}
-	    },
-	    error: function (msg) {
-	    	W.$.dialog.alert(msg);
-	    }
-	});
-    return false;
+	if($.trim($("#name").val()) == ''){
+		W.$.dialog.alert('名称不能为空!',function(){
+			return;
+		});
+	}else{
+		$.ajax({
+		    type: "post",
+		    url: "/waitList/validate.action",
+		    dataType: "json",
+		    data : $('#mainForm').serialize(),
+		    async:false,
+		    success: function (data) {
+		    	if(data.result==0){
+		    		save();
+		    	}else{
+		    		api.get('add').alert(data.msg);//原生态alert
+//	 	    		api.get('add').$.dialog.alert(data.msg);//底层弹出
+//	 	    		W.$.dialog.alert(data.msg);//丢失lock
+//	 	    		return false;
+		    	}
+		    },
+		    error: function (msg) {
+		    	W.$.dialog.alert(msg);
+		    }
+		});
+	}
 });
 
 //保存

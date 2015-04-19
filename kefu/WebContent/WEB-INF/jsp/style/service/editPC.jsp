@@ -156,6 +156,29 @@ $('#btn_save').on('click',function(){
 		$.dialog.alert("高度请填写数字!");
 		return;
 	}
+	
+	//校验文件类型
+	var filepath=$("input[name='fileOn']").val();
+	if(filepath!=''){
+		var extStart=filepath.lastIndexOf(".");
+	    var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!");
+	    	return;
+	    }
+	}
+    
+    
+	filepath=$("input[name='fileOff']").val();
+	if(filepath!=''){
+		extStart=filepath.lastIndexOf(".");
+	    ext=filepath.substring(extStart,filepath.length).toUpperCase();
+	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!!");
+	    	return;
+	    }
+	}
+	
 	var path = "/serviceIcon/savePC.action";  
     $('#mainForm').attr("action", path).submit();
 });

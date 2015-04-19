@@ -118,6 +118,26 @@
 
 //保存
 $('#btn_save').on('click',function(){
+	//校验文件类型
+	var filepath=$("input[name='fileYs']").val();
+	if(filepath!=''){
+		var extStart=filepath.lastIndexOf(".");
+	    var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!");
+	    	return;
+	    }
+	}
+	filepath=$("input[name='fileYx']").val();
+	if(filepath!=''){
+		extStart=filepath.lastIndexOf(".");
+	    ext=filepath.substring(extStart,filepath.length).toUpperCase();
+	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!!");
+	    	return;
+	    }
+	}
+	
 	var path = "/clientStyle/save.action";  
     $('#mainForm').attr("action", path).submit();
 });

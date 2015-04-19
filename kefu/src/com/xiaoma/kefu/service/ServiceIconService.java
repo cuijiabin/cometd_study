@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.io.IOException;
+import java.util.Date;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -101,6 +102,17 @@ public class ServiceIconService {
             	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+extensionName);//压缩后的路径
         }
 		
+	}
+	
+	/**
+	 * 创建
+	* @param serviceIcon
+	* @Author: wangxingfei
+	* @Date: 2015年4月19日
+	 */
+	public Integer create(ServiceIcon serviceIcon) {
+		serviceIcon.setCreateDate(new Date());
+		return (Integer) serviceIconDaoImpl.add(serviceIcon);
 	}
 	
 
