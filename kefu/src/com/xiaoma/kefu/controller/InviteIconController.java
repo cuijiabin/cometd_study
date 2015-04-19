@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
+import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.model.ServiceIcon;
-import com.xiaoma.kefu.service.ServiceIconService;
+import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
- * 客服图标	controller
+ * 对话邀请框	controller
  * *********************************
 * @Description: TODO
 * @author: wangxingfei
@@ -31,13 +31,13 @@ import com.xiaoma.kefu.util.SysConst.StylePicName;
 **********************************
  */
 @Controller
-@RequestMapping(value = "serviceIcon")
-public class ServiceIconController {
+@RequestMapping(value = "inviteIcon")
+public class InviteIconController {
 
-	private Logger logger = Logger.getLogger(ServiceIconController.class);
+	private Logger logger = Logger.getLogger(InviteIconController.class);
 
 	@Autowired
-	private ServiceIconService serviceIconService;
+	private InviteIconService inviteIconService;
 	
 	
 	/**
@@ -52,15 +52,12 @@ public class ServiceIconController {
 	@RequestMapping(value = "editPC.action", method = RequestMethod.GET)
 	public String editPC(Model model,@RequestParam Integer styleId) {
 		try {
-			ServiceIcon serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.PC);
-			String onUrl = getViewPath(serviceIcon, StylePicName.客服图标PC在线);
-			String offUrl = getViewPath(serviceIcon, StylePicName.客服图标PC离线);
-			List<DictItem> dict = DictMan.getDictList("d_display_model");
-			model.addAttribute("serviceIcon", serviceIcon);
-			model.addAttribute("onUrl", onUrl);
-			model.addAttribute("offUrl", offUrl);
+			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
+//			String offUrl = getViewPath(serviceIcon, StylePicName.客服图标PC离线);
+			List<DictItem> dict = DictMan.getDictList("d_location_model");
+			model.addAttribute("inviteIcon", inviteIcon);
 			model.addAttribute("dict", dict);
-			return "/style/service/editPC";
+			return "/style/invite/editPC";
 		} catch (Exception e) {
 			logger.error("editPC"+styleId,e);
 			model.addAttribute("error", "对不起出错了");
@@ -78,31 +75,22 @@ public class ServiceIconController {
 	* @Date: 2015年4月13日
 	 */
 	@RequestMapping(value = "savePC.action", method = RequestMethod.POST)
-	public String savePC(Model model,MultipartFile fileOn,
-			MultipartFile fileOff,
-			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
+	public String savePC(Model model,
+			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
-			//保存文件 ys
-			serviceIconService.saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标PC在线);
-			serviceIconService.saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标PC离线);
-//			
-//			//拿出旧的创建时间,类型,按钮id, 别的全用新的
-			ServiceIcon oldModel = serviceIconService.get(serviceIcon.getId());
-			serviceIcon.setCreateDate(oldModel.getCreateDate());
-			serviceIcon.setDeviceType(oldModel.getDeviceType());
-			serviceIcon.setButtonId(oldModel.getButtonId());
-			serviceIcon.setUpdateDate(new Date());
-			if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址
-				serviceIcon.setOnlinePic(oldModel.getOnlinePic());;
-			}
-			if(serviceIcon.getOfflinePic()==null){//如果这次没上传图片,则取上次的地址
-				serviceIcon.setOfflinePic(oldModel.getOfflinePic());
-			}
-			serviceIconService.update(serviceIcon);
+//			//补充字段
+			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
+			inviteIcon.setCreateDate(oldModel.getCreateDate());
+			inviteIcon.setDeviceType(oldModel.getDeviceType());
+			inviteIcon.setTruePic(oldModel.getTruePic());
+			inviteIcon.setButtonId(oldModel.getButtonId());
+			inviteIcon.setUpdateDate(new Date());
+			inviteIconService.update(inviteIcon);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("savePC"+inviteIcon.getId(), e);
+			return "error500";
 		}
-		return "redirect:/serviceIcon/editPC.action?styleId="+serviceIcon.getStyleId(); 
+		return "redirect:/inviteIcon/editPC.action?styleId="+inviteIcon.getStyleId(); 
 	}
 	
 	/**

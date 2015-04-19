@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.xiaoma.kefu.dict.DictMan;
+
 /**
  * 文件操作	工具类
  * *********************************
@@ -40,6 +42,21 @@ public class FileUtil {
 		} catch (IOException e) {
 			throw e;
 		}
-      
+	}
+	
+	/**
+	 * 获取风格上传图片的	根路径
+	 * @param styleId 	风格id
+	* @Description: TODO
+	* @return	rootpath/style/styleId
+	* @Author: wangxingfei
+	* @Date: 2015年4月14日
+	 */
+	public static String getStyleRootPath(Integer styleId) {
+		if(styleId==null) styleId=0;
+		return 
+				DictMan.getDictItem("d_sys_param", 1).getItemName()
+				+"/" + SysConst.STYLE_PATH
+				+"/" + styleId;
 	}
 }

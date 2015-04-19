@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *对话邀请框元素	实体类
@@ -55,6 +56,9 @@ public class InviteElement implements Serializable {
 	private Date updateDate;
 	@Column(name="createDate")
 	private Date createDate;
+	
+	@Transient
+	private Integer sortId;//虚拟列,排序id
 	
 	public Integer getId() {
 		return id;
@@ -139,6 +143,12 @@ public class InviteElement implements Serializable {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public Integer getSortId() {
+		return sortId;
+	}
+	public void setSortId(Integer sortId) {
+		this.sortId = sortId;
 	}
 	
 	
