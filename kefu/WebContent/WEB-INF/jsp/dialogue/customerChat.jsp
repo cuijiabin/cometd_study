@@ -14,7 +14,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
-
+<link rel="stylesheet" type="text/css" href="/jsplugin/exp/css/style.css" />
 </head>
 
 <body onload="init()" scroll="no" class="g-body">
@@ -43,15 +43,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="u-operate">
                                 <div class="u-operatebar c-bg">
                                     <ul class="u-operatebar-btn">
-                                        <li><img src="/img/icon_01.png" alt="" /></li>
-                                        <li><img src="/img/icon_02.png" alt="" /></li>
-                                        <li><img src="/img/icon_03.png" alt="" /></li>
+                                        <li><a class="exp-block-trigger" href="javascript:;"><img src="/img/icon_01.png" alt="" /></a></li>
+<!--                                         <li><img src="/img/icon_02.png" alt="" /></li> -->
+<!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
                                         <li><img src="/img/icon_04.png" alt="" /></li>
                                         <li><img src="/img/icon_05.png" alt="" /></li>
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">
-                                    <textarea class="u-txtarea" id="inputbox" onkeypress="return onSendBoxEnter(event);"></textarea>
+                                    <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
                                     <div class="u-send">
                                         <div class="btn-group">
                                             <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -154,13 +154,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
-
 <script type="text/javascript" src="/js/comet4j.js"></script>
-
+<script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script language="javascript" for="window" event="onload"> 
 
    var maxLogCount = 100;
@@ -220,7 +218,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			text = text.HTMLEncode();
 			var t = data.transtime;
 			var str = [ '<p class="r-visitor">',name,'&nbsp;', t,
-				           '</p><p class="r-visitor-txt">',text,'</p>' ];
+				           '</p><p class="r-visitor-txt">',$.expBlock.textFormat(text),'</p>' ];
 			
 			console.log(str);
 			checkLogCount();
@@ -332,6 +330,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		String.prototype.trim = function() {
 			return this.replace(/^\s+|\s+$/g, '');
 		};
+		
+		/***
+		 *加载表情
+		 */
+		$(document).ready(function(){
+			$.expBlock.initExp({
+				/*
+				//用户表情结构数据
+				expData: [{name: '默认',icons:[{url:"../resources/js/plugins/exp/img/zz2_thumb.gif",title:"织"},{url:"../resources/js/plugins/exp/img/horse2_thumb.gif",title:"神马"}]}]
+				//包含textarea和表情触发的exp-holder
+				holder: '.exp-holder',
+				//exp-holder中的textarea输入dom，默认为textarea,
+				textarea : 'textarea',
+				//触发dom
+				trigger : '.exp-block-trigger',
+				//每页显示表情的组数
+				grpNum : 5,
+				//位置相对页面固定(absolute)||窗口固定(fixed)
+				posType : 'absolute',
+				//表情层数
+				zIndex : '100'
+				*/
+			});
+			
+			//使表情失效
+			$.expBlock.disableExp();
+			//使表情重新启动
+			$.expBlock.enableExp();
+			
+			$('#J_sbt').click(function(){
+				var s, ta = $('#inputbox'), val = ta.val();
+				//将字符串中如"[微笑]"类的表情代号替换为<img/>标签
+				s = $.expBlock.textFormat(val);
+				alert(s);
+				//console.log(s);
+				$('#J_resulte').val(s);
+			})
+			
+			/*
+			 * ajax远程获取表情,注意同源策略
+			 * 要求返回的数据格式如:[{name: groupname,icons:[{url:'imgurl',title:"iconname"},{url:'imgurl',title:"iconname"}]},{name: groupname,icons:[{url:'imgurl',title:"iconname"},{url:'imgurl',title:"iconname"}]},...]
+			 */
+			//$.expBlock.getRemoteExp(url);
+			
+		})
 </script> 
 
 </body>
