@@ -229,7 +229,7 @@
 			var ccnId = '"'+dQuene.ccnId+'"';
 			var customer = dQuene.customer;
 			
-			html += "<li class='on'><p>客户："+customer.id
+			html += "<li id='li:"+dQuene.ccnId+"'><p>客户："+customer.id
 			+"</p><p><a href='javascript:changeTitle("+customer.id+","+ccnId+");'>"
 			+customer.ip+"</a></p><p>上线时间："+getTimeByPattern(dQuene.enterTime)+"</p><span class='u-close'>x</span></li>";
 		}
@@ -239,10 +239,14 @@
 	function changeTitle(customerId,ccnId){
 		
 		console.log("与客户"+customerId+"对话中");
+		
+		$("li[id^='li:']").attr("class", null);
+		$("#li:"+ccnId).attr("class", "on");
+		
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
 		$("#currentCustomerId").val(customerId);
-		
+		switchDialogue(ccnId);
 		getCustomerById(customerId);
 	}
 	
@@ -251,9 +255,15 @@
 		var ccnId = dQuene.ccnId;
 		var customer = dQuene.customer;
 		
+		console.log("收到通知后刷新列表，与客户"+customer.id+"对话中");
+		
+		//$("li[id^='li:']").attr("class", null);
+		$("#li:"+ccnId).attr("class", "on");
+		
 		$("#contentTitle").html("与客户"+customer.id+"对话中");
 		$("#currentCcnId").val(ccnId);
 		$("#currentCustomerId").val(customer.id);
+		switchDialogue(ccnId);
 		
 		$("#customerInfo a[name$='customerId']").html(customer.customerName);
 		$("#customerInfo p[name$='customerIpInfo']").html(customer.ip);
@@ -292,6 +302,7 @@
 		console.log("收到消息了！");
 		var id = data.id;
 		console.log(id);
+		createHiddenDiv(id);
 		var name = data.name || '';
 		name = name.HTMLEncode();
 		var text = data.text || '';
@@ -300,9 +311,26 @@
 		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',text,'</p>' ];
 		console.log(str);
 		checkLogCount();
-		logbox.innerHTML += str.join('');
+		$("#"+id).append(str.join(''));
+		
+		//logbox.innerHTML = $("#"+id).html();
+		//$("#currentCcnId").val(id);
+		switchDialogue(id);
 		lastTalkId = id;
 		moveScroll();
+	}
+	//切换对话框
+	function switchDialogue(ccnId){
+		logbox.innerHTML = $("#"+ccnId).html();
+		$("#currentCcnId").val(ccnId);
+	}
+	
+	function createHiddenDiv(ccnId){
+		if ($("#"+ccnId).length > 0){ 
+			return;
+		}else{
+			$("#logbox").after("<div id='"+ccnId+"' style='display: none;'></div>");
+		}
 	}
 	
 	//获取客户信息

@@ -1,7 +1,6 @@
 package com.xiaoma.kefu.service;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 
-import com.sun.org.apache.xpath.internal.operations.And;
 import com.xiaoma.kefu.dao.CustomerDao;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.CookieUtil;
@@ -106,7 +105,12 @@ public class CustomerService {
 	 * 查询一条
 	 */
 	public Customer getCustomerById(long id) {
-		return customerDaoImpl.getCustomerById(id);
+		Customer customer = (Customer) JedisDao.getObject(JedisConstant.CUSTOMER_INFO+id);
+		   if(customer == null){
+			   customer = customerDaoImpl.getCustomerById(id);
+			   JedisDao.setKO(JedisConstant.CUSTOMER_INFO+id, customer);
+		   }
+		return customer;
 	}
 
 	public Long getMaxCustomerId() {

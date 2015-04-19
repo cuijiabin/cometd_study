@@ -80,6 +80,16 @@ public class JedisConstant {
 	 * 待保存对话队列
 	 */
 	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
+	
+	/**
+	 * 缓存客服信息
+	 */
+	public static final String USER_INFO = "user_info:";
+	
+	/**
+	 * 缓存客户信息
+	 */
+	public static final String CUSTOMER_INFO = "customer_info:";
 
 	// #######生成key方法
 	/**

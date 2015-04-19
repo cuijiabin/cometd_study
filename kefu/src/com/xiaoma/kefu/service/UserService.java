@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisConstant;
+import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.util.PageBean;
 
 
@@ -111,7 +113,13 @@ public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,Integer pag
 	    * 在弹出的对话框显示详细信息
 	    */
 	   public User getUserById(Integer id){
-		   return userDaoImpl.findById(User.class,id);
+		   
+		   User user = (User) JedisDao.getObject(JedisConstant.USER_INFO+id);
+		   if(user == null){
+			   user = userDaoImpl.findById(User.class,id);
+			   JedisDao.setKO(JedisConstant.USER_INFO+id, user);
+		   }
+		   return user;
 	   }
 	   
 	   /**
