@@ -22,7 +22,7 @@
         <tr>
             <td class="f-txtr tdbg">
             	<input type="hidden" id="id" name="id" value="${style.id}"/>
-            	<input type="text" id="name" name="name" value="${style.name}"/>
+            	<input type="text" id="name" name="name" value="${style.name}" maxlength="32"/>
             </td>
             <td class="f-txtr tdbg">
             	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
@@ -39,6 +39,13 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 
 <script type="text/javascript">
+(function($){
+	$(window).load(function(){
+		var oInput = document.getElementById("name");
+		oInput.focus();//获取焦点
+	});
+})(jQuery);
+
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
 

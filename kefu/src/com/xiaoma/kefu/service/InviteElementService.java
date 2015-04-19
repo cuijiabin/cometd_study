@@ -125,13 +125,18 @@ public class InviteElementService {
 	}
 	
 	/**
-	 * 删除元素
+	 * 删除元素 ,同时删除元素中上传的文件
 	* @param inviteElement
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月19日
 	 */
 	public int delete(InviteElement inviteElement) {
+		inviteElement = get(inviteElement.getId());
+		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
+		String savePath = FileUtil.getStyleRootPath(inviteIcon.getStyleId()) + "/" + inviteElement.getId() ;
+		FileUtil.deleteDir(savePath);
+		
 		return inviteElementDaoImpl.delete(inviteElement);
 	}
 

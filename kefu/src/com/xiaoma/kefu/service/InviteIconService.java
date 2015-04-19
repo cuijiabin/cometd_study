@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,19 @@ public class InviteIconService {
 	 */
 	public Integer update(InviteIcon inviteIcon) {
 		return inviteIconDaoImpl.update(inviteIcon);
+	}
+	
+	/**
+	 * 创建
+	* @param inviteIcon
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月19日
+	 */
+	public Integer create(InviteIcon inviteIcon) {
+		inviteIcon.setCreateDate(new Date());
+		return (Integer) inviteIconDaoImpl.add(inviteIcon);
+		
 	}
 
 }

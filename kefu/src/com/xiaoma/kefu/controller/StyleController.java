@@ -128,7 +128,7 @@ public class StyleController {
 			Integer id = style.getId();
 			int isSuccess = 0;
 			if(id==null){
-				isSuccess = styleService.create(style);
+				isSuccess = styleService.initStyle(style);//初始化风格
 			}else{
 				Style toUpdate = styleService.get(id);
 				toUpdate.setName(style.getName());

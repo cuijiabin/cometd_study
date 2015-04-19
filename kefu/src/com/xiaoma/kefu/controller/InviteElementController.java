@@ -122,6 +122,9 @@ public class InviteElementController {
 			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
 //			//补充字段
 			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
+			if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
+				inviteElement.setPicUrl(oldModel.getPicUrl());;
+			}
 			inviteElement.setName(oldModel.getName());
 			inviteElement.setCreateDate(oldModel.getCreateDate());
 			inviteElement.setUpdateDate(new Date());

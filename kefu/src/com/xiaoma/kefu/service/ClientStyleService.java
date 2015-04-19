@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.io.IOException;
+import java.util.Date;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -28,6 +29,18 @@ public class ClientStyleService {
 	
 	@Autowired
 	private ClientStyleDao clientStyleDaoImpl;
+	
+	/**
+	 * 创建
+	* @param clientStyle
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月19日
+	 */
+	public Integer create(ClientStyle clientStyle){
+		clientStyle.setCreateDate(new Date());
+		return (Integer) clientStyleDaoImpl.add(clientStyle);
+	}
 	
 	/**
 	 * 根据风格id查找

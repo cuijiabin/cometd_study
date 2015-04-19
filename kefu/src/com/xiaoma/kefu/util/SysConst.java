@@ -108,5 +108,24 @@ public class SysConst {
 		}
 	}
 	
+	/**
+	 * 风格下5个界面的 类型ID
+	 * *********************************
+	* @Description: TODO
+	* @author: wangxingfei
+	* @createdAt: 2015年4月19日下午4:29:45
+	**********************************
+	 */
+	public enum StyleIconType{
+		访问端界面(1),客服图标(2),对话邀请框(3),手机端客服图标(4),手机端对话邀请框(5);
+		private Integer value;
+		StyleIconType(Integer value){
+			this.value = value;
+		}
+		public Integer getCode(){
+			return this.value;
+		}
+	}
+	
 	
 }

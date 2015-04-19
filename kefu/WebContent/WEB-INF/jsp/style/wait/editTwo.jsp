@@ -42,16 +42,24 @@ var W = api.opener;//获取父页面对象
 var pId = '${pId }';
 var cDG2;
 
-//添加
+//添加二级菜单
 function addTwo(){
-	cDG2 = W.$.dialog({
-		id:'addTwo',
-		content:'url:/waitList/addTwo.action?pId='+pId,
-		lock:true,
-		parent:api,
-		width: 400,height: 150,
-		title:'添加二级菜单'
-	});
+	if(pId==''){
+		W.$.dialog.alert('请先选择一级菜单!',function(){
+			return;
+		});
+	}else{
+		cDG2 = W.$.dialog({
+			id:'addTwo',
+			content:'url:/waitList/addTwo.action?pId='+pId,
+			lock:true,
+			parent:api,
+			width: 400,height: 150,
+			title:'添加二级菜单'
+		});
+	}
+	
+	
 }
 
 //添加回调

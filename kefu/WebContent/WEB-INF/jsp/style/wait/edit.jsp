@@ -104,7 +104,8 @@ function add(){
 //添加回调
 function addCallback(){
 	cDG.close();
-	api.reload(window);
+	window.location = '/waitList/edit.action?styleId='+'${styleId}'
+// 	api.reload(window);
 }
 
 //删除

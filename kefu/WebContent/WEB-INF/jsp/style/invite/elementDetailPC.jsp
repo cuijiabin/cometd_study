@@ -14,7 +14,9 @@
 		<tbody>
 			<tr>
 				<td class="f-txtl" colspan="2"><b class="c-colf00">（${inviteElement.sortId }）</b> <span id="spanName">${inviteElement.name }</span>
-					<button type="button" class="btn btn-primary btn-small" onclick="updateName(${inviteElement.id })">修改名称</button>
+					<c:if test="${inviteElement.id != null }">
+						<button type="button" class="btn btn-primary btn-small" onclick="updateName(${inviteElement.id })">修改名称</button>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
@@ -63,8 +65,10 @@
 </form>
 
 <div class="m-query-hd">
-    <button type="button" class="btn btn-primary btn-small" onclick="saveDetail()">保存</button>
-    <button type="button" class="btn btn-primary btn-small">刷新预览图</button>
+	<c:if test="${inviteElement.id != null }">
+		<button type="button" class="btn btn-primary btn-small" onclick="saveDetail()">保存</button>
+    	<button type="button" class="btn btn-primary btn-small">刷新预览图</button>
+	</c:if>
 </div>
 
 
@@ -95,13 +99,14 @@ function saveDetail(){
 	
 	//校验文件类型
 	var filepath=$("input[name='groupFile']").val();
-    var extStart=filepath.lastIndexOf(".");
-    var ext=filepath.substring(extStart,filepath.length).toUpperCase();
-    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
-    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!");
-    	return;
-    }
-    
+	if(filepath!=''){
+	    var extStart=filepath.lastIndexOf(".");
+	    var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!");
+	    	return;
+	    }
+	}
 	var path = "/inviteElement/savePC.action";  
     $('#mainForm').attr("action", path).submit();
 }

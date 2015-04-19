@@ -43,7 +43,7 @@
 (function($){
 	$(window).load(function(){
 		var oInput = document.getElementById("name");
-		oInput.focus();
+		oInput.focus();//获取焦点
 	});
 })(jQuery);
 
