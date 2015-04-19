@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Blacklist;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
@@ -42,7 +47,7 @@ public class BlacklistController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ,String createDate){
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Blacklist> pageBean ,String createDate,String endDate){
 		try {
 			blacklistService.getResult(conditions.getMap(), pageBean,createDate);
 			if (conditions == null || conditions.getMap() == null
@@ -62,7 +67,12 @@ public class BlacklistController {
      */
     @RequestMapping(value = "new.action",method=RequestMethod.GET)
     public String toSave(Model model,Blacklist blacklist) {
-
+    	
+    	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+        Date sub = DateUtils.addHours(now, 8);//设置失效时间为8个小时
+	    String	endDate = sdf.format(sub);  //失效时间
+        model.addAttribute("endDate", endDate);
         return "customer/addBlacklist";
       }
 
@@ -71,12 +81,27 @@ public class BlacklistController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Blacklist blacklist,String enddate,Model model) throws ParseException {
+	public String save(HttpSession session ,Blacklist blacklist,String enddate,Model model) throws ParseException {
 		
 		try {
-			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			  Date date = sdf.parse(enddate);
+			User user = (User) session.getAttribute(CacheName.USER);
+			if (user == null)
+				return "login";
+			 String loginName = user.getLoginName();//获得工号
+			 Integer userId = user.getId();
+			 blacklist.setUserName(loginName);
+			 blacklist.setUserId(userId);
+			
+			 SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			 Date date = sdf.parse(enddate); //String型 时间转换为 Date型
 			 blacklist.setEndDate(date);
+			 
+			 Date now =  new Date();
+			 String nowString =  sdf.format(now); //Date型 时间 转换为 String型
+			 Date nowDate = sdf.parse(nowString);
+			 blacklist.setStartDate(nowDate);
+			 blacklist.setCreateDate(nowDate);
+			 
 			boolean isSuccess = blacklistService.createNewBlacklist(blacklist);
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
@@ -206,6 +231,5 @@ public class BlacklistController {
 		}
 		return "resultjson";
 	}
-
-
+	
 }

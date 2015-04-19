@@ -79,7 +79,7 @@ public class AddressUtil {
 
 			System.out.println(country + "=" + area + "=" + region + "=" + city
 					+ "=" + county + "=" + isp);
-			return region;
+			return region+city+" ["+isp+"]";
 		}
 		return null;
 	}
@@ -209,6 +209,7 @@ public class AddressUtil {
 		
 		// 测试ip 219.136.134.157 中国=华南=广东省=广州市=越秀区=电信
 		String ip = "219.136.134.157";
+		
 		String address = "";
 		try {
 			address = AddressUtil.getAddresses("ip=" + ip, "utf-8");

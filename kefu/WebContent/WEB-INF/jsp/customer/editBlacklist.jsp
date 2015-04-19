@@ -14,15 +14,7 @@
 </head>
 
 <body>
-<!-- 面包屑 -->
-<div class="m-crumb">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">访客管理</a></li>
-        <li><i>&gt;</i><a href="#">黑名单</a></li>
-        <li><i>&gt;</i>修改黑名单</li>
-    </ul>
-</div>
+
 <!-- 表格有边框 -->
 <h2>修改黑名单</h2>
 
@@ -30,7 +22,7 @@
 
         <tr>
            <td></td>
-           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><span id="blacklistIdInfo" style = "color: red;">*</span><td>
+           <td><input type ="hidden" id ="blacklistId" name="blacklistId" value="${blacklist.id}"/><span id="blacklistIdInfo" style = "color: red;"></span><td>
         </tr>
         <tr>
            <td>客户编号</td>
@@ -42,7 +34,7 @@
         </tr>
          <tr>
            <td>失效时间</td>
-           <td><input type ="text" id ="endDate" name="endDate" value="${blacklist.endDate}"/><span id="endDateInfo" style = "color: red;">*</span><td>
+           <td><input type ="text" readonly="readonly" id ="endDate" name="endDate" value="${blacklist.endDate}"/><span id="endDateInfo" style = "color: red;">*</span><td>
         </tr>
          <tr>
            <td>阻止原因</td>
@@ -51,7 +43,7 @@
    </table>
    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
 <!--        <button type="submit" class="btn btn-primary" onclick="update()">保存<i class="icon-ok icon-white"></i></button> -->
-                    <button type="reset" class="btn" id="btn_cancel">取消</button>
+                    <button type="reset" class="btn btn-primary" id="btn_cancel">取消</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -69,7 +61,6 @@ $('#btn_cancel').on('click',function(){
 
 //保存
 $('#btn_save').on('click',function(){
-	alert("修改确定");
 	var data = {
 		"id"  : $("#blacklistId").val(),
 		"customerId" : $("#customerId").val(),
@@ -90,7 +81,9 @@ $('#btn_save').on('click',function(){
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		W.$.dialog.alert('操作成功!',function(){
-	    			W.editCallback();
+	    		
+	    			api.close();
+	    		
 	    		});
 	    	}else{
 	    		$.dialog.alert(data.msg);

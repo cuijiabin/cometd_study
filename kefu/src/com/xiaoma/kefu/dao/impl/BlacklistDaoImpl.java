@@ -114,7 +114,13 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			List<String> relation = new ArrayList<String>();
 			List<Criterion> role = new ArrayList<Criterion>();// 条件
 			List<Order> orders = new ArrayList<Order>();// 排序
-			
+			if(createDate==null){
+			  SimpleDateFormat fora = new SimpleDateFormat("yyyy-MM-dd");
+			  SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			  Date today =  new Date();
+			  String todayString = fora.format(today);
+			  role.add(Restrictions.between("createDate", f.parse(todayString + " 0:00:00"), f.parse(todayString + " 23:59:59")));
+			}
 			if (conditions != null) {
 				if (StringHelper.isNotEmpty(conditions.get("description"))) {
 					role.add(Restrictions.like("description",
@@ -129,26 +135,6 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 				if (StringHelper.isNotEmpty(userName)) {
 					role.add(Restrictions.like("userName",
 							"%" + conditions.get("userName").trim() + "%"));
-				}
-			
-				
-				if (conditions.get("startDate") != null
-						&& !conditions.get("startDate").isEmpty()
-						&& conditions.get("endDate") != null
-						&& !conditions.get("endDate").isEmpty()) {
-					SimpleDateFormat format = new SimpleDateFormat(
-							"yyyy-MM-dd HH:mm:ss");
-					try {
-						role.add(Restrictions.between(
-								"createDate",
-								format.parse(conditions.get("startDate")
-										+ " 0:00:00"),
-								format.parse(conditions.get("endDate")
-										+ " 23:59:59")));
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error(e.getMessage());
-					}
 				}
 			}
 			orders.add(Order.desc("createDate"));

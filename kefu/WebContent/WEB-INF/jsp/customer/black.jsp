@@ -63,6 +63,7 @@ function find(currentPage){
 	var url="/blacklist/find.action";
 	var data = {
 			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
 			"map[customerId]":$("#customerId").val(),
 			"map[description]":$("#description").val(),
 			"map[userName]":$("#userName").val(),
@@ -86,7 +87,7 @@ function find(currentPage){
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-    	var d = $.dialog({id:'blacklist',content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,});
+    	var d = $.dialog({id:'blacklist',title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,});
     }
     /**
     *新增的方法
@@ -127,22 +128,8 @@ function find(currentPage){
     */
     function toUpdate(blacklistId){
     	
-    		$.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,
-    			width: 400,height: 500,
-    			button: [
-    				        {
-    				            name: '确认',
-    				            callback: function () {
-    				                 update(); 
-    				                return false;
-    				            },
-    				            focus: true
-    				        },
-    				        {
-    				            name: '关闭'
-    				        }
-    				    ]
-    			});
+    		$.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
+    			width: 400,height: 450,});
     	}
 
 

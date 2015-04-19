@@ -14,18 +14,10 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<!-- 面包屑 -->
-<div class="m-crumb">
-    <ul class="f-cb">
-        <li><b>位置：</b></li>
-        <li><a href="#">访客管理</a></li>
-        <li><i>&gt;</i><a href="#">黑名单</a></li>
-        <li><i>&gt;</i>添加黑名单</li>
-    </ul>
-</div>
 <!-- 表格有边框 -->
 <h2>添加黑名单</h2>
 <table  border="1" aglin="centert" class="table">
+
         <tr>
           <td>客户编号</td>
            <td><input type ="text" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span><td>
@@ -36,7 +28,7 @@
         </tr>
          <tr> 
            <td>失效时间</td>
-           <td><input type ="text" id ="endDate" name="endDate" /><span id="endDateInfo" style = "color: red;">*</span><td>
+           <td><input id="endDate" name="endDate"  type="text"  readonly="readonly" value="${endDate }" /><span id="endDateInfo" style = "color: red;">*</span><td>
         </tr>
          <tr>
            <td>阻止原因</td>
@@ -50,7 +42,6 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
-
 function addBlacklist(id){
 	var url="";
 	var data="";
@@ -86,18 +77,16 @@ function addBlacklist(id){
     		async:false,
     		success : function(data) {
     			if (data.result == 0) {
-    				alert(data.msg);
-    				$("#customerId").val('');
-    				$("#ip").val('');
-    				$("#endDate").val('');
-    				$("#description").val('');
-    				location.reload();
+    				W.$.dialog.alert('操作成功!',function(){
+    	    			api.close();			
+    	    		});
+
     			} else {
-    				alert(data.msg);
+    				W.$.dialog.alert(data.msg);
     			}
     		},
     		error : function(msg) {
-    			alert(data.msg);
+    			W.$.dialog.alert(data.msg);
     		}
     	});
 	}
@@ -112,12 +101,21 @@ function verificationParam(userData) {
 		 alert("客户编号不得为空！");
 		return false;
 	}
-	
+	var   customerIdParam =/^(-|\+)?\d+$/;
+	if (!customerIdParam.test(customerId)) {
+		alert("请输入有效的客户编号");
+		return false;
+	}
 	var ip = userData.ip;
 	if (ip.replace("^[ ]+$", "").length == 0) {
 		 alert("IP地址不得为空！");
 		return false;
 	}
+ 	  var ipParam =/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+		if (!ipParam.test(ip)) {
+			alert("ip地址格式不正确");
+			return false;
+		}
 	
 	if(checkBlacklist()){
 	    alert("此IP地址已存在！");
@@ -160,14 +158,11 @@ function checkBlacklist(){
 		success : function(data) {
 			if(data.code==0){
 				$("#ipInfo").html("*");
-				
 			}
-			
 			else{
 				alert(flag);
 				$("#ipInfo").html("该IP地址已存在!");
 			 	flag = true;
-			 
 			}
 		},
 		error : function(msg){
@@ -176,6 +171,7 @@ function checkBlacklist(){
 	});
 	return flag;
 }
+
 
 function cl(){
 	api.close();			
