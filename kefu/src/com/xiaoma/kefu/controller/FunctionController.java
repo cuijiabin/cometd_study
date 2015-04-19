@@ -164,8 +164,7 @@ public class FunctionController {
 			if (user == null) {
 				return "login";
 			}
-			boolean isSuccess = funcService.checkFunc(user.getId(),
-					"f_dialog_gl");
+			boolean isSuccess = true;//funcService.checkFunc(user.getId(), "f_dialog_gl");
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
 			} else {
