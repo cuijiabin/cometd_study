@@ -12,13 +12,6 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="/jsplugin/exp/css/style.css" />
-<script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/app.js"></script>
-<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
-<script type="text/javascript" src="/js/comet4j.js"></script>
-<script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
-
 </head>
 
 <body scroll="no" class="g-body">
@@ -151,6 +144,12 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/comet4j.js"></script>
+<script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script language="javascript" for="window" event="onload"> 
 
 	var lastTalkId = null ;
