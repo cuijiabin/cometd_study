@@ -51,7 +51,6 @@ public class MessageTypeController {
 	 @RequestMapping(value = "detail.action",method = RequestMethod.GET)
 	 public String messageTypeDetail(Model mode ,Integer id){
 		 
-		 
 		 MessageType messageType = messageTypeService.getMessageTypeById(id);
 		
 		 JSONObject jsonObject = JSONObject.fromObject(messageType);

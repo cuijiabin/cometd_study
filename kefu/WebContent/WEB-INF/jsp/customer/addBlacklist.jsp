@@ -107,9 +107,10 @@ function verificationParam(userData) {
 		return false;
 	}
 	
-	var   customerIdParam =/^(-|\+)?\d+$/;
+	//只能为整数
+	var   customerIdParam =/^(-|\+)?\d+$/; 
 	if (!customerIdParam.test(customerId)) {
-		alert("客户编号不得为中文");
+		alert("请输入有效的客户编号");
 		return false;
 	}
 	
