@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.sun.org.apache.xpath.internal.operations.And;
 import com.xiaoma.kefu.dao.MessageTypeDao;
 import com.xiaoma.kefu.model.MessageType;
 
@@ -18,13 +19,13 @@ import com.xiaoma.kefu.model.MessageType;
 public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements MessageTypeDao {
   
 	@Override
-	public List findTree(int tid) {
+	public List<MessageType> findTree(int tid) {
 		Session session = getSession();
 		String hql="";
-		if(tid!=12){
-		     hql = "from MessageType m where m.id="+tid+" or m.pId ="+tid;
+		if(tid==1){
+			hql = "from MessageType m where m.typeId="+tid+" and status=1" ;
 		}else{
-			 hql = "from MessageType m where m.id="+tid+" or m.pId ="+tid+" or m.pId in (select m.id from MessageType m where m.pId="+tid+")";
+			hql = "from MessageType m where m.typeId="+tid+" and userId=";
 		}
 		Query query = session.createQuery(hql);
 		return query.list();

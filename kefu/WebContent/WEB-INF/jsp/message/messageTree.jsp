@@ -3,7 +3,6 @@
 <!doctype html>
 <html lang="zh-cn">
 <head>
- 这里树快出来
  <SCRIPT >
 
 var zTree;
@@ -77,7 +76,7 @@ var zTree;
 		<TD width=260px align=left valign=top style="BORDER-RIGHT: #999999 1px dashed">
 			<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
 		</TD>
-		<TD width=770px align=left valign=top><IFRAME ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%  height=600px SRC="core/standardData.html"></IFRAME></TD>
+		<TD width=770px align=left valign=top><IFRAME ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%  height=600px SRC=""></IFRAME></TD>
 	</TR>
 </TABLE>  
 </body>

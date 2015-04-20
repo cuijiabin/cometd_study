@@ -13,25 +13,23 @@ import com.xiaoma.kefu.util.PageBean;
 /**
  * @author frongji
  * @time 2015年4月8日下午3:36:28
- *
+ * 
  */
 @Service
 public class MessageTypeService {
-	
+
 	@Autowired
 	private MessageTypeDao messageTypeDaoImpl;
-	  
-      public List findTree(int tid) {
-		
-		return messageTypeDaoImpl.findTree(tid);
-	  }
-	
-	  /**
-	    * 在弹出的对话框显示详细信息
-	    */
-	   public MessageType getMessageTypeById(Integer id){
-		   return messageTypeDaoImpl.getMessageTypeById(id);
-	   }
 
+	public List findTree(int tid) {
+		return messageTypeDaoImpl.findTree(tid);
+	}
+
+	/**
+	 * 在弹出的对话框显示详细信息
+	 */
+	public MessageType getMessageTypeById(Integer id) {
+		return messageTypeDaoImpl.getMessageTypeById(id);
+	}
 
 }
