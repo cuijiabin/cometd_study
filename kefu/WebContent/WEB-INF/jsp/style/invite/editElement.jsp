@@ -47,14 +47,12 @@
                     <td class="c-wd150 f-vat">
                     	<ul class="e_tit c-bor">
                     		<c:forEach var="ele" items="${elementList }">
-								<li>
+								<li class="on">
 	                            	<a href="#" onclick="editDetail(${ele.id},${ele.sortId })">
 	                            		<b class="c-colf00">（${ele.sortId }）</b> 
 	                            		<span id="listName${ele.id }">${ele.name }</span>
 	                            	</a>
-	                            	<a href="#" onclick="delDetail(${ele.id})">
-	                            		<span > &times;</span>
-	                            	</a>
+                            		<span onclick="delDetail(${ele.id})" class="u-close f-fr"> &times;</span>
                             	</li>
 							</c:forEach>
                         </ul>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="blank" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<meta name="author" content="dobao">
+<title>访客手机端对话窗口--客服信息管理系统</title>
+<link rel="icon" href="favicon.ico">
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
+<link href="css/app.css" rel="stylesheet" type="text/css">
+</head>
+
+<body style="background:#f2f2f2">
+<header class="m-mob-hd">
+    <div class="m-mob-siteTit">
+        <img src="img/icon_worker.png" height="30" alt="" />
+        留学考试全日制
+    </div>
+    <h3 class="m-mob-tit">正与客服<span>【 丁老师 】</span>聊天</h3>
+    <div class="f-fr m-mob-menu">
+        <a class="m-mob-menuOn">人工服务</a>
+        <ul class="m-mob-submenu">
+            <li><a label="worker">人工客服</a></li>
+            <li><a label="message">留言</a></li>
+        </ul>
+    </div>
+</header>
+<div id="chat">
+    <div class="m-mob-bd">
+        <div class="m-mobChat-cnt">
+            <div class="msg-worker">
+                <span class="avatar"></span>
+                <p class="msg-box"><i></i>您好，欢迎您的咨询，请问有什么需要帮助的吗？ </p>
+            </div>
+            <div class="msg-visitor">
+                <span class="avatar"></span>
+                <p class="msg-box"><i></i>您好，欢迎您的咨询，请问有什么需要帮助的吗？ </p>
+            </div>
+            <div class="msg-time">4月14日 13:00</div>
+            <div class="msg-worker">
+                <span class="avatar"></span>
+                <p class="msg-box"><i></i>您好，欢迎您的咨询，请问有什么需要帮助的吗？ </p>
+            </div>
+            <div class="msg-visitor">
+                <span class="avatar"></span>
+                <p class="msg-box"><i></i>您好，欢迎您的咨询，请问有什么需要帮助的吗？ </p>
+            </div>
+            <div class="msg-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>
+            <div class="msg-offline"><span class="alert alert-error">对不起，连接失败</span></div>
+            <div class="msg-offline"><span class="alert alert-block">对不起，客服不在线，请留言</span></div>
+            <div class="msg-offline"><span class="alert alert-info">客服正忙，请您耐心等待</span></div>
+        </div>
+    </div>
+    
+    <!-- 输入模块 -->
+    <div class="m-mob-inputbar">
+        <div class="m-mob-face">
+            <ul id="faces_ul">
+                <li v="0"><img title="困惑" src="img/face/xmface_1.gif"></li>
+                <li v="1"><img title="流泪" src="img/face/xmface_2.gif"></li>
+                <li v="2"><img title="鬼脸" src="img/face/xmface_3.gif"></li>
+                <li v="3"><img title="郁闷" src="img/face/xmface_4.gif"></li>
+                <li v="4"><img title="傲慢" src="img/face/xmface_5.gif"></li>
+                <li v="5"><img title="闭嘴" src="img/face/xmface_6.gif"></li>
+                <li v="6"><img title="惊讶" src="img/face/xmface_7.gif"></li>
+                <li v="7"><img title="流汗" src="img/face/xmface_8.gif"></li>
+                <li v="8"><img title="疑问" src="img/face/xmface_9.gif"></li>
+                <li v="9"><img title="心动" src="img/face/xmface_10.gif"></li>
+                <li v="10"><img title="耍酷" src="img/face/xmface_11.gif"></li>
+                <li v="11"><img title="发怒" src="img/face/xmface_12.gif"></li>
+                <li v="12"><img title="难过" src="img/face/xmface_13.gif"></li>
+                <li v="13"><img title="高兴" src="img/face/xmface_14.gif"></li>
+                <li v="14"><img title="委屈" src="img/face/xmface_15.gif"></li>
+                <li v="15"><img title="鄙视" src="img/face/xmface_16.gif"></li>
+                <li v="16"><img title="瞌睡" src="img/face/xmface_17.gif"></li>
+                <li v="17"><img title="偷笑" src="img/face/xmface_18.gif"></li>
+                <li v="18"><img title="胜利" src="img/face/xmface_19.gif"></li>
+                <li v="19"><img title="再见" src="img/face/xmface_20.gif"></li>
+                <li v="20"><img title="牛逼" src="img/face/xmface_21.gif"></li>
+                <li v="21"><img title="开心" src="img/face/xmface_22.gif"></li>
+                <li v="22"><img title="鼓掌" src="img/face/xmface_23.gif"></li>
+                <li v="23"><img title="我晕" src="img/face/xmface_24.gif"></li>
+                <li v="24"><img title="握手" src="img/face/xmface_25.gif"></li>
+                <li v="25"><img title="找打" src="img/face/xmface_26.gif"></li>
+                <li v="26"><img title="吃饭" src="img/face/xmface_27.gif"></li>
+                <li v="27"><img title="得意" src="img/face/xmface_28.gif"></li>
+                <li v="28"><img title="成交" src="img/face/xmface_29.gif"></li>
+                <li v="29"><img title="有礼" src="img/face/xmface_30.gif"></li>
+                <li v="30"><img title="惊吓" src="img/face/xmface_31.gif"></li>
+                <li v="31"><img title="发财" src="img/face/xmface_32.gif"></li>
+                <li v="32"><img title="奋斗" src="img/face/xmface_33.gif"></li>
+                <li v="33"><img title="蛋糕" src="img/face/xmface_34.gif"></li>
+                <li v="34"><img title="鲜花" src="img/face/xmface_35.gif"></li>
+                <li v="35"><img title="干杯" src="img/face/xmface_36.gif"></li>
+                <li v="36"><img title="成交" src="img/face/xmface_37.gif"></li>
+                <li v="37"><img title="欢迎" src="img/face/xmface_38.gif"></li>
+                <li v="38"><img title="再会" src="img/face/xmface_39.gif"></li>
+                <li v="39"><img title="通话" src="img/face/xmface_40.gif"></li>
+            </ul>
+        </div>
+        <div class="hd">
+            <textarea class="input"></textarea>
+            <a class="icon-tools" href="#" title="评分"></a>
+            <a class="icon-face" href="#" title="表情"></a>
+            <a href="#" class="btn btn-primary btn-send" id="btn-send">发送</a>
+        </div>
+    </div>
+</div>
+
+<!-- 评分模块 -->
+<div class="m-mob-score">
+    <p>请为客服人员评分：</p>
+    <ul>
+        <li><span class="icon-star icon-star-0"></span>很满意<i class="icon-check"></i></li>
+        <li class="selected"><span class="icon-star icon-star-1"></span>较好<i class="icon-check"></i></li>
+        <li><span class="icon-star icon-star-2"></span>一般<i class="icon-check"></i></li>
+        <li><span class="icon-star icon-star-3"></span>较差<i class="icon-check"></i></li>
+        <li><span class="icon-star icon-star-4"></span>恶劣<i class="icon-check"></i></li>
+    </ul>
+    <div class="m-mob-btn">
+        <a class="m-mob-btnNo" href="#">取消</a>
+        <a class="m-mob-btnOk" href="#">确定</a>
+    </div>
+</div>
+<div class="masker"></div>
+
+<!-- 留言模块 -->
+<div id="message" style="display:none;">
+    <div class="m-mob-message">
+        <form autocomplete="off">
+            <p>对不起，当前客服人员不在线，请留下您的问题和联系方式，客服会在上线后第一时间回复您！</p>
+            <input class="tbox" type="text" placeholder="联系电话或手机号码（必填）" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+            <p>请留言：</p>
+            <textarea class="abox" placeholder="我有问题想要咨询，请与我联系！"></textarea>
+            <p class="m-mob-btn"><a href="#" class="m-mob-btnOk">提交留言</a></p>
+        </form>
+        <small>Powered by <a href="http://www.xiaoma.com/">XiaoMa</a></small>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript">
+addListener = function(){
+	// 点击表情区域以外地方自动关闭表情框或者右上角切换标签以外的地方自动隐藏标签
+	$(document).bind('click', function(e){
+		if(!$(e.target).closest("a").is(".icon-face") && $('.m-mob-face').hasClass('m-mob-faceOn')){
+			$('.m-mob-face').removeClass('m-mob-faceOn');
+		}
+		if(!$(e.target).closest("div").is(".m-mob-menu") && !$('.m-mob-submenu').is(':hidden')){
+			$('.m-mob-submenu').slideToggle('slow');
+		}
+	});
+	$(window).resize(function (){
+		if ($('.m-mob-score').hasClass('m-mob-scoreOn')){
+			scoreResize();
+		}
+	});
+}
+addListener();
+function scoreResize(){
+	var top = window.innerHeight - $('.m-mob-score').outerHeight(),
+		left = window.innerWidth - $('.m-mob-score').outerWidth();
+	top = top < 0 ? 0 : top / 2;
+	left = left < 0 ? 0 : left / 2;
+	$('.m-mob-score').css({'top': top, 'left': left});
+}
+// 表情框的显示和隐藏
+$('.icon-face').click(function () {
+	if ($('.m-mob-face').hasClass('m-mob-faceOn')){
+		$('.m-mob-face').removeClass('m-mob-faceOn');
+	}else {
+		$('.m-mob-face').addClass('m-mob-faceOn');
+	}
+});
+// 评分功能
+$('.icon-tools').click(function(){
+	$('.m-mob-score').addClass('m-mob-scoreOn');
+	$('.masker').addClass('masker-show');
+	scoreResize();
+});
+// 评分框取消按钮
+$('.m-mob-score .m-mob-btnNo,.masker').click(function(){
+	$('.m-mob-score').removeClass('m-mob-scoreOn');
+	$('.masker').removeClass('masker-show');
+});
+// 评分框确定按钮
+$('.m-mob-score .m-mob-btnOk').click(function () {
+	$('.m-mob-score').removeClass('m-mob-scoreOn');
+	$('.masker').removeClass('masker-show');
+});
+// 评分选择时
+$('.m-mob-score ul li').click(function () {
+	$('.m-mob-score ul li').removeClass('selected');
+	$(this).addClass('selected');
+});
+// 下拉菜单
+$(".m-mob-menuOn").click(function(){
+	$('.m-mob-submenu').slideToggle('slow');
+})
+// 菜单切换
+var nowLabel = 'worker'; // 当前标签(默认人工客服)
+$('.m-mob-menu a').click(function(){
+	var label = $(this).attr('label');
+	if (label == nowLabel) {
+		return ;
+	}
+	nowLabel = label;
+	switch (label) {
+		case 'worker':
+			window.location.reload();
+			break;
+		case 'message':
+			$('#chat').hide();
+			$('#message').show();
+			$(".m-mob-menuOn").text("留言");
+			$(".m-mob-tit").text("请填写留言信息");
+			$(".m-mob-submenu").hide();
+			break;
+		default:
+			break;
+	}
+});
+</script>
+</body>
+</html>
