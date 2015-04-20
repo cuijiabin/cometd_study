@@ -83,7 +83,7 @@ public class UserController {
 				User user = userService.login(loginName, password);
 				if (user != null) {
 					session.setAttribute(CacheName.USER, user);
-					CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
+//					CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
 					model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
 					Thread thread = new AddLoginLogThread(user.getId(),
 							CookieUtil.getIpAddr(request));

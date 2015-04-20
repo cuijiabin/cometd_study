@@ -132,16 +132,14 @@ public class CustomerService {
 	 * @throws Exception
 	 */
 	public Customer genCustomer(HttpServletRequest request) throws Exception {
+		
 		Cookie cookie = CookieUtil.getCustomerCookie(request);
 		String ip = CookieUtil.getIpAddr(request);
-		Customer customer = customerDaoImpl.getByIp(ip);
+		Customer customer = null;//= customerDaoImpl.getByIp(ip);
 
 		Long customerId = null;
-		if (customer != null) {
-			customerId = customer.getId();
-		} else if (customer == null && cookie != null) {
-			String id = DesUtil.decrypt(cookie.getValue(), SystemConfiguration
-					.getInstance().getSecretKey());
+		 if (cookie != null) {
+			String id = DesUtil.decrypt(cookie.getValue(), SystemConfiguration.getInstance().getSecretKey());
 			customerId = Long.valueOf(id);
 
 		} else if (customer == null && cookie == null) {

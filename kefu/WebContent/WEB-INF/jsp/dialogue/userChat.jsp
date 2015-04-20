@@ -161,8 +161,12 @@
 			var style = engine.getConnector().workStyle;
 			style = style === 'stream'?'长连接':'长轮询';
 			console.log("连接方式style: "+ style);
+			var str = ['<div class="r-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>'];
+			logbox.innerHTML += str.join('');
 		},
 		stop : function(cause, url, cId, engine) {
+			var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
+			logbox.innerHTML += str.join('');
 		},
 		dialogue : function(data, engine) {
 			switch (data.type) {
@@ -228,7 +232,7 @@
 			var ccnId = '"'+dQuene.ccnId+'"';
 			var customer = dQuene.customer;
 			
-			html += "<li id='li:"+dQuene.ccnId+"'><p>客户："+customer.id
+			html += "<li id='li:"+dQuene.ccnId+"' class='on'><p>客户："+customer.id
 			+"</p><p><a href='javascript:changeTitle("+customer.id+","+ccnId+");'>"
 			+customer.ip+"</a></p><p>上线时间："+getTimeByPattern(dQuene.enterTime)+"</p><span class='u-close'>x</span></li>";
 		}
@@ -239,8 +243,10 @@
 		
 		console.log("与客户"+customerId+"对话中");
 		
-		$("li[id^='li:']").attr("class", null);
-		$("#li:"+ccnId).attr("class", "on");
+		$("li[id^='li:']").attr("class", "on");
+		$("#li:"+ccnId).addClass("on");
+		console.log("修改class样式"+"#li:"+ccnId);
+		console.log("修改class后："+$("#li:"+ccnId).html());
 		
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
@@ -256,8 +262,8 @@
 		
 		console.log("收到通知后刷新列表，与客户"+customer.id+"对话中");
 		
-		//$("li[id^='li:']").attr("class", null);
-		$("#li:"+ccnId).attr("class", "on");
+		$("#li:"+ccnId).addClass("on");
+		console.log("修改class后："+$("#li:"+ccnId).html());
 		
 		$("#contentTitle").html("与客户"+customer.id+"对话中");
 		$("#currentCcnId").val(ccnId);
@@ -300,7 +306,12 @@
 		data = data.obj
 		console.log("收到消息了！");
 		var id = data.id;
-		console.log(id);
+		console.log(id);7
+		
+		if(id == JS.Engine.getId()){
+			id = $("#currentCcnId").val();
+		}
+		//创建隐藏div
 		createHiddenDiv(id);
 		var name = data.name || '';
 		name = name.HTMLEncode();
@@ -312,8 +323,6 @@
 		checkLogCount();
 		$("#"+id).append(str.join(''));
 		
-		//logbox.innerHTML = $("#"+id).html();
-		//$("#currentCcnId").val(id);
 		switchDialogue(id);
 		lastTalkId = id;
 		moveScroll();
@@ -324,6 +333,7 @@
 		$("#currentCcnId").val(ccnId);
 	}
 	
+	//创建隐藏div
 	function createHiddenDiv(ccnId){
 		if ($("#"+ccnId).length > 0){ 
 			return;

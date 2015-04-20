@@ -114,6 +114,9 @@ public class FunctionService {
 
 	public List checkFuncOne(List<Function> list, String codes) {
 		List listFunc = new ArrayList();
+		if(list == null){
+			return listFunc;
+		}
 		for (Function func : list) {
 			int count = codes.indexOf(","+func.getCode()+",");
 			if(count>=0){

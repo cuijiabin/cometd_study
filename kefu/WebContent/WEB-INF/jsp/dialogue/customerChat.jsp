@@ -1,8 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 <html>
@@ -39,6 +35,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
+	                            <c:forEach var="dialogue" items="${dialogueList}">
+	                              <p class="r-visitor">${dialogue.customerId}&nbsp;</p>
+	                              <p class="r-visitor-txt"></p>
+	                            </c:forEach>
                             </div>
                             <div class="u-operate">
                                 <div class="u-operatebar c-bg">
@@ -171,11 +171,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var style = engine.getConnector().workStyle;
 					style = style === 'stream'?'长连接':'长轮询';
 					console.log("style: "+ style);
-					var str = ['<p class="r-welcome">※ 已建立链接</p>'];
+					var str = ['<div class="r-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>'];
 					logbox.innerHTML += str.join('');
 				},
 				stop : function(cause, url, cId, engine) {
-					var str = ['<p class="r-welcome">※连接中断</p>'];
+					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
 				},
 				dialogue : function(data, engine) {
@@ -184,7 +184,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						onMessage(data);
 						break;
 					case 'on_open': // 上线
-						onOpen(data.obj);
+						onOpen(data);
 						break;
 					case 'on_close': // 下线
 						onLeft(data);
@@ -228,13 +228,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		// 用户上线通知
 		function onOpen(data) {
-			var name = data.cardName || '';
+			var user = data.obj;
+			var name = user.cardName || '';
 			name = name.HTMLEncode();
-			var str = '<p class="r-visitor">成功建立连接</p>';
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			logbox.innerHTML += str;
-			moveScroll();
+			
+			//修改cookie
+			//var cookieValue = data.cookieValue;
+			//console.log("设置cookie"+cookieValue);
+			//setCookie("KF_CUSTOMER_ID", cookieValue,20);  
+		}
+		
+		// 设置Cookie
+		function setCookie(name, value, expireDay) {
+			var exp = new Date();
+			exp.setTime(exp.getTime() + expireDay * 24 * 60 * 60 * 1000);
+			document.cookie = name + "=" + escape(value) + ";expires="
+					+ exp.toGMTString();
 		}
 		// 用户下线通知
 		function onLeft(data) {

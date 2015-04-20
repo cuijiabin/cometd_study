@@ -3,6 +3,7 @@ package com.test;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,14 @@ public class DialogueDetailServiceTest {
 	public void batchDelTest() throws Exception{
 		List<Long> ids = Arrays.asList(23L,24L,25L,26L,27L);
 		dialogueDetailService.batchDelete(ids);
+		
+	}
+	
+	@Test
+	public void getLastRecordsByCustomerId() throws Exception{
+		
+		List<DialogueDetail> list = dialogueDetailService.getLastRecordsByCustomerId(100000030L);
+		
+		System.out.println(list.toString());
 	}
 }

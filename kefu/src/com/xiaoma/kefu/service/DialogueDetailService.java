@@ -30,4 +30,10 @@ public class DialogueDetailService {
 		
 		return dialogueDetailDao.batchDelete(DialogueDetail.class, idList);
 	}
+	
+	public List<DialogueDetail> getLastRecordsByCustomerId(Long customerId){
+		
+		return dialogueDetailDao.getLastRecordsByCustomerId(customerId);
+		
+	}
 }
