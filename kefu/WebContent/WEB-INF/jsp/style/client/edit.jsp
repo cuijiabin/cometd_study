@@ -28,12 +28,6 @@
 </div>
 
 <div class="g-cnt">
-    <!-- 查询条件 -->
-    <div class="m-query f-mar10">
-        <div class="m-query-hd">
-        	<button type="button" class="btn btn-primary btn-small" id="btn_save">保存</button>
-        </div>
-    </div>
     
     <div class="f-padd10">
     	<!-- 表格有边框 -->
@@ -99,6 +93,12 @@
 	            </tbody>
 	        </table>
         </form>
+    </div>
+    
+    <div class="m-query f-mar10">
+        <div class="m-query-hd">
+        	<button type="button" class="btn btn-primary btn-small" id="btn_save">保存</button>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>

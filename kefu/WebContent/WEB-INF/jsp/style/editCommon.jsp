@@ -55,12 +55,12 @@
                 <tr>
                     <td class="c-wd150">手机端客服图标</td>
                     <td class="f-txtl"><img src="" alt="" /></td>
-                    <td class="c-wd120"><button type="button" class="btn btn-small">设置</button></td>
+                    <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editServiceYD(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">手机端对话邀请框</td>
                     <td class="f-txtl"><img src="" alt="" /></td>
-                    <td class="c-wd120"><button type="button" class="btn btn-small">设置</button></td>
+                    <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editInviteYD(${style.id})" >设置</button></td>
                 </tr>
             </tbody>
         </table>
@@ -88,17 +88,32 @@ function editClient(styleId){
 
 //客服图标 PC
 function editServicePC(styleId){
-	var url = '/serviceIcon/editPC.action?styleId='+styleId;
+	var url = '/serviceIcon/edit.action?styleId='+styleId+'&deviceTypeId=1';
 	window.location = url;
 	return;
 }
 
 //对话邀请框设置 PC
 function editInvitePC(styleId){
-	var url = '/inviteIcon/editPC.action?styleId='+styleId;
+	var url = '/inviteIcon/edit.action?styleId='+styleId+'&deviceTypeId=1';
 	window.location = url;
 	return;
 }
+
+//客服图标 移动
+function editServiceYD(styleId){
+	var url = '/serviceIcon/edit.action?styleId='+styleId+'&deviceTypeId=2';
+	window.location = url;
+	return;
+}
+
+//对话邀请框设置 移动
+function editInviteYD(styleId){
+	var url = '/inviteIcon/edit.action?styleId='+styleId+'&deviceTypeId=2';
+	window.location = url;
+	return;
+}
+
 
 </script>
 </body>

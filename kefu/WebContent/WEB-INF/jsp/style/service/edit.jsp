@@ -29,17 +29,13 @@
 </div>
 
 <div class="g-cnt">
-    <div class="m-query f-mar10">
-        <div class="m-query-hd">
-        	<button type="button" class="btn btn-primary btn-small" id="btn_save">保存</button>
-        </div>
-    </div>
     
     <div class="f-padd10">
     	<!-- 表格有边框 -->
     	<form id="mainForm" enctype="multipart/form-data" method="post">
     		<input type="hidden" id="id" name="id" value="${serviceIcon.id }"/>
     		<input type="hidden" id="styleId" name="styleId" value="${serviceIcon.styleId }" />
+    		<input type="hidden" id="deviceType" name="deviceType" value="${serviceIcon.deviceType }" />
 	        <table class="table table-bordered m-table c-wdat">
 	            <tbody>
 	                <tr>
@@ -123,6 +119,13 @@
 	        </table>
         </form>
     </div>
+    
+    <div class="m-query f-mar10">
+        <div class="m-query-hd">
+        	<button type="button" class="btn btn-primary btn-small" id="btn_save">保存</button>
+        </div>
+    </div>
+    
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -179,7 +182,7 @@ $('#btn_save').on('click',function(){
 	    }
 	}
 	
-	var path = "/serviceIcon/savePC.action";  
+	var path = "/serviceIcon/save.action";  
     $('#mainForm').attr("action", path).submit();
 });
 

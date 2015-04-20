@@ -19,11 +19,11 @@ public class CacheFactory {
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");
 				obj=functionService.userFuncs((Integer)key);
-			}else if(cacheName.equals(CacheName.USERFUNCTION)){
+			}else if(cacheName.equals(CacheName.SYSFUNCTIONONE)){
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");
 				obj=functionService.findFuncOne();
-			}else if(cacheName.equals(CacheName.USERFUNCTION)){
+			}else if(cacheName.equals(CacheName.FUNCTIONTREEBYID)){
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");
 				obj=functionService.findTree((Integer)key);
