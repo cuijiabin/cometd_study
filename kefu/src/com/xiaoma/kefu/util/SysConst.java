@@ -79,6 +79,8 @@ public class SysConst {
 	public enum StylePicName{
 		访问端右上("clientYs"),访问端右下("clientYx")
 		,客服图标PC在线("servicePCon"),客服图标PC离线("servicePCoff")
+		,客服图标移动在线("serviceYDon"),客服图标移动离线("serviceYDoff")
+		,邀请框PC("invitePC"),邀请框移动("inviteYD")
 		,元素背景图("group");
 		private String value;
 		StylePicName(String value){

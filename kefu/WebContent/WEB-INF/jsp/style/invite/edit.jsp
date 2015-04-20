@@ -35,6 +35,7 @@
     	<form id="mainForm" enctype="multipart/form-data" method="post">
     		<input type="hidden" id="id" name="id" value="${inviteIcon.id }"/>
     		<input type="hidden" id="styleId" name="styleId" value="${inviteIcon.styleId }" />
+    		<input type="hidden" id="deviceType" name="deviceType" value="${inviteIcon.deviceType }" />
         	<table class="table table-bordered m-table c-wdat">
 	            <tbody>
 	                <tr>
@@ -101,13 +102,13 @@ $('#btn_save').on('click',function(){
 		$.dialog.alert("垂直定位像素请填写数字!");
 		return;
 	}
-	var path = "/inviteIcon/savePC.action";  
+	var path = "/inviteIcon/save.action";  
     $('#mainForm').attr("action", path).submit();
 });
 
 //编辑元素
 function editElement(id){
-	var url = '/inviteElement/editPC.action?inviteId='+id;
+	var url = '/inviteElement/edit.action?inviteId='+id;
 	window.location = url;
 	return;
 }

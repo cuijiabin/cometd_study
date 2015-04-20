@@ -58,6 +58,7 @@
 				<td class="c-wd100">自定义链接</td>
 				<td class="f-txtl">
 					<xiaoma:select name="openType" dictName="d_ele_openType" value="${inviteElement.openType }" />
+					<input class="c-wd300" type="text" id="openUrl" name="openUrl" value="${inviteElement.openUrl }" maxlength="100" placeholder="http://" />
 				</td>
 			</tr>
 		</tbody>
@@ -107,7 +108,7 @@ function saveDetail(){
 	    	return;
 	    }
 	}
-	var path = "/inviteElement/savePC.action";  
+	var path = "/inviteElement/save.action";  
     $('#mainForm').attr("action", path).submit();
 }
 

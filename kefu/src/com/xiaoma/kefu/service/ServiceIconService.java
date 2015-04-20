@@ -87,10 +87,10 @@ public class ServiceIconService {
             
             //路径+文件名
             String tempPath = savePath+"/"+saveName;
-            if(type.equals(StylePicName.客服图标PC在线)){
-            	serviceIcon.setOnlinePic(tempPath+extensionName);//设置路径
-            }else if(type.equals(StylePicName.客服图标PC离线)){
-            	serviceIcon.setOfflinePic(tempPath+extensionName);//设置路径
+            if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
+            	serviceIcon.setOnlinePic(tempPath+extensionName);//在线
+            }else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
+            	serviceIcon.setOfflinePic(tempPath+extensionName);//离线
             }
             
             //保存文件

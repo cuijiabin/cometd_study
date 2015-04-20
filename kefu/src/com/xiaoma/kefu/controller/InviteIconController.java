@@ -11,12 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.InviteIcon;
-import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
@@ -45,21 +43,30 @@ public class InviteIconController {
 	* @Description: TODO
 	* @param model
 	* @param styleId
+	* @param deviceTypeId 1=PC 2=移动
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	@RequestMapping(value = "editPC.action", method = RequestMethod.GET)
-	public String editPC(Model model,@RequestParam Integer styleId) {
+	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
+	public String edit(Model model,Integer styleId,Integer deviceTypeId) {
 		try {
-			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
-//			String offUrl = getViewPath(serviceIcon, StylePicName.客服图标PC离线);
+			InviteIcon inviteIcon;
+			String picUrl;
+			if(deviceTypeId==1){
+				inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
+				picUrl = getViewPath(inviteIcon, StylePicName.邀请框PC);
+			}else{
+				inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.移动);
+				picUrl = getViewPath(inviteIcon, StylePicName.邀请框移动);
+			}
 			List<DictItem> dict = DictMan.getDictList("d_location_model");
 			model.addAttribute("inviteIcon", inviteIcon);
+			model.addAttribute("picUrl", picUrl);
 			model.addAttribute("dict", dict);
-			return "/style/invite/editPC";
+			return "/style/invite/edit";
 		} catch (Exception e) {
-			logger.error("editPC"+styleId,e);
+			logger.error("edit"+styleId+",deviceTypeId="+deviceTypeId,e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -69,60 +76,57 @@ public class InviteIconController {
 	 * 保存
 	* @Description: TODO
 	* @param model
-	* @param customer
+	* @param inviteIcon
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	@RequestMapping(value = "savePC.action", method = RequestMethod.POST)
-	public String savePC(Model model,
+	@RequestMapping(value = "save.action", method = RequestMethod.POST)
+	public String save(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
 //			//补充字段
 			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
 			inviteIcon.setCreateDate(oldModel.getCreateDate());
-			inviteIcon.setDeviceType(oldModel.getDeviceType());
+//			inviteIcon.setDeviceType(oldModel.getDeviceType());
 			inviteIcon.setTruePic(oldModel.getTruePic());
 			inviteIcon.setButtonId(oldModel.getButtonId());
 			inviteIcon.setUpdateDate(new Date());
 			inviteIconService.update(inviteIcon);
 		} catch (Exception e) {
-			logger.error("savePC"+inviteIcon.getId(), e);
+			logger.error("save"+inviteIcon.getId(), e);
 			return "error500";
 		}
-		return "redirect:/inviteIcon/editPC.action?styleId="+inviteIcon.getStyleId(); 
+		return "redirect:/inviteIcon/edit.action?styleId="+inviteIcon.getStyleId()
+				+"&deviceTypeId="+inviteIcon.getDeviceType(); 
 	}
 	
 	/**
 	 * 缩略图展示的路径
 	* @Description: TODO
-	* @param serviceIcon
+	* @param inviteIcon
 	* @param type
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月15日
 	 */
-	private String getViewPath(ServiceIcon serviceIcon,StylePicName type) {
+	private String getViewPath(InviteIcon inviteIcon,StylePicName type) {
 		String extensionName = "";
-		if(type.equals(StylePicName.客服图标PC在线)){
-			String fileName = serviceIcon.getOnlinePic();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}else if(type.equals(StylePicName.客服图标PC离线)){
-			String fileName = serviceIcon.getOfflinePic();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}
+		String fileName = inviteIcon.getTruePic();
+		if(StringUtils.isBlank(fileName)) return extensionName;
+		extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
+		
 		return 
 //				SystemConfiguration.getInstance().getPicPrefix() //前缀
 				DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
-				+ "/"+serviceIcon.getStyleId()	//风格id
+				+ "/"+inviteIcon.getStyleId()	//风格id
 				+ "/"+type.getCode()	//类别
-				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀
+//				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀	这里暂时不需要缩略图
 				+ extensionName	//后缀
 				;
 	}  
 	
 	
 }
+

@@ -23,7 +23,7 @@
         <li><i>&gt;</i><a href="#">系统设置</a></li>
         <li><i>&gt;</i><a href="/style/find.action">风格管理</a></li>
         <li><i>&gt;</i><a href="/style/editCommon.action?styleId=${inviteIcon.styleId }">界面样式设置</a></li>
-        <li><i>&gt;</i><a href="/inviteIcon/editPC.action?styleId=${inviteIcon.styleId }">对话邀请框设置</a></li>
+        <li><i>&gt;</i><a href="/inviteIcon/edit.action?styleId=${inviteIcon.styleId }&deviceTypeId=${inviteIcon.deviceType}">对话邀请框设置</a></li>
         <li><i>&gt;</i>样式设置</li>
     </ul>
 </div>
@@ -62,7 +62,7 @@
                     </td>
                     <td>
                     	<div id="table_data">
-							<jsp:include page="elementDetailPC.jsp"></jsp:include>
+							<jsp:include page="elementDetail.jsp"></jsp:include>
 						</div>
                     </td>
                 </tr>
@@ -86,7 +86,7 @@
 
 //编辑元素
 function editDetail(id,sortId){
-	var url = '/inviteElement/editDetailPC.action';
+	var url = '/inviteElement/editDetail.action';
 	$.ajax({
 	    type: "get",
 	    url: url,
@@ -116,7 +116,7 @@ function addEle(){
 function addCallback(id,newName){
 	$.dialog({id:'addName'}).close();
 	var inviteId = '${inviteIcon.id}';
-	var url = '/inviteElement/editPC.action?inviteId='+inviteId+'&id='+id;
+	var url = '/inviteElement/edit.action?inviteId='+inviteId+'&id='+id;
 	window.location = url;
 }
 
@@ -132,7 +132,7 @@ function delDetail(id){
 		    success: function (data) {
 		    	if(data.result==0){
 		    		$.dialog.alert(data.msg,function(){
-		    			var url = '/inviteElement/editPC.action?inviteId='+'${inviteIcon.id}';
+		    			var url = '/inviteElement/edit.action?inviteId='+'${inviteIcon.id}';
 			    		window.location = url;
 		    		});
 		    	}else{
