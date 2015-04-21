@@ -24,7 +24,7 @@ import com.xiaoma.kefu.util.Ajax;
 **********************************
  */
 @Controller
-@RequestMapping(value = "charRecordField")
+@RequestMapping(value = "chatRecordField")
 public class ChatRecordFieldController {
 
 	private Logger logger = Logger.getLogger(ChatRecordFieldController.class);

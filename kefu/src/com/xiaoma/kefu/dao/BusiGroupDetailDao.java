@@ -42,5 +42,14 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	 */
 	public BusiGroupDetail getByModel(BusiGroupDetail busiGroupDetail);
 	
+	/**
+	 * 更新是否 接待客户
+	* @param detail
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public int updateIsRece(BusiGroupDetail detail);
+	
 	
 }

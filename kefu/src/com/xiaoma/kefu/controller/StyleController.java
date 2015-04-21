@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,8 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.Style;
-import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.BusiGroupService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
@@ -33,8 +35,6 @@ public class StyleController {
 	private StyleService styleService;
 	@Autowired
 	private BusiGroupService busiGroupService;//业务分组
-	@Autowired
-	private BusiGroupDetailService busiGroupDetailService;//业务分组明细
 	
 	
 	/**
@@ -117,7 +117,7 @@ public class StyleController {
 	 * 保存风格
 	* @Description: TODO
 	* @param model
-	* @param customer
+	* @param style
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
@@ -164,6 +164,30 @@ public class StyleController {
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
+	}
+	
+	/**
+	 * 校验风格下 是否存在 业务分组
+	* @Description: TODO
+	* @param model
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月13日
+	 */
+	@RequestMapping(value = "checkHasGroup.action", method = RequestMethod.GET)
+	public String checkHasGroup(Model model, Integer styleId) {
+		try {
+			List<BusiGroup> groupList = busiGroupService.findByStyleId(styleId);
+			if (groupList!=null && groupList.size()>0) {
+				model.addAttribute("result", Ajax.JSONResult(0, "成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "请先创建业务分组!"));
+			}
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "失败!"));
+		}
+		return "resultjson";
 	}
 	
 }

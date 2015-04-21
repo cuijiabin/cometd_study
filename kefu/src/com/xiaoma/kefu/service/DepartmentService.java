@@ -179,12 +179,12 @@ public class DepartmentService {
 	/**
 	 * 查询所有部门,及部门下在职员工
 	 * (用于树形展示)
-	* @param onlyRoleId	如果只需要挂了某个角色的用户,则传次参数, 如果需要全部则传null
+	* @param onlyRoleId	如果只需要挂了某个角色的用户,则传此参数, 如果需要全部则传null
 	* @return	json格式 
-	* 			id:1 	部门或用户id
-	* 			pId:0 	部门pId=0, 用户pId=部门id
-	* 			name:xx	部门或用户name,用户取cardName
-	* 			type:1	用户type=1,部门type=2
+	* 			id 		部门或用户id;
+	* 			pId 	部门pId=0, 用户pId=部门id;
+	* 			name	部门或用户name,用户取cardName;
+	* 			type	用户type=1,部门type=2
 	* @Author: wangxingfei
 	* @Date: 2015年4月21日
 	 */
@@ -201,7 +201,7 @@ public class DepartmentService {
 			List<User> userList = userDaoImpl.getUsertByDeptId(dept.getId());
 			for(User user : userList){
 				if(onlyRoleId!=null){//如果需要过滤角色
-					if(user.getRoleId().equals(onlyRoleId.getCode())){//
+					if(user.getRoleId().equals(onlyRoleId.getCode())){
 						JSONObject userJson = new JSONObject();
 						userJson.element("id", user.getId()).element("pId", dept.getId()).element("name", user.getCardName()).element("type", "1");
 						json.add(userJson);

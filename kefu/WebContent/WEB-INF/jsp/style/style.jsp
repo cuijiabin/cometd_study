@@ -96,6 +96,30 @@ function fenzu(id){
 	return;
 }
 
+//业务分流
+function fenliu(id){
+	$.ajax({
+		type : 'get',
+		url :  "/style/checkHasGroup.action",
+		dataType : 'json',
+		data: {"styleId":id} ,
+		async: true,//true异步, false 同步
+	 	success: function (data) {
+	    	if(data.result==0){
+	    		var url = '/busiGroupDetail/editDetail.action?styleId='+id;
+	    		window.location = url;
+	    		return;
+	    	}else{
+	    		$.dialog.alert(data.msg);
+	    		return;
+	    	}
+	    },
+	    error: function (msg) {
+	    	$.dialog.alert(msg);
+	    }
+	});
+}
+
 //设置
 function editCommon(id){
 	var url = '/style/editCommon.action?styleId='+id;

@@ -250,7 +250,7 @@ function updateCusl(customerId,dialogueId){
 
 //配置显示字段
 function editDisplay(){
-	$.dialog({content:'url:/charRecordField/edit.action',
+	$.dialog({content:'url:/chatRecordField/edit.action',
 		id: 'editDisplay',
 		width: 650,height: 400,
 		lock:true, 

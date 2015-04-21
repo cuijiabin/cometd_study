@@ -51,24 +51,30 @@ var W = api.opener;//获取父页面对象
 
 //先检验,后保存
 $('#btn_save').on('click',function(){
-	$.ajax({
-	    type: "post",
-	    url: "/style/validate.action",
-	    dataType: "json",
-	    data : $('#mainForm').serialize(),
-// 	    contentType: "application/json; charset=utf-8",
-	    async:false,
-	    success: function (data) {
-	    	if(data.result==0){
-	    		save();
-	    	}else{
-	    		W.$.dialog.alert(data.msg);
-	    	}
-	    },
-	    error: function (msg) {
-	    	W.$.dialog.alert(msg);
-	    }
-	});
+	if($.trim($("#name").val()) == ''){
+		$.dialog.alert('名称不能为空!',function(){
+			return false;
+		});
+	}else{
+		$.ajax({
+		    type: "post",
+		    url: "/style/validate.action",
+		    dataType: "json",
+		    data : $('#mainForm').serialize(),
+//	 	    contentType: "application/json; charset=utf-8",
+		    async:false,
+		    success: function (data) {
+		    	if(data.result==0){
+		    		save();
+		    	}else{
+		    		W.$.dialog.alert(data.msg);
+		    	}
+		    },
+		    error: function (msg) {
+		    	W.$.dialog.alert(msg);
+		    }
+		});
+	}
     return false;
 });
 
