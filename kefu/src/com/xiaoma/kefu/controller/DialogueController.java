@@ -34,7 +34,6 @@ import com.xiaoma.kefu.util.DesUtil;
 @Controller
 @RequestMapping(value = "dialogue")
 public class DialogueController {
-
 	@Autowired
 	private DialogueService dialogueService;
 	
@@ -129,6 +128,14 @@ public class DialogueController {
 		response.addCookie(cookie);
 		
 		model.addAttribute("customer", customer);
+		
+		//留言框生成规则    --------------开始
+		model.addAttribute("reply",dialogueService.findReplyWayList());
+		model.addAttribute("message",dialogueService.findMessageObject());
+		
+		//获取客服部人员列表
+		model.addAttribute("userList",dialogueService.findReplyWayList());
+		//留言框生成规则   ---------------结束
 
 		return "/dialogue/customerChat";
 	}

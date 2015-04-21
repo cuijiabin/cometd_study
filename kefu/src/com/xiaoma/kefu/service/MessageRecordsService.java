@@ -94,5 +94,13 @@ public class MessageRecordsService {
 	public MessageRecords findById(Integer id) {
 		return messageRecordsDaoImpl.findById(MessageRecords.class, id);
 	}
+	/***
+	 * 添加新留言
+	 * @param mr
+	 * @return
+	 */
+	public Integer add(MessageRecords mr) {
+		return (Integer)messageRecordsDaoImpl.add(mr);
+	}
 
 }

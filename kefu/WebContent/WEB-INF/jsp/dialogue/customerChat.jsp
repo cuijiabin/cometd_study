@@ -83,18 +83,19 @@
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复方式：</label>
                                         <div class="u-subsec">
-                                            <label><input type="radio" name="mode" />网站</label>
-                                            <label><input type="radio" name="mode" />邮箱</label>
-                                            <label><input type="radio" name="mode" />短信</label>
+                                        	<c:forEach varStatus="status" items="${reply}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> name="reply" value="${d.itemCode}" />${ d.itemName }</label>
+                                       		</c:forEach>
                                         </div>
                                     </div>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复对象：</label>
                                         <div class="u-subsec">
-                                            <label><input type="radio" name="object" />公司</label>
-                                            <label><input type="radio" name="object" />部门/员工</label>
+                                        	<c:forEach varStatus="status" items="${message}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="message" value="${d.itemCode}" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                       		</c:forEach>
                                         </div>
-                                        <select class="c-wd80">
+                                        <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
                                             <option selected="selected">全部部门</option>
                                             <option value="客服部">客服部</option>
                                             <option value="留学部">留学部</option>
@@ -389,6 +390,15 @@
 			//$.expBlock.getRemoteExp(url);
 			
 		})
+		
+		function changeMessage(obj){
+			if(obj.id == 'messageRadio')
+				$("#teacher").hide();
+			else
+				$("#teacher").show();
+		}
+		
+		
 </script> 
 
 </body>

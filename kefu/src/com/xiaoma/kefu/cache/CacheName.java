@@ -32,4 +32,12 @@ public class CacheName {
 	//根据父节点id左侧树状
 	public static final String FUNCTIONTREEBYID="functionTreeById";
 	
+	
+	
+	//回复方式(生成留言框)
+	public static final String REPLYWAY="REPLYWAY";
+	//留言对象(生成留言框)
+	public static final String MESSAGETO="MESSAGETO";
+	
+	
 }

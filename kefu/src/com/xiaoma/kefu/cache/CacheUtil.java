@@ -32,7 +32,7 @@ public class CacheUtil {
 	 */
 	public static String getCacheName(Object cacheName, Object value) {
 //		return Md5Util.MD5Encode(new StringBuilder((String) cacheName).append(value).toString());
-		return new StringBuilder((String) cacheName).append(value).toString();
+		return new StringBuilder((String) cacheName).append(":").append(value).toString();
 	}
 	/**
 	 * 转换缓存时间格式
