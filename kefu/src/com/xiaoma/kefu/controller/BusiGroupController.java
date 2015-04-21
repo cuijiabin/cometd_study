@@ -3,7 +3,6 @@ package com.xiaoma.kefu.controller;
 import java.util.List;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.BusiGroupDetail;
-import com.xiaoma.kefu.model.Department;
-import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.BusiGroupService;
 import com.xiaoma.kefu.service.DepartmentService;
-import com.xiaoma.kefu.service.FunctionService;
-import com.xiaoma.kefu.service.StyleService;
-import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.SysConst.RoleNameId;
 
@@ -41,18 +35,11 @@ public class BusiGroupController {
 	private Logger logger = Logger.getLogger(BusiGroupController.class);
 
 	@Autowired
-	private StyleService styleService;
-	@Autowired
 	private BusiGroupService busiGroupService;//业务分组
 	@Autowired
 	private BusiGroupDetailService busiGroupDetailService;//业务分组明细
 	@Autowired
 	private DepartmentService deptService;//部门
-	@Autowired
-	private UserService userService;//用户
-	
-	@Autowired
-	private FunctionService funcService;
 	
 	
 	/**
@@ -74,7 +61,7 @@ public class BusiGroupController {
 				detailList = busiGroupDetailService.findByGroupId(groupList.get(0).getId());
 			}
 			//树
-			JSONArray jsonTree = getDeptUserJsonTree();
+			JSONArray jsonTree = deptService.getDeptUserTree(RoleNameId.员工);
 			
 			model.addAttribute("jsonTree", jsonTree.toString());
 			model.addAttribute("groupList", groupList);
@@ -85,34 +72,6 @@ public class BusiGroupController {
 			logger.error("StyleController.viewGroup ERROR",e);
 			return "/error500";
 		}
-	}
-	
-	/**
-	 * 封装部门和部门下员工 为json对象
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月21日
-	 */
-	private JSONArray getDeptUserJsonTree() {
-		JSONArray json = new JSONArray();
-		List<Department> deptList = deptService.findDept();
-		for(Department dept : deptList){
-			//封装部门进去
-			JSONObject deptJson = new JSONObject();
-			deptJson.element("id", dept.getId()).element("pId", "0").element("name", dept.getName()).element("type", "2");
-			json.add(deptJson);
-			
-			//查询部门下员工
-			List<User> userList = userService.getResultDept(dept.getId());
-			for(User user : userList){
-				if(user.getRoleId().equals(RoleNameId.员工.getCode())){//如果是员工,才放进树
-					JSONObject userJson = new JSONObject();
-					userJson.element("id", user.getId()).element("pId", dept.getId()).element("name", user.getCardName()).element("type", "1");
-					json.add(userJson);
-				}
-			}
-		}
-		return json;
 	}
 	
 	/**
