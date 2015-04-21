@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.RoleDept;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.SysConst.RoleNameId;
 
 /**
  * 
@@ -129,7 +133,6 @@ public class DepartmentService {
 		return deptDaoImpl.checkDept(dept);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Department> findDept() {
 		
 		return (List<Department>) deptDaoImpl.findDept();
@@ -172,4 +175,45 @@ public class DepartmentService {
 		}
          return null;
 	}
+	
+	/**
+	 * 查询所有部门,及部门下在职员工
+	 * (用于树形展示)
+	* @param onlyRoleId	如果只需要挂了某个角色的用户,则传次参数, 如果需要全部则传null
+	* @return	json格式 
+	* 			id:1 	部门或用户id
+	* 			pId:0 	部门pId=0, 用户pId=部门id
+	* 			name:xx	部门或用户name,用户取cardName
+	* 			type:1	用户type=1,部门type=2
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public JSONArray getDeptUserTree(RoleNameId onlyRoleId){
+		JSONArray json = new JSONArray();
+		List<Department> deptList = findDept();//所有部门
+		for(Department dept : deptList){
+			//封装部门进去
+			JSONObject deptJson = new JSONObject();
+			deptJson.element("id", dept.getId()).element("pId", "0").element("name", dept.getName()).element("type", "2");
+			json.add(deptJson);
+			
+			//查询部门下员工,只查在职状态
+			List<User> userList = userDaoImpl.getUsertByDeptId(dept.getId());
+			for(User user : userList){
+				if(onlyRoleId!=null){//如果需要过滤角色
+					if(user.getRoleId().equals(onlyRoleId.getCode())){//
+						JSONObject userJson = new JSONObject();
+						userJson.element("id", user.getId()).element("pId", dept.getId()).element("name", user.getCardName()).element("type", "1");
+						json.add(userJson);
+					}
+				}else{//全部在职员工
+					JSONObject userJson = new JSONObject();
+					userJson.element("id", user.getId()).element("pId", dept.getId()).element("name", user.getCardName()).element("type", "1");
+					json.add(userJson);
+				}
+			}
+		}
+		return json;
+	}
+	
 }
