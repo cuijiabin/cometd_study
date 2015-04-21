@@ -6,7 +6,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sun.org.apache.xpath.internal.operations.And;
 import com.xiaoma.kefu.dao.MessageTypeDao;
 import com.xiaoma.kefu.model.MessageType;
 

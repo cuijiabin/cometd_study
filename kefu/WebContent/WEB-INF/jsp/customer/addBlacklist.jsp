@@ -32,7 +32,7 @@
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description" /><span id="descriptionInfo" style = "color: red;">*</span></td>
+           <td><input type ="text" id ="description" name="description"  /><span id="descriptionInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
           
@@ -143,10 +143,13 @@ function verificationParam(userData) {
 	}
 
 	var description	 = userData.description;
-	if (description.replace("^[ ]+$", "").length == 0) {
+	if (description.replace(/^ +| +$/g,'')=='') {
 		 alert("阻止原因不得为空！");
 		return false;
 	}
+	
+
+ 
 	return true;
 }
 /*

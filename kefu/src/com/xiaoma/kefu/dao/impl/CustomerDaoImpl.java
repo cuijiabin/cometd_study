@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.formula.functions.Today;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.CustomerDao;
@@ -47,7 +44,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 	public Integer getAllCustomerCount(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean) {
 		Session session = getSession();
 
-		String hql = "select  COUNT(DISTINCT(a.id)) FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		String hql = "select  COUNT(DISTINCT(a.id)) FROM customer a LEFT JOIN dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
 		}else {
@@ -113,7 +110,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 		
 	
 		Session session = getSession();
-		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		String hql = "select a.*,b.* FROM customer a LEFT JOIN dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
 		}else {
@@ -165,7 +162,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 			   String keywords) {
 		
 		Session session = getSession();
-		String hql = "select a.*,b.* FROM Customer a LEFT JOIN Dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
+		String hql = "select a.*,b.* FROM customer a LEFT JOIN dialogue b on a.id=b.customerId  WHERE 1=1 and a.status<>1  ";
 		if(beginDate!=null && endDate!=null){
 			hql +="and  a.createDate BETWEEN '"+ beginDate+" "+"00:00:00"+"' " +"AND"+" '" +endDate+" "+"23:59:59"+"' ";
 		}

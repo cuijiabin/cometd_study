@@ -49,7 +49,6 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 /*
@@ -83,7 +82,7 @@
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-    	var d = $.dialog({id:'blacklist',title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,id:'addBlackList'});
+    	var d = $.dialog({title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,id:'addBlackList'});
  }
 
     /**

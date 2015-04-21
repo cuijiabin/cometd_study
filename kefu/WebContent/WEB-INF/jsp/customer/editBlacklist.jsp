@@ -114,12 +114,14 @@ function updateParam(userData) {
 		 alert("失效时间不得为空！");
 		return false;
 	}
-
+      
+	
 	var description	 = userData.description;
-	if (description.replace("^[ ]+$", "").length == 0) {
+	if (description.replace(/^ +| +$/g,'')=='') {
 		 alert("阻止原因不得为空！");
 		return false;
 	}
+  
 	return true;
 }
 </script>
