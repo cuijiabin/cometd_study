@@ -124,15 +124,29 @@ public class BlacklistController {
 	 * @return
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.POST)
-	public String updateBlacklist(Model model, @ModelAttribute("blacklist")Blacklist blacklist ,String enddate) {
-    
+	public String updateBlacklist( HttpSession session ,Model model, @ModelAttribute("blacklist")Blacklist blacklist ,String enddate) {
 		try {
-
 			Blacklist toUpdateBlacklist = blacklistService.getBlacklistById(blacklist.getId());
 
 			toUpdateBlacklist.setCustomerId(blacklist.getCustomerId());
 			toUpdateBlacklist.setIp(blacklist.getIp());
+			toUpdateBlacklist.setEndDate(blacklist.getEndDate());
             toUpdateBlacklist.setDescription(blacklist.getDescription());
+            
+    		User user = (User) session.getAttribute(CacheName.USER);
+			if (user == null)
+				return "login";
+			 String loginName = user.getLoginName();//获得工号
+			 Integer userId = user.getId();
+			 toUpdateBlacklist.setUserName(loginName);
+			 toUpdateBlacklist.setUserId(userId); 
+            
+			 SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			 Date now =  new Date();
+			 String nowString =  sdf.format(now); //Date型 时间 转换为 String型
+			 Date nowDate = sdf.parse(nowString);
+			 toUpdateBlacklist.setCreateDate(nowDate);
+            
 			boolean isSuccess = blacklistService.updateBlacklist(toUpdateBlacklist);
 
 			if (isSuccess) {
