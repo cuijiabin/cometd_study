@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -517,6 +518,34 @@ public class JedisTalkDao {
 		return (id > 0);
 	}
 
+	// ######################
+	public static Set<String> getOffLineUserSet(){
+		
+		Jedis jedis = JedisDao.getJedis();
+		
+		return jedis.zrange(JedisConstant.OFF_LINE_USER_SET, 0, -1);
+	}
+	public Boolean addOffLineUserSet(String userId){
+		
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.zadd(JedisConstant.OFF_LINE_USER_SET, System.currentTimeMillis(), userId);
+		
+		logger.info("redis zadd key:" + JedisConstant.OFF_LINE_USER_SET +" value: "+ userId);
+
+		return (id > 0);
+	}
+	
+	public Boolean remOffLineUserSet(String userId){
+		
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.zrem(JedisConstant.OFF_LINE_USER_SET, userId);
+		
+		logger.info("redis zrem key:" + JedisConstant.OFF_LINE_USER_SET +" value: "+ userId);
+
+		return (id > 0);
+	}
 
 	// ######################补充服务
 
@@ -574,5 +603,28 @@ public class JedisTalkDao {
 
 	}
 	
+	/**
+	 * 获取所有在线用户（对话框未关闭）
+	 * 
+	 * @return
+	 */
+	public static List<String> getOnlineUserIds(){
+		
+		String keyPattern = JedisConstant.genCcnKey(JedisConstant.USER_TYPE, "*");
+		Jedis jedis = JedisDao.getJedis();
+		Set<String> keys = jedis.keys(keyPattern);
+		
+		return jedis.mget((String[])keys.toArray());
+		
+	}
+	
+	public static List<String> getSwitchList(){
+		List<String> result = getOnlineUserIds();
+		if(CollectionUtils.isEmpty(result)){
+			result = new ArrayList<String>();
+		}
+		result.removeAll(getOffLineUserSet());
+		return result;
+	}
 
 }

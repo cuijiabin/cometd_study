@@ -35,10 +35,13 @@
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
+                            <c:if test="${dialogueList != null}">
 	                            <c:forEach var="dialogue" items="${dialogueList}">
-	                              <p class="r-visitor">${dialogue.customerId}&nbsp;</p>
-	                              <p class="r-visitor-txt"></p>
+	                              <p class="r-visitor">${dialogue.customerId}&nbsp;${dialogue.createDate}</p>
+	                              <p class="r-visitor-txt">${dialogue.content}</p>
 	                            </c:forEach>
+	                            <div class="r-history"><h3>历史记录</h3></div>
+	                        </c:if>
                             </div>
                             <div class="u-operate">
                                 <div class="u-operatebar c-bg">

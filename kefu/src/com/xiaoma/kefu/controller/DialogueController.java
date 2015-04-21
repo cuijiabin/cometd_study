@@ -23,6 +23,7 @@ import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.JedisNameUtil;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
@@ -62,7 +63,21 @@ public class DialogueController {
 	@RequestMapping(value = "chat.action", method = RequestMethod.GET)
 	public String chat(HttpSession session, Model model) {
 
+		List<String> userIds = JedisTalkDao.getOnlineUserIds();
 		return "/dialogue/chat";
+	}
+	
+	/**
+	 * 获取转接用户列表
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "switchList.action", method = RequestMethod.GET)
+	public String switchList(HttpSession session, Model model) {
+		
+		return "/dialogue/switchList";
+		
 	}
 
 	/**
