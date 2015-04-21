@@ -19,10 +19,11 @@
         <tr>
             <td>工号</td>
             <td>姓名</td>
+            <td>工号名片</td>
             <td>身份</td>
-            <td>状态</td>
             <td>部门</td>
             <td>接听数</td>
+            <td>状态</td>
         </tr>
     </thead>
     <tbody>
@@ -31,9 +32,10 @@
             <td>${user.loginName}</td>
             <td>${user.userName}</td>
             <td>${user.cardName}</td>
-            <td>${user.onLineStatus}</td>
-            <td>${user.deptId}</td>
+            <td>${user.roleName}</td>
+            <td>${user.deptName}</td>
             <td>${user.maxListen}</td>
+            <td>${user.onLineStatus}</td>
         </tr>
         </c:forEach>
     </tbody>

@@ -106,8 +106,8 @@ var setting = {
 
 var str ='${json}';
 var zNodes = eval('('+ str +')');
-var str = $("#strings").val();
-var ids=str.split(",");
+var strs = $("#strings").val();
+var ids=strs.split(",");
 for (var i = 0; i < zNodes.length; i++) {
 	for (var t = 0; t < ids.length; t++) {
 		var yy=parseInt(ids[t]);
@@ -138,10 +138,10 @@ function loadReady() {
 function saveFunc(){
 	var treeObj = $.fn.zTree.getZTreeObj("tree");
 	var nodes = treeObj.getCheckedNodes(true);
+	alert(nodes);
 	var ids="";
 	for (var i = 0; i < nodes.length; i++) {
 		 ids+=nodes[i].id+",";
-		 
 	    }
 	  var data = {
 		    "ids":ids,
@@ -169,7 +169,7 @@ if($("#deptId").val()!=undefined){
 }
 function findPermit(obj){
 	var val=obj.value;
-     location.href="/function/permit.action?deptId="+val+"&roleId="+$("#roleId").val()+"";
+     location.href="/function/permit.action?deptId="+val+"&roleId="+$("#roleId").val()+"&status=3";
 }
 </script>
 

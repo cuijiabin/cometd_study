@@ -12,13 +12,13 @@
 <link href="css/app.css" rel="stylesheet" type="text/css">
 </head>
 
-<body style="background:#dfdfdf;">
+<body style="background:#dfdfdf;" onkeydown="if(event.keyCode == '13'){login()}">
 <div class="m-login">
 		<div class="login_form">
 			<div class="m-login-info" id="err"></div>
 			<div class="form_info">
 				<div class="field">
-					<label>用户名：</label>
+					<label>工号：</label>
 					<input type="text" name="loginName" id="loginName" class="text" size="20">
 				</div>
 				<div class="field">
@@ -34,6 +34,7 @@
 					<label></label>
 					<button class="button" style="margin-left:50px;_margin-left:48px" onclick="javascript:login();"></button>
 				</div>
+				<button onclick="relogin()">取消</button>
 			</div>
 		</div>
 	</div>
@@ -66,6 +67,13 @@
 		    	$("#err").text("出现错误,请重新登录");
 		    }
 		});
+	}
+	
+	function relogin(){
+		$("#loginName").val("");
+		$("#password").val("");
+		$("#yzm").val("");
+
 	}
 	
 	  function reloadImage(imgurl){

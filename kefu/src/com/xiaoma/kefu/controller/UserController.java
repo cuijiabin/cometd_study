@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.dao.impl.UserDaoImpl;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.DictItem;
@@ -70,7 +72,7 @@ public class UserController {
 	@RequestMapping(value = "login.action", method = RequestMethod.POST)
 	public String login(HttpSession session, HttpServletRequest request,
 			String loginName, String password, String yzm, Model model) {
-		String yanzheng = session.getAttribute("randomCode").toString();
+		String yanzheng = (String) session.getAttribute("randomCode");
 		Date oldTime = (Date) session.getAttribute("yzmtime");
 		if (yanzheng == null || oldTime == null) {
 			model.addAttribute("result", Ajax.JSONResult(3, "请刷新验证码重新输入!"));
@@ -90,8 +92,7 @@ public class UserController {
 					if (thread != null)
 						thread.start();
 				} else {
-					model.addAttribute("result",
-							Ajax.JSONResult(3, "登录名或者密码错误!"));
+					model.addAttribute("result", Ajax.JSONResult(4, "登录名或者密码错误!"));
 				}
 			} else {
 				model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
@@ -114,9 +115,10 @@ public class UserController {
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null)
 			return "login";
-		String codes=(String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
+		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
+				user.getId());
 		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "");
-	    List newList = funcService.checkFuncOne(list,codes);
+		List newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
 		// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
 		if (typeId == null)
@@ -262,7 +264,7 @@ public class UserController {
 			model.addAttribute("deptList", dlist);
 			model.addAttribute("roleList", rlist);
 			if (type == null) {
-				return "/set/govern/user/addUser";
+				return "/set/govern/user/updateUser";
 			} else {
 				return "/set/govern/user/checkUser";
 			}
@@ -282,7 +284,7 @@ public class UserController {
 	public String updateUser(Model model, @ModelAttribute("user") User user) {
 
 		try {
-			Integer isSuccess = userService.updateUser(null,user);
+			Integer isSuccess = userService.updateUser(null, user);
 
 			if (isSuccess == 1) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
@@ -372,22 +374,22 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "repass.action", method = RequestMethod.GET)
-	public String updateUser(Model model, HttpSession session,
-			String password, String oldpass) {
+	public String updateUser(Model model, HttpSession session, String password,
+			String oldpass) {
 		try {
 			User user = (User) session.getAttribute("user");
 			if (user == null)
-				return"login";
+				return "login";
 			if (password != null) {
-					Integer isSuccess = userService.updateUser(password,user);
-					if (isSuccess == 1) {
-						model.addAttribute("result", Ajax.JSONResult(0, "密码重置成功!"));
-					} else {
-						model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
-					}
-				}else{
-					model.addAttribute("result", Ajax.JSONResult(2, "密码为空请重新输入"));
+				Integer isSuccess = userService.updateUser(password, user);
+				if (isSuccess == 1) {
+					model.addAttribute("result", Ajax.JSONResult(0, "密码重置成功!"));
+				} else {
+					model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
 				}
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(2, "密码为空请重新输入"));
+			}
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "密码重置失败!"));
 		}
@@ -398,6 +400,7 @@ public class UserController {
 
 	/**
 	 * 工号验证
+	 * 
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
@@ -423,35 +426,39 @@ public class UserController {
 		}
 		return "resultjson";
 	}
+
 	/**
 	 * 用户的旧密码验证
+	 * 
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
 
 	@RequestMapping(value = "checkPass.action", method = RequestMethod.GET)
-	public String checkPass(Model model, HttpSession session,String oldpass)
+	public String checkPass(Model model, HttpSession session, String oldpass)
 			throws UnsupportedEncodingException {
 
 		try {
 			User user = (User) session.getAttribute("user");
 			if (user == null)
-				return"login";
-			if ( oldpass != null) {
-				String password1 = user.getPassword();
-				String mdpass=DigestUtils.md5Hex(oldpass.getBytes("UTF-8"));
-				if(password1.equals(mdpass)){
+				return "login";
+			if (oldpass != null) {
+				User usern = userService.getUserById(user.getId());
+				String password1 = usern.getPassword();
+				String mdpass = DigestUtils.md5Hex(oldpass.getBytes("UTF-8"));
+				if (password1.equals(mdpass)) {
 					model.addAttribute("result", Ajax.toJson(0, "验证正确！"));
-			     }else{
-			    	 model.addAttribute("result", Ajax.toJson(1, "旧密码输入不正确！")); 
-			     }
-		   }
+				} else {
+					model.addAttribute("result", Ajax.toJson(1, "旧密码输入不正确！"));
+				}
+			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
 		return "resultjson";
 	}
+
 	@RequestMapping(value = "checkMsg.action", method = RequestMethod.GET)
 	public String checkMsg(Model model, String ln, Integer uId, String phone,
 			String msg) throws UnsupportedEncodingException {
@@ -483,13 +490,15 @@ public class UserController {
 
 	/**
 	 * 缓存清除
-	 * @param name 表名
+	 * 
+	 * @param name
+	 *            表名
 	 */
 	@RequestMapping(value = "clear.action")
 	public String clearTable(Model model, String name) {
 		List<DictItem> list = DictMan.getDictList(name);
-		if(list != null && list.size()>0){
-			for(DictItem item : list)
+		if (list != null && list.size() > 0) {
+			for (DictItem item : list)
 				DictMan.clearItemCache(item.getCode(), item.getItemCode());
 		}
 		DictMan.clearTableCache(name);

@@ -26,9 +26,9 @@
             <td><input type="checkbox" id="id" name="id" value="${user.id}"/></td>
             <td>${user.loginName}</td>
             <td>${user.userName}</td>
-            <td>${user.cardName}</td>
+            <td>${user.roleName}</td>
             <td>${user.onLineStatus}</td>
-            <td><a href="javascript:deptUser(${user.deptId})">${user.deptId}<a></a></td>
+            <td><a href="javascript:deptUser(${user.deptId})">${user.deptName}<a></a></td>
             <td>${user.maxListen}</td>
             <td><a href="javascript:findUser(${user.id})">查看<a/>&nbsp;&nbsp;&nbsp;&nbsp;
                    <c:if test="${status==1}"><a href="javascript:updateUser(${user.id})">编辑<a/></c:if>

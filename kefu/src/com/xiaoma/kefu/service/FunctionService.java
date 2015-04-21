@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.cache.CacheFactory;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.controller.FunctionController;
 import com.xiaoma.kefu.dao.FunctionDao;
 import com.xiaoma.kefu.dao.RoleDeptDao;
 import com.xiaoma.kefu.dao.RoleDeptFuncDao;
@@ -28,6 +30,7 @@ import com.xiaoma.kefu.util.StringHelper;
  */
 @Service
 public class FunctionService {
+	private Logger logger = Logger.getLogger(FunctionService.class);
 	@Autowired
 	private FunctionDao funcDao;
 	@Autowired
@@ -82,7 +85,12 @@ public class FunctionService {
 		}
 		return 0;
 	}
-
+    /**
+     * 查询出所拥有的权限串
+     * @param roleId
+     * @param deptId
+     * @return
+     */
 	public String checkedFunc(Integer roleId, Integer deptId) {
 		RoleDept roleDept = roleDeptDao.findRoleDeptBy(roleId, deptId);
 		if (roleDept != null) {
@@ -100,7 +108,11 @@ public class FunctionService {
 		}
 		return 0 + ",";
 	}
-	
+	/**
+	 * 将所有用的权限拼接成一个字符串
+	 * @param id
+	 * @return
+	 */
     public Object userFuncs(Integer id){
     	User user = userDao.findById(User.class, id);
     	RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(), user.getDeptId());
@@ -111,7 +123,13 @@ public class FunctionService {
 		}
 		return userFunc;
     }
-
+    
+    /**
+     * 查询头部信息权限对比返回
+     * @param list
+     * @param codes
+     * @return
+     */
 	public List checkFuncOne(List<Function> list, String codes) {
 		List listFunc = new ArrayList();
 		if(list == null){
@@ -126,23 +144,24 @@ public class FunctionService {
 		return listFunc;
 	}
     
-//	public boolean checkedFunc(Integer id, String code) {
-//		boolean flag=false;
-//		String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id);
-//		if(StringHelper.isEmpty(codes)){
-//			CacheFactory.factory(CacheName.USERFUNCTION, id);
-//		
-//			for (Function func : list) {
-//				if(code.equals(func.getCode())){
-//					flag=true;
-//				}
-//			}
-//		}else{
-//			int count = codes.indexOf(code);
-//			if(count>=0){
-//				return true;
-//			}
-//		}
-//		return flag;
-//	}
+	/**
+	 * 根据用户id和code值来检验改用户的页面是否有某个权限
+	 * @param id
+	 * @param code
+	 * @return
+	 */
+	public boolean isCheckFunc(Integer id, String code) {
+		try{
+		String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id);
+			int count = codes.indexOf(","+code+",");
+			if(count>=0){
+				return true;
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		 return false;
+	}
+	
+
 }

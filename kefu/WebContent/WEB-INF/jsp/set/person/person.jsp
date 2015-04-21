@@ -31,7 +31,7 @@
       <td>姓名：</td><td>${user.userName}</td>
       </tr>
       <tr>
-      <td>生日：</td><td>${user.birthday}</td>
+      <td>身份：</td><td>${user.roleName}</td>
       </tr>
       <tr>
       <td>身份：</td><td>${user.cardName}</td>
@@ -55,7 +55,6 @@ function repass(){
 
 function callback(){
 	$.dialog({id:'pass'}).close();
-	find();
 }
 </script>
 </body>

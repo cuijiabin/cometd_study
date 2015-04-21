@@ -55,6 +55,23 @@ public class User implements Serializable {
 	private String createDate;
 	@Column(name="endDate")
 	private String endDate;
+	@Column(name="roleName")
+	private String roleName;
+	@Column(name="deptName")
+	private String deptName;
+	
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
 	public Integer getId() {
 		return id;
 	}
