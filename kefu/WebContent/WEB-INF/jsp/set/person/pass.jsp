@@ -83,7 +83,7 @@ function verificationParam(userData) {
 		
        var password = userData.password;
 	   if(password.replace(/(^\s*)|(\s*$)/g, "").length ==0){
-			alert("旧密码不能为空");
+			alert("新密码不能为空");
 			return false;
 		}
 		

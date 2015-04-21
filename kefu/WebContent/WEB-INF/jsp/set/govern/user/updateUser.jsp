@@ -15,11 +15,11 @@
 
 <body>
 <!-- 表格有边框 -->
-<h3>添加工号</h2>
+<h3>修改工号</h2>
 <table class="table table-bordered table-striped table-hover m-table">
         <tr>
             <td>工号</td>
-            <td><input type="text" id="loginName" name="loginName" value="${user.loginName}"/></td>
+            <td><input type="text" id="loginName" name="loginName" value="${user.loginName}" readonly="readonly"/></td>
             <td>姓名</td>
             <td><input type="text" id="userName" name="userName" value="${user.userName}" maxlength="16"/></td>
         </tr>
@@ -71,7 +71,7 @@
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
- <button style="float:right;margin-right:40px;" onclick="javascript:saveUser();" class="btn btn-primary btn-small" >确认</button>
+ <button style="float:right;margin-right:40px;" onclick="javascript:saveUser(${user.id});" class="btn btn-primary btn-small" >确认</button>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -80,23 +80,24 @@
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 function saveUser(id){
-		var url = "/user/save.action";
+		var url = "/user/update.action";
 		var data = {
+			"id":id,
 			"loginName" : $("#loginName").val(),
 			"userName" : $("#userName").val(),
 			"password" : $("#password").val(),
 			"password1" : $("#password1").val(),
 			"listenLevel" : $("#listenLevel option:selected").val(),
 			"deptId" : $("#deptId option:selected").val(),
-			"roleId" : $("#roleId option:selected").val(),
 			"deptName" : $("#deptId option:selected").text(),
+			"roleId" : $("#roleId option:selected").val(),
 			"roleName" : $("#roleId option:selected").text(),
 			"maxListen" : $("#maxListen").val(),
 			"cardName" : $("#cardName").val(),
 			"createDate" : $("#createDate").val(),		    
 		};
-			//新增时验证参数
-			if (!verificationParam(data)) {
+			//时验证参数
+			if (!verificationParam1(data)) {
 				return;
 			}
 	$.ajax({
@@ -114,10 +115,9 @@ function saveUser(id){
 		}
 	});
 }
-/**
- *  js 校验添加
- */
-function verificationParam(userData) {
+
+//修改时验证
+function verificationParam1(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("工号不得为空！");
@@ -128,12 +128,7 @@ function verificationParam(userData) {
 		 alert("工号输入规则不对");
 		return false;
 	}
-	
-	 if(checkUser()){
-		    alert("工号已存在！");
-		   return false;
-	   }
-	
+		
 	var userName = userData.userName;
 	if (userName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		 alert("姓名不得为空！");
@@ -141,37 +136,38 @@ function verificationParam(userData) {
 	}
 	
 	var password = userData.password;
-	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
-	if (!patrn.test(password)) {
-		 alert("密码格式不正确");
-		return false;
+	if(password.replace(/(^\s*)|(\s*$)/g, "").length !=0){
+		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
+		if (!patrn.test(password)) {
+			alert("密码格式不正确");
+			return false;
+		}
+		
+		var password1 = userData.password1;
+		if (password !=password1) {
+			alert("两次输入密码不一致！");
+			return false;
+		}
 	}
-	
-	var password1 = userData.password1;
-	if (password !=password1) {
-		 alert("两次输入密码不一致！");
-		return false;
-	}
-	
 	var maxListen = userData.maxListen;
 	if (maxListen.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写最大接听数！");
+		alert("请填写最大接听数！");
 		return false;
 	}
-	var checkListen = /^\d+$/;
+	var checkListen =/^\d+$/;
 	if(!checkListen.test(maxListen)||maxListen==0){
 		alert("请输入大于0的正整数！");
 		return false;
 	}
 	var cardName = userData.cardName;
 	if (cardName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写名片！");
+		alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写入职时间！");
+		alert("请填写入职时间！");
 		return false;
 	}
 	

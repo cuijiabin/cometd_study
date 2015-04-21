@@ -73,7 +73,7 @@ function findUser(id){
 
 	var d = $.dialog({id:'dept',title:"查看部门成员",content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
-		600,height: 600,});
+		800,height: 600,});
 
 }
 function deleteDept(id){

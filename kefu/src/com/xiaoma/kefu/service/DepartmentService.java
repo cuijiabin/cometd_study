@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.xiaoma.kefu.dao.DepartmentDao;
 import com.xiaoma.kefu.dao.RoleDao;
 import com.xiaoma.kefu.dao.RoleDeptDao;
 import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.RoleDept;
@@ -24,10 +26,11 @@ import com.xiaoma.kefu.util.PageBean;
  */
 @Service
 public class DepartmentService {
+	private Logger logger = Logger.getLogger(DepartmentService.class);
 	@Autowired DepartmentDao deptDaoImpl;
 	@Autowired RoleDao roleDaoImpl;
 	@Autowired RoleDeptDao roleDeptDao;
-	@Autowired UserDao UserDaoImpl;
+	@Autowired UserDao userDaoImpl;
 	
 	/**
 	 * 查询所有
@@ -112,7 +115,7 @@ public class DepartmentService {
 	 * @return
 	 */
 	public Integer deleteDeptById(Integer id){
-		List<User> user = UserDaoImpl.getUsertByDeptId(id);
+		List<User> user = userDaoImpl.getUsertByDeptId(id);
 		if(user.isEmpty()||user==null){
 		Department dept =deptDaoImpl.findById(Department.class, id);
 		dept.setIsDel(1);
@@ -138,5 +141,35 @@ public class DepartmentService {
 	public Integer getMaxNum() {
 		
 		return deptDaoImpl.getMaxNum();
+	}
+	/**
+	 * 根据id查询部门里的所有员工包括离职的员工（用于记录查询）
+	 * @param deptId
+	 * @return
+	 */
+	public List<User> deptUserAll(Integer deptId) {
+		try{
+		   List<User> list = userDaoImpl.findUserAllBydeptId(deptId);
+		   return list;
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+         return null;
+	}
+	
+	public List<Department> deptByRole(Integer userId) {
+		try{
+			User user = userDaoImpl.findById(User.class, userId);
+			if(user.getRoleId()== Integer.parseInt(DictMan.getDictItem("d_sys_Param", 13).getItemName())){
+				List<Department> list=deptDaoImpl.getAllDept();
+				return list;
+			}else{
+				List<Department> dept =deptDaoImpl.getDeptById(user.getDeptId());
+				return dept;
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+         return null;
 	}
 }

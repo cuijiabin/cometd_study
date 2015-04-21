@@ -21,6 +21,8 @@ public class BusiGroupService {
 	
 	@Autowired
 	private BusiGroupDao busiGroupDaoImpl;
+	@Autowired
+	private BusiGroupDetailService busiGroupDetailService;//分组明细
 	
 	/**
 	 * 获取风格下的 业务分组list
@@ -84,7 +86,7 @@ public class BusiGroupService {
 	}
 	
 	/**
-	 * 删除分组
+	 * 删除分组(包含明细)
 	* @Description: TODO
 	* @param group
 	* @return
@@ -92,6 +94,7 @@ public class BusiGroupService {
 	* @Date: 2015年4月13日
 	 */
 	public int delete(BusiGroup group) {
+		busiGroupDetailService.deleteByGroupId(group.getId());
 		return busiGroupDaoImpl.delete(group);
 	}
 	

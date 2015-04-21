@@ -90,6 +90,11 @@ public class JedisConstant {
 	 * 缓存客户信息
 	 */
 	public static final String CUSTOMER_INFO = "customer_info:";
+	
+	/**
+	 * 离线用户列表
+	 */
+	public static final String OFF_LINE_USER_SET = "off_line_user_set";
 
 	// #######生成key方法
 	/**

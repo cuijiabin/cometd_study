@@ -1,7 +1,11 @@
 package com.xiaoma.kefu.util;
 
+import java.io.IOException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+import com.xiaoma.kefu.redis.SystemConfiguration;
 
 /**
  * cookie读写
@@ -12,6 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 public class CookieUtil {
 
 	public static String KF_CUSTOMER_ID = "KF_CUSTOMER_ID";
+
+	public static Cookie genCookieByCustomerId(String cusatomerId) {
+
+		String value = null;
+		try {
+			value = DesUtil.encrypt(cusatomerId, SystemConfiguration
+					.getInstance().getSecretKey());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Cookie(KF_CUSTOMER_ID, value);
+
+	}
 
 	public static Cookie getCustomerFromCookies(Cookie[] cookies) {
 		if (cookies == null) {
@@ -28,12 +45,28 @@ public class CookieUtil {
 		return null;
 
 	}
-	
+
 	public static Cookie getCustomerCookie(HttpServletRequest request) {
-		
+
 		Cookie[] cookies = request.getCookies();
 
 		return getCustomerFromCookies(cookies);
+
+	}
+
+	public static String getCustomerIdFromCookie(HttpServletRequest request) {
+		Cookie cookie = getCustomerCookie(request);
+		String customerId = null;
+		
+		if (cookie != null) {
+			try {
+				customerId = DesUtil.decrypt(cookie.getValue(),SystemConfiguration.getInstance().getSecretKey());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		return customerId;
 
 	}
 

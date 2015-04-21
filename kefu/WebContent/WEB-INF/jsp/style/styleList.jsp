@@ -28,7 +28,7 @@
 				<td>
 					<a href="#" onClick="fenzu(${style.id})">业务分组</a>
 					<a href="#" onClick="showDetail(${style.id})">业务分流</a>
-					<a href="#" onClick="showDetail(${style.id})">分配机制</a>
+					<a href="#" onClick="editAllot(${style.id})">分配机制</a>
 				</td>
 			</tr>
 		</c:forEach>

@@ -103,4 +103,20 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 		return ((Number) query.uniqueResult()).intValue();
 
 	}
+
+	@Override
+	public List<Department> getAllDept() {
+		Session session = getSession();
+		String hql = "from Department";
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
+
+	@Override
+	public List<Department> getDeptById(Integer deptId) {
+		Session session = getSession();
+		String hql = "from Department where id ="+deptId;
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
 }

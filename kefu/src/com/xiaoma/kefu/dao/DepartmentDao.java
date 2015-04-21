@@ -37,4 +37,8 @@ public interface DepartmentDao extends BaseDao<Department> {
 	 * @return
 	 */
 	public Integer getMaxNum();
+
+	public List<Department> getAllDept();
+
+	public List<Department> getDeptById(Integer deptId);
 }

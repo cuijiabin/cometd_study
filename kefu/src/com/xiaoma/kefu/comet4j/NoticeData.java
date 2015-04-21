@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.comet4j;
 
+
 public class NoticeData {
 
 	public static final String APP_CHANNEL = "talker";
@@ -10,6 +11,8 @@ public class NoticeData {
 	public static final String HEALTH = "health";
 	
 	private String type ;
+	
+	private String cookieValue;
 	
 	private Object obj ;
 
@@ -33,8 +36,12 @@ public class NoticeData {
 	public void setObj(Object obj) {
 		this.obj = obj;
 	}
+	public String getCookieValue() {
+		return cookieValue;
+	}
+	public void setCookieValue(String cookieValue) {
+		this.cookieValue = cookieValue;
+	}
     
-	
-	
 	
 }

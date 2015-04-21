@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.StyleDao;
+import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.model.ServiceIcon;
@@ -34,6 +35,8 @@ public class StyleService {
 	private ServiceIconService serviceIconService;//客服图标
 	@Autowired
 	private InviteIconService inviteIconService;//对话邀请框
+	@Autowired
+	private AllotRuleService allotRuleService;//分配机制
 
 	public List<Style> findByNameLike(String styleName) {
 		return styleDaoImpl.findByNameLike(styleName);
@@ -156,6 +159,11 @@ public class StyleService {
 		buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端对话邀请框.getCode());
 		inviteIcon.setButtonId(buttonId);
 		inviteIconService.create(inviteIcon);
+		
+		//分配机制
+		AllotRule allotRule = new AllotRule();
+		allotRule.setStyleId(styleId);
+		allotRuleService.create(allotRule);
 		
 		return num;
 	}

@@ -102,6 +102,15 @@ function editCommon(id){
 	window.location = url;
 	return;
 }
+
+//分配机制
+function editAllot(id){
+	var url = '/allotRule/edit.action?styleId='+id;
+	window.location = url;
+	return;
+}
+
+
 </script>
 </body>
 </html>

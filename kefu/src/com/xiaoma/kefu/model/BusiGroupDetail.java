@@ -35,6 +35,8 @@ public class BusiGroupDetail implements Serializable {
 	private Integer groupId;
 	@Column(name="userId")
 	private Integer userId;
+	@Column(name="userType")
+	private Integer userType;
 	@Column(name="cardName")
 	private String cardName;
 	@Column(name="isReception")
@@ -83,6 +85,12 @@ public class BusiGroupDetail implements Serializable {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public Integer getUserType() {
+		return userType;
+	}
+	public void setUserType(Integer userType) {
+		this.userType = userType;
 	}
 	
 	

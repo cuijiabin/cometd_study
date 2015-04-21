@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.Keyboard;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
@@ -66,34 +67,7 @@ public class FunctionController {
 			return "error";
 		}
 	}
-
-	// /**
-	// * 进入全新配置页面的查询
-	// */
-	// @SuppressWarnings({ "rawtypes", "unused", "static-access" })
-	// @RequestMapping(value = "permit.action", method = RequestMethod.GET)
-	// public String permit(Model model, Integer id ) {
-	// try {
-	// if (id != null) {
-	// Role role = roleService.getRoleById(roleId);
-	// List<Department> deptlist = deptService.findDept();
-	// List list = funcService.findFunction();
-	// JSONArray json = new JSONArray().fromObject(list);
-	// System.out.println(json);
-	// model.addAttribute("role", role);
-	// model.addAttribute("list", deptlist);
-	// model.addAttribute("json", json.toString());
-	// return "/set/govern/func/func";
-	// } else {
-	// return "null";
-	// }
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// model.addAttribute("error", "出错了,请刷新页面重试！");
-	// return "error";
-	// }
-	// }
-
+	
 	/**
 	 * 配置权限的查询
 	 */
@@ -141,9 +115,9 @@ public class FunctionController {
 			if (roleId != null && deptId != null && ids != null) {
 				Integer isSuccess = funcService.saveFunc(roleId, deptId, ids);
 				if (isSuccess != 0) {
-					model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
+					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
 				} else {
-					model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
+					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
 				}
 			}
 			return "resultjson";
@@ -153,23 +127,38 @@ public class FunctionController {
 			return "error";
 		}
 	}
-
-	/***
-	 * 验证是否有权限来显示这个按钮
+	/**
+	 * 跳转到快捷键的页面
+	 * @param model
+	 * @return
 	 */
-	@RequestMapping(value = "checkFunc.action", method = RequestMethod.GET)
-	public String checkFunc(Model model, HttpSession session, String code) {
+	@RequestMapping(value = "key.action", method = RequestMethod.GET)
+	public String key(Model model) {
+		try {
+	        return "/set/person/key";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
+		}
+	}
+	/**
+	 * 跳转到快捷键的页面
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "savekey.action", method = RequestMethod.GET)
+	public String savekey(Model model,Keyboard keyboard,HttpSession session) {
 		try {
 			User user = (User) session.getAttribute("user");
-			if (user == null) {
+			if(user==null)
 				return "login";
-			}
-			boolean isSuccess = true;//funcService.checkFunc(user.getId(), "f_dialog_gl");
-			if (isSuccess) {
-				model.addAttribute("result", Ajax.JSONResult(0, "添加成功!"));
-			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
-			}
+				Integer isSuccess = funcService.savekey(keyboard,user);
+				if (isSuccess != 0) {
+					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
+				} else {
+					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
+				}
 			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());

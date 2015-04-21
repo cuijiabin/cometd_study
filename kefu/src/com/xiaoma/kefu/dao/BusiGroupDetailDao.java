@@ -24,5 +24,23 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	 */
 	public List<BusiGroupDetail> findByGroupId(Integer groupId);
 	
+	/**
+	 * 根据分组id,删除
+	* @param id
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月20日
+	 */
+	public int deleteByGroupId(Integer groupId);
+	
+	/**
+	 * 根据分组id,用户id,用户类型, 查找当前对象
+	* @param busiGroupDetail
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public BusiGroupDetail getByModel(BusiGroupDetail busiGroupDetail);
+	
 	
 }
