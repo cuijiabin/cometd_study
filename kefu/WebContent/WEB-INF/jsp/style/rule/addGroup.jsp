@@ -40,6 +40,13 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 
 <script type="text/javascript">
+(function($){
+	$(window).load(function(){
+		var oInput = document.getElementById("name");
+		oInput.focus();//获取焦点
+	});
+})(jQuery);
+
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
 

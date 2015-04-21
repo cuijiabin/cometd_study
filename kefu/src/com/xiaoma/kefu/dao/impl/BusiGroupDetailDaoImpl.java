@@ -37,5 +37,37 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 		return	query.list();
 	}
 	
+	/**
+	 * 根据分组id,删除
+	* @param id
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月20日
+	 */
+	public int deleteByGroupId(Integer groupId){
+		Session session = getSession();
+		String hql = "delete BusiGroupDetail t where t.groupId = :groupId ";
+		Query query = session.createQuery(hql);
+		query.setInteger("groupId", groupId);
+		return query.executeUpdate();
+	}
+	
+	/**
+	 * 根据分组id,用户id,用户类型, 查找当前对象
+	* @param busiGroupDetail
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public BusiGroupDetail getByModel(BusiGroupDetail busiGroupDetail){
+		Session session = getSession();
+		String hql = "from BusiGroupDetail t where t.groupId = :groupId and t.userId = :userId and t.userType = :userType  ";
+		Query query = session.createQuery(hql);
+		query.setInteger("groupId", busiGroupDetail.getGroupId());
+		query.setInteger("userId", busiGroupDetail.getUserId());
+		query.setInteger("userType", busiGroupDetail.getUserType());
+		return (BusiGroupDetail) query.uniqueResult();
+	}
+	
 
 }

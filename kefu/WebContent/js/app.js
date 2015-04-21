@@ -105,9 +105,9 @@ $("#openClose").click(function(){
 // 客服端访客对话框架-手风琴菜单
 jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
 // 关闭按钮
-$(".u-close").click(function(){
-	$(this).parent().remove();
-})
+//$(".u-close").click(function(){
+//	$(this).parent().remove();
+//})
 // 客户端访客对话框架
 jQuery(".slideTab").slide({trigger:"click"});
 jQuery(".slideTab2").slide({trigger:"click"});

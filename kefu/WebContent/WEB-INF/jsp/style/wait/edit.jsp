@@ -164,7 +164,7 @@ function toUpdate(id){
 			    	}
 			    },
 			    error: function (msg) {
-			    	W.$.dialog.alert(data.msg,function(){
+			    	W.$.dialog.alert(msg,function(){
 //			    		input.focus();
 		    			td.html(txt);
 		    		});
