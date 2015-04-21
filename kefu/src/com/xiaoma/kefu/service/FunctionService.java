@@ -8,19 +8,18 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.xiaoma.kefu.cache.CacheFactory;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.controller.FunctionController;
 import com.xiaoma.kefu.dao.FunctionDao;
+import com.xiaoma.kefu.dao.KeyboardDao;
 import com.xiaoma.kefu.dao.RoleDeptDao;
 import com.xiaoma.kefu.dao.RoleDeptFuncDao;
 import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.Function;
+import com.xiaoma.kefu.model.Keyboard;
 import com.xiaoma.kefu.model.RoleDept;
 import com.xiaoma.kefu.model.RoleDeptFunc;
 import com.xiaoma.kefu.model.User;
-import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * 
@@ -39,6 +38,8 @@ public class FunctionService {
 	private RoleDeptFuncDao roleDeptFuncDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private KeyboardDao keyDao;
 
 	public List findFuncOne() {
 
@@ -161,6 +162,20 @@ public class FunctionService {
 			logger.error(e.getMessage());
 		}
 		 return false;
+	}
+    /**
+     * 保存快捷键
+     * @param keyboard
+     * @param user
+     * @return
+     */
+	public Integer savekey(Keyboard keyboard, User user) {
+		List<Keyboard> list = keyDao.findByUesrId(user.getId());
+		if(!list.isEmpty())
+        keyDao.deleteByUserId(user.getId());
+		keyboard.setUserId(user.getId());
+		Integer value = (Integer) keyDao.add(keyboard);
+		return value;
 	}
 	
 

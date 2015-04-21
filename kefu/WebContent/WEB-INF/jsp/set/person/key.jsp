@@ -24,7 +24,7 @@
     </ul>
 </div>
 <div>
-	<table>
+	<table border="1" style="margin:20px 0 10px 50px">
 		<tr>
 			<td>客户端截图热键:</td> <td>Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="A"></td>
 		</tr>
@@ -38,11 +38,11 @@
 			<td>下一个对话热键:</td> <td>Shift+Alt+<input type="text" id="nextKey" name="nextKey" style="width: 20px" value="2"></td>
 		</tr>
 		<tr>
-			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey"/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
-			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey"/>Ctrl+Enter
-			</td>
+			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey" value="1"/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" id="sendKey" name="sendKey" value="2"/>Ctrl+Enter	</td>
 		</tr>
 	</table>
+	 <button style="margin-left:230px;" onclick="javascript:saveKey();" class="btn btn-primary btn-small" >&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
 </div>
 <!-- 表格有边框 -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -51,6 +51,30 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+function saveKey(){
+	   url="/funciton/savekey.action";
+	   data = {
+			    "picKey":$("#picKey").val(),
+				"showKey" : $("#showKey").val(),	    
+				"lastKey" : $("#lastKey").val(),	    
+				"nextKey" : $("#nextKey").val(),	    
+				"sendKey" : $('input:radio[name=sendKey]:checked').val()	    
+			};
+		$.ajax({
+			type : "get",
+			url : url,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(data) {
+					alert(data.msg);
+			},
+			error : function(msg) {
+				alert("出现错误,请重试!");
+			}
+		});
+	}
+}
 </script>
 </body>
 </html>
