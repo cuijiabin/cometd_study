@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
+
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
@@ -129,6 +131,8 @@ public class DialogueController {
 		// 留言框生成规则 --------------开始
 		model.addAttribute("replyWay",dialogueService.findReplyWayList());
 		model.addAttribute("replyType",dialogueService.findMessageObject());
+		model.addAttribute("infoList",dialogueService.findInfoList());
+		model.addAttribute("checkInfo",DictMan.getDictItem("d_sys_param", 8));
 		
 		//获取客服部人员列表
 		model.addAttribute("userList",userService.getResultDept(1));

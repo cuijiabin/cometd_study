@@ -320,5 +320,21 @@ public class DialogueService {
 		}
 		return null;
 	}
+	public List<DictItem> findInfoList(){
+		try {
+			List<DictItem> list = DictMan.getDictList("d_cus_info");
+			DictItem dictItem = DictMan.getDictItem("d_sys_param", 7);
+			List<DictItem> dList = new ArrayList<DictItem>();
+			for(DictItem d : list){
+				if(dictItem.getItemName().indexOf(d.getItemCode()) >= 0){
+					dList.add(d);
+				}
+			}
+			return dList;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
 
 }

@@ -102,15 +102,11 @@
                                         	</c:forEach>
                                         </select>
                                     </div>
+                                    <c:forEach varStatus="status" items="${infoList}" var="d">
                                     <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">姓名：</label><input class="c-wd150" name="custName" id="custName" type="text" /> <span class="help-inline c-clred">* 必填</span>
+                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
                                     </div>
-                                    <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">Email：</label><input class="c-wd150" name="custEmail" id="custEmail" type="text" />
-                                    </div>
-                                    <div class="f-mbm">
-                                    	<label class="c-wd80 f-txtr">电话：</label><input class="c-wd150" name="custPhone" id="custPhone" type="text" /> <span class="help-inline c-clred">* 必填</span>
-                                    </div>
+                                    </c:forEach>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">留言内容：</label><textarea name="custContent" id="custContent" style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
                                     </div>
