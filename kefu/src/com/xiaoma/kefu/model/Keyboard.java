@@ -35,7 +35,7 @@ public class Keyboard implements Serializable {
 	@Column(name="showKey")
 	private String showKey;
 	
-	@Column(name="lastKet")
+	@Column(name="lastKey")
 	private String lastKey;
 	
 	@Column(name="nextKey")

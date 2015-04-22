@@ -43,7 +43,7 @@ public class FunctionController {
 	private DepartmentService deptService;
 
 	// 查询各个级别的树
-	@SuppressWarnings("static-access")
+	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
 	public String tree(Model model, Integer id,HttpSession session) {
 		try {
@@ -71,7 +71,7 @@ public class FunctionController {
 	/**
 	 * 配置权限的查询
 	 */
-	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
+	@SuppressWarnings({ "rawtypes", "static-access" })
 	@RequestMapping(value = "permit.action", method = RequestMethod.GET)
 	public String findFunc(Model model, Integer roleId, Integer deptId,
 			Integer status) {
@@ -107,10 +107,9 @@ public class FunctionController {
 	/**
 	 * 保存权限的配置
 	 */
-	@SuppressWarnings({ "rawtypes", "unused", "static-access" })
 	@RequestMapping(value = "saveFunc.action", method = RequestMethod.POST)
 	public String saveFunc(Model model, Integer roleId, Integer deptId,
-			String ids) {
+			String ids,HttpSession session) {
 		try {
 			if (roleId != null && deptId != null && ids != null) {
 				Integer isSuccess = funcService.saveFunc(roleId, deptId, ids);
@@ -147,12 +146,10 @@ public class FunctionController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "savekey.action", method = RequestMethod.GET)
+	@RequestMapping(value = "saveKeyboard.action", method = RequestMethod.GET)
 	public String savekey(Model model,Keyboard keyboard,HttpSession session) {
 		try {
-			User user = (User) session.getAttribute("user");
-			if(user==null)
-				return "login";
+			    User user = (User) session.getAttribute("user");
 				Integer isSuccess = funcService.savekey(keyboard,user);
 				if (isSuccess != 0) {
 					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));

@@ -11,7 +11,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.dao.DepartmentDao;
 import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -26,9 +30,11 @@ public class UserService {
 
 	@Autowired
 	private UserDao userDaoImpl;
+	@Autowired
+	private DepartmentDao deptDao;
 
-	public User login(String name, String password) {
-		return userDaoImpl.findUser(name, password);
+	public User login(String name) {
+		return userDaoImpl.findUser(name);
 	}
 
 	/**
@@ -110,7 +116,13 @@ public class UserService {
 	public Integer createNewUser(User user) throws ParseException {
 		user.setOnLineStatus(1);
 		user.setStatus(1);
-		return (Integer) userDaoImpl.add(user);
+		user.setIsLock(0);
+		Integer succ=(Integer) userDaoImpl.add(user);
+		List<Department> dlist =deptDao.getDeptById(user.getDeptId());
+		Department dept = dlist.get(0);
+		dept.setUserCount(dept.getUserCount()-1);
+		deptDao.update(dept);
+		 return succ;
 	}
 
 	/**
@@ -131,20 +143,27 @@ public class UserService {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
+	@SuppressWarnings("unused")
 	public Integer updateUser(String pass, User user)
 			throws UnsupportedEncodingException {
 		User toUpdateUser = userDaoImpl.findById(User.class, user.getId());
 
 		if (user.getPassword() == "" || user.getPassword() == null) {
 			toUpdateUser.setPassword(toUpdateUser.getPassword());
-		} else if (pass != null) {
+			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
+		} else if (!pass.equals("1") && pass!=null) {
 			String password = new String(DigestUtils.md5Hex(pass
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
-		} else {
+			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
+		} else if(pass.equals("1")){
+			toUpdateUser.setPassword(toUpdateUser.getPassword());
+			toUpdateUser.setIsLock(1);
+		}else{
 			String password = new String(DigestUtils.md5Hex(user.getPassword()
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
+			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
 		}
 		toUpdateUser.setLoginName(user.getLoginName());
 		toUpdateUser.setCardName(user.getCardName());
@@ -157,7 +176,10 @@ public class UserService {
 		toUpdateUser.setEmail(user.getEmail());
 		toUpdateUser.setMaxListen(user.getMaxListen());
 		toUpdateUser.setCreateDate(user.getCreateDate());
-		return userDaoImpl.update(toUpdateUser);
+		Integer succ = userDaoImpl.update(toUpdateUser);
+		CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+		return succ;
+		
 	}
 
 	/**
@@ -201,6 +223,14 @@ public class UserService {
 				leup.setStatus(status);
 				leup.setEndDate(time);
 				val = userDaoImpl.update(leup);
+				List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
+				Department dept = dlist.get(0);
+				if(status==2){
+				    dept.setUserCount(dept.getUserCount()-1);
+				}else{
+					dept.setUserCount(dept.getUserCount()+1);
+				}
+				deptDao.update(dept);
 			}
 			if (val == 1) {
 				return 1;
@@ -211,7 +241,20 @@ public class UserService {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
 			leup.setStatus(status);
 			leup.setEndDate(time);
-			return userDaoImpl.update(leup);
+			Integer succ = userDaoImpl.update(leup);
+			List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
+			Department dept = dlist.get(0);
+			if(status==2){
+			    dept.setUserCount(dept.getUserCount()-1);
+			}else{
+				dept.setUserCount(dept.getUserCount()+1);
+			}
+			deptDao.update(dept);
+			if (succ == 1) {
+				return 1;
+			} else {
+				return 0;
+			}
 		}
 	}
 
@@ -219,24 +262,35 @@ public class UserService {
 	public Integer tradeUser(String ids, Integer deptId) {
 		if (ids.length() > 2) {
 			String[] array = ids.split(",");
+			Integer succ=0;
 			for (String str : array) {
 				if (Integer.parseInt(str) == 0)
 					continue;
-				User leup = userDaoImpl.findById(User.class,
-						Integer.parseInt(str));
+				User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
 				leup.setDeptId(deptId);
-				return userDaoImpl.update(leup);
+				List<Department> dlist =deptDao.getDeptById(deptId);
+				Department dept = dlist.get(0);
+				dept.setUserCount(dept.getUserCount()+1);
+				deptDao.update(dept);
+			    succ = userDaoImpl.update(leup);
+			}
+			if(succ==1){
+				return succ;
 			}
 			return 0;
 		} else {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
 			leup.setDeptId(deptId);
+			List<Department> dlist =deptDao.getDeptById(deptId);
+			Department dept = dlist.get(0);
+			dept.setUserCount(dept.getUserCount()+1);
+			deptDao.update(dept);
 			return userDaoImpl.update(leup);
 		}
 	}
 
 	// 通过部门查询员工
-	public List getResultDept(Integer deptId) {
+	public List<User> getResultDept(Integer deptId) {
 
 		List<User> list = userDaoImpl.getUsertByDeptId(deptId);
 		return list;

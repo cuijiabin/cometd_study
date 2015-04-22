@@ -29,7 +29,7 @@
 			<td>客户端截图热键:</td> <td>Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="A"></td>
 		</tr>
 		<tr>
-			<td>显示客户端热键:</td> <td>Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="z"></td>
+			<td>显示客户端热键:</td> <td>Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="Z"></td>
 		</tr>
 		<tr>
 			<td>上一个对话热键:</td> <td>Shift+Alt+<input type="text" id="lastKey" name="lastKey" style="width: 20px" value="3"></td>
@@ -52,7 +52,7 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 function saveKey(){
-	   url="/funciton/savekey.action";
+	   url="/function/saveKeyboard.action";
 	   data = {
 			    "picKey":$("#picKey").val(),
 				"showKey" : $("#showKey").val(),	    
@@ -64,16 +64,18 @@ function saveKey(){
 			type : "get",
 			url : url,
 			data : data,
-			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
+				if(data.result==2){
+					alert("dfjkdjf");
+				}else{
 					alert(data.msg);
+				}
 			},
 			error : function(msg) {
 				alert("出现错误,请重试!");
 			}
 		});
-	}
 }
 </script>
 </body>

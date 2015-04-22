@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.dao.UserDao;
-import com.xiaoma.kefu.dao.impl.UserDaoImpl;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.DictItem;
@@ -72,37 +70,71 @@ public class UserController {
 	@RequestMapping(value = "login.action", method = RequestMethod.POST)
 	public String login(HttpSession session, HttpServletRequest request,
 			String loginName, String password, String yzm, Model model) {
-		String yanzheng = (String) session.getAttribute("randomCode");
-		Date oldTime = (Date) session.getAttribute("yzmtime");
-		if (yanzheng == null || oldTime == null) {
-			model.addAttribute("result", Ajax.JSONResult(3, "请刷新验证码重新输入!"));
-			return "resultjson";
-		}
-		Date newTime = new Date();
-		long count = newTime.getTime() - oldTime.getTime();
-		if (count < 400000) {
-			if (yzm.equals(yanzheng)) {
-				User user = userService.login(loginName, password);
-				if (user != null) {
-					session.setAttribute(CacheName.USER, user);
-//					CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
-					model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
-					Thread thread = new AddLoginLogThread(user.getId(),
-							CookieUtil.getIpAddr(request));
-					if (thread != null)
-						thread.start();
+		try {
+			String yanzheng = (String) session.getAttribute("randomCode");
+			Date oldTime = (Date) session.getAttribute("yzmtime");
+			if (yanzheng == null || oldTime == null) {
+				model.addAttribute("result", Ajax.JSONResult(3, "请刷新验证码重新输入!"));
+				return "resultjson";
+			}
+			Date newTime = new Date();
+			long count = newTime.getTime() - oldTime.getTime();
+			if (count < 400000) {
+				if (yzm.equals(yanzheng)) {
+					User user = userService.login(loginName);
+					if (user != null) {
+						if (user.getIsLock() == 0) {
+							String password1 = new String(DigestUtils.md5Hex(password.getBytes("UTF-8")));
+							if (password1.equals(user.getPassword())) {
+								session.setAttribute("user", user);
+								model.addAttribute("result",Ajax.JSONResult(0, "登录成功!"));
+								Thread thread = new AddLoginLogThread(user.getId(),CookieUtil.getIpAddr(request));
+								if (thread != null)
+									thread.start();
+							} else {
+								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "");
+								if (obj == null) {
+									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", 1, 6);
+								} else {
+									Integer num = Integer.parseInt(CacheMan.getObject(CacheName.LOGINCOUNT, "").toString());
+									if (num == 4)
+										userService.updateUser("1", user);
+									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", num + 1,6);
+								}
+								model.addAttribute("result",
+										Ajax.JSONResult(6, "密码错误请重新输入!"));
+							}
+						} else {
+							model.addAttribute("result",
+									Ajax.JSONResult(5, "账户已锁,请联系管理员!"));
+						}
+					} else {
+						model.addAttribute("result",
+								Ajax.JSONResult(4, "用户不存在请重新输入!"));
+					}
 				} else {
-					model.addAttribute("result", Ajax.JSONResult(4, "登录名或者密码错误!"));
+					model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
 				}
 			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "验证码错误!"));
+				model.addAttribute("result",
+						Ajax.JSONResult(2, "验证码过期,请刷新重登录!"));
 			}
-		} else {
-			model.addAttribute("result", Ajax.JSONResult(2, "验证码过期,请刷新重登录!"));
+			return "resultjson";
+		} catch (Exception e) {
+			model.addAttribute("message", "查询失败,请刷新重试!");
+			logger.error(e.getMessage());
+			return "/error";
 		}
-		return "resultjson";
 	}
 
+	// session.setAttribute("user", user);
+	// model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
+	// Thread thread = new AddLoginLogThread(user.getId(),
+	// CookieUtil.getIpAddr(request));
+	// if (thread != null)
+	// thread.start();
+	// password = new String(
+	// DigestUtils.md5Hex(password.getBytes("UTF-8")));
 	/**
 	 * 进入主页的树列表展示
 	 * 
@@ -110,6 +142,7 @@ public class UserController {
 	 * @param password
 	 * @param session
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String main(HttpSession session, Model model, Integer typeId) {
 		User user = (User) session.getAttribute(CacheName.USER);
