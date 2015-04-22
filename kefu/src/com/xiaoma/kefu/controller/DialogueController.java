@@ -139,7 +139,7 @@ public class DialogueController {
 		model.addAttribute("message",dialogueService.findMessageObject());
 		
 		//获取客服部人员列表
-		model.addAttribute("userList",dialogueService.findReplyWayList());
+		model.addAttribute("userList",userService.getResultDept(1));
 		//留言框生成规则   ---------------结束
 
 		return "/dialogue/customerChat";

@@ -63,8 +63,8 @@ public class MessageRecordsController {
 	 * @Author: hanyu
 	 * @Date: 2015年4月21日
 	 */
-	@RequestMapping(value = "view.action", method = RequestMethod.POST)
-	public String view(HttpServletRequest request,Model model,@ModelAttribute("mr")MessageRecords mr) {
+	@RequestMapping(value = "add.action", method = RequestMethod.POST)
+	public String add(HttpServletRequest request,Model model,@ModelAttribute("mr")MessageRecords mr) {
 		try {
 			messageRecordsService.add(mr);
 //			model.addAttribute("msg", msg);
