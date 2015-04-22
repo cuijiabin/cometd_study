@@ -97,7 +97,7 @@ $('#btn_save').on('click',function(){
 	}
 	$.ajax({
 		type : 'post',
-		url :  "/charRecordField/saveRecord.action",
+		url :  "/chatRecordField/saveRecord.action",
 		dataType : 'json',
 		data: {data:str} ,
 		async: false,

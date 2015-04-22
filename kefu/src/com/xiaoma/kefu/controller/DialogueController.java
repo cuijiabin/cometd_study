@@ -28,13 +28,13 @@ import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
 
 @Controller
 @RequestMapping(value = "dialogue")
 public class DialogueController {
-
 	@Autowired
 	private DialogueService dialogueService;
 	
@@ -43,6 +43,9 @@ public class DialogueController {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	@Autowired
+	private UserService userService;
 
 	private Jedis jedis = JedisDao.getJedis();
 	
@@ -63,7 +66,8 @@ public class DialogueController {
 	@RequestMapping(value = "chat.action", method = RequestMethod.GET)
 	public String chat(HttpSession session, Model model) {
 
-		List<String> userIds = JedisTalkDao.getOnlineUserIds();
+		List<String> userIds = JedisTalkDao.getSwitchList();
+//		userService.getUserById(id)
 		return "/dialogue/chat";
 	}
 	
@@ -129,6 +133,14 @@ public class DialogueController {
 		response.addCookie(cookie);
 		
 		model.addAttribute("customer", customer);
+		
+		//留言框生成规则    --------------开始
+		model.addAttribute("reply",dialogueService.findReplyWayList());
+		model.addAttribute("message",dialogueService.findMessageObject());
+		
+		//获取客服部人员列表
+		model.addAttribute("userList",userService.getResultDept(1));
+		//留言框生成规则   ---------------结束
 
 		return "/dialogue/customerChat";
 	}

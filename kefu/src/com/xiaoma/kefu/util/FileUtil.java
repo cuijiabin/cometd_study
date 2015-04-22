@@ -35,7 +35,7 @@ public class FileUtil {
         }
         FileOutputStream out;
 		try {
-			out = new FileOutputStream(savePath + "\\"+ fileName);
+			out = new FileOutputStream(savePath + "/"+ fileName);
 			out.write(fileData.getBytes());
 		    out.flush();
 		    out.close();

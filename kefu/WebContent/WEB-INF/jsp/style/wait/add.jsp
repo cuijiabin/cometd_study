@@ -78,6 +78,7 @@ $('#btn_save').on('click',function(){
 		    }
 		});
 	}
+	return false;
 });
 
 //保存

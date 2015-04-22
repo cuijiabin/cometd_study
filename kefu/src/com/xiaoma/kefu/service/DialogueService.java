@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -21,8 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.controller.DialogueController;
 import com.xiaoma.kefu.dao.DialogueDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Dialogue;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.database.DataBase;
@@ -39,7 +43,7 @@ import com.xiaoma.kefu.util.database.DataSet;
  */
 @Service("dialogueService")
 public class DialogueService {
-	
+	private Logger logger = Logger.getLogger(DialogueService.class);
 	@Autowired
 	private DialogueDao dialogueDaoImpl;
 	@Autowired
@@ -280,6 +284,41 @@ public class DialogueService {
 	public Long add(Dialogue dialogue){
 		
 		return (Long) dialogueDaoImpl.add(dialogue);
+	}
+	
+	
+	public List<DictItem> findReplyWayList(){
+		try {
+			List<DictItem> list = DictMan.getDictList("d_cus_reply_way");
+			DictItem dictItem = DictMan.getDictItem("d_sys_param", 9);
+			List<DictItem> dList = new ArrayList<DictItem>();
+			for(DictItem d : list){
+				if(dictItem.getItemName().indexOf(d.getItemCode()) >= 0){
+					dList.add(d);
+				}
+			}
+			return dList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+	public List<DictItem> findMessageObject(){
+		try {
+			List<DictItem> list = DictMan.getDictList("d_cus_reply_obj");
+			DictItem dictItem = DictMan.getDictItem("d_sys_param", 10);
+			List<DictItem> dList = new ArrayList<DictItem>();
+			for(DictItem d : list){
+				if(dictItem.getItemName().indexOf(d.getItemCode()) >= 0){
+					dList.add(d);
+				}
+			}
+			return dList;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
 	}
 
 }

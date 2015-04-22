@@ -69,5 +69,20 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 		return (BusiGroupDetail) query.uniqueResult();
 	}
 	
+	/**
+	 * 更新是否 接待客户
+	* @param detail
+	 * @return 
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public int updateIsRece(BusiGroupDetail detail){
+		Session session = getSession();
+	    Query query = session.createQuery("update BusiGroupDetail t set t.isReception = :isReception where id = :id "); 
+	    query.setInteger("isReception", detail.getIsReception());
+	    query.setInteger("id", detail.getId());
+	    return query.executeUpdate();  
+	}
+	
 
 }

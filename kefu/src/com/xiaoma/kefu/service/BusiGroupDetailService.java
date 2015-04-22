@@ -1,7 +1,9 @@
 package com.xiaoma.kefu.service;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,7 @@ public class BusiGroupDetailService {
 	* @Date: 2015年4月21日
 	 */
 	public Integer create(BusiGroupDetail busiGroupDetail) {
+		busiGroupDetail.setCreateDate(new Date());
 		return (Integer) busiGroupDetailDaoDaoImpl.add(busiGroupDetail);
 	}
 
@@ -74,6 +77,25 @@ public class BusiGroupDetailService {
 	 */
 	public int delete(BusiGroupDetail busiGroupDetail) {
 		return busiGroupDetailDaoDaoImpl.delete(busiGroupDetail);
+	}
+	
+	/**
+	 * 保存分流明细
+	* @param data	15:0,16:1	id:是否勾选 0否,1是
+	* @Author: wangxingfei
+	* @Date: 2015年4月21日
+	 */
+	public void saveDetail(String data) {
+		if(StringUtils.isNotBlank(data)){
+			String[] strs = data.split(",");
+			for(String temp : strs){
+				String[] ss = temp.split(":");
+				BusiGroupDetail detail = new BusiGroupDetail();
+				detail.setId(Integer.valueOf(ss[0]));
+				detail.setIsReception(Integer.valueOf(ss[1]));
+				busiGroupDetailDaoDaoImpl.updateIsRece(detail);
+			}
+		}
 	}
 	
 

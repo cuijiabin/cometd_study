@@ -83,40 +83,39 @@
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复方式：</label>
                                         <div class="u-subsec">
-                                            <label><input type="radio" name="mode" />网站</label>
-                                            <label><input type="radio" name="mode" />邮箱</label>
-                                            <label><input type="radio" name="mode" />短信</label>
+                                        	<c:forEach varStatus="status" items="${reply}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> name="reply" value="${d.itemCode}" />${ d.itemName }</label>
+                                       		</c:forEach>
                                         </div>
                                     </div>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复对象：</label>
                                         <div class="u-subsec">
-                                            <label><input type="radio" name="object" />公司</label>
-                                            <label><input type="radio" name="object" />部门/员工</label>
+                                        	<c:forEach varStatus="status" items="${message}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="message" value="${d.itemCode}" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                       		</c:forEach>
                                         </div>
-                                        <select class="c-wd80">
-                                            <option selected="selected">全部部门</option>
-                                            <option value="客服部">客服部</option>
-                                            <option value="留学部">留学部</option>
-                                            <option value="随时学">随时学</option>
-                                            <option value="好顾问">好顾问</option>
+                                        <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
+                                        	<c:forEach varStatus="status" items="${userList}" var="user">
+                                        		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
+                                        	</c:forEach>
                                         </select>
                                     </div>
                                     <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">姓名：</label><input class="c-wd150" type="text" /> <span class="help-inline c-clred">* 必填</span>
+                                        <label class="c-wd80 f-txtr">姓名：</label><input class="c-wd150" name="custName" id="custName" type="text" /> <span class="help-inline c-clred">* 必填</span>
                                     </div>
                                     <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">Email：</label><input class="c-wd150" type="text" />
+                                        <label class="c-wd80 f-txtr">Email：</label><input class="c-wd150" name="custEmail" id="custEmail" type="text" />
                                     </div>
                                     <div class="f-mbm">
-                                    	<label class="c-wd80 f-txtr">电话：</label><input class="c-wd150" type="text" /> <span class="help-inline c-clred">* 必填</span>
+                                    	<label class="c-wd80 f-txtr">电话：</label><input class="c-wd150" name="custPhone" id="custPhone" type="text" /> <span class="help-inline c-clred">* 必填</span>
                                     </div>
                                     <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">留言内容：</label><textarea style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
+                                        <label class="c-wd80 f-txtr">留言内容：</label><textarea name="custContent" id="custContent" style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
                                     </div>
                                     <div class="u-hr"></div>
                                     <div class="m-query-bd">
-                                        <button type="button" class="btn btn-primary">提交</button>
+                                        <button type="button" onclick="javascript:addMessage();" class="btn btn-primary">提交</button>
                                     </div>
                                 </div>
                             </div>
@@ -389,6 +388,40 @@
 			//$.expBlock.getRemoteExp(url);
 			
 		})
+		
+		function changeMessage(obj){
+			if(obj.id == 'messageRadio')
+				$("#teacher").hide();
+			else
+				$("#teacher").show();
+		}
+		function addMessage(){
+			 data = {
+					   "id":id,
+						"name" : $("#name").val(),
+						"sortNum": $("#sortNum").val()
+					};
+			 $.ajax({
+		    		type : "post",
+		    		url : "/messageRecords/add.action",
+		    		data : data,
+		    		dataType : "json",
+		    		async:false,
+		    		success : function(data) {
+		    			if (data.result == 0) {
+		    				W.$.dialog.alert('操作成功!',function(){
+		    					W.addCallback();		
+		    	    		});
+		    			} else {
+		    				W.$.dialog.alert(data.msg);
+		    			}
+		    		},
+		    		error : function(msg) {
+		    			W.$.dialog.alert(data.msg);
+		    		}
+		    	});
+		}
+		
 </script> 
 
 </body>

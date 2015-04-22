@@ -56,25 +56,25 @@ $('#btn_save').on('click',function(){
 		W.$.dialog.alert('元素名称不能为空!',function(){
 			return;
 		});
+	}else{
+		$.ajax({
+		    type: "post",
+		    url: "/inviteElement/validate.action",
+		    dataType: "json",
+		    data : $('#mainForm1').serialize(),
+		    async:false,
+		    success: function (data) {
+		    	if(data.result==0){
+		    		save();
+		    	}else{
+		    		W.$.dialog.alert(data.msg);
+		    	}
+		    },
+		    error: function (msg) {
+		    	W.$.dialog.alert(msg);
+		    }
+		});
 	}
-	
-	$.ajax({
-	    type: "post",
-	    url: "/inviteElement/validate.action",
-	    dataType: "json",
-	    data : $('#mainForm1').serialize(),
-	    async:false,
-	    success: function (data) {
-	    	if(data.result==0){
-	    		save();
-	    	}else{
-	    		W.$.dialog.alert(data.msg);
-	    	}
-	    },
-	    error: function (msg) {
-	    	W.$.dialog.alert(msg);
-	    }
-	});
     return false;
 });
 
