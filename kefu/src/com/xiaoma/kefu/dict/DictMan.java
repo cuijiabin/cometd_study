@@ -34,7 +34,7 @@ public class DictMan {
 	}
 	public static void clearItemCache(String table, String key) {
 		table = table.toLowerCase();
-		CacheMan.remove(CacheName.DICTITEM + table, key);
+		CacheMan.remove(CacheName.DICTITEM , table + key);
 	}
 	public static void addItemCache(String cacheName,String table, Object obj) {
 		table = table.toLowerCase();

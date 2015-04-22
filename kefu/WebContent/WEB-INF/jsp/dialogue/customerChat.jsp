@@ -396,12 +396,21 @@
 				$("#teacher").show();
 		}
 		function checkMessage(){
-			var custName = $("#custName").val();
+			//姓名
+			var custName = $("#custname").val();
 			if(!custName || custName.length>20){
 				$.dialog.alert("姓名不能为空或超过20个字符!");
 				return true;
 			}
-			var custPhone = $("#custPhone").val();
+			//邮箱
+			var email = $("#custemail").val();
+			var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+			if(email && (email.length>20 || !pattern.test(email))){
+				$.dialog.alert("请输入正确的邮箱!");
+				return true;
+			}
+			//电话
+			var custPhone = $("#custphone").val();
 			if (custPhone.replace("^[ ]+$", "").length != 0) {
 				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
 				if (!pattenPhone.test(custPhone)) {
@@ -412,11 +421,37 @@
 				$.dialog.alert("手机号码为空或者格式不正确!");
 				return true;
 			}
+			//QQ
+			var qq = $("#custqq").val();
+			if(qq || qq.length>40){
+				$.dialog.alert("QQ号码超长!");
+				return true;
+			}
+			//MSN
+			var msn = $("#custmsn").val();
+			if(msn || msn.length>40){
+				$.dialog.alert("MSN超长!");
+				return true;
+			}
+			//单位
+			var company = $("#custcompany").val();
+			if(company || company.length>100){
+				$.dialog.alert("单位超长!");
+				return true;
+			}
+			//地址
+			var address = $("#custaddress").val();
+			if(address || address.length>100){
+				$.dialog.alert("地址超长!");
+				return true;
+			}
+			//留言内容
 			var custContent = $("#custContent").val();
 			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
 				$.dialog.alert("留言内容应在10-200个字符之间!");
 				return true;
 			}
+			
 			return false;
 		}
 		function addMessage(){
@@ -442,9 +477,13 @@
 						"userId" : $("#teacher").val(),
 						"replyWay" : replyWay,
 						"replyType" :replyType,
-						"name": $("#custName").val(),
-						"email": $("#custEmail").val(),
-						"phone": $("#custPhone").val(),
+						"name": $("#custname").val()?$("#custname").val():"",
+						"email": $("#custemail").val()?$("#custemail").val():"",
+						"phone": $("#custphone").val()?$("#custphone").val():"",
+						"qq": $("#custqq").val()?$("#custqq").val():"",
+						"msn": $("#custmsn").val()?$("#custmsn").val():"",
+						"company": $("#custcompany").val()?$("#custcompany").val():"",
+						"address": $("#custaddress").val()?$("#custaddress").val():"",
 						"messageContent": $("#custContent").val().replace("^[ ]+$", "")
 					};
 			 $.ajax({
