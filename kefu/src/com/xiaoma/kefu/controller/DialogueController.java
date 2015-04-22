@@ -15,20 +15,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.comet4j.core.CometConnection;
-import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
-
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.comet4j.Constant;
 import com.xiaoma.kefu.comet4j.DialogueQuene;
-import com.xiaoma.kefu.comet4j.NoticeData;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
