@@ -10,13 +10,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Keyboard;
+import com.xiaoma.kefu.model.RemindType;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.DepartmentService;
@@ -143,7 +146,7 @@ public class FunctionController {
 		}
 	}
 	/**
-	 * 跳转到快捷键的页面
+	 * 保存快捷键
 	 * @param model
 	 * @return
 	 */
@@ -156,6 +159,66 @@ public class FunctionController {
 					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
 				} else {
 					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
+				}
+			return "resultjson";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
+		}
+	}
+	
+	/**
+	 * 跳转到提醒设置的页面
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "remind.action", method = RequestMethod.GET)
+	public String remind(Model model) {
+		try {
+	        return "/set/person/remind";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
+		}
+	}
+	
+	/**
+	 * 保存提醒方式
+	 * @param model
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "saveRemind.action", method = RequestMethod.POST)
+	public String saveRemind(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
+			MultipartFile lsound,MultipartFile jsound,MultipartFile resound) {
+		try {
+			    User user = (User) session.getAttribute("user");
+			    if(user!=null){
+			    	if(!lsound.isEmpty()){
+			    		String name="lsound";
+			    		String url=funcService.saveFile(lsound,user,name);
+			    		remindType.setLineEffectUrl(url);
+			    	}
+			    	if(!jsound.isEmpty()){
+			    		String name="jsound";
+			    		String url=funcService.saveFile(jsound,user,name);
+			    		remindType.setCreateUrl(url);
+			    	}
+			    	if(!resound.isEmpty()){
+			    		String name="resound";
+			    		String url=funcService.saveFile(resound,user,name);
+			    		remindType.setReceiveUrl(url);
+			    	}
+				    Integer isSuccess = funcService.saveRemind(remindType,user);
+					if (isSuccess != 0) {
+						model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
+					} else {
+						model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
+					}		
+				}else{
+					model.addAttribute("result", Ajax.JSONResult(1, "保存失败,退出程序重新登再试!"));
 				}
 			return "resultjson";
 		} catch (Exception e) {

@@ -1,0 +1,8 @@
+onLineStauts            在线状态                           1 在线    2 离线
+status                       用户状态                           1 在职     2离职
+isDel                         是否删除                           0 正常      1删除
+soundEffect             播放音效                     0 无        1有
+enactEffect                制定音效                           1默认音效  2自定义音效
+upHimt                    弹窗提醒                           0 无      1 有
+upWdInform            弹出情况                           1 弹出窗口   2 弹出通知
+sendKey                   按键发送                            1 Enter     2Ctrl+Enter

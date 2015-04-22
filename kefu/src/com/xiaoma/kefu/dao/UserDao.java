@@ -3,7 +3,6 @@ package com.xiaoma.kefu.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
 

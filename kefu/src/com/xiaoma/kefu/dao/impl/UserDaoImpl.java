@@ -126,6 +126,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		return ((Number) query.uniqueResult()).intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getUsertByDeptId(Integer deptId) {
 		Session session = getSession();
@@ -158,6 +159,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		find(User.class, relation, role, null, orders, pageBean);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getUsertByRoleId(Integer roleId) {
 		Session session = getSession();
@@ -170,6 +172,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	/**
 	 * 根据部门查询所有用户，包括离职
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> findUserAllBydeptId(Integer deptId) {
 		Session session = getSession();

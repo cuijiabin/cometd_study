@@ -1,24 +1,31 @@
 package com.xiaoma.kefu.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.FunctionDao;
 import com.xiaoma.kefu.dao.KeyboardDao;
+import com.xiaoma.kefu.dao.RemindTypeDao;
 import com.xiaoma.kefu.dao.RoleDeptDao;
 import com.xiaoma.kefu.dao.RoleDeptFuncDao;
 import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Keyboard;
+import com.xiaoma.kefu.model.RemindType;
 import com.xiaoma.kefu.model.RoleDept;
 import com.xiaoma.kefu.model.RoleDeptFunc;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.util.FileUtil;
 
 /**
  * 
@@ -39,6 +46,8 @@ public class FunctionService {
 	private UserDao userDao;
 	@Autowired
 	private KeyboardDao keyDao;
+	@Autowired
+	private RemindTypeDao remindDao;
 
 	@SuppressWarnings("unchecked")
 	public List<Function> findFuncOne() {
@@ -182,6 +191,39 @@ public class FunctionService {
 		Integer value = (Integer) keyDao.add(keyboard);
 		return value;
 	}
+
+	public Integer saveRemind(RemindType remindType, User user) {
+		List<RemindType> list = remindDao.findRemindByUesrId(user.getId());
+		if(!list.isEmpty())
+		remindDao.deleteRemindByUserId(user.getId());
+		remindType.setUserId(user.getId());
+		if(remindType.getLsoundEffect()==null)
+			remindType.setLsoundEffect(0);
+		if(remindType.getBubble()==null)
+			remindType.setBubble(0);
+		if(remindType.getJsoundEffect()==null)
+			remindType.setJsoundEffect(0);
+		if(remindType.getReSoundEffect()==null)
+			remindType.setReSoundEffect(0);
+		if(remindType.getUpHint()==null)
+			remindType.setUpHint(0);
+		remindType.setCreateDate(new Date());
+		Integer value = (Integer) remindDao.add(remindType);
+		return value;
+	}
+
+	public String saveFile(MultipartFile file,User user,String name) throws IOException {
 	
+		//获取需要保存的路径
+        String savePath = DictMan.getDictItem("d_sys_param", 14).getItemName()+"/"+"remindSound"+"/"+user.getLoginName();
+        String saveName = name;
+        String fileName = file.getOriginalFilename();//名称
+        String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx 
+        //路径+文件名
+        String tempPath = savePath+"/"+saveName+extensionName;
+        //保存文件
+        FileUtil.saveFile(savePath, saveName+extensionName, file);
+		return tempPath;
+	}
 
 }

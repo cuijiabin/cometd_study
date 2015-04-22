@@ -22,6 +22,7 @@ public class FunctionDaoImpl  extends BaseDaoImpl<Function> implements FunctionD
 	
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List findTree(int tid) {
 		Session session = getSession();
@@ -35,6 +36,7 @@ public class FunctionDaoImpl  extends BaseDaoImpl<Function> implements FunctionD
 		return query.list();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List findAll() {
 		Session session = getSession();
@@ -43,6 +45,7 @@ public class FunctionDaoImpl  extends BaseDaoImpl<Function> implements FunctionD
 		return query.list();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getUserFuc(Integer id) {
 		Session session = getSession();

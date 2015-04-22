@@ -66,11 +66,7 @@ function saveKey(){
 			data : data,
 			dataType : "json",
 			success : function(data) {
-				if(data.result==2){
-					alert("dfjkdjf");
-				}else{
 					alert(data.msg);
-				}
 			},
 			error : function(msg) {
 				alert("出现错误,请重试!");

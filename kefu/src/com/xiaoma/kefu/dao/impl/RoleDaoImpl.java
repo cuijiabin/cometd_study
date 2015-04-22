@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
@@ -20,8 +19,6 @@ import com.xiaoma.kefu.util.StringHelper;
 
 @Repository("roleDaoImpl")
 public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
-	private static Logger logger = Logger.getLogger(RoleDaoImpl.class);
-
 	/**
 	 * 分页条件查询
 	 */

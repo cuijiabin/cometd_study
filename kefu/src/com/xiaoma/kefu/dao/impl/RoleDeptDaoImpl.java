@@ -16,6 +16,7 @@ public class RoleDeptDaoImpl extends BaseDaoImpl<RoleDept> implements
 
 	private static Logger logger = Logger.getLogger(RoleDeptDaoImpl.class);
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public RoleDept findRoleDeptBy(Integer roleId, Integer deptId) {
 		Session session = getSession();
