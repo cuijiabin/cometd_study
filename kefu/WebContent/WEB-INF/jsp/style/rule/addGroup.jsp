@@ -52,9 +52,8 @@ var W = api.opener;//获取父页面对象
 
 //先检验,后保存
 $('#btn_save').on('click',function(){
-	var name = $("#name").val();
-	if(name==''){
-		$.dialog.alert("请填写名称!");
+	if($.trim($("#name").val()) == ''){
+		$.dialog.alert('名称不能为空!');
 		return false;
 	}
 	var data = {
@@ -79,7 +78,6 @@ $('#btn_save').on('click',function(){
 	    	$.dialog.alert(msg);
 	    }
 	});
-    return false;
 });
 
 //保存

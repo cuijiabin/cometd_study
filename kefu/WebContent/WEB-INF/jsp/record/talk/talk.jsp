@@ -63,7 +63,7 @@
                 <label><input type="radio" name="numCondition" value='XY' />小于</label>
             </div>
             <div class="input-append">
-              	<input class="c-wd30" type="text" id="totalNum" name="totalNum" >
+              	<input class="c-wd30" type="text" id="totalNum" name="totalNum" maxlength="4">
               	<button class="btn btn-small" type="button">条</button>
             </div>
             <label>站点来源：</label><input class="c-wd150" type="text" id="styleName" name="styleName" />
@@ -110,16 +110,16 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
 
 function find(currentPage){
 	
-	if(isNaN($("#totalNum").val())){
-		$.dialog.alert("交谈条数请填写数字!");
+	var totalNum = $("#totalNum").val();
+	if(!isInteger(totalNum)){
+		$.dialog.alert("交谈条数请填写正整数!");
 		return;
 	}
-	
-	
 	var isTalk = 0 ;
 	if(($("#isTalk").is(":checked"))){
 		isTalk = 1;
@@ -140,7 +140,7 @@ function find(currentPage){
 			"talkContent":$("#talkContent").val(),
 			"keywords":$("#keywords").val(),
 			"numCondition":$("input[name='numCondition']:checked").val(),
-			"totalNum":$("#totalNum").val(),
+			"totalNum":totalNum,
 			"styleName":$("#styleName").val(),
 			"openType":$("#openType").val(),
 			"closeType":$("#closeType").val(),

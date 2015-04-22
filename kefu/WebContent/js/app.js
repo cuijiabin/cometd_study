@@ -113,4 +113,16 @@ jQuery(".slideTab").slide({trigger:"click"});
 jQuery(".slideTab2").slide({trigger:"click"});
 jQuery(".g-sd3").slide({mainCell:"ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1});
 
-
+/*
+ * 是否正整数
+ * 如果为空,则返回true
+ * 如果是 返回true,如果不是,返回false
+ */
+function isInteger(value){
+	if(value!=''){
+		if(!(/^(\+|-)?\d+$/.test( value ))||value<=0){  
+			return false;
+	    }
+	}
+	return true;
+}

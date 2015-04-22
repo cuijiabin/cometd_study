@@ -5,6 +5,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/app.js"></script>	
 <!-- 表格有边框 -->
 
 <form id="mainForm" enctype="multipart/form-data" method="post">
@@ -77,24 +78,24 @@
 
 //保存
 function saveDetail(){
-	if(isNaN($("#width").val())){
-		$.dialog.alert("宽度请填写数字!");
+	if(!isInteger($("#width").val())){
+		$.dialog.alert("宽度请填写正整数!");
 		return;
 	}
-	if(isNaN($("#height").val())){
-		$.dialog.alert("高度请填写数字!");
+	if(!isInteger($("#height").val())){
+		$.dialog.alert("高度请填写正整数!");
 		return;
 	}
-	if(isNaN($("#siteLeft").val())){
-		$.dialog.alert("距左距离请填写数字!");
+	if(!isInteger($("#siteLeft").val())){
+		$.dialog.alert("距左距离请填写正整数!");
 		return;
 	}
-	if(isNaN($("#siteTop").val())){
-		$.dialog.alert("距顶距离请填写数字!");
+	if(!isInteger($("#siteTop").val())){
+		$.dialog.alert("距顶距离请填写正整数!");
 		return;
 	}
-	if(isNaN($("#level").val())){
-		$.dialog.alert("层叠顺序请填写数字!");
+	if(!isInteger($("#level").val())){
+		$.dialog.alert("层叠顺序请填写正整数!");
 		return;
 	}
 	
@@ -127,5 +128,6 @@ function editCallback(id,newName){
 	$("#spanName").html(newName);
 	$("#listName"+id).html(newName);
 }
+
 
 </script>

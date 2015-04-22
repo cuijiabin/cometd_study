@@ -94,12 +94,12 @@
 
 //保存
 $('#btn_save').on('click',function(){
-	if(isNaN($("#siteZyPx").val())){
-		$.dialog.alert("水平定位像素请填写数字!");
+	if(!isInteger($("#siteZyPx").val())){
+		$.dialog.alert("水平定位像素请填写正整数!");
 		return;
 	}
-	if(isNaN($("#siteDdPx").val())){
-		$.dialog.alert("垂直定位像素请填写数字!");
+	if(!isInteger($("#siteDdPx").val())){
+		$.dialog.alert("垂直定位像素请填写正整数!");
 		return;
 	}
 	var path = "/inviteIcon/save.action";  
