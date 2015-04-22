@@ -1,7 +1,11 @@
 package com.xiaoma.kefu.cache;
 
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import redis.clients.jedis.Jedis;
 
 import com.xiaoma.kefu.redis.JedisDao;
 
@@ -14,10 +18,10 @@ public class CacheMan {
 		try {
 			String key = CacheUtil.getCacheName(cacheName, value);
 			Object obj = JedisDao.getObject(key);
-			if(obj == null){
-				obj = CacheFactory.factory(cacheName,value);
-				if(obj != null)
-					JedisDao.setKO(key,obj);
+			if (obj == null) {
+				obj = CacheFactory.factory(cacheName, value);
+				if (obj != null)
+					JedisDao.setKO(key, obj);
 			}
 			return obj;
 		} catch (Exception ex) {
@@ -44,7 +48,7 @@ public class CacheMan {
 			Object obj, int time) {
 		try {
 			String key = CacheUtil.getCacheName(cacheName, value);
-			JedisDao.setKOT(key, obj,CacheUtil.getCacheTime(time));
+			JedisDao.setKOT(key, obj, CacheUtil.getCacheTime(time));
 			return obj;
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
@@ -55,11 +59,23 @@ public class CacheMan {
 	// 删除指定缓存对象；param1:缓存前缀，param2:对应的id
 	public static void remove(Object cacheName, Object value) {
 		try {
-			JedisDao.remove(
-					CacheUtil.getCacheName(cacheName, value));
+			JedisDao.remove(CacheUtil.getCacheName(cacheName, value));
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 		}
+	}
+
+	// 根绝key匹配删除
+	public static void removeByKeyPattern(String cacheName) {
+
+		Jedis jedis = JedisDao.getJedis();
+		Set<String> keys = jedis.keys(cacheName + "*");
+		if(keys == null || keys.size() < 1){
+			return ;
+		}
+		String[] delKeys = new String[keys.size()];
+		delKeys = keys.toArray(delKeys);
+		jedis.del(delKeys);
 	}
 
 	// 删除所有服务器缓存对象，谨慎使用
@@ -69,6 +85,10 @@ public class CacheMan {
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 		}
+	}
+	
+	public static void main(String[] args) {
+		removeByKeyPattern(CacheName.USERFUNCTION);
 	}
 
 }

@@ -149,7 +149,7 @@ public class ChatCometController {
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
 		
 		Customer customer  = customerService.getCustomerById(cId);
-		String customerName = StringUtils.isEmpty(customer.getCustomerName()) ? ("客户："+cId) : customer.getCustomerName();
+		String customerName = (customer == null || StringUtils.isEmpty(customer.getCustomerName())) ? ("客户："+cId) : customer.getCustomerName();
 		
 		//包装消息并发送
 		Message umessage = new Message(cusCId, customerName, message, messageTime);

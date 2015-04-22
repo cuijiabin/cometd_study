@@ -28,6 +28,7 @@ import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.DesUtil;
 
@@ -42,6 +43,9 @@ public class DialogueController {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	@Autowired
+	private UserService userService;
 
 	private Jedis jedis = JedisDao.getJedis();
 	
@@ -62,7 +66,8 @@ public class DialogueController {
 	@RequestMapping(value = "chat.action", method = RequestMethod.GET)
 	public String chat(HttpSession session, Model model) {
 
-		List<String> userIds = JedisTalkDao.getOnlineUserIds();
+		List<String> userIds = JedisTalkDao.getSwitchList();
+//		userService.getUserById(id)
 		return "/dialogue/chat";
 	}
 	
