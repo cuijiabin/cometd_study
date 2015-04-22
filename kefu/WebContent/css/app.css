@@ -206,7 +206,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .g-bd1c{padding:0 7px 0 5px;background:#fcfcfd;zoom:1;}
 .g-sd1{position:relative;width:220px;overflow:hidden;zoom:1;}
 .g-sd1 ul,.g-sd1 li{margin:0;padding:0;list-style:none;}
-.g-sd1 li{float:left;line-height:34px;line-height:33px\9;line-height:33px\0;word-wrap:normal;white-space:nowrap;}
+.g-sd1 li{display:inline-block;line-height:34px;line-height:33px\9;line-height:33px\0;word-wrap:normal;white-space:nowrap;}
 .g-sd1 li i{display:inline-block;*display:inline;*zoom:1;width:10px;text-align:center;font-size:12px;color:#ccc;font-style:normal;font-family:\5b8b\4f53;}
 .g-sd1 li a{display:inline-block;padding:0 5px;font-weight:bold;color:#1155cc;}
 .g-mn1{line-height:34px;}
@@ -221,6 +221,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .g-mn2{float:left;width:100%;}
 .g-mn2c{margin:0 175px 0 155px;}
 .g-mn2c .g-mn2c-cnt,.m-visitor{background:#fff;}
+.g-mn2c-cnt .u-userinfo{height:80px;background:#fcfcfd;border-bottom:1px solid #d9d9d9;}
 .m-visitor{height:123px;}
 .m-sidemenu{}
 .m-sidemenu .u-tit{height:25px;line-height:25px;cursor:pointer;}
@@ -234,7 +235,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .m-dialog2 .u-record{overflow-y:scroll;}
 .m-dialog2 .u-operate{}
 .m-dialog2 .u-operatebar{height:25px;padding:0 10px;line-height:25px;background:#fcfcfd;border:solid #d9d9d9;border-width:1px 0;overflow:hidden;}
-.m-dialog2 .u-input{position:relative;overflow:hidden;}
+.m-dialog2 .u-input{position:relative;}
 .m-dialog2 .u-txtarea{position:absolute;top:0;left:0;margin:0;border:0 none;resize:none;}
 .m-dialog2 .u-send{float:right;width:100px;padding:34px 0;text-align:center;}
 .m-dialog2 .u-send .dropdown-menu{min-width:100px;}
@@ -283,7 +284,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .m-dialog .u-record{overflow-y:scroll;}
 .m-dialog .u-operate{}
 .m-dialog .u-operatebar{height:25px;padding:0 10px;line-height:25px;background:#fcfcfd;border:solid #d9d9d9;border-width:1px 0;overflow:hidden;}
-.m-dialog .u-input{position:relative;overflow:hidden;}
+.m-dialog .u-input{position:relative;}
 .m-dialog .u-txtarea{position:absolute;top:0;left:0;margin:0;border:0 none;resize:none;}
 .m-dialog .u-send{float:right;width:100px;padding:34px 0;text-align:center;}
 .m-dialog .u-send .dropdown-menu{min-width:100px;}
@@ -324,6 +325,9 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .r-sms-manager .r-visitor{color:#0000ff;}
 .r-sms-visitor .r-manager{color:#0000ff;}
 .r-sms-visitor .r-visitor{color:#008040;}
+.m-dialog2 .u-record{padding:0 6px;}
+.m-dialog2 .u-record .r-visitor-txt{text-align:right;padding-right:19px;}
+.m-dialog2 .r-sms-manager .r-visitor{text-align:right;}
 
 /* 状态栏 */
 .g-bd3{height:26px;margin:5px;font-size:12px;color:#999;}

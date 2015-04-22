@@ -59,7 +59,15 @@ public class User implements Serializable {
 	private String roleName;
 	@Column(name="deptName")
 	private String deptName;
+	@Column(name="isLock")
+	private Integer isLock;
 	
+	public Integer getIsLock() {
+		return isLock;
+	}
+	public void setIsLock(Integer isLock) {
+		this.isLock = isLock;
+	}
 	public String getRoleName() {
 		return roleName;
 	}

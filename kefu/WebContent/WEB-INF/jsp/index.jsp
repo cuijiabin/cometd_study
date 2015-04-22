@@ -11,7 +11,7 @@
 <jsp:include page="top.jsp"/>
 <div class="g-bd">
 	<div class="g-sd f-fl">
-    	<div id="leftMain" class="f-fl"></div>
+    	<div id="Scroll"><div id="leftMain" class="f-fl"></div></div>
         <a href="javascript:;" id="openClose" style="outline-style:none;outline-color:invert;outline-width:medium;" hideFocus="hidefocus" class="open" title="展开与关闭"><span class="f-dn">展开</span></a>
     </div>    
     <div class="g-mn">

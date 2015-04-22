@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -10,9 +12,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.MessageRecords;
+import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.MessageRecordsService;
+import com.xiaoma.kefu.util.AddressUtil;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.CookieUtil;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * 留言信息 	controller
@@ -28,6 +35,8 @@ public class MessageRecordsController {
 
 	@Autowired
 	private MessageRecordsService messageRecordsService;
+	@Autowired
+	private CustomerService customerService;
 	
 	private Logger logger = Logger.getLogger(MessageRecordsController.class);
 	
@@ -66,6 +75,30 @@ public class MessageRecordsController {
 	@RequestMapping(value = "add.action", method = RequestMethod.POST)
 	public String add(HttpServletRequest request,Model model,@ModelAttribute("mr")MessageRecords mr) {
 		try {
+			if(mr == null ||mr.getReplyType() == null || mr.getCustomerId()==null || StringHelper.isEmpty(mr.getMessageContent()) || 
+					mr.getReplyWay() == null || StringHelper.isEmpty(mr.getName()) || StringHelper.isEmpty(mr.getPhone())){
+				model.addAttribute("result", Ajax.JSONResult(1, "数据不完整,请刷新后重新填写!"));
+				return "resultjson";
+			}
+			Customer customer = customerService.getCustomerById(mr.getCustomerId());
+			if(customer == null){
+				model.addAttribute("result", Ajax.JSONResult(1, "数据不完整,请刷新后重新填写!"));
+				return "resultjson";
+			}
+			mr.setCreateDate(new Date());
+			mr.setCustomerName(customer.getCustomerName());
+			if(mr.getReplyType() != 2){
+				mr.setDeptId(null);
+				mr.setUserId(null);
+			}else{
+				mr.setDeptId(1);
+			}
+			mr.setStyleId(customer.getStyleId());
+			mr.setStatus(1);
+			mr.setIp(customer.getIp());
+			mr.setIpInfo(customer.getIpInfo());
+			mr.setFirstLandingPage(customer.getFirstLandingPage());
+			mr.setIsDel(0);
 			messageRecordsService.add(mr);
 //			model.addAttribute("msg", msg);
 			model.addAttribute("result", Ajax.JSONResult(0, "操作完成!"));

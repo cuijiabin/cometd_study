@@ -77,6 +77,7 @@ public class DepartmentService {
 		int count = deptDaoImpl.getMaxNum();
 		dept.setId(count+1);
         dept.setIsDel(0);
+        dept.setUserCount(0);
        int deptId = (Integer) deptDaoImpl.add(dept);
 		List<Role> list = roleDaoImpl.findRole();
 		for (Role role : list) {

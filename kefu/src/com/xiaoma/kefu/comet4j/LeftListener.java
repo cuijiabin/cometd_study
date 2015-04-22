@@ -40,8 +40,7 @@ public class LeftListener extends DropListener {
 				//获取通话对话点并删除
 				String toUserCcnId = JedisTalkDao.getCcnPassiveId(ccnId);
 				JedisTalkDao.delCcnPassiveId(ccnId);
-				JedisTalkDao.remCcnReceiveList(ccnId, toUserCcnId);
-				JedisTalkDao.decrCurrentReceiveCount(toUserCcnId);
+				JedisTalkDao.remCcnReceiveList(toUserCcnId, ccnId);
 				
 				//保存会话
 		        String key = JedisConstant.getDialogueListKey(toUserCcnId,ccnId);
@@ -49,8 +48,6 @@ public class LeftListener extends DropListener {
 				
 				logger.info("前端用户customerId："+customerId+" ,退出联接; 通信点id："+ccnId+" ,关联客服通信点id："+toUserCcnId
 						+" ,客服id: "+JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, toUserCcnId));
-				// 写入cookie
-				// DesUtil.encrypt(userId,PropertiesUtil.getProperties(CacheName.SECRETKEY));
 				
 				//通知客更新后台列表
 				CometEngine engine = (CometEngine) anEvent.getTarget();
@@ -79,11 +76,9 @@ public class LeftListener extends DropListener {
 				
 				//清空
 				String ccnReceiveListKey = JedisConstant.genCcnReceiveListKey(ccnId);
-				String currentReceiveCountKey = JedisConstant.genCurrentReceiveCountKey(ccnId);
-				JedisDao.getJedis().del(ccnReceiveListKey,currentReceiveCountKey);
+				JedisDao.getJedis().del(ccnReceiveListKey);
 				
-				logger.info("客服userId："+userId+" ,退出联接; 通信点id："+ccnId+" ,清空接待列表key："+ccnReceiveListKey
-						+" ,清空接待列表数量key: "+currentReceiveCountKey);
+				logger.info("客服userId："+userId+" ,退出联接; 通信点id："+ccnId+" ,清空接待列表key："+ccnReceiveListKey);
 				
 				//通知前端用户对话结束！
 				NoticeData nd = new NoticeData(Constant.ON_CLOSE, null);

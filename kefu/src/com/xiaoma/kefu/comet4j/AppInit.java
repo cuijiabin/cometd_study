@@ -3,9 +3,11 @@ package com.xiaoma.kefu.comet4j;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.Logger;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.thread.SaveDialogueThread;
 
 /**
@@ -13,6 +15,8 @@ import com.xiaoma.kefu.thread.SaveDialogueThread;
  * @author cuijiabin
  */
 public class AppInit implements ServletContextListener {
+	
+	private Logger logger = Logger.getLogger(AppInit.class);
 
 	/**
 	 * 初始化默认通道
@@ -28,6 +32,11 @@ public class AppInit implements ServletContextListener {
 		
 		//删除时监听
 		engine.addDropListener(new LeftListener());
+		
+		//启动时先默认删除所有缓存
+		logger.info("启动时先默认删除所有缓存");
+		CacheMan.removeAll();
+		
         
 		//全程监听 保存对话内容
 		Thread saveDialogueThread = new Thread(new SaveDialogueThread(), "SaveDialogueThread");

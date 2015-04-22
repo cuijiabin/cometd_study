@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -21,22 +20,15 @@ import com.xiaoma.kefu.util.StringHelper;
 
 @Repository("userDaoImpl")
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(UserDaoImpl.class);
 
 	@Override
-	public User findUser(String name, String password) {
+	public User findUser(String name) {
 		Session session = getSession();
-		String hql = "from User u where u.loginName = :name and u.password = :password and u.status = 1";
+		String hql = "from User u where u.loginName = :name and u.status = 1";
 		Query query = session.createQuery(hql);
-		// 设置参数,使用MD5对密码进行加密
-		try {
-			password = new String(
-					DigestUtils.md5Hex(password.getBytes("UTF-8")));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		query.setString("name", name);
-		query.setString("password", password);
 		return (User) query.uniqueResult();
 	}
 

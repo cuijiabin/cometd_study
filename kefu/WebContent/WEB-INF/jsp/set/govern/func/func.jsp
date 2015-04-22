@@ -138,7 +138,6 @@ function loadReady() {
 function saveFunc(){
 	var treeObj = $.fn.zTree.getZTreeObj("tree");
 	var nodes = treeObj.getCheckedNodes(true);
-	alert(nodes);
 	var ids="";
 	for (var i = 0; i < nodes.length; i++) {
 		 ids+=nodes[i].id+",";

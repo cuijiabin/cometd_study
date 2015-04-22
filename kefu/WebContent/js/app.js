@@ -47,8 +47,8 @@ function wSize(){
 	$(".m-talk").height(heights2-33);
 	$(".g-mn2c-cnt").height(heights2-39);
 	$(".g-sd2r").height(heights2-5);
-	$(".m-dialog2").height(heights3-145);
-	$(".m-dialog2 .u-record").height(heights2-190);
+	$(".m-dialog2").height(heights3-246);
+	$(".m-dialog2 .u-record").height(heights2-291);
 	var heights5 = $(".m-dialog2").height()-$(".m-dialog2 .u-record").height();
 	$(".m-dialog2 .u-operate").height(heights5);
 	$(".m-dialog2 .u-txtarea").height(heights5-35);
@@ -105,9 +105,9 @@ $("#openClose").click(function(){
 // 客服端访客对话框架-手风琴菜单
 jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
 // 关闭按钮
-//$(".u-close").click(function(){
-//	$(this).parent().remove();
-//})
+$(".u-close").click(function(){
+	$(this).parent().remove();
+})
 // 客户端访客对话框架
 jQuery(".slideTab").slide({trigger:"click"});
 jQuery(".slideTab2").slide({trigger:"click"});

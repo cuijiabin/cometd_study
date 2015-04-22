@@ -33,6 +33,7 @@
                 <div class="bd">
                     <div class="g-mn5c c-bor">
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
+                        <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -83,16 +84,16 @@
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复方式：</label>
                                         <div class="u-subsec">
-                                        	<c:forEach varStatus="status" items="${reply}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> name="reply" value="${d.itemCode}" />${ d.itemName }</label>
+                                        	<c:forEach varStatus="status" items="${replyWay}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="true" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                     </div>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复对象：</label>
                                         <div class="u-subsec">
-                                        	<c:forEach varStatus="status" items="${message}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="message" value="${d.itemCode}" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                        	<c:forEach varStatus="status" items="${replyType}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                         <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
@@ -161,6 +162,7 @@
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
 <script language="javascript" for="window" event="onload"> 
 
    var maxLogCount = 100;
@@ -172,7 +174,7 @@
 				start : function(cId, aml, engine) {
 					var style = engine.getConnector().workStyle;
 					style = style === 'stream'?'长连接':'长轮询';
-					console.log("style: "+ style);
+					console.log("style: "+ style+"cId: "+cId);
 					var str = ['<div class="r-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>'];
 					logbox.innerHTML += str.join('');
 				},
@@ -395,11 +397,57 @@
 			else
 				$("#teacher").show();
 		}
+		function checkMessage(){
+			var custName = $("#custName").val();
+			if(!custName || custName.length>20){
+				$.dialog.alert("姓名不能为空或超过20个字符!");
+				return true;
+			}
+			var custPhone = $("#custPhone").val();
+			if (custPhone.replace("^[ ]+$", "").length != 0) {
+				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
+				if (!pattenPhone.test(custPhone)) {
+					$.dialog.alert("手机号码为空或者格式不正确!");
+					return true;
+				}
+			}else{
+				$.dialog.alert("手机号码为空或者格式不正确!");
+				return true;
+			}
+			var custContent = $("#custContent").val();
+			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
+				$.dialog.alert("留言内容应在10-200个字符之间!");
+				return true;
+			}
+			return false;
+		}
 		function addMessage(){
-			 data = {
-					   "id":id,
-						"name" : $("#name").val(),
-						"sortNum": $("#sortNum").val()
+			if(checkMessage()){
+				return;
+			}
+			var replyWay="";
+			$('input[name="replyWay"]').each(function(){    
+				if(this.checked){
+					replyWay=this.value;
+				}
+				//message += $(this).val() + ",";    
+			  });
+			var replyType="";
+			$('input[name="replyType"]').each(function(){    
+				if(this.checked){
+					replyType=this.value;
+				}
+				//message += $(this).val() + ",";    
+			  });
+			var data = {
+					   "customerId":$("#currentCustomerId").val(),
+						"userId" : $("#teacher").val(),
+						"replyWay" : replyWay,
+						"replyType" :replyType,
+						"name": $("#custName").val(),
+						"email": $("#custEmail").val(),
+						"phone": $("#custPhone").val(),
+						"messageContent": $("#custContent").val().replace("^[ ]+$", "")
 					};
 			 $.ajax({
 		    		type : "post",
@@ -409,15 +457,13 @@
 		    		async:false,
 		    		success : function(data) {
 		    			if (data.result == 0) {
-		    				W.$.dialog.alert('操作成功!',function(){
-		    					W.addCallback();		
-		    	    		});
+		    				$.dialog.alert('留言成功!');
 		    			} else {
-		    				W.$.dialog.alert(data.msg);
+		    				$.dialog.alert(data.msg);
 		    			}
 		    		},
 		    		error : function(msg) {
-		    			W.$.dialog.alert(data.msg);
+		    			$.dialog.alert(data.msg);
 		    		}
 		    	});
 		}

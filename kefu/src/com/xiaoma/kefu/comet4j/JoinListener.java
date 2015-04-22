@@ -1,7 +1,6 @@
 package com.xiaoma.kefu.comet4j;
 
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,11 +11,9 @@ import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
 
 import com.xiaoma.kefu.common.SpringContextUtil;
-import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
-import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 
@@ -26,7 +23,6 @@ import com.xiaoma.kefu.util.CookieUtil;
  */
 public class JoinListener extends ConnectListener {
 
-	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
 
 	private UserService userService = (UserService) SpringContextUtil.getBean("userService");
 	private Logger logger = Logger.getLogger(JoinListener.class);
@@ -37,6 +33,8 @@ public class JoinListener extends ConnectListener {
 		HttpServletRequest request = conn.getRequest();
 		
 		String referer = request.getHeader("referer");
+		
+		logger.info("JoinListener referer: "+referer);
 
 		HttpSession session = request.getSession();
 
@@ -56,10 +54,8 @@ public class JoinListener extends ConnectListener {
 			logger.info("客服："+userId+" ,进入对话系统; 通信点id： "+ccnId);
 		} else {
 			try {
-				Cookie[] cookies = request.getCookies();
-				String customerId = "100000050";
-				logger.info("穿入的customerId："+cookies);
 				
+				String customerId = CookieUtil.getCustomerIdFromCookie(request);
 
 				// 添加至当前用户通信点
 				JedisTalkDao.setCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId, customerId);
@@ -71,7 +67,6 @@ public class JoinListener extends ConnectListener {
 				String allocateCnnId = JedisTalkDao.allocateCcnId();
 				
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
-				JedisTalkDao.incrCurrentReceiveCount(allocateCnnId);
 				
 				//设置被谁接待
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);

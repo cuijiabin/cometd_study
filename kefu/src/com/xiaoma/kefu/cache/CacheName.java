@@ -31,6 +31,8 @@ public class CacheName {
 	public static final String SYSFUNCTIONONE="sysfunctionOne";
 	//根据父节点id左侧树状
 	public static final String FUNCTIONTREEBYID="functionTreeById";
+	//登录时记录错误登录的次数
+	public static final String LOGINCOUNT="loginCount";
 	
 	
 	

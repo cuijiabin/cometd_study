@@ -1,7 +1,5 @@
 package com.xiaoma.kefu.redis;
 
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -119,20 +117,12 @@ public class JedisDao {
 		jedis.del(key);
 	}
 	
-	
-	
-	
-	
-	
 	/***
 	 * 删除全部缓存，慎用。
 	 */
 	public static void flushAll(){
 		jedis = getJedis();
 		jedis.flushAll();
-		
-		Set<String> keys = jedis.keys("chananme*");
-		jedis.del((String[]) keys.toArray());
 	}
 	
 	public static void main(String[] args) {

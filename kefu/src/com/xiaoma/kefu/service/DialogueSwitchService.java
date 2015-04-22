@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.dao.DialogueSwitchDao;
 import com.xiaoma.kefu.model.DialogueSwitch;
 
-@Service
+@Service("dialogueSwitchService")
 public class DialogueSwitchService {
 
 	@Resource()

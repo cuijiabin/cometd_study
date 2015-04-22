@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,16 +40,19 @@ public class FunctionService {
 	@Autowired
 	private KeyboardDao keyDao;
 
-	public List findFuncOne() {
+	@SuppressWarnings("unchecked")
+	public List<Function> findFuncOne() {
 
 		return funcDao.findBylevel(1);
 	}
 
-	public List findTree(int tid) {
+	@SuppressWarnings("unchecked")
+	public List<Function> findTree(int tid) {
 
 		return funcDao.findTree(tid);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findFunction() {
 
 		return funcDao.findAll();
@@ -71,6 +73,8 @@ public class FunctionService {
 	public Integer saveFunc(Integer roleId, Integer deptId, String ids) {
 		RoleDept roleDept = roleDeptDao.findRoleDeptBy(roleId, deptId);
 		Integer success = roleDeptDao.deleteRD(roleDept.getId());
+		if(ids=="")
+			return 1;
 		if (success == 1) {
 			if (roleDept != null) {
 				int isSuccess = 0;
@@ -114,7 +118,8 @@ public class FunctionService {
 	 * @param id
 	 * @return
 	 */
-    public Object userFuncs(Integer id){
+    @SuppressWarnings("unchecked")
+	public Object userFuncs(Integer id){
     	User user = userDao.findById(User.class, id);
     	RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(), user.getDeptId());
 		List<Function> list= funcDao.getUserFuc(roleDept.getId());
@@ -131,8 +136,8 @@ public class FunctionService {
      * @param codes
      * @return
      */
-	public List checkFuncOne(List<Function> list, String codes) {
-		List listFunc = new ArrayList();
+	public List<Function> checkFuncOne(List<Function> list, String codes) {
+		List<Function> listFunc = new ArrayList<Function>();
 		if(list == null){
 			return listFunc;
 		}
