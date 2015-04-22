@@ -120,7 +120,7 @@ public class UserService {
 		Integer succ=(Integer) userDaoImpl.add(user);
 		List<Department> dlist =deptDao.getDeptById(user.getDeptId());
 		Department dept = dlist.get(0);
-		dept.setUserCount(dept.getUserCount()-1);
+		dept.setUserCount(dept.getUserCount()+1);
 		deptDao.update(dept);
 		 return succ;
 	}
