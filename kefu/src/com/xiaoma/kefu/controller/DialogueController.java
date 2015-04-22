@@ -127,11 +127,11 @@ public class DialogueController {
 		
 		
 		// 留言框生成规则 --------------开始
-		model.addAttribute("reply", dialogueService.findReplyWayList());
-		model.addAttribute("message", dialogueService.findMessageObject());
-
-		// 获取客服部人员列表
-		model.addAttribute("userList", dialogueService.findReplyWayList());
+		model.addAttribute("replyWay",dialogueService.findReplyWayList());
+		model.addAttribute("replyType",dialogueService.findMessageObject());
+		
+		//获取客服部人员列表
+		model.addAttribute("userList",userService.getResultDept(1));
 		// 留言框生成规则 ---------------结束
 
 		return "/dialogue/customerChat";
