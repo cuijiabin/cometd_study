@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.redis;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -250,64 +251,17 @@ public class JedisTalkDao {
 
 	public static Integer getCurrentReceiveCount(String ccnId) {
 
-		String key = JedisConstant.genCurrentReceiveCountKey(ccnId);
+		String key = JedisConstant.genCcnReceiveListKey(ccnId);
 
 		Jedis jedis = JedisDao.getJedis();
 
-		String value = jedis.get(key);
+		Long size = jedis.zcard(key);
 
-		Integer count = (StringUtils.isBlank(value)) ? 0 : Integer
-				.valueOf(value);
-
-		return count;
+		return size.intValue();
 	}
-
-	public static Boolean setCurrentReceiveCount(String ccnId, Integer count) {
-
-		String key = JedisConstant.genCurrentReceiveCountKey(ccnId);
-
-		Jedis jedis = JedisDao.getJedis();
-
-		String replay = jedis.set(key, count.toString());
-		
-		logger.info("redis set key:" + key +" value: "+ count);
-
-		return StringUtils.isNotBlank(replay);
-	}
-
-	/**
-	 * 通信点接待数量自增
-	 * @param ccnId
-	 * @return
-	 */
-	public static Boolean incrCurrentReceiveCount(String ccnId) {
-
-		String key = JedisConstant.genCurrentReceiveCountKey(ccnId);
-
-		Jedis jedis = JedisDao.getJedis();
-
-		Long replay = jedis.incr(key);
-		
-		logger.info("redis incr key:" + key);
-
-		return (replay > 0);
-	}
-
-	public static Boolean decrCurrentReceiveCount(String ccnId) {
-
-		String key = JedisConstant.genCurrentReceiveCountKey(ccnId);
-
-		Jedis jedis = JedisDao.getJedis();
-
-		Long replay = jedis.decr(key);
-		
-		logger.info("redis decr key:" + key);
-
-		return (replay > 0);
-	}
-
+	
 	// #################################
-
+    
 	public static List<String> getCcnReceiveList(String ccnId) {
 
 		String key = JedisConstant.genCcnReceiveListKey(ccnId);
@@ -525,7 +479,7 @@ public class JedisTalkDao {
 		
 		return jedis.zrange(JedisConstant.OFF_LINE_USER_SET, 0, -1);
 	}
-	public Boolean addOffLineUserSet(String userId){
+	public static Boolean addOffLineUserSet(String userId){
 		
 		Jedis jedis = JedisDao.getJedis();
 
@@ -536,7 +490,7 @@ public class JedisTalkDao {
 		return (id > 0);
 	}
 	
-	public Boolean remOffLineUserSet(String userId){
+	public static Boolean remOffLineUserSet(String userId){
 		
 		Jedis jedis = JedisDao.getJedis();
 
@@ -556,36 +510,6 @@ public class JedisTalkDao {
 	 * @return
 	 */
 	public static String allocateCcnId() {
-
-		List<String> cnnList = getCcnList(JedisConstant.USER_TYPE);
-//		Set<String> userList = new HashSet<String>();
-//		Map<String, Integer> userCountMap = new HashMap<String, Integer>();
-//		for (String ccnId : cnnList) {
-//			String userId = getCnnUserId(JedisConstant.USER_TYPE, ccnId);
-//			if (StringUtils.isNotBlank(userId)) {
-//				Integer num = getCurrentReceiveCount(userId);
-//				userList.add(userId);
-//				Integer count = userCountMap.get(userId);
-//				count = (count == null) ? num : (num + count);
-//				userCountMap.put(userId, count);
-//			}
-//		}
-//
-//		String result = null;
-//		Integer maxLastCount = null;
-//		for (String userId : userList) {
-//			Integer lastCount = getMaxReceiveCount(userId)
-//					- userCountMap.get(userId);
-//			if (maxLastCount == null || maxLastCount < lastCount) {
-//				maxLastCount = lastCount;
-//				result = userId;
-//			}
-//		}
-//		if (result == null) {
-//			return result;
-//		}
-//
-//		result = getUserCcnList(result).get(0);
 		
 		String key = JedisConstant.genCcnListKey(JedisConstant.USER_TYPE);
 
@@ -594,17 +518,14 @@ public class JedisTalkDao {
 		Long size = jedis.zcount(key, Long.MIN_VALUE, Long.MAX_VALUE);
 		size = (size == 0) ? 0L : size-1;
 		
-
 		Set<String> set = jedis.zrange(key, Integer.parseInt(size.toString()), -1);
 		Iterator<String> it = set.iterator();
-		
-
 		return it.next();
 
 	}
 	
 	/**
-	 * 获取所有在线用户（对话框未关闭）
+	 * 获取所有在线用户（对话框未关闭,去重）
 	 * 
 	 * @return
 	 */
@@ -613,8 +534,18 @@ public class JedisTalkDao {
 		String keyPattern = JedisConstant.genCcnKey(JedisConstant.USER_TYPE, "*");
 		Jedis jedis = JedisDao.getJedis();
 		Set<String> keys = jedis.keys(keyPattern);
+		if(null == keys || keys.size() < 1){
+			return null;
+		}
 		
-		return jedis.mget((String[])keys.toArray());
+		String[] keyArray = new String[keys.size()];
+		keyArray = (String[]) keys.toArray(keyArray);
+		
+		//去重
+		Set<String> set = new HashSet<String>();
+		set.addAll(jedis.mget(keyArray));
+		
+		return new ArrayList<String>(set);
 		
 	}
 	

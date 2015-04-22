@@ -20,18 +20,17 @@ public class JedisConstant {
 	 * 客服类型
 	 */
 	public static final Integer USER_TYPE = 2;
-	
+
 	/**
 	 * 通信点id
 	 */
 	public static final String CCN_ID = "ccn_id:";
 
-	
 	/**
 	 * 当前通信点(ccnId+type --> userId)
 	 */
 	public static final String CURRENT_CCN_TYPE = "current_ccn_type:";
-	
+
 	/**
 	 * 用户的通信点列表(userId --> zset[ccnId])
 	 */
@@ -41,26 +40,19 @@ public class JedisConstant {
 	 * 当前通信点列表(userType --> zset[ccnId])
 	 */
 	public static final String CURRENT_CCN_LIST = "current_ccn_list:";
-	
-	
 
 	// #######################与接待有关系
-	
+
 	/**
 	 * 最大接待量（userId --> num）
 	 */
 	public static final String MAX_RECEIVE_COUNT = "max_receive_count:";
 
 	/**
-	 * 当前接待量(ccnId --> num)
-	 */
-	public static final String CURRENT_RECEIVE_COUNT = "current_receive_count:";
-
-	/**
 	 * 用户通信点列表(ccnId --> zset[ccnId])
 	 */
 	public static final String CCN_RECEIVE_LIST = "ccn_receive_list:";
-	
+
 	/**
 	 * 被接收通信点
 	 */
@@ -75,22 +67,22 @@ public class JedisConstant {
 	 * 对话列表( 客服ccnId+客户ccnId --> list)
 	 */
 	public static final String DIALOGUE_LIST = "dialogue_list:";
-	
+
 	/**
 	 * 待保存对话队列
 	 */
 	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
-	
+
 	/**
 	 * 缓存客服信息
 	 */
 	public static final String USER_INFO = "user_info:";
-	
+
 	/**
 	 * 缓存客户信息
 	 */
 	public static final String CUSTOMER_INFO = "customer_info:";
-	
+
 	/**
 	 * 离线用户列表
 	 */
@@ -108,9 +100,10 @@ public class JedisConstant {
 
 		return CURRENT_CCN_TYPE + type + CCN_ID + ccnId;
 	}
-	
+
 	/**
 	 * 生成用户通信点列表key
+	 * 
 	 * @param userId
 	 * @return
 	 */
@@ -129,10 +122,8 @@ public class JedisConstant {
 
 		return CURRENT_CCN_LIST + type;
 	}
-	
-	
-	
-	//##################################################
+
+	// ##################################################
 	/**
 	 * 生成最大接待数量的key
 	 * 
@@ -143,21 +134,10 @@ public class JedisConstant {
 
 		return MAX_RECEIVE_COUNT + userId;
 	}
-	
-	
-	/**
-	 * 生成通信点接待数量的key
-	 * 
-	 * @param ccnId
-	 * @return
-	 */
-	public static String genCurrentReceiveCountKey(String ccnId) {
 
-		return CURRENT_RECEIVE_COUNT + ccnId;
-	}
-	
 	/**
 	 * 生成通信点接待列表
+	 * 
 	 * @param ccnId
 	 * @return
 	 */
@@ -165,7 +145,7 @@ public class JedisConstant {
 
 		return CCN_RECEIVE_LIST + ccnId;
 	}
-	
+
 	/**
 	 * 生成被接收通信点
 	 */
@@ -185,7 +165,6 @@ public class JedisConstant {
 		return TALKER_TYPE + type + CCN_ID + ccnId;
 	}
 
-	
 	/**
 	 * 生成对话列表的key
 	 * 
@@ -196,50 +175,48 @@ public class JedisConstant {
 
 		return DIALOGUE_LIST + uccnId + CCN_ID + cccnId;
 	}
-	
+
 	/**
 	 * 检查对话列key表格式是否正确
+	 * 
 	 * @param dialogueListKey
 	 * @return
 	 */
-	public static Boolean checkDialogueListKey(String dialogueListKey){
-		
-		if(StringUtils.isBlank(dialogueListKey)){
+	public static Boolean checkDialogueListKey(String dialogueListKey) {
+
+		if (StringUtils.isBlank(dialogueListKey)) {
 			return false;
 		}
-		
+
 		int start = dialogueListKey.indexOf(DIALOGUE_LIST);
-		if(start < 0){
+		if (start < 0) {
 			return false;
 		}
-		
+
 		int end = dialogueListKey.indexOf(CCN_ID);
-		if(end <= start+DIALOGUE_LIST.length()){
+		if (end <= start + DIALOGUE_LIST.length()) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	public static String getUccnIdFromKey(String dialogueListKey){
-		int start = dialogueListKey.indexOf(DIALOGUE_LIST)+DIALOGUE_LIST.length();
+
+	public static String getUccnIdFromKey(String dialogueListKey) {
+		int start = dialogueListKey.indexOf(DIALOGUE_LIST)
+				+ DIALOGUE_LIST.length();
 		int end = dialogueListKey.indexOf(CCN_ID);
-		
+
 		return dialogueListKey.substring(start, end);
 	}
-	
-	public static String getCccnIdFromKey(String dialogueListKey){
-		
-		int start = dialogueListKey.indexOf(CCN_ID)+CCN_ID.length();
-		
+
+	public static String getCccnIdFromKey(String dialogueListKey) {
+
+		int start = dialogueListKey.indexOf(CCN_ID) + CCN_ID.length();
+
 		return dialogueListKey.substring(start);
 	}
-	
+
 	public static void main(String[] args) {
-		String demo = "dialogue_list:7e3f5bd8-6da1-4e77-be0f-d5b830dad76dccn_id:1c92dbe4-5ea7-4826-91fd-5ee71ee14e2e";
-		Boolean start = checkDialogueListKey(demo);
-		
-		System.out.println(start);
 	}
-	
+
 }

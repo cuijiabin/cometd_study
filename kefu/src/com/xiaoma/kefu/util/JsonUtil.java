@@ -90,4 +90,15 @@ public class JsonUtil {
 		return result;
 	}
 	
+	public static List<Integer> convertString2Integer(List<String> list) {
+		if (CollectionUtils.isEmpty(list)) {
+			return null;
+		}
+		List<Integer> result = new ArrayList<Integer>();
+		for (String li : list) {
+			result.add(Integer.valueOf(li));
+		}
+		return result;
+	}
+	
 }

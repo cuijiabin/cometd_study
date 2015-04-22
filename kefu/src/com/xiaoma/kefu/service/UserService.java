@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.service;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,11 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
@@ -240,6 +243,19 @@ public class UserService {
 
 		List<User> list = userDaoImpl.getUsertByDeptId(deptId);
 		return list;
+	}
+	
+	/**
+	 * 根据id列表批量获取用户
+	 * @param ids
+	 * @return
+	 */
+	public List<User> getUsersByIds(List<Integer> ids){
+		List<Serializable> userIds = JsonUtil.convertInteger2Serializable(ids);
+		if(CollectionUtils.isEmpty(userIds)){
+			return null;
+		}
+		return userDaoImpl.findByIds(User.class, userIds);
 	}
 
 }

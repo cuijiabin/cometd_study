@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.DialogueSwitch;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DialogueSwitchService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.StudyMapUtil;
@@ -41,6 +43,9 @@ public class ChatCometController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private DialogueSwitchService dialogueSwitchService;
 	
 	private Logger logger = Logger.getLogger(ChatCometController.class);
 
@@ -235,5 +240,58 @@ public class ChatCometController {
 
 		return;
 
+	}
+	
+	/**
+	 * 客服转接操作
+	 * @param request
+	 * @param response
+	 * @param ccnId
+	 * @param toUserId
+	 * @param customerId
+	 */
+	public void switchDialogue(HttpServletRequest request,HttpServletResponse response, String ccnId,Integer toUserId,Long customerId,String remark,String customerCcnId){
+		
+		logger.info("switchDialogue param ccnId: "+ccnId+" ,toUserId: "+toUserId+" ,customerId: "+customerId);
+		String uId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+		Integer userId = Integer.valueOf(uId);
+		
+		//参数检查
+		if(userId == null || toUserId == null || customerId == null){
+			return ;
+		}
+		
+		//保存转接记录到数据库
+		DialogueSwitch dialogueSwitch = new DialogueSwitch();
+		dialogueSwitch.setFromUserId(userId);
+		dialogueSwitch.setToUserId(toUserId);
+		dialogueSwitch.setCustomerId(customerId);
+		
+		dialogueSwitch.setRemark(remark);
+		dialogueSwitch.setCreateDate(new Date());
+		
+		dialogueSwitchService.addDialogueSwitch(dialogueSwitch);
+		
+		String toCcnId = JedisTalkDao.getUserCcnList(toUserId.toString()).get(0);
+		
+		//保存会话
+        String key = JedisConstant.getDialogueListKey(ccnId,customerCcnId);
+        JedisTalkDao.lpushSaveDialogue(key);
+		
+        //添加到离线客户列表
+        JedisTalkDao.addOffLineUserSet(uId);
+        
+        //修改接待列表
+        JedisTalkDao.remCcnReceiveList(ccnId, customerCcnId);
+        JedisTalkDao.addCcnReceiveList(toCcnId, customerCcnId);
+        
+        //发送通知
+
+		CometEngine engine = context.getEngine();
+		CometConnection ccn = engine.getConnection(ccnId);
+		
+		NoticeData nd = new NoticeData(Constant.UPDATE_LIST, null);
+		
+		engine.sendTo(Constant.CHANNEL, ccn, nd);
 	}
 }

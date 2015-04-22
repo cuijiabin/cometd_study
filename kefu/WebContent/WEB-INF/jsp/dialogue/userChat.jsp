@@ -36,9 +36,8 @@
         </div>
         <div class="g-sd1 f-fr">
          <ul class="f-cb">
-                <li><a href="#">添加工单</a></li>
                 <li><i>|</i><a href="#">访客阻止</a></li>
-                <li><i>|</i><a href="#"> 客服转接</a></li>
+                <li><i>|</i><a href="javascript:switchCustomer()"> 客服转接</a></li>
             </ul>
         </div>
     </div>
@@ -160,7 +159,7 @@
 		start : function(cId, aml, engine) {
 			var style = engine.getConnector().workStyle;
 			style = style === 'stream'?'长连接':'长轮询';
-			console.log("连接方式style: "+ style);
+			console.log("style: "+ style+"cId: "+cId);
 			var str = ['<div class="r-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>'];
 			logbox.innerHTML += str.join('');
 		},
@@ -453,7 +452,58 @@
 		return d.pattern(pattern);
 	}
 	
+	//客服转接对话框
+	function switchCustomer(){
+		var customerId = $("#currentCustomerId").val();
+		
+		if(customerId == null || customerId.length ==0){
+			$.dialog.alert("没有选中客户");
+		}else{
+			$.ajax({
+			    type: "get",
+			    url: "/dialogue/switchList.action?customerId="+customerId,
+			    contentType: "application/json; charset=utf-8",
+			    dataType: "html",
+			    success: function (data) {
+			    	$.dialog({
+						content:data,
+						title:"客服转接",
+						width: 400,
+						height: 300,
+						id:'editBlackList',
+						button: [
+							        {
+							            name: '确定',
+							            callback: function () {
+							            	submitswitchInfo();
+							            },
+							            focus: true
+							        },
+							        {
+							            name: '取消',
+							            callback: function () {
+							            }
+							        }
+							    ]});
+			    },
+			    error: function () {
+			    	$.dialog.alert("获取转接客户失败！");
+			    }
+			});
+		}
+		
+		
+		
+	}
 	
+	//向后台提交事务
+	function submitswitchInfo(){
+		var switchUserId = $("#switchUserId").val();
+		var switchContent = $("#switchContent").val();
+		var customerId = $("#currentCustomerId").val();
+		
+		console.log(switchUserId+" , "+switchContent);
+	}
 	
 </script>
 <script type="text/javascript">

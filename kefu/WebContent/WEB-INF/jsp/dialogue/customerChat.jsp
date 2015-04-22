@@ -33,6 +33,7 @@
                 <div class="bd">
                     <div class="g-mn5c c-bor">
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
+                        <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -174,7 +175,7 @@
 				start : function(cId, aml, engine) {
 					var style = engine.getConnector().workStyle;
 					style = style === 'stream'?'长连接':'长轮询';
-					console.log("style: "+ style);
+					console.log("style: "+ style+"cId: "+cId);
 					var str = ['<div class="r-offline"><span class="alert alert-success">恭喜你，连接成功</span></div>'];
 					logbox.innerHTML += str.join('');
 				},

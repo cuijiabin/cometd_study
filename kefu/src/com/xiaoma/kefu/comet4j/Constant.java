@@ -10,5 +10,10 @@ public class Constant {
 	public static final String ON_CLOSE = "on_close";
 	public static final String ON_MESSAGE = "on_message";
 	public static final String UPDATE_LIST = "update_list";
+	
+	//客户转接通知
+	public static final String ON_SWITCH_CUSTOMER = "on_switch_customer";
+	public static final String ON_SWITCH_FROM = "on_switch_from";
+	public static final String ON_SWITCH_TO = "on_switch_to";
 
 }
