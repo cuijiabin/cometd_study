@@ -51,7 +51,7 @@ public class MessageTypeService {
    }
 
 	/**
-	 * 在弹出的对话框显示详细信息
+	 * 显示详细信息
 	 */
 	public MessageType getMessageTypeById(Integer id) {
 		return messageTypeDaoImpl.getMessageTypeById(id);

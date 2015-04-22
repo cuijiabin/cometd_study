@@ -7,7 +7,6 @@
 
 var zTree;
 	var demoIframe;
-
 	var setting = {
 		view: {
 			dblClickExpand: false,
@@ -29,13 +28,13 @@ var zTree;
 			}
 		},
 		callback: {
-			      onClick:zTreeOnClick
+	
+		    onClick:zTreeOnClick
 		}
 	};
 
 	var str ='${json}';
 	var zNodes = eval('('+ str +')');
-	
 	$(document).ready(function(){
 		var t = $("#tree");
 		t = $.fn.zTree.init(t, setting, zNodes);
@@ -45,7 +44,6 @@ var zTree;
 		zTree.expandAll(true);
 		//zTree.selectNode(zTree.getNodeByParam("id", 101));
 		//alert(3);
-
 	});
 
 	function loadReady() {
@@ -57,16 +55,25 @@ var zTree;
 		demoIframe.height(h);
 	}
 	
+	var id =  1;   //设置树节点ID默认为1
+	var title = '公共常用语分类设置';
+	var sortId= 1;
+	var pId= 0;
+	var status=1;
+	var typeId=1;
 	 //树单击事件显示详细信息
 	function zTreeOnClick(event, treeId, treeNode) {
-		
-		alert(zTree);
+	
 		var url = "/messageType/detail.action";
 		var data = {
-			"id" : sortId,
-	         "readonly" : true 
+			"id" : treeNode.id,
 		};
-
+		id=treeNode.id;    
+		title = treeNode.name;
+		sortId = treeNode.sortId;
+		pId = treeNode.pId;
+		status = treeNode.status;
+		typeId  =treeNode.typeId;
 		$.ajax({
 			type : "get",
 			url : url,
@@ -81,12 +88,11 @@ var zTree;
 			}
 		});
 
-
 	}
 
-  </SCRIPT>
-  </head>
 
+  </SCRIPT>
+ </head>
 <body style="background-color:transparent">
  <TABLE border=0 height=600px align=left>
 	<TR>

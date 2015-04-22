@@ -33,7 +33,12 @@ public class MessageTypeController {
 	@Autowired
 	private MessageTypeService messageTypeService;
 
-	// 查询各个级别的树
+	/**
+	 * 查询各个级别的树
+	 * @param model
+	 * @param id
+	 * @return
+	 */
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String main(Model model, Integer id) {
@@ -46,11 +51,11 @@ public class MessageTypeController {
 					MessageType mt = (MessageType)list.get(i);
 					JSONObject jObject = new JSONObject();
 					jObject.element("id", mt.getId()).element("pId", mt.getpId())
-						.element("name", mt.getTitle());
+						.element("name", mt.getTitle()).element("typeId",mt.getTypeId())
+						.element("sortId",mt.getSortId()).element("status",mt.getStatus());
 					json.add(jObject);
 				}
 			}
-			
 			System.out.println(json);
 			model.addAttribute("json", json.toString());
 			return "message/messageType";
@@ -65,10 +70,11 @@ public class MessageTypeController {
      * @return 返回值
      */
     @RequestMapping(value = "new.action",method=RequestMethod.GET)
-    public String toSave(Model model) {
+    public String toSave(Model model,Integer treeId,Integer typeId) {
+     model.addAttribute("treeId",treeId);
+     model.addAttribute("typeId",typeId);
         return "message/addMessageType";
      }
-    
     
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
 	public String save(HttpSession session, Model model,MessageType messageType) throws ParseException {
@@ -97,7 +103,19 @@ public class MessageTypeController {
 		 }
 		return "resultjson";
 	}
-
+  
+	  /**
+     * 编辑前页面跳转
+     * 
+     * @return 返回值
+     */
+    @RequestMapping(value = "toUpdate.action",method=RequestMethod.GET)
+    public String toUpdate(Model model,MessageType messageType,Integer treeId,Integer typeId) {
+    	 model.addAttribute("messageType", messageType);
+	     model.addAttribute("treeId",treeId);
+	     model.addAttribute("typeId",typeId);
+        return "message/editMessageType";
+     }
 	/**
 	 * 显示详细信息
 	 * 
@@ -105,14 +123,11 @@ public class MessageTypeController {
 	 * @return
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
-	public String messageTypeDetail(Model mode, Integer id) {
+	public String messageTypeDetail(Model model, Integer id) {
 
 		MessageType messageType = messageTypeService.getMessageTypeById(id);
-
-		JSONObject jsonObject = JSONObject.fromObject(messageType);
-		mode.addAttribute("result", jsonObject.toString());
-
-		return "message/messageType";
+	    model.addAttribute("messageType",messageType);
+		return "message/messageTypeDetail";
 	}
 
 }

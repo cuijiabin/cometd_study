@@ -22,7 +22,7 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 		Session session = getSession();
 		String hql="";
 		if(tid==1){
-			hql = "from MessageType m where m.typeId="+tid+" and status=1" ;
+			hql = "from MessageType m where m.typeId="+tid+" ";
 		}else{
 			hql = "from MessageType m where m.typeId="+tid+" and userId=";
 		}

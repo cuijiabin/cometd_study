@@ -17,10 +17,7 @@
   	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
       <table class="table table-bordered table-striped table-hover m-table">
           <tbody>
-                  <tr>
-                  <td class="c-wd50">父ID</td>
-                  <td><input type="text" id="pId" name="pId" value="${treeId}"/></td>
-                 </tr>
+        
                  <tr>
                   <td class="c-wd50">分类编号</td>
                   <td><input type="text" id="typeId" name="typeId" value="${typeId }"/></td>
@@ -28,21 +25,21 @@
               
                  <tr>
                     <td class="c-wd50">分类名称</td>
-                     <td><input type="text" type="text" id="title" name="title" /></td>
+                     <td><input type="text" type="text" id="title" name="title" value="${messageType.title} " /></td>
                 </tr>
              <tr>
                   <td class="c-wd50">排序</td>
-                  <td><input type="text" type="text" id="sortId" name="sortId" /></td>
+                  <td><input type="text" type="text" id="sortId" name="sortId" value="${messageType.sortId }"/></td>
               </tr>
                <tr>
                  <td class="c-wd50">展示</td>
-                  <td class="c-wd300"><input id="statusCk" name="statusCk" type="checkbox"  /></td>
+                  <td class="c-wd300"><input type="checkbox" id="replyWay"  value="${messageType.status }" <c:if test="${messageType.status==1 }"> checked </c:if>  /></td>
               </tr>
               
               <tr>
           
            <td colspan="2" align="right">
-            <button  onclick="javascript:addMessageType(${messageType.id});"  class="btn btn-primary" >保存</button>
+            <button  onclick="javascript:editMessageType();"  class="btn btn-primary" >保存</button>
             <button  onclick="javascript:cl();" class="btn btn-primary" >取消</button>
             </td>
         </tr>
@@ -58,13 +55,13 @@
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 
-function addMessageType(id){
+function editMessageType(){
 	 
 	
-	  var isSelect = document.getElementById("statusCk").checked;
+	  var isSelect = document.getElementById("replyWay_${messageType.status }").checked;
 	  var status = isSelect ? 1:2;
-
-	  var url = "/messageType/save.action";
+      alert(status);
+//	  var url = "/messageType/save.action";
 	  var data = {
 	    "pId"   : $("#pId").val(),  
 	  	"typeId" : $("#typeId").val(),

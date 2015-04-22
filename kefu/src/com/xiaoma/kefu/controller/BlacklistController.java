@@ -127,10 +127,14 @@ public class BlacklistController {
 	public String updateBlacklist( HttpSession session ,Model model, @ModelAttribute("blacklist")Blacklist blacklist ,String enddate) {
 		try {
 			Blacklist toUpdateBlacklist = blacklistService.getBlacklistById(blacklist.getId());
-
+			 SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			toUpdateBlacklist.setCustomerId(blacklist.getCustomerId());
 			toUpdateBlacklist.setIp(blacklist.getIp());
-			toUpdateBlacklist.setEndDate(blacklist.getEndDate());
+			
+	
+			 Date date = sdf.parse(enddate); //String型 时间转换为 Date型
+			 toUpdateBlacklist.setEndDate(date);
+			
             toUpdateBlacklist.setDescription(blacklist.getDescription());
             
     		User user = (User) session.getAttribute(CacheName.USER);
@@ -141,7 +145,7 @@ public class BlacklistController {
 			 toUpdateBlacklist.setUserName(loginName);
 			 toUpdateBlacklist.setUserId(userId); 
             
-			 SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
 			 Date now =  new Date();
 			 String nowString =  sdf.format(now); //Date型 时间 转换为 String型
 			 Date nowDate = sdf.parse(nowString);

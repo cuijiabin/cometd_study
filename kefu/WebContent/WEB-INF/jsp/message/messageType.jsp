@@ -26,24 +26,24 @@
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageType();">添加</button>
-            <button type="button" class="btn btn btn-warning btn-small f-fl">编辑</button>
+            <button type="button" class="btn btn btn-warning btn-small f-fl" onclick="javascript:updateMessageType();">编辑</button>
             <button type="button" class="btn btn btn-danger btn-small f-fl">删除</button>
             <input class="c-wd150" type="text" />
             <button type="button" class="btn btn-primary btn-small">搜索</button>
         </div>
     </div>
     
-    <div class="g-bd6 f-cb f-mar20">
-
-<div class="g-sd6 c-bor" id="table_data">
-    <h3 class="u-tit c-bg">常用语分类设置</h3>
-	<jsp:include page="messageTree.jsp"></jsp:include>
+	<div class="g-bd6 f-cb f-mar20">
+		<div class="g-sd6 c-bor" >
+		    <h3 class="u-tit c-bg">常用语分类设置</h3>
+			<jsp:include page="messageTree.jsp"></jsp:include>
+		</div >
+		
+		 <div id="table_data" class="g-mn6">
+		     <jsp:include page="messageTypeDetail.jsp"></jsp:include>
+		</div>
+	</div>
 </div>
- <div class="g-mn6">
-     <jsp:include page="messageTypeDetail.jsp"></jsp:include>
-</div>
-    </div>
- </div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
@@ -59,11 +59,31 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
+
 /**
  * 跳转新增前的页面
  */
-function addMessageType(){
-	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action',lock:true, width:	600,height: 400});
+function addMessageType(event, treeId, treeNode){
+
+	var treeId = id;
+	var tyd = typeId;
+	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
+			lock:true, width:	600,height: 400});
+}
+
+/**
+ * 跳转编辑前的页面
+ */
+function updateMessageType(){
+
+	var treeId = id;
+	var ti = title;
+	var so= sortId;
+	var pI= pId;
+	var st=status;
+	var tyd = typeId;
+	var d = $.dialog({id:'updateMessageType' ,title:"编辑分类信息",content:'url:/messageType/toUpdate.action?treeId='+treeId+'&typeId='+tyd+'&title='+ti+'&sortId='+so+'&pId='+pI+'&status='+st+' ',
+			lock:true, width:	600,height: 400});
 }
 
 //编辑常用语分类
@@ -72,6 +92,7 @@ function editCallback(){
 	var pageNo = '${pageBean.currentPage}';
 	find(pageNo);
 }
+
 
 //新增常用语分类
 function addCallback(){
