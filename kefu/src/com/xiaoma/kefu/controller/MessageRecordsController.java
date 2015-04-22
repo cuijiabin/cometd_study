@@ -75,7 +75,7 @@ public class MessageRecordsController {
 	@RequestMapping(value = "add.action", method = RequestMethod.POST)
 	public String add(HttpServletRequest request,Model model,@ModelAttribute("mr")MessageRecords mr) {
 		try {
-			if(mr == null ||mr.getReplyType() == null || mr.getCustomerId()==null || StringHelper.isEmpty(mr.getKeywords()) || 
+			if(mr == null ||mr.getReplyType() == null || mr.getCustomerId()==null || StringHelper.isEmpty(mr.getMessageContent()) || 
 					mr.getReplyWay() == null || StringHelper.isEmpty(mr.getName()) || StringHelper.isEmpty(mr.getPhone())){
 				model.addAttribute("result", Ajax.JSONResult(1, "数据不完整,请刷新后重新填写!"));
 				return "resultjson";
@@ -95,9 +95,8 @@ public class MessageRecordsController {
 			}
 			mr.setStyleId(customer.getStyleId());
 			mr.setStatus(1);
-			String ip = CookieUtil.getIpAddr(request);
-			mr.setIp(ip);
-			mr.setIpInfo(AddressUtil.getAddresses("ip=" + ip, "utf-8"));
+			mr.setIp(customer.getIp());
+			mr.setIpInfo(customer.getIpInfo());
 			mr.setFirstLandingPage(customer.getFirstLandingPage());
 			mr.setIsDel(0);
 			messageRecordsService.add(mr);

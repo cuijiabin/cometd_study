@@ -85,7 +85,7 @@
                                         <label class="c-wd80 f-txtr">回复方式：</label>
                                         <div class="u-subsec">
                                         	<c:forEach varStatus="status" items="${replyWay}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="true" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@
                                         <label class="c-wd80 f-txtr">回复对象：</label>
                                         <div class="u-subsec">
                                         	<c:forEach varStatus="status" items="${replyType}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                         <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
@@ -162,6 +162,7 @@
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
 <script language="javascript" for="window" event="onload"> 
 
    var maxLogCount = 100;
@@ -396,11 +397,6 @@
 			else
 				$("#teacher").show();
 		}
-		function changeRadio(o){
-			alert(o.name+"==="+o.value+"==="+o.checked+"===="+$("input[name='replyType'][checked]").val());
-			 //$("input[name='"+o.name+"'][checked]").val(o.value);
-			 
-		}
 		function checkMessage(){
 			var custName = $("#custName").val();
 			if(!custName || custName.length>20){
@@ -410,24 +406,48 @@
 			var custPhone = $("#custPhone").val();
 			if (custPhone.replace("^[ ]+$", "").length != 0) {
 				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
-				if (!pattenPhone.test(phone)) {
+				if (!pattenPhone.test(custPhone)) {
+					$.dialog.alert("手机号码为空或者格式不正确!");
+					return true;
+				}
+			}else{
 				$.dialog.alert("手机号码为空或者格式不正确!");
 				return true;
 			}
+			var custContent = $("#custContent").val();
+			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
+				$.dialog.alert("留言内容应在10-200个字符之间!");
+				return true;
+			}
+			return false;
 		}
 		function addMessage(){
 			if(checkMessage()){
 				return;
 			}
+			var replyWay="";
+			$('input[name="replyWay"]').each(function(){    
+				if(this.checked){
+					replyWay=this.value;
+				}
+				//message += $(this).val() + ",";    
+			  });
+			var replyType="";
+			$('input[name="replyType"]').each(function(){    
+				if(this.checked){
+					replyType=this.value;
+				}
+				//message += $(this).val() + ",";    
+			  });
 			var data = {
 					   "customerId":$("#currentCustomerId").val(),
 						"userId" : $("#teacher").val(),
-						"replyWay" : $("input[name='replyWay'][checked]").val(),
-						"replyType" : $("input[name='replyType'][checked]").val(),
+						"replyWay" : replyWay,
+						"replyType" :replyType,
 						"name": $("#custName").val(),
 						"email": $("#custEmail").val(),
 						"phone": $("#custPhone").val(),
-						"messageContent": $("#custContent").val()
+						"messageContent": $("#custContent").val().replace("^[ ]+$", "")
 					};
 			 $.ajax({
 		    		type : "post",
@@ -436,11 +456,8 @@
 		    		dataType : "json",
 		    		async:false,
 		    		success : function(data) {
-		    			alert("data:"+data);
 		    			if (data.result == 0) {
-		    				$.dialog.alert('操作成功!',function(){
-		    					addCallback();		
-		    	    		});
+		    				$.dialog.alert('留言成功!');
 		    			} else {
 		    				$.dialog.alert(data.msg);
 		    			}

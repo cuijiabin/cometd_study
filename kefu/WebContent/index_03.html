@@ -28,7 +28,7 @@
                 </div>
                 <div class="bd">
                     <div class="g-mn5c c-bor">
-                        <h3 class="u-tit c-bg f-txtl">等待咨询...</h3>
+                        <h3 class="u-tit c-bg f-txtl">等待咨询...<a class="f-fr c-colf00" href="#"><b>X 结束对话</b></a></h3>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="scrolldIV">
                             	<p class="r-welcome">※ 已建立链接</p>
@@ -204,6 +204,12 @@ function setScrollTop(){
 	$(".u-record").scrollTop($(".u-record")[0].scrollHeight);
 }
 window.onresize=setScrollTop();
+// 禁止右键
+$(document).ready(function(){  
+	$(document).bind("contextmenu",function(e){  
+		return false;  
+	});  
+});
 </script>
 </body>
 </html>
