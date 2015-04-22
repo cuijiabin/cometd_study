@@ -377,7 +377,7 @@
 					html += '<li action-data="['+EXP_DATA[0].icons[i].title+']"><img title="'+EXP_DATA[0].icons[i].title+'" alt="'+EXP_DATA[0].icons[i].title+'" src="'+EXP_DATA[0].icons[i].url+'"></li>';
 				}*/
 		
-		html +='</ul></div><a class="exp-close" href="javascript:;"></a></div><a class="exp-tri" href="javascript:;"></a></div>';
+		html +='</ul></div><a class="exp-close" href="javascript:;"></a></div></div>';
 		return html;
 	}
 	

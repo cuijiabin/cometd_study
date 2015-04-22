@@ -84,16 +84,16 @@
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复方式：</label>
                                         <div class="u-subsec">
-                                        	<c:forEach varStatus="status" items="${reply}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> name="reply" value="${d.itemCode}" />${ d.itemName }</label>
+                                        	<c:forEach varStatus="status" items="${replyWay}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="checked" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                     </div>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">回复对象：</label>
                                         <div class="u-subsec">
-                                        	<c:forEach varStatus="status" items="${message}" var="d">
-                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="message" value="${d.itemCode}" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                        	<c:forEach varStatus="status" items="${replyType}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="checked" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
                                         <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
@@ -396,11 +396,38 @@
 			else
 				$("#teacher").show();
 		}
+		function changeRadio(o){
+			alert(o.name+"==="+o.value+"==="+o.checked+"===="+$("input[name='replyType'][checked]").val());
+			 //$("input[name='"+o.name+"'][checked]").val(o.value);
+			 
+		}
+		function checkMessage(){
+			var custName = $("#custName").val();
+			if(!custName || custName.length>20){
+				$.dialog.alert("姓名不能为空或超过20个字符!");
+				return true;
+			}
+			var custPhone = $("#custPhone").val();
+			if (custPhone.replace("^[ ]+$", "").length != 0) {
+				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
+				if (!pattenPhone.test(phone)) {
+				$.dialog.alert("手机号码为空或者格式不正确!");
+				return true;
+			}
+		}
 		function addMessage(){
-			 data = {
-					   "id":id,
-						"name" : $("#name").val(),
-						"sortNum": $("#sortNum").val()
+			if(checkMessage()){
+				return;
+			}
+			var data = {
+					   "customerId":$("#currentCustomerId").val(),
+						"userId" : $("#teacher").val(),
+						"replyWay" : $("input[name='replyWay'][checked]").val(),
+						"replyType" : $("input[name='replyType'][checked]").val(),
+						"name": $("#custName").val(),
+						"email": $("#custEmail").val(),
+						"phone": $("#custPhone").val(),
+						"messageContent": $("#custContent").val()
 					};
 			 $.ajax({
 		    		type : "post",
@@ -409,16 +436,17 @@
 		    		dataType : "json",
 		    		async:false,
 		    		success : function(data) {
+		    			alert("data:"+data);
 		    			if (data.result == 0) {
-		    				W.$.dialog.alert('操作成功!',function(){
-		    					W.addCallback();		
+		    				$.dialog.alert('操作成功!',function(){
+		    					addCallback();		
 		    	    		});
 		    			} else {
-		    				W.$.dialog.alert(data.msg);
+		    				$.dialog.alert(data.msg);
 		    			}
 		    		},
 		    		error : function(msg) {
-		    			W.$.dialog.alert(data.msg);
+		    			$.dialog.alert(data.msg);
 		    		}
 		    	});
 		}

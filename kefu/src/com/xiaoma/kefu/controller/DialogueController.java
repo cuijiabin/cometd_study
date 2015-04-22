@@ -124,7 +124,8 @@ public class DialogueController {
 		response.addCookie(cookie);
 
 		model.addAttribute("customer", customer);
-
+		
+		
 		// 留言框生成规则 --------------开始
 		model.addAttribute("reply", dialogueService.findReplyWayList());
 		model.addAttribute("message", dialogueService.findMessageObject());
