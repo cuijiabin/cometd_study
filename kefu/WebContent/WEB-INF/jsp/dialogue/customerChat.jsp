@@ -96,12 +96,11 @@
                                         		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
-                                        <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
+										<select id="teacher" name="teacher" style="display:none;" class="c-wd80">
                                         	<c:forEach varStatus="status" items="${userList}" var="user">
                                         		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
                                         	</c:forEach>
-                                        </select>
-                                    </div>
+                                        </select>                                    </div>
                                     <c:forEach varStatus="status" items="${infoList}" var="d">
                                     <div class="f-mbm">
                                     	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
@@ -183,6 +182,9 @@
 					case 'on_message': // 收到聊天消息
 						onMessage(data);
 						break;
+					case 'on_switch_customer': //客服切换
+						switchCustomer(data);
+						break;
 					case 'on_open': // 上线
 						onOpen(data);
 						break;
@@ -234,10 +236,10 @@
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
 			
-			//修改cookie
-			//var cookieValue = data.cookieValue;
-			//console.log("设置cookie"+cookieValue);
-			//setCookie("KF_CUSTOMER_ID", cookieValue,20);  
+		}
+		
+		function switchCustomer(data){
+			alert("后台用户切换！");
 		}
 		
 		// 设置Cookie

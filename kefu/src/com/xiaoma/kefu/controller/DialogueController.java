@@ -1,6 +1,11 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.comet4j.core.CometConnection;
+import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +26,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.dict.DictMan;
+import com.xiaoma.kefu.comet4j.Constant;
+import com.xiaoma.kefu.comet4j.DialogueQuene;
+import com.xiaoma.kefu.comet4j.NoticeData;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
@@ -30,6 +40,7 @@ import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.StudyMapUtil;
 
 @Controller
 @RequestMapping(value = "dialogue")
@@ -71,6 +82,68 @@ public class DialogueController {
 		model.addAttribute("customerId", customerId);
 
 		return "/dialogue/switch";
+	}
+	
+	/**
+	 * 获取当前对话列表
+	 * 
+	 * @param request
+	 * @param response
+	 * @param ccnId
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 */
+	@RequestMapping(value = "receiveList.action", method = RequestMethod.GET)
+	public String customerList(HttpServletRequest request,HttpServletResponse response, String ccnId, Model model)
+			throws IOException, NoSuchFieldException, SecurityException {
+		
+		List<DialogueQuene> list = new ArrayList<DialogueQuene>();
+		List<String> ccnIds = JedisTalkDao.getCcnReceiveList(ccnId);
+		
+		if(CollectionUtils.isNotEmpty(ccnIds)){
+			
+			Map<String, Long> ccnIdCustomerMap = new HashMap<String, Long>();
+			
+			for (String cId : ccnIds) {
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cId);
+				if (customerId != null) {
+					ccnIdCustomerMap.put(cId, Long.parseLong(customerId));
+				}
+			}
+			List<Long> customerIds = new ArrayList<Long>(ccnIdCustomerMap.values());
+			List<Customer> customers = new ArrayList<Customer>();
+			Map<Long, Customer> customerMap = new HashMap<Long, Customer>();
+			if(CollectionUtils.isNotEmpty(customerIds)){
+				customers = customerService.findByIds(customerIds);
+				customerMap = StudyMapUtil.convertList2Map(customers, Customer.class.getDeclaredField("id"));
+			}
+			
+			for (String cId : ccnIds) {
+				DialogueQuene dialogueQuene = new DialogueQuene();
+				dialogueQuene.setCcnId(cId);
+				
+				Long customerId = ccnIdCustomerMap.get(cId);
+				Customer customer = customerMap.get(customerId);
+				if(customer != null){
+					dialogueQuene.setCustomer(customer);
+				}
+				Long millTime = JedisTalkDao.getCcnReceiveScore(ccnId,cId);
+				if(millTime != null){
+					dialogueQuene.setEnterTime(new Date(millTime));
+				}
+				
+				list.add(dialogueQuene);
+			}
+		}
+		
+		
+		model.addAttribute("list", list);
+
+		return "/dialogue/receiveList";
+
 	}
 
 	/**

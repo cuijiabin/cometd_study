@@ -177,6 +177,14 @@
 				//更新接听列表
 				userList(data.obj);
 				break;
+			case 'on_switch_from':
+				//转接给其他客服
+				updateCustomerList();
+				break;
+			case 'on_switch_to':
+				//被客服转接
+				updateCustomerList();
+				break;
 			case 'on_open': 
 			    //上线 发送更新用户列表请求
 				updateCustomerList();
@@ -199,9 +207,19 @@
 	function updateCustomerList() {
 		if (!JS.Engine.running)
 			return;
-		var id = JS.Engine.getId();
-		var param = "ccnId=" + id ;
-		JS.AJAX.post('/chat/receiveList.action', param, function() {
+		var data = {"ccnId":JS.Engine.getId()};
+		$.ajax({
+		    type: "get",
+		    url: "/dialogue/receiveList.action",
+		    data: data,
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "html",
+		    success: function (data) {
+		    	$("#customerList").html(data);
+		    },
+		    error: function (msg) {
+		        console.log("getCustomerById Error");
+		    }
 		});
 	}
 
@@ -209,43 +227,7 @@
 	$("#customerInfo").hide();
 	updateCustomerList();
 	
-	
-	
-	//更新用户列表操作
-	function userList(data) {
-		var list = data;
-		var listSize = list.length;
-		console.log("对话列表长度："+listSize);
-		
-		//对话标题
-		$("#currentDialogueNum").html("当前共有"+listSize+"个对话");
-		if(listSize > 0){
-			$("#customerInfo").show();
-			var dq = list[0];
-			changeCustomerInfo(dq);
-		}
-		var html = "";
-		for(var i=0; i<list.length; i++){
-			var dQuene = list[i];
-			//连接点id
-			var ccnId = '"'+dQuene.ccnId+'"';
-			var customer = dQuene.customer;
-			
-			html += "<li id='li:"+dQuene.ccnId+"' class='on'><p>客户："+customer.id
-			+"</p><p><a href='javascript:changeTitle("+customer.id+","+ccnId+");'>"
-			+customer.ip+"</a></p><p>上线时间："+getTimeByPattern(dQuene.enterTime)+"</p><span class='u-close'>x</span></li>";
-		}
-		console.log(html);
-		 $("#customerList").html(html);
-	}
 	function changeTitle(customerId,ccnId){
-		
-		console.log("与客户"+customerId+"对话中");
-		
-		$("li[id^='li:']").attr("class", "on");
-		$("#li:"+ccnId).addClass("on");
-		console.log("修改class样式"+"#li:"+ccnId);
-		console.log("修改class后："+$("#li:"+ccnId).html());
 		
 		$("#contentTitle").html("与客户"+customerId+"对话中");
 		$("#currentCcnId").val(ccnId);
@@ -254,24 +236,12 @@
 		getCustomerById(customerId);
 	}
 	
-	// 显示客户信息
-	function changeCustomerInfo(dQuene){
-		var ccnId = dQuene.ccnId;
-		var customer = dQuene.customer;
-		
-		console.log("收到通知后刷新列表，与客户"+customer.id+"对话中");
-		
-		$("#li:"+ccnId).addClass("on");
-		console.log("修改class后："+$("#li:"+ccnId).html());
-		
-		$("#contentTitle").html("与客户"+customer.id+"对话中");
-		$("#currentCcnId").val(ccnId);
-		$("#currentCustomerId").val(customer.id);
-		switchDialogue(ccnId);
-		
-		$("#customerInfo a[name$='customerId']").html(customer.customerName);
-		$("#customerInfo p[name$='customerIpInfo']").html(customer.ip);
-		
+	//结束对话
+	function endDialogue(customerCnnId){
+		customerCnnId = customerCnnId.replace("\"","").replace("\"","");
+		alert("确定结束与"+customerCnnId+"的对话？");
+		$("#"+customerCnnId).remove();
+		updateCustomerList();
 	}
 	
 	// 发送聊天信息动作
@@ -290,6 +260,20 @@
 		});
 	}
 	
+	function switchCustomer1(remark,toUserId){
+		if (!JS.Engine.running)
+			return;
+		remark = remark.trim();
+		if (!remark)
+			return;
+		var ccnId = JS.Engine.getId();
+		var customerId = $("#currentCustomerId").val();
+		var customerCcnId = $("#currentCcnId").val();
+		var param = "ccnId="+ccnId+'&customerId='+customerId+'&customerCcnId='+customerCcnId+'&remark='+remark+'&toUserId='+toUserId;
+		JS.AJAX.post('/chat/switchDialogue.action', param, function() {
+		});
+	}
+	
 	// 回车事件
 	function onSendBoxEnter(event) {
 		console.log("回车发送！");
@@ -305,7 +289,7 @@
 		data = data.obj
 		console.log("收到消息了！");
 		var id = data.id;
-		console.log(id);7
+		console.log(id);
 		
 		if(id == JS.Engine.getId()){
 			id = $("#currentCcnId").val();
@@ -320,7 +304,7 @@
 		var str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',$.expBlock.textFormat(text),'</p>' ];
 		console.log(str);
 		checkLogCount();
-		$("#"+id).append(str.join(''));
+		$("#D"+id).append(str.join(''));
 		
 		switchDialogue(id);
 		lastTalkId = id;
@@ -328,16 +312,16 @@
 	}
 	//切换对话框
 	function switchDialogue(ccnId){
-		logbox.innerHTML = $("#"+ccnId).html();
+		logbox.innerHTML = $("#D"+ccnId).html();
 		$("#currentCcnId").val(ccnId);
 	}
 	
 	//创建隐藏div
 	function createHiddenDiv(ccnId){
-		if ($("#"+ccnId).length > 0){ 
+		if ($("#D"+ccnId).length > 0){ 
 			return;
 		}else{
-			$("#logbox").after("<div id='"+ccnId+"' style='display: none;'></div>");
+			$("#logbox").after("<div id='D"+ccnId+"' style='display: none;'></div>");
 		}
 	}
 	
@@ -475,7 +459,10 @@
 							        {
 							            name: '确定',
 							            callback: function () {
-							            	submitswitchInfo();
+							            	var switchUserId = $("#switchUserId").val();
+							        		var switchContent = $("#switchContent").val();
+							        		alert(switchContent+" ,== "+switchUserId);
+							        		switchCustomer1(switchContent,switchUserId);
 							            },
 							            focus: true
 							        },
@@ -494,15 +481,6 @@
 		
 		
 		
-	}
-	
-	//向后台提交事务
-	function submitswitchInfo(){
-		var switchUserId = $("#switchUserId").val();
-		var switchContent = $("#switchContent").val();
-		var customerId = $("#currentCustomerId").val();
-		
-		console.log(switchUserId+" , "+switchContent);
 	}
 	
 </script>

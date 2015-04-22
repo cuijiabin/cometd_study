@@ -250,10 +250,11 @@ public class ChatCometController {
 	 * @param toUserId
 	 * @param customerId
 	 */
-	public void switchDialogue(HttpServletRequest request,HttpServletResponse response, String ccnId,Integer toUserId,Long customerId,String remark,String customerCcnId){
+	@RequestMapping(value = "switchDialogue.action", method = RequestMethod.POST)
+	public void switchDialogue(HttpServletRequest request,HttpServletResponse response, String ccnId,String toUserId,Long customerId,String remark,String customerCcnId){
 		
 		logger.info("switchDialogue param ccnId: "+ccnId+" ,toUserId: "+toUserId+" ,customerId: "+customerId);
-		String uId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+		String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
 		Integer userId = Integer.valueOf(uId);
 		
 		//参数检查
@@ -264,7 +265,7 @@ public class ChatCometController {
 		//保存转接记录到数据库
 		DialogueSwitch dialogueSwitch = new DialogueSwitch();
 		dialogueSwitch.setFromUserId(userId);
-		dialogueSwitch.setToUserId(toUserId);
+		dialogueSwitch.setToUserId(Integer.valueOf(toUserId));
 		dialogueSwitch.setCustomerId(customerId);
 		
 		dialogueSwitch.setRemark(remark);
@@ -272,7 +273,7 @@ public class ChatCometController {
 		
 		dialogueSwitchService.addDialogueSwitch(dialogueSwitch);
 		
-		String toCcnId = JedisTalkDao.getUserCcnList(toUserId.toString()).get(0);
+		String toCcnId = JedisTalkDao.getUserCcnList(toUserId).get(0);
 		
 		//保存会话
         String key = JedisConstant.getDialogueListKey(ccnId,customerCcnId);
@@ -283,15 +284,25 @@ public class ChatCometController {
         
         //修改接待列表
         JedisTalkDao.remCcnReceiveList(ccnId, customerCcnId);
+        JedisTalkDao.delCcnPassiveId(customerCcnId);
+        
         JedisTalkDao.addCcnReceiveList(toCcnId, customerCcnId);
+        JedisTalkDao.setCcnPassiveId(customerCcnId, toCcnId);
         
         //发送通知
-
 		CometEngine engine = context.getEngine();
-		CometConnection ccn = engine.getConnection(ccnId);
 		
-		NoticeData nd = new NoticeData(Constant.UPDATE_LIST, null);
+		//获取通道
+		CometConnection ucn = engine.getConnection(ccnId);
+		CometConnection tcn = engine.getConnection(toCcnId);
+		CometConnection cun = engine.getConnection(customerCcnId);
 		
-		engine.sendTo(Constant.CHANNEL, ccn, nd);
+		NoticeData uud = new NoticeData(Constant.ON_SWITCH_FROM, null);
+		NoticeData ttd = new NoticeData(Constant.ON_SWITCH_TO, null);
+		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, null);
+		
+		engine.sendTo(Constant.CHANNEL, ucn, uud);
+		engine.sendTo(Constant.CHANNEL, tcn, ttd);
+		engine.sendTo(Constant.CHANNEL, cun, cud);
 	}
 }
