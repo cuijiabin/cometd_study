@@ -21,7 +21,7 @@ public interface UserDao extends BaseDao<User> {
 	 * @param password
 	 * @return
 	 */
-	public abstract User findUser(String name, String password);
+	public abstract User findUser(String name);
 
 	/**
 	 * 查询用户

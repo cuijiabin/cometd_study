@@ -10,6 +10,8 @@
     <thead>
         <tr>
             <td>部门名称</td>
+            <td>在职人数</td>
+            <td>排序</td>
             <td>操作</td>
         </tr>
     </thead>
@@ -17,6 +19,8 @@
         <c:forEach var="dept" items="${pageBean.objList}">
         <tr>
             <td>${dept.name}</td>
+            <td>${dept.userCount}</td>
+            <td>${dept.sortNum}</td>
             <td><a href="javascript:findUser(${dept.id})">查看<a/>&nbsp;&nbsp;<a href="javascript:updateDept(${dept.id})">编辑<a/>&nbsp;&nbsp;<a href="javascript:deleteDept(${dept.id})">删除<a/></td>
         </tr>
         </c:forEach>

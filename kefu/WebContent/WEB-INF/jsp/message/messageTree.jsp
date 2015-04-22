@@ -29,16 +29,7 @@ var zTree;
 			}
 		},
 		callback: {
-			beforeClick: function(treeId, treeNode) {
-				var zTree = $.fn.zTree.getZTreeObj("tree");
-				if (treeNode.isParent) {
-					zTree.expandNode(treeNode);
-					return false;
-				} else {
-					demoIframe.attr("src",treeNode.file + ".html");
-					return true;
-				}
-			}
+			      onClick:zTreeOnClick
 		}
 	};
 
@@ -65,8 +56,34 @@ var zTree;
 		if (h < 530) h = 530;
 		demoIframe.height(h);
 	}
+	
+	 //树单击事件显示详细信息
+	function zTreeOnClick(event, treeId, treeNode) {
+		
+		alert(zTree);
+		var url = "/messageType/detail.action";
+		var data = {
+			"id" : sortId,
+	         "readonly" : true 
+		};
 
-  //-->
+		$.ajax({
+			type : "get",
+			url : url,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			dataType : "html",
+			success : function(data) {
+				 $("#table_data").html(data);
+			},
+			error : function(msg) {
+				alert("error");
+			}
+		});
+
+
+	}
+
   </SCRIPT>
   </head>
 

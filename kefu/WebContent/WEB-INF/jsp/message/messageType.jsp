@@ -34,47 +34,17 @@
     </div>
     
     <div class="g-bd6 f-cb f-mar20">
-<!--         <div class="g-sd6 c-bor"> -->
-<!--             <h3 class="u-tit c-bg">常用语分类设置</h3> -->
-<!--             这里放树状菜单哦~ -->
-<!--         </div> -->
 
 <div class="g-sd6 c-bor" id="table_data">
     <h3 class="u-tit c-bg">常用语分类设置</h3>
 	<jsp:include page="messageTree.jsp"></jsp:include>
 </div>
-        <div class="g-mn6">
-            <div class="g-mn6c">
-            	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
-                <table class="table table-bordered table-striped table-hover m-table">
-                    <thead>
-                           <tr>
-                            <td class="c-wd50">分类编号</td>
-                           
-                           </tr>
-                        
-                           <tr>
-                              <td class="c-wd50">分类编号</td>
-                              <td class="c-wd300">1</td>
-                          </tr>
-                       <tr>
-                            <td class="c-wd50">分类编号</td>
-                            <td class="c-wd300">1</td>
-                        </tr>
-                         <tr>
-                           <td class="c-wd50">分类编号</td>
-                            <td class="c-wd300">1</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-           
-                    </tbody>
-                </table>
- 
-            </div>
-        </div>
-    </div>
+ <div class="g-mn6">
+     <jsp:include page="messageTypeDetail.jsp"></jsp:include>
 </div>
+    </div>
+ </div>
+
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

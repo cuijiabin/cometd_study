@@ -1,82 +1,49 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>   
+<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
 <!doctype html>
 <html lang="zh-cn">
 <head>
- <SCRIPT >
-var zTree;
-	var demoIframe;
+<meta charset="utf-8">
+<meta name="author" content="dobao">
+<title>客服信息管理系统</title>
+<link rel="icon" href="favicon.ico">
+<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
+<link href="/css/app.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
+      <table class="table table-bordered table-striped table-hover m-table">
+        <tr>
+                <td class="c-wd50">父ID<input type="text" id="id" name="id"/></td>
+               </tr>
+                <tr>
+                <td class="c-wd50">父ID<input type="text" id="typeId" name="typeId"/></td>
+               </tr>
+               <tr>
+                <td class="c-wd50">分类编号<input type="text" id="typeId" name="typeId"/></td>
+               </tr>
+               <tr>
+                  <td class="c-wd50">分类名称<input type="text" type="text" id="title" name="title" /></td>
+              </tr>
+           <tr>
+                <td class="c-wd50">排序<input type="text" type="text" id="sortId" name="sortId" /></td>
+            </tr>
+             <tr>
+               <td class="c-wd50">展示<input type="checkbox"/></td>
+            </tr>
+   
+      
+     </table>
 
-	var setting = {
-		view: {
-			dblClickExpand: false,
-			showLine: false,
-			selectedMulti: false,
-			open:true
-		},
-		async:{
-			enable:false,  //是否启用异步加载
-			type:'get',
-			url:""
-		},
-		data: {
-			simpleData: {
-				enable:true,  
-				idKey: "id",
-				pIdKey: "pId",
-				rootPId: ""
-			}
-		},
-		callback: {
-			beforeClick: function(treeId, treeNode) {
-				var zTree = $.fn.zTree.getZTreeObj("tree");
-				if (treeNode.isParent) {
-					zTree.expandNode(treeNode);
-					return false;
-				} else {
-					demoIframe.attr("src",treeNode.file + ".html");
-					return true;
-				}
-			}
-		}
-	};
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
 
-	var str ='${json}';
-	var zNodes = eval('('+ str +')');
-	
-	$(document).ready(function(){
-		var t = $("#tree");
-		t = $.fn.zTree.init(t, setting, zNodes);
-		demoIframe = $("#testIframe");
-		demoIframe.bind("load", loadReady);
-		var zTree = $.fn.zTree.getZTreeObj("tree");
-		zTree.expandAll(true);
-		//zTree.selectNode(zTree.getNodeByParam("id", 101));
-		//alert(3);
 
-	});
-
-	function loadReady() {
-		var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
-		htmlH = demoIframe.contents().find("html").get(0).scrollHeight,
-		maxH = Math.max(bodyH, htmlH), minH = Math.min(bodyH, htmlH),
-		h = demoIframe.height() >= maxH ? minH:maxH ;
-		if (h < 530) h = 530;
-		demoIframe.height(h);
-	}
-
-  //-->
-  </SCRIPT>
-  </head>
-
-<body style="background-color:transparent">
- <TABLE border=0 height=600px align=left>
-	<TR>
-		<TD width=260px align=left valign=top style="BORDER-RIGHT: #999999 1px dashed">
-			<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
-		</TD>
-		<TD width=770px align=left valign=top><IFRAME ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%  height=600px SRC="core/standardData.html"></IFRAME></TD>
-	</TR>
-</TABLE>  
+</script>
 </body>
-</html> 
+</html>

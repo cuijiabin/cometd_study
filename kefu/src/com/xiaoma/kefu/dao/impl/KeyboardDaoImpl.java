@@ -15,6 +15,7 @@ public class KeyboardDaoImpl extends BaseDaoImpl<Keyboard> implements
 		KeyboardDao {
 	private static Logger logger = Logger.getLogger(KeyboardDaoImpl.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Keyboard> findByUesrId(Integer id) {
 		Session session = getSession();
