@@ -143,7 +143,6 @@ public class UserService {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
-	@SuppressWarnings("unused")
 	public Integer updateUser(String pass, User user)
 			throws UnsupportedEncodingException {
 		User toUpdateUser = userDaoImpl.findById(User.class, user.getId());

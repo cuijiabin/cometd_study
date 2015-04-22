@@ -114,6 +114,7 @@ public class FunctionController {
 			if (roleId != null && deptId != null && ids != null) {
 				Integer isSuccess = funcService.saveFunc(roleId, deptId, ids);
 				if (isSuccess != 0) {
+					CacheMan.removeByKeyPattern(CacheName.USERFUNCTION);
 					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
 				} else {
 					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
