@@ -19,9 +19,9 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">系统设置</a></li>
-        <li><i>&gt;</i><a href="#">风格管理</a></li>
-        <li><i>&gt;</i><a href="#">分配机制</a></li>
+        <li>系统设置</li>
+        <li><i>&gt;</i>风格管理</li>
+        <li><i>&gt;</i>分配机制</li>
     </ul>
 </div>
 

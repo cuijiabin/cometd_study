@@ -19,8 +19,8 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">记录中心</a></li>
-        <li><i>&gt;</i><a href="#">聊天记录</a></li>
+        <li>记录中心</li>
+        <li><i>&gt;</i>聊天记录</li>
     </ul>
 </div>
 <!-- 查询条件 -->

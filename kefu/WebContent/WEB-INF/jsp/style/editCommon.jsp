@@ -20,9 +20,9 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">首页</a></li>
-        <li><i>&gt;</i><a href="#">系统设置</a></li>
-        <li><i>&gt;</i><a href="#">风格管理</a></li>
+        <li>首页</li>
+        <li><i>&gt;</i>系统设置</li>
+        <li><i>&gt;</i>风格管理</li>
         <li><i>&gt;</i>界面样式设置</li>
     </ul>
 </div>
@@ -39,7 +39,7 @@
             <tbody>
                 <tr>
                     <td class="c-wd150">访问端界面</td>
-                    <td class="f-txtl"><img src="http://oc2.xiaoma.com/style/setting/ver06/img/sreenshot/wxf_new/sreenshot_company_gray.gif" width="154" alt="" /></td>
+                    <td class="f-txtl"><img src="${picUrl1 }" alt="" /></td>
                     <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editClient(${style.id})" >设置</button></td>
                 </tr>
                 <tr>

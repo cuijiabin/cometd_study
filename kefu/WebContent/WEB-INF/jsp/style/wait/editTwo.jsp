@@ -7,33 +7,35 @@
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 
-<div class="u-record r-sms-visitor">
-	<!-- 表格有边框 -->
-	<div style="float:right;margin-right: 30px;height: 24px">
-       	<button type="button" class="btn btn-primary btn-small" onclick="addTwo();">添加</button>
- 	</div>
-	<table class="table table-bordered table-striped table-hover m-table">
-		<thead>
+
+ <div class="f-txtr">
+     <button type="submit" class="btn btn-primary" onclick="addTwo();">添加</button>
+ </div>
+ <table class="table table-bordered table-striped table-hover m-table c-wdat f-mar0 f-mtm">
+     <thead>
+         <tr>
+             <th>二级菜单</th>
+             <th>链接地址</th>
+             <th>操作</th>
+         </tr>
+     </thead>
+     <tbody>
+		<c:forEach var="z" items="${zList}">
 			<tr>
-				<td>二级菜单</td>
-				<td>链接地址</td>
-	            <td>操作</td>
+	            <td id="zname${z.id }">${z.name}</td>
+	            <td id="zurl${z.id }">${z.linkUrl}</td>
+	            <td>
+	            	<a href="#" onClick="toUpdateTwo(${z.id})">修改</a>&nbsp;
+	            	<a href="#" onClick="delTwo(${z.id},${pId })">删除</a>
+	            </td>
 			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="z" items="${zList}">
-				<tr>
-		            <td id="zname${z.id }">${z.name}</td>
-		            <td id="zurl${z.id }">${z.linkUrl}</td>
-		            <td>
-		            	<a href="#" onClick="toUpdateTwo(${z.id})">修改</a>&nbsp;
-		            	<a href="#" onClick="delTwo(${z.id},${pId })">删除</a>
-		            </td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-</div>  
+		</c:forEach>
+     </tbody>
+ </table>
+ <div class="f-txtr f-mtw">
+     <button type="submit" class="btn" onclick="cancel();">关闭</button>
+ </div>
+
 
 <script type="text/javascript">
 
@@ -51,7 +53,7 @@ function addTwo(){
 	}else{
 		cDG2 = W.$.dialog({
 			id:'addTwo',
-			content:'url:/waitList/addTwo.action?pId='+pId,
+			content:'url:/waitList/addTwo.action?pId='+pId+'&styleId='+'${styleId}',
 			lock:true,
 			parent:api,
 			width: 400,height: 150,
@@ -109,6 +111,12 @@ function toUpdateTwo(id){
 	//文本框失去焦点后提交内容，重新变为文本 
 	input1.blur(function(){ //名称
 		var newtxt = input1.val(); 
+		if($.trim(newtxt) == ''){
+			W.$.dialog.alert("名称不能为空!");
+			td1.html(txtOldName);
+			input2.focus();//url获取焦点
+   			return false;
+		}
 		//判断文本有没有修改 
 		if (newtxt != txtOldName) {
 			var postData = {"id":id,"name":newtxt,"pId":pId,"linkUrl":txtOldUrl};
@@ -198,5 +206,9 @@ function saveTwoName(postData,td,txt){
 	});
 }
 
+//关闭
+function cancel(){
+	api.close();
+}
 
 </script>

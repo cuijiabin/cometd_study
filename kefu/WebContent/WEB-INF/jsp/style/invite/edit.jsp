@@ -20,10 +20,10 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">首页</a></li>
-        <li><i>&gt;</i><a href="#">系统设置</a></li>
-        <li><i>&gt;</i><a href="/style/find.action">风格管理</a></li>
-        <li><i>&gt;</i><a href="/style/editCommon.action?styleId=${inviteIcon.styleId }">界面样式设置</a></li>
+        <li>首页</li>
+        <li><i>&gt;</i>系统设置</li>
+        <li><i>&gt;</i>风格管理</li>
+        <li><i>&gt;</i>界面样式设置</li>
         <li><i>&gt;</i>对话邀请框设置</li>
     </ul>
 </div>
