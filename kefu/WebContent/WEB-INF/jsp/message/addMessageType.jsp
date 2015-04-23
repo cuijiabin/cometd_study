@@ -15,34 +15,32 @@
 </head>
 <body>
   	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
+  	  <input type="hidden" id="pId" name="pId" value="${treeId}"/>
       <table class="table table-bordered table-striped table-hover m-table">
           <tbody>
-                  <tr>
-                  <td class="c-wd50">父ID</td>
-                  <td><input type="text" id="pId" name="pId" value="${treeId}"/></td>
-                 </tr>
+              
                  <tr>
-                  <td class="c-wd50">分类编号</td>
-                  <td><input type="text" id="typeId" name="typeId" value="${typeId }"/></td>
+                  <td class="f-txtr tdbg">分类编号</td>
+                  <td class="f-txtl"><input type="text" id="typeId" name="typeId" value="${typeId }"/></td>
                  </tr>
               
                  <tr>
-                    <td class="c-wd50">分类名称</td>
-                     <td><input type="text" type="text" id="title" name="title" /></td>
+                    <td class="f-txtr tdbg">分类名称</td>
+                     <td class="f-txtl"><input type="text" type="text" id="title" name="title" /></td>
                 </tr>
              <tr>
-                  <td class="c-wd50">排序</td>
-                  <td><input type="text" type="text" id="sortId" name="sortId" /></td>
+                  <td class="f-txtr tdbg">排序</td>
+                  <td class="f-txtl"><input type="text" type="text" id="sortId" name="sortId" /></td>
               </tr>
                <tr>
-                 <td class="c-wd50">展示</td>
+                 <td class="f-txtr tdbg">展示</td>
                   <td class="c-wd300"><input id="statusCk" name="statusCk" type="checkbox"  /></td>
               </tr>
               
               <tr>
           
            <td colspan="2" align="right">
-            <button  onclick="javascript:addMessageType(${messageType.id});"  class="btn btn-primary" >保存</button>
+            <button  onclick="javascript:addMessageType();"  class="btn btn-primary" >保存</button>
             <button  onclick="javascript:cl();" class="btn btn-primary" >取消</button>
             </td>
         </tr>
@@ -58,7 +56,7 @@
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 
-function addMessageType(id){
+function addMessageType(){
 	 
 	
 	  var isSelect = document.getElementById("statusCk").checked;

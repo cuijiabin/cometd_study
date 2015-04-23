@@ -49,12 +49,21 @@ public class MessageTypeService {
 	
 	return messageTypeDaoImpl.deleteMessageTypeById(id);
    }
-
+    /**
+     * 查询子节点
+     */
+   public Integer checkChild(Integer id){
+	      Integer count =  messageTypeDaoImpl.checkChild(id);
+	      return count;
+   }
 	/**
 	 * 显示详细信息
 	 */
 	public MessageType getMessageTypeById(Integer id) {
 		return messageTypeDaoImpl.getMessageTypeById(id);
 	}
+	
+	
+	
 
 }

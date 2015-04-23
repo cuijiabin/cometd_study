@@ -3,6 +3,10 @@
 <!doctype html>
 <html lang="zh-cn">
 <head>
+<link rel="stylesheet" href="/jsplugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
  <SCRIPT >
 
 var zTree;
@@ -28,7 +32,6 @@ var zTree;
 			}
 		},
 		callback: {
-	
 		    onClick:zTreeOnClick
 		}
 	};
@@ -40,7 +43,10 @@ var zTree;
 		t = $.fn.zTree.init(t, setting, zNodes);
 		demoIframe = $("#testIframe");
 		demoIframe.bind("load", loadReady);
-		var zTree = $.fn.zTree.getZTreeObj("tree");
+		zTree = $.fn.zTree.getZTreeObj("tree");
+		var node = zTree.getNodeByParam("id", "${messageType.id}");
+		zTree.selectNode(node,false);
+
 		zTree.expandAll(true);
 		//zTree.selectNode(zTree.getNodeByParam("id", 101));
 		//alert(3);
@@ -55,12 +61,6 @@ var zTree;
 		demoIframe.height(h);
 	}
 	
-	var id =  1;   //设置树节点ID默认为1
-	var title = '公共常用语分类设置';
-	var sortId= 1;
-	var pId= 0;
-	var status=1;
-	var typeId=1;
 	 //树单击事件显示详细信息
 	function zTreeOnClick(event, treeId, treeNode) {
 	

@@ -94,6 +94,17 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 		return false;
 		
 	}
-
+	/**
+	 * 查询是否有子节点
+	 */
+	@Override
+	public Integer checkChild(Integer id ){
+		Session session = getSession();
+		StringBuffer hqlBuffer = new StringBuffer(
+				"select count(m.pId) from MessageType m  where  m.pId="+id+" and m.typeId=1 " );
+	  Query query = session.createQuery(hqlBuffer.toString());
+	  Object obj = query.uniqueResult();
+		return Integer.parseInt(obj.toString());
+	}
 
 }

@@ -176,7 +176,7 @@ function checkBlacklist(){
 				$("#ipInfo").html("*");
 			}
 			else{
-				alert(flag);
+				
 				$("#ipInfo").html("*");
 			 	flag = true;
 			}

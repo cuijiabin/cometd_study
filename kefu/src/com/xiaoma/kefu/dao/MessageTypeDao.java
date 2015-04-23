@@ -41,5 +41,11 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     * @return
     */
    public	List findTree(int tid);
+   /**
+    * 查询子节点
+    * @param id
+    * @return
+    */
+   public Integer checkChild(Integer id);
 
 }
