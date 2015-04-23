@@ -514,6 +514,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .f-csm{cursor:move;}
 .f-usn{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;}
 /* 新增function样式 */
+.f-mar0{margin:0 !important;}
 .f-mtn{margin-top:5px !important;}
 .f-mbn{margin-bottom:5px !important;}
 .f-mtm{margin-top:10px !important;}
@@ -524,11 +525,11 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .f-mbw{margin-bottom:20px !important;}
 .f-mtu{margin-top:30px !important;}
 .f-mbu{margin-bottom:30px !important;}
-.f-mar0{margin:0 !important;}
 .f-mar5{margin:5px !important;}
 .f-mar10{margin:10px !important;}
 .f-mar15{margin:15px !important;}
 .f-mar20{margin:20px !important;}
+.f-padd0{padding:0 !important;}
 .f-ptn{padding-top:5px !important;}
 .f-pbn{padding-bottom:5px !important;}
 .f-ptm{padding-top:10px !important;}
@@ -537,7 +538,6 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .f-pbv{padding-bottom:15px !important;}
 .f-ptw{padding-top:20px !important;}
 .f-pbw{padding-bottom:20px !important;}
-.f-padd0{padding:0 !important;}
 .f-padd5{padding:5px !important;}
 .f-padd10{padding:10px !important;}
 .f-padd15{padding:15px !important;}

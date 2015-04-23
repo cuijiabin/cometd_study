@@ -40,6 +40,8 @@ public class CacheName {
 	public static final String REPLYWAY="REPLYWAY";
 	//留言对象(生成留言框)
 	public static final String MESSAGETO="MESSAGETO";
+	//风格下面的等待列表
+	public static final String STYLEWAITLIST="STYLEWAITLIST";
 	
 	
 }

@@ -76,6 +76,12 @@ public interface WaitListDao extends BaseDao<WaitList>{
 	 */
 	public int deleteByPid(Integer id);
 
-	
+	/***
+	 * 根据风格ID和父级ID获取List
+	 * @param styleId
+	 * @param id
+	 * @return
+	 */
+	public List<WaitList> findListById(Integer styleId,Integer id);
 	
 }

@@ -101,7 +101,8 @@
                                         	<c:forEach varStatus="status" items="${userList}" var="user">
                                         		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
                                         	</c:forEach>
-                                        </select>                                    </div>
+                                        </select>                                    
+                                    </div>
                                     <c:forEach varStatus="status" items="${infoList}" var="d">
                                     <div class="f-mbm">
                                     	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
@@ -177,6 +178,7 @@
 				stop : function(cause, url, cId, engine) {
 					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
+					findWaitList();//获取等待列表
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -439,25 +441,26 @@
 			}
 			//QQ
 			var qq = $("#custqq").val();
-			if(qq || qq.length>40){
-				$.dialog.alert("QQ号码超长!");
+			var pattenQQ = /^[d]{20}$/;
+			if(qq && !pattenQQ.test(qq)){
+				$.dialog.alert("QQ号码格式不正确!");
 				return true;
 			}
 			//MSN
 			var msn = $("#custmsn").val();
-			if(msn || msn.length>40){
+			if(msn && msn.length>40){
 				$.dialog.alert("MSN超长!");
 				return true;
 			}
 			//单位
 			var company = $("#custcompany").val();
-			if(company || company.length>100){
+			if(company && company.length>100){
 				$.dialog.alert("单位超长!");
 				return true;
 			}
 			//地址
 			var address = $("#custaddress").val();
-			if(address || address.length>100){
+			if(address && address.length>100){
 				$.dialog.alert("地址超长!");
 				return true;
 			}
@@ -520,7 +523,34 @@
 		    		}
 		    	});
 		}
-		
+		function findWaitList(id){
+			return;
+			 $.ajax({
+		    		type : "post",
+		    		url : "/messageRecords/add.action",
+		    		data : data,
+		    		dataType : "json",
+		    		async:false,
+		    		success : function(data) {
+		    			if (data.result == 0) {
+		    				$.dialog.alert('留言成功!');
+		    			} else {
+		    				$.dialog.alert(data.msg);
+		    			}
+		    		},
+		    		error : function(msg) {
+		    			$.dialog.alert(data.msg);
+		    		}
+		    	});
+			if(id == 0){
+				
+			}
+		}
+	
+		// 客户端访客对话框架
+		jQuery(".slideTab").slide({trigger:"click"});
+		jQuery(".slideTab2").slide({trigger:"click"});
+		jQuery(".g-sd3").slide({mainCell:"ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1});
 </script> 
 
 </body>

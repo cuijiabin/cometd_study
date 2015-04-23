@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.Ajax;
@@ -196,4 +198,29 @@ public class WaitListController {
 		}
 		return "resultjson";
 	}
+	/***
+	 * 根据Id查询所有
+	 * @param model
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "findById.action", method = RequestMethod.GET)
+	public String findById(Model model,Integer styleId,Integer id) {
+		try {
+			if(styleId == null)
+				styleId = 1;
+			if(id == null)
+				id = 0;
+			List<WaitList> list = (List<WaitList>) CacheMan.getObject(CacheName.STYLEWAITLIST, styleId+"_"+id);
+			model.addAttribute("result", Ajax.JSONResult(0, "操作成功!"));
+			
+		} catch (Exception e) {
+		}
+		return "resultjson";
+	}
+	public static void main(String [] args){
+		
+	}
+	
+	
 }

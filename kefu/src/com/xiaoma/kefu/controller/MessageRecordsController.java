@@ -16,9 +16,7 @@ import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.MessageRecordsService;
-import com.xiaoma.kefu.util.AddressUtil;
 import com.xiaoma.kefu.util.Ajax;
-import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.StringHelper;
 
 /**

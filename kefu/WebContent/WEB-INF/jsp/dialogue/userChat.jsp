@@ -633,6 +633,8 @@
 		//$.expBlock.getRemoteExp(url);
 		
 	})
+	// 客服端访客对话框架-手风琴菜单
+jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
 </script>
 </body>
 </html>
