@@ -35,7 +35,7 @@
               </tr>
                <tr>
                  <td class="f-txtr tdbg">展示</td>
-                  <td class="c-wd300"><input type="checkbox" id="statusCk"  value="${messageType.status }" <c:if test="${messageType.status==1 }"> checked </c:if>  /></td>
+                  <td class="f-txtl"><input style="margin-left: 90px" type="checkbox" id="statusCk"  value="${messageType.status }" <c:if test="${messageType.status==1 }"> checked </c:if>  /></td>
               </tr>
               <tr>
 		           <td colspan="2" align="right">

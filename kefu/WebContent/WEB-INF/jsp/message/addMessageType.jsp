@@ -16,38 +16,34 @@
 <body>
   	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
   	  <input type="hidden" id="pId" name="pId" value="${treeId}"/>
-      <table class="table table-bordered table-striped table-hover m-table">
+  	   <div style="margin:50px;">
+  <table class="table table-bordered m-table">
           <tbody>
-              
-                 <tr>
-                  <td class="f-txtr tdbg">分类编号</td>
-                  <td class="f-txtl"><input type="text" id="typeId" name="typeId" value="${typeId }"/></td>
-                 </tr>
-              
-                 <tr>
-                    <td class="f-txtr tdbg">分类名称</td>
-                     <td class="f-txtl"><input type="text" type="text" id="title" name="title" /></td>
-                </tr>
-             <tr>
-                  <td class="f-txtr tdbg">排序</td>
-                  <td class="f-txtl"><input type="text" type="text" id="sortId" name="sortId" /></td>
-              </tr>
-               <tr>
-                 <td class="f-txtr tdbg">展示</td>
-                  <td class="c-wd300"><input id="statusCk" name="statusCk" type="checkbox"  /></td>
-              </tr>
-              
-              <tr>
-          
-           <td colspan="2" align="right">
+           <tr>
+	          <td class="f-txtr tdbg" width="150px">分类编号</td>
+	          <td class="f-txtl"><input type="text" id="typeId" name="typeId" value="${typeId }"/></td>
+           </tr>
+            <tr>
+               <td class="f-txtr tdbg">分类名称</td>
+                <td class="f-txtl"><input type="text" type="text" id="title" name="title" /></td>
+           </tr>
+           <tr>
+                <td class="f-txtr tdbg">排序</td>
+                <td class="f-txtl"><input type="text" type="text" id="sortId" name="sortId" /></td>
+            </tr>
+            <tr>
+              <td class="f-txtr tdbg">展示</td>
+               <td class="f-txtl"><input style="margin-left: 90px" id="statusCk" name="statusCk" type="checkbox"  /></td>
+           </tr>
+         <tr>
+            <td colspan="2" align="right">
             <button  onclick="javascript:addMessageType();"  class="btn btn-primary" >保存</button>
             <button  onclick="javascript:cl();" class="btn btn-primary" >取消</button>
             </td>
         </tr>
-              
           </tbody>
       </table>
- 
+ </div>
  
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
