@@ -34,6 +34,7 @@
                     <div class="g-mn5c c-bor">
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
+                        <input type="hidden" id="isForbidden" value="${isForbidden}"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -191,6 +192,9 @@
 					case 'on_close': // 下线
 						onLeft(data);
 						break;
+					case 'end_dialogue': // 结束对话
+						endDialogue(data);
+						break;
 					default:
 					}
 				}
@@ -204,8 +208,13 @@
 		//}
 		//开启连接
 		function start(){
-			JS.Engine.start('/conn');
-			inputbox.focus();
+			var isForbidden =  $("#isForbidden").val();
+			if(isForbidden == 'false'){
+				JS.Engine.start('/conn');
+				inputbox.focus();
+			}else{
+				alert("对不起您已经被禁用");
+			}
 		}
 		
 		
@@ -256,6 +265,13 @@
 			name = name.HTMLEncode();
 			var t = data.transtime;
 			var str = ['<p class="r-visitor">',name,'&nbsp;',t,'&nbsp;离开了</p>'];
+			checkLogCount();
+			logbox.innerHTML += str.join('');
+			lastTalkId = null;
+			moveScroll();
+		}
+		function endDialogue(){
+			var str = ['<p class="r-visitor">','&nbsp;','&nbsp;对话结束了！</p>'];
 			checkLogCount();
 			logbox.innerHTML += str.join('');
 			lastTalkId = null;

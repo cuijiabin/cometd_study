@@ -1,16 +1,11 @@
 package com.xiaoma.kefu.comet4j;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
@@ -21,17 +16,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.DialogueSwitch;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueSwitchService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.JsonUtil;
-import com.xiaoma.kefu.util.StudyMapUtil;
 import com.xiaoma.kefu.util.TimeHelper;
 
 @Controller
@@ -46,6 +42,9 @@ public class ChatCometController {
 	
 	@Autowired
 	private DialogueSwitchService dialogueSwitchService;
+	
+	@Autowired
+	private BlacklistService blacklistService;
 	
 	private Logger logger = Logger.getLogger(ChatCometController.class);
 
@@ -96,10 +95,10 @@ public class ChatCometController {
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
 		
 		//包装消息并发送
-		Message umessage = new Message(userCId,"我",message,messageTime);
+		Message umessage = new Message(userCId,"我",message,messageTime,"1");
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(cusCId, user.getCardName(), message, messageTime);
+		Message cmessage = new Message(cusCId, user.getCardName(), message, messageTime,"2");
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
@@ -134,6 +133,9 @@ public class ChatCometController {
 		String userCId = JedisTalkDao.getCcnPassiveId(cusCId);
 		logger.info("send message to user info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
 		
+		//如果userCId是空的话，告诉当前用户对话已结束
+		//TODO
+		
 		//获取用户id
 		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCId);
 		String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cusCId);
@@ -157,10 +159,10 @@ public class ChatCometController {
 		String customerName = (customer == null || StringUtils.isEmpty(customer.getCustomerName())) ? ("客户："+cId) : customer.getCustomerName();
 		
 		//包装消息并发送
-		Message umessage = new Message(cusCId, customerName, message, messageTime);
+		Message umessage = new Message(cusCId, customerName, message, messageTime,"2");
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
-		Message cmessage = new Message(userCId,"我",message,messageTime);
+		Message cmessage = new Message(userCId,"我",message,messageTime,"1");
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
@@ -173,74 +175,6 @@ public class ChatCometController {
 
 	}
 
-	/**
-	 * 获取当前对话列表
-	 * 
-	 * @param request
-	 * @param response
-	 * @param ccnId
-	 * @param model
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchFieldException
-	 * @throws SecurityException
-	 */
-	@RequestMapping(value = "receiveList.action", method = RequestMethod.POST)
-	public void customerList(HttpServletRequest request,HttpServletResponse response, String ccnId)
-			throws IOException, NoSuchFieldException, SecurityException {
-
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;charset=UTF-8");
-		
-		List<DialogueQuene> list = new ArrayList<DialogueQuene>();
-		List<String> ccnIds = JedisTalkDao.getCcnReceiveList(ccnId);
-		
-		if(CollectionUtils.isNotEmpty(ccnIds)){
-			
-			Map<String, Long> ccnIdCustomerMap = new HashMap<String, Long>();
-			
-			for (String cId : ccnIds) {
-				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cId);
-				if (customerId != null) {
-					ccnIdCustomerMap.put(cId, Long.parseLong(customerId));
-				}
-			}
-			List<Long> customerIds = new ArrayList<Long>(ccnIdCustomerMap.values());
-			List<Customer> customers = new ArrayList<Customer>();
-			Map<Long, Customer> customerMap = new HashMap<Long, Customer>();
-			if(CollectionUtils.isNotEmpty(customerIds)){
-				customers = customerService.findByIds(customerIds);
-				customerMap = StudyMapUtil.convertList2Map(customers, Customer.class.getDeclaredField("id"));
-			}
-			
-			for (String cId : ccnIds) {
-				DialogueQuene dialogueQuene = new DialogueQuene();
-				dialogueQuene.setCcnId(cId);
-				
-				Long customerId = ccnIdCustomerMap.get(cId);
-				Customer customer = customerMap.get(customerId);
-				if(customer != null){
-					dialogueQuene.setCustomer(customer);
-				}
-				Long millTime = JedisTalkDao.getCcnReceiveScore(ccnId,cId);
-				if(millTime != null){
-					dialogueQuene.setEnterTime(new Date(millTime));
-				}
-				
-				list.add(dialogueQuene);
-			}
-		}
-		
-		CometEngine engine = context.getEngine();
-		CometConnection ccn = engine.getConnection(ccnId);
-		
-		NoticeData nd = new NoticeData(Constant.UPDATE_LIST, list);
-		
-		engine.sendTo(Constant.CHANNEL, ccn, nd);
-
-		return;
-
-	}
 	
 	/**
 	 * 客服转接操作
@@ -305,4 +239,94 @@ public class ChatCometController {
 		engine.sendTo(Constant.CHANNEL, tcn, ttd);
 		engine.sendTo(Constant.CHANNEL, cun, cud);
 	}
+	
+	/**
+	 * 结束对话操作
+	 * @param request
+	 * @param response
+	 * @param ccnId
+	 * @param toUserId
+	 * @param customerId
+	 * @param remark
+	 * @param customerCcnId
+	 */
+	@RequestMapping(value = "endDialogue.action", method = RequestMethod.POST)
+	public void endDialogue(HttpServletRequest request,HttpServletResponse response, String ccnId, Integer type, String endCcnId){
+		
+		logger.info("endDialogue param ccnId: "+ccnId+" ,type: "+type+" ,endCcnId: "+endCcnId);
+		//参数验证
+		if(StringUtils.isBlank(ccnId) || type == null || StringUtils.isBlank(endCcnId)){
+			logger.warn("endDialogue param is illegal! ");
+			return ;
+		}
+		
+		CometEngine engine = context.getEngine();
+		
+		CometConnection ccn = engine.getConnection(ccnId);
+		CometConnection ecn = engine.getConnection(endCcnId);
+		
+		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, null);
+		
+		if(JedisConstant.USER_TYPE == type){
+			 JedisTalkDao.remCcnReceiveList(ccnId, endCcnId);
+		     JedisTalkDao.delCcnPassiveId(endCcnId);
+		     
+		    //保存会话
+	        String key = JedisConstant.getDialogueListKey(ccnId,endCcnId);
+	        JedisTalkDao.lpushSaveDialogue(key);
+			 
+		}else if(JedisConstant.CUSTOMER_TYPE == type){
+			JedisTalkDao.remCcnReceiveList(endCcnId, ccnId);
+		    JedisTalkDao.delCcnPassiveId(ccnId);
+		    
+		    //保存会话
+	        String key = JedisConstant.getDialogueListKey(endCcnId,ccnId);
+	        JedisTalkDao.lpushSaveDialogue(key);
+	        
+		}
+		
+		engine.sendTo(Constant.CHANNEL, ccn, nd);
+		engine.sendTo(Constant.CHANNEL, ecn, nd);
+	}
+	
+	/**
+	 * 访客阻止 （类似于结束对话，多了黑名单操作）
+	 * @param request
+	 * @param response
+	 * @param ccnId
+	 * @param customerCcnId
+	 * @param remark
+	 */
+	@RequestMapping(value = "forbidCuntomer.action", method = RequestMethod.POST)
+	public void forbidCuntomer(HttpServletRequest request,HttpServletResponse response, String ccnId, String customerCcnId, String remark){
+		logger.info("forbidCuntomer param ccnId: "+ccnId+" ,customerCcnId: "+customerCcnId+" ,remark: "+remark);
+		if(StringUtils.isBlank(ccnId) || StringUtils.isBlank(customerCcnId)){
+			logger.warn("forbidCuntomer param is illegal!");
+			return ;
+		}
+		String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+		String cId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+		
+		Blacklist blacklist = new Blacklist();
+		blacklist.setCreateDate(new Date());
+		blacklist.setCustomerId(Long.valueOf(cId));
+		blacklist.setUserId(Integer.valueOf(uId));
+		blacklistService.createNewBlacklist(blacklist);
+		
+		//修改对话关系
+	    JedisTalkDao.remCcnReceiveList(ccnId, customerCcnId);
+        JedisTalkDao.delCcnPassiveId(customerCcnId);
+	     
+	    //保存会话
+        String key = JedisConstant.getDialogueListKey(ccnId,customerCcnId);
+        JedisTalkDao.lpushSaveDialogue(key);
+        
+        //发送通知
+        CometEngine engine = context.getEngine();
+		CometConnection ccn = engine.getConnection(customerCcnId);
+		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, null);
+		engine.sendTo(Constant.CHANNEL, ccn, nd);
+	}
+	
+	
 }

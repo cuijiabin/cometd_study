@@ -29,6 +29,7 @@ import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
@@ -51,6 +52,9 @@ public class DialogueController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BlacklistService blacklistService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 
@@ -160,6 +164,7 @@ public class DialogueController {
 
 		Long id = null;
 		Boolean isNew = true;
+		Boolean isForbidden = false;
 		if (StringUtils.isNotBlank(customerId)) {
 			try {
 				id = Long.parseLong(customerId);
@@ -178,6 +183,7 @@ public class DialogueController {
 			id = customerService.insert(customer);
 
 		} else {
+			isForbidden = blacklistService.judgeForbidden(id);
 			customer = customerService.getCustomerById(id);
 			List<DialogueDetail> list = dialogueDetailService
 					.getLastRecordsByCustomerId(id);
@@ -194,6 +200,7 @@ public class DialogueController {
 		response.addCookie(cookie);
 
 		model.addAttribute("customer", customer);
+		model.addAttribute("isForbidden", isForbidden);
 		
 		
 		// 留言框生成规则 --------------开始

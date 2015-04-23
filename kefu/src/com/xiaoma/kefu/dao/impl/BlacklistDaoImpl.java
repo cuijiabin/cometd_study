@@ -216,5 +216,17 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 			return Integer.parseInt(obj.toString());
 		}
 
+
+		@Override
+		public Boolean judgeForbidden(Long customerId) {
+			
+			Session session = getSession();
+			String hql = "select count(1) from black_list where customerId ="+customerId;
+			Query query = session.createSQLQuery(hql);
+			Integer count = ((Number)query.uniqueResult()).intValue();
+			
+			return (count > 0);
+		}
+
 	
 }
