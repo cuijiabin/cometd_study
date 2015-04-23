@@ -35,6 +35,7 @@
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
                         <input type="hidden" id="isForbidden" value="${isForbidden}"/>
+                        <input type="hidden" id="styleId" value="${customer.styleId}"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -523,28 +524,28 @@
 		    		}
 		    	});
 		}
+		findWaitList(0);//获取等待列表
 		function findWaitList(id){
 			return;
+			var data = {
+					   "styleId":$("#styleId").val(),
+						"id" : id
+					};
 			 $.ajax({
-		    		type : "post",
-		    		url : "/messageRecords/add.action",
+		    		type : "get",
+		    		url : "/waitList/findById.action",
 		    		data : data,
-		    		dataType : "json",
+		    		dataType : "html",
+		    		contentType : "application/json; charset=utf-8",
 		    		async:false,
 		    		success : function(data) {
-		    			if (data.result == 0) {
-		    				$.dialog.alert('留言成功!');
-		    			} else {
-		    				$.dialog.alert(data.msg);
-		    			}
+	    				logbox.innerHTML += data;
 		    		},
 		    		error : function(msg) {
 		    			$.dialog.alert(data.msg);
 		    		}
 		    	});
-			if(id == 0){
-				
-			}
+			
 		}
 	
 		// 客户端访客对话框架

@@ -2,6 +2,7 @@ package com.xiaoma.kefu.cache;
 
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.service.FunctionService;
+import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.StringHelper;
 
 
@@ -27,6 +28,10 @@ public class CacheFactory {
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");
 				obj=functionService.findTree((Integer)key);
+			}else if(cacheName.equals(CacheName.STYLEWAITLIST)){
+				WaitListService waitListService = (WaitListService) SpringContextUtil
+						.getBean("waitListService");
+				obj=waitListService.findListById((String)key);
 			}
 		}
 		return obj;
