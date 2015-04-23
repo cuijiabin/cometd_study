@@ -21,6 +21,7 @@ import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * User DAO service class
@@ -150,30 +151,33 @@ public class UserService {
 			throws UnsupportedEncodingException {
 		User toUpdateUser = userDaoImpl.findById(User.class, user.getId());
 
-		if (user.getPassword() == "" || user.getPassword() == null) {
-			toUpdateUser.setPassword(toUpdateUser.getPassword());
-			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
-		} else if (!pass.equals("1") && pass!=null) {
+		 if (StringHelper.isNotEmpty(pass) && !pass.equals("1")) {
 			String password = new String(DigestUtils.md5Hex(pass
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
-			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
-		} else if(pass.equals("1")){
-			toUpdateUser.setPassword(toUpdateUser.getPassword());
+		} else if(StringHelper.isNotEmpty(pass) && pass.equals("1")){
 			toUpdateUser.setIsLock(1);
-		}else{
+		}else if(StringHelper.isNotEmpty(user.getPassword())){
 			String password = new String(DigestUtils.md5Hex(user.getPassword()
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
-			toUpdateUser.setIsLock(toUpdateUser.getIsLock());
 		}
 		toUpdateUser.setLoginName(user.getLoginName());
 		toUpdateUser.setCardName(user.getCardName());
-		toUpdateUser.setDeptId(user.getDeptId());
+		if(toUpdateUser.getDeptId()!=user.getDeptId()){
+			List<Department> dlist =deptDao.getDeptById(toUpdateUser.getDeptId());
+			Department dept = dlist.get(0);
+			dept.setUserCount(dept.getUserCount()-1);
+			deptDao.update(dept);
+			List<Department> dlist1 =deptDao.getDeptById(user.getDeptId());
+			Department dept1 = dlist1.get(0);
+			dept1.setUserCount(dept1.getUserCount()+1);
+			deptDao.update(dept1);
+			toUpdateUser.setDeptId(user.getDeptId());
+		}
 		toUpdateUser.setRoleId(user.getRoleId());
 		toUpdateUser.setDeptName(user.getDeptName());
 		toUpdateUser.setRoleName(user.getRoleName());
-		toUpdateUser.setStatus(toUpdateUser.getStatus());
 		toUpdateUser.setListenLevel(user.getListenLevel());
 		toUpdateUser.setEmail(user.getEmail());
 		toUpdateUser.setMaxListen(user.getMaxListen());
@@ -224,7 +228,6 @@ public class UserService {
 						Integer.parseInt(str));
 				leup.setStatus(status);
 				leup.setEndDate(time);
-				val = userDaoImpl.update(leup);
 				List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
 				Department dept = dlist.get(0);
 				if(status==2){
@@ -233,6 +236,7 @@ public class UserService {
 					dept.setUserCount(dept.getUserCount()+1);
 				}
 				deptDao.update(dept);
+			  val = userDaoImpl.update(leup);
 			}
 			if (val == 1) {
 				return 1;
@@ -243,7 +247,6 @@ public class UserService {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
 			leup.setStatus(status);
 			leup.setEndDate(time);
-			Integer succ = userDaoImpl.update(leup);
 			List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
 			Department dept = dlist.get(0);
 			if(status==2){
@@ -252,6 +255,7 @@ public class UserService {
 				dept.setUserCount(dept.getUserCount()+1);
 			}
 			deptDao.update(dept);
+			Integer succ = userDaoImpl.update(leup);
 			if (succ == 1) {
 				return 1;
 			} else {
@@ -269,11 +273,16 @@ public class UserService {
 				if (Integer.parseInt(str) == 0)
 					continue;
 				User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
-				leup.setDeptId(deptId);
+				List<Department> dlist1 =deptDao.getDeptById(leup.getDeptId());
+				Department dept1 = dlist1.get(0);
+				dept1.setUserCount(dept1.getUserCount()-1);
+				deptDao.update(dept1);
 				List<Department> dlist =deptDao.getDeptById(deptId);
 				Department dept = dlist.get(0);
 				dept.setUserCount(dept.getUserCount()+1);
 				deptDao.update(dept);
+				leup.setDeptId(deptId);
+				leup.setDeptName(dept.getName());
 			    succ = userDaoImpl.update(leup);
 			}
 			if(succ==1){

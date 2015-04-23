@@ -136,8 +136,13 @@ public class FunctionController {
 	 * @return
 	 */
 	@RequestMapping(value = "key.action", method = RequestMethod.GET)
-	public String key(Model model) {
+	public String key(Model model,HttpSession session) {
 		try {
+			User user = (User) session.getAttribute("user");
+			if(user==null)
+				return "login";
+			Keyboard key = funcService.findkeyById(user.getId());
+			model.addAttribute("key",key);
 	        return "/set/person/key";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -174,8 +179,13 @@ public class FunctionController {
 	 * @return
 	 */
 	@RequestMapping(value = "remind.action", method = RequestMethod.GET)
-	public String remind(Model model) {
+	public String remind(Model model,HttpSession session) {
 		try {
+			User user = (User) session.getAttribute("user");
+			if(user==null)
+				return "login";
+			RemindType remind = funcService.findRemindByUserId(user.getId());
+			model.addAttribute("remind",remind);
 	        return "/set/person/remind";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -189,37 +199,34 @@ public class FunctionController {
 	 * @param model
 	 * @return
 	 */
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "saveRemind.action", method = RequestMethod.POST)
 	public String saveRemind(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
 			MultipartFile lsound,MultipartFile jsound,MultipartFile resound) {
 		try {
-			    User user = (User) session.getAttribute("user");
-			    if(user!=null){
-			    	if(!lsound.isEmpty()){
-			    		String name="lsound";
-			    		String url=funcService.saveFile(lsound,user,name);
-			    		remindType.setLineEffectUrl(url);
-			    	}
-			    	if(!jsound.isEmpty()){
-			    		String name="jsound";
-			    		String url=funcService.saveFile(jsound,user,name);
-			    		remindType.setCreateUrl(url);
-			    	}
-			    	if(!resound.isEmpty()){
-			    		String name="resound";
-			    		String url=funcService.saveFile(resound,user,name);
-			    		remindType.setReceiveUrl(url);
-			    	}
-				    Integer isSuccess = funcService.saveRemind(remindType,user);
-					if (isSuccess != 0) {
-						model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
-					} else {
-						model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
-					}		
-				}else{
-					model.addAttribute("result", Ajax.JSONResult(1, "保存失败,退出程序重新登再试!"));
-				}
+		        User user = (User) session.getAttribute("user");
+		        if(user==null)
+		    	return "login";
+		    	if(!lsound.isEmpty()){
+		    		String name="lsound";
+		    		String url=funcService.saveFile(lsound,user,name);
+		    		remindType.setLineEffectUrl(url);
+		    	}
+		    	if(!jsound.isEmpty()){
+		    		String name="jsound";
+		    		String url=funcService.saveFile(jsound,user,name);
+		    		remindType.setCreateUrl(url);
+		    	}
+		    	if(!resound.isEmpty()){
+		    		String name="resound";
+		    		String url=funcService.saveFile(resound,user,name);
+		    		remindType.setReceiveUrl(url);
+		    	}
+			    Integer isSuccess = funcService.saveRemind(remindType,user);
+				if (isSuccess != 0) {
+					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
+				} else {
+					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
+				}		
 			return "resultjson";
 		} catch (Exception e) {
 			logger.error(e.getMessage());

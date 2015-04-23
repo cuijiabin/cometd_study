@@ -145,6 +145,7 @@ public class UserController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String main(HttpSession session, Model model, Integer typeId) {
+	try{
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null)
 			return "login";
@@ -160,6 +161,11 @@ public class UserController {
 				typeId);
 		model.addAttribute("func", function);
 		return "index";
+	}catch(Exception e){
+		model.addAttribute("message", "查询失败,请刷新重试!");
+		logger.error(e.getMessage());
+		return "/error";
+	}
 	}
 
 	/**
@@ -241,7 +247,9 @@ public class UserController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
-			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
+			logger.error(e.getMessage());
+			model.addAttribute("error", "添加失败");
+			return "error";
 		}
 
 		return "resultjson";
@@ -549,6 +557,8 @@ public class UserController {
 	@RequestMapping(value = "person.action")
 	public String person(HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
+		if(user==null)
+	    return "login";
 		model.addAttribute("user", user);
 		return "set/person/person";
 	}

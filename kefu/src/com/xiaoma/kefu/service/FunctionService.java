@@ -226,4 +226,19 @@ public class FunctionService {
 		return tempPath;
 	}
 
+	public Keyboard findkeyById(Integer id) {
+		List<Keyboard> list = keyDao.findByUesrId(id);
+		if(list.isEmpty())
+		return null;
+		return list.get(0);
+				
+	}
+
+	public RemindType findRemindByUserId(Integer id) {
+		List<RemindType> list = remindDao.findRemindByUesrId(id);
+		if(list.isEmpty())
+		return null;
+		return list.get(0);
+	}
+
 }
