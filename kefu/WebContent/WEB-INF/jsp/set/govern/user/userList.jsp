@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
+<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
@@ -27,7 +28,7 @@
             <td>${user.loginName}</td>
             <td>${user.userName}</td>
             <td>${user.roleName}</td>
-            <td>${user.onLineStatus}</td>
+            <td><xiaoma:dictValue name="d_user_onLineStatus"  value="${user.onLineStatus}"/></td>
             <td><a href="javascript:deptUser(${user.deptId})">${user.deptName}<a></a></td>
             <td>${user.maxListen}</td>
             <td><a href="javascript:findUser(${user.id})">查看<a/>&nbsp;&nbsp;&nbsp;&nbsp;

@@ -51,5 +51,15 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	 */
 	public int updateIsRece(BusiGroupDetail detail);
 	
+	/**
+	 * 根据用户和类型,删除分组明细信息
+	* @param userId	用户或部门id
+	* @param userType	1=用户 2=部门
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月22日
+	 */
+	public int deleteByUserOrDept(Integer userId,Integer userType);
+	
 	
 }

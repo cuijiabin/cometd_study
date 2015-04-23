@@ -35,7 +35,8 @@ public class DepartmentService {
 	@Autowired RoleDao roleDaoImpl;
 	@Autowired RoleDeptDao roleDeptDao;
 	@Autowired UserDao userDaoImpl;
-	
+	@Autowired 
+	private BusiGroupDetailService busiGroupDetailService;
 	/**
 	 * 查询所有
 	 * @param currentPage
@@ -122,9 +123,10 @@ public class DepartmentService {
 	public Integer deleteDeptById(Integer id){
 		List<User> user = userDaoImpl.getUsertByDeptId(id);
 		if(user.isEmpty()||user==null){
+		busiGroupDetailService.deleteByDeptId(id);
 		Department dept =deptDaoImpl.findById(Department.class, id);
 		dept.setIsDel(1);
-           return deptDaoImpl.update(dept);
+        return deptDaoImpl.update(dept);
 		}
 		return 3;
 	}

@@ -85,6 +85,7 @@ public class CustomerService {
 	 * 修改
 	 */
 	public boolean updateCustomer(Customer customer) {
+		JedisDao.remove(JedisConstant.CUSTOMER_INFO+customer.getId());
 		return customerDaoImpl.updateCustomer(customer);
 	}
 

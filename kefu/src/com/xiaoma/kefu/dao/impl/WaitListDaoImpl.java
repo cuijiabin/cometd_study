@@ -138,6 +138,19 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 		query.setInteger("id", id);
 		return query.executeUpdate();
 	}
-
+	/***
+	 * 根据风格ID和父级ID获取List
+	 * @param styleId
+	 * @param id
+	 * @return
+	 */
+	public List<WaitList> findListById(Integer styleId,Integer id){
+		Session session = getSession();
+		String hql = "from WaitList a where a.styleId=:styleId and a.pId = :id ";
+		Query query = session.createQuery(hql);
+		query.setInteger("styleId", styleId);
+		query.setInteger("id", id);
+		return query.list();
+	}
 	
 }

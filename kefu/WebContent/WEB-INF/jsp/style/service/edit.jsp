@@ -20,10 +20,10 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">首页</a></li>
-        <li><i>&gt;</i><a href="#">系统设置</a></li>
-        <li><i>&gt;</i><a href="/style/find.action">风格管理</a></li>
-        <li><i>&gt;</i><a href="/style/editCommon.action?styleId=${serviceIcon.styleId }">界面样式设置</a></li>
+        <li>首页</li>
+        <li><i>&gt;</i>系统设置</li>
+        <li><i>&gt;</i>风格管理</li>
+        <li><i>&gt;</i>界面样式设置</li>
         <li><i>&gt;</i>客服图标设置</li>
     </ul>
 </div>
@@ -143,20 +143,21 @@
 
 //保存
 $('#btn_save').on('click',function(){
-	if(isNaN($("#siteZyPx").val())){
-		$.dialog.alert("水平定位像素请填写数字!");
+	
+	if(!isInteger($("#siteZyPx").val())){
+		$.dialog.alert("水平定位像素请填写正整数!");
 		return;
 	}
-	if(isNaN($("#siteDdPx").val())){
-		$.dialog.alert("垂直定位像素请填写数字!");
+	if(!isInteger($("#siteDdPx").val())){
+		$.dialog.alert("垂直定位像素请填写正整数!");
 		return;
 	}
-	if(isNaN($("#width").val())){
-		$.dialog.alert("宽度请填写数字!");
+	if(!isInteger($("#width").val())){
+		$.dialog.alert("宽度请填写正整数!");
 		return;
 	}
-	if(isNaN($("#height").val())){
-		$.dialog.alert("高度请填写数字!");
+	if(!isInteger($("#height").val())){
+		$.dialog.alert("高度请填写正整数!");
 		return;
 	}
 	

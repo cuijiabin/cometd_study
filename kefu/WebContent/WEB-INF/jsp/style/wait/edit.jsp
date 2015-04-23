@@ -15,22 +15,20 @@
 
 <body>
 
-<div class="g-bd6 f-cb f-mar20">
-    <div class="g-sd6 c-bor">
-        <h3 class="u-tit c-bg">等待列表配置</h3>
-        <div style="float:right;margin-right: 30px;height: 24px">
-       		<button type="button" class="btn btn-primary btn-small" onclick="add();">添加</button>
-   		</div>
-        <!-- 表格有边框 -->
-		<table class="table table-bordered table-striped table-hover m-table">
-			<thead>
-				<tr>
-					<td>一级菜单</td>
-		            <td>操作</td>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="p" items="${pList}">
+<div class="g-cnt f-padd20">
+	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9;">
+        <div class="f-txtr">
+            <button type="submit" class="btn btn-primary" onclick="add();">添加</button>
+        </div>
+        <table class="table table-bordered table-striped table-hover m-table c-wdat f-mar0 f-mtm">
+            <thead>
+                <tr>
+                    <th>一级菜单</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<c:forEach var="p" items="${pList}">
 					<tr>
 			            <td id="pname${p.id }">${p.name}</td>
 			            <td>
@@ -40,22 +38,15 @@
 			            </td>
 					</tr>
 				</c:forEach>
-			</tbody>
-		</table>
+            </tbody>
+        </table>
+	</div>
+	
+	<div class="f-padd20 f-fl">
+       	<div id="table_data">
+			<jsp:include page="editTwo.jsp"></jsp:include>
+		</div>
     </div>
-    
-    <div class="g-mn6">
-        <div class="g-mn6c">
-        	<div id="table_data">
-				<jsp:include page="editTwo.jsp"></jsp:include>
-			</div>
-        </div>
-    </div>
-    
-</div>
-
-<div style="float:right;margin-right: 30px;height: 24px">
-    <button type="button" class="btn btn-primary btn-small" onclick="cancel();">关闭</button>
 </div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -72,7 +63,8 @@ var cDG;
 function show(id){
 	var url="/waitList/editTwo.action";
 	var data = {
-			"pId":id
+			"pId":id,
+			"styleId":'${styleId}'
 	};
 	$.ajax({
 	    type: "get",
@@ -143,6 +135,11 @@ function toUpdate(id){
 	//文本框失去焦点后提交内容，重新变为文本 
 	input.blur(function(){ 
 		var newtxt = input.val(); 
+		if($.trim(newtxt) == ''){
+			W.$.dialog.alert("名称不能为空!");
+   			td.html(txt);
+   			return false;
+		}
 		//判断文本有没有修改 
 		if (newtxt != txt) {
 			var postData = {"id":id,"name":newtxt,"styleId":'${styleId}'};
@@ -199,11 +196,6 @@ function save(postData,td,txt){
     		});
 	    }
 	});
-}
-
-//关闭
-function cancel(){
-	api.close();
 }
 
 </script>

@@ -1,6 +1,11 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +21,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.comet4j.DialogueQuene;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.StudyMapUtil;
 
 @Controller
 @RequestMapping(value = "dialogue")
@@ -43,6 +52,9 @@ public class DialogueController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BlacklistService blacklistService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 
@@ -70,6 +82,68 @@ public class DialogueController {
 
 		return "/dialogue/switch";
 	}
+	
+	/**
+	 * 获取当前对话列表
+	 * 
+	 * @param request
+	 * @param response
+	 * @param ccnId
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 */
+	@RequestMapping(value = "receiveList.action", method = RequestMethod.GET)
+	public String customerList(HttpServletRequest request,HttpServletResponse response, String ccnId, Model model)
+			throws IOException, NoSuchFieldException, SecurityException {
+		
+		List<DialogueQuene> list = new ArrayList<DialogueQuene>();
+		List<String> ccnIds = JedisTalkDao.getCcnReceiveList(ccnId);
+		
+		if(CollectionUtils.isNotEmpty(ccnIds)){
+			
+			Map<String, Long> ccnIdCustomerMap = new HashMap<String, Long>();
+			
+			for (String cId : ccnIds) {
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, cId);
+				if (customerId != null) {
+					ccnIdCustomerMap.put(cId, Long.parseLong(customerId));
+				}
+			}
+			List<Long> customerIds = new ArrayList<Long>(ccnIdCustomerMap.values());
+			List<Customer> customers = new ArrayList<Customer>();
+			Map<Long, Customer> customerMap = new HashMap<Long, Customer>();
+			if(CollectionUtils.isNotEmpty(customerIds)){
+				customers = customerService.findByIds(customerIds);
+				customerMap = StudyMapUtil.convertList2Map(customers, Customer.class.getDeclaredField("id"));
+			}
+			
+			for (String cId : ccnIds) {
+				DialogueQuene dialogueQuene = new DialogueQuene();
+				dialogueQuene.setCcnId(cId);
+				
+				Long customerId = ccnIdCustomerMap.get(cId);
+				Customer customer = customerMap.get(customerId);
+				if(customer != null){
+					dialogueQuene.setCustomer(customer);
+				}
+				Long millTime = JedisTalkDao.getCcnReceiveScore(ccnId,cId);
+				if(millTime != null){
+					dialogueQuene.setEnterTime(new Date(millTime));
+				}
+				
+				list.add(dialogueQuene);
+			}
+		}
+		
+		
+		model.addAttribute("list", list);
+
+		return "/dialogue/receiveList";
+
+	}
 
 	/**
 	 * 客户对话框请求页 负责用户的创建与cookie的读写还有聊天历史记录！
@@ -90,6 +164,7 @@ public class DialogueController {
 
 		Long id = null;
 		Boolean isNew = true;
+		Boolean isForbidden = false;
 		if (StringUtils.isNotBlank(customerId)) {
 			try {
 				id = Long.parseLong(customerId);
@@ -108,6 +183,7 @@ public class DialogueController {
 			id = customerService.insert(customer);
 
 		} else {
+			isForbidden = blacklistService.judgeForbidden(id);
 			customer = customerService.getCustomerById(id);
 			List<DialogueDetail> list = dialogueDetailService
 					.getLastRecordsByCustomerId(id);
@@ -124,11 +200,14 @@ public class DialogueController {
 		response.addCookie(cookie);
 
 		model.addAttribute("customer", customer);
+		model.addAttribute("isForbidden", isForbidden);
 		
 		
 		// 留言框生成规则 --------------开始
 		model.addAttribute("replyWay",dialogueService.findReplyWayList());
 		model.addAttribute("replyType",dialogueService.findMessageObject());
+		model.addAttribute("infoList",dialogueService.findInfoList());
+		model.addAttribute("checkInfo",DictMan.getDictItem("d_sys_param", 8));
 		
 		//获取客服部人员列表
 		model.addAttribute("userList",userService.getResultDept(1));

@@ -22,13 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.xiaoma.kefu.controller.DialogueController;
 import com.xiaoma.kefu.dao.DialogueDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DictItem;
-import com.xiaoma.kefu.redis.SystemConfiguration;
-import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
 
@@ -143,9 +141,11 @@ public class DialogueService {
 	* @Date: 2015年4月7日
 	 */
 	private void createExcel(List<String> title, List<List<String>> contentList) throws Exception {
-		String basePath = SystemConfiguration.getInstance().getFileUrl()
-				+"/" + SysConst.EXP_TALK_PATH ;
+//		String basePath = SystemConfiguration.getInstance().getFileUrl()
+//				+"/" + SysConst.EXP_TALK_PATH ;
 		String fileName = getFileName();
+		String basePath = FileUtil.getExpTalkRootPath(fileName);
+		
 		String path = basePath + "/" + fileName + ".xlsx";
 		File file = new File(path);
 		createFileWithDirs(file);//创建目录
@@ -222,17 +222,21 @@ public class DialogueService {
 	* @Date: 2015年4月7日
 	 */
 	private List<List<String>> getContentList(Map<String, String> recordFieldMap) {
-		String sql = " SELECT t1.id dialogueId,IFNULL(t2.customerName,t1.customerId) customerId "
+		String sql = " SELECT t1.id dialogueId,IFNULL(t2.customerName,t1.customerId) customerName "
+				+ " , CASE WHEN t2.customerName IS NULL THEN 0 ELSE 1 END hasName,t1.customerId "
 				+ " , t1.ipInfo, t1.consultPage, t1.keywords  "
-				+ " , t3.name styleId, t1.openType, t1.closeType, t1.isWait, t1.waitListId "
+				+ " , case when t1.isWait=1 then '是' else '否' end isWait "
+				+ " , t3.name styleId, t1.openType, t1.closeType, IFNULL(t1.waitListId,0) waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
-				+ " , t1.landingPage, t1.keywords, t1.durationTime, t1.btnCode "
+				+ " , t1.landingPage, t1.durationTime, t1.btnCode "
 				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
 				+ " INNER JOIN style t3 on t1.styleId = t3.id "//风格(站点来源)
-				+ " WHERE t1.isDel = 0 " ;
+				+ " WHERE t1.isDel = 0 " 
+				+ " AND DATE(t1.beginDate) = DATE_SUB(CURDATE(),INTERVAL 1 DAY) ";
+		
 		DataSet ds = DataBase.Query(sql);
 		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);
 		for(int i=0;i<ds.RowCount;i++){
@@ -308,6 +312,22 @@ public class DialogueService {
 		try {
 			List<DictItem> list = DictMan.getDictList("d_cus_reply_obj");
 			DictItem dictItem = DictMan.getDictItem("d_sys_param", 10);
+			List<DictItem> dList = new ArrayList<DictItem>();
+			for(DictItem d : list){
+				if(dictItem.getItemName().indexOf(d.getItemCode()) >= 0){
+					dList.add(d);
+				}
+			}
+			return dList;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+	public List<DictItem> findInfoList(){
+		try {
+			List<DictItem> list = DictMan.getDictList("d_cus_info");
+			DictItem dictItem = DictMan.getDictItem("d_sys_param", 7);
 			List<DictItem> dList = new ArrayList<DictItem>();
 			for(DictItem d : list){
 				if(dictItem.getItemName().indexOf(d.getItemCode()) >= 0){

@@ -84,5 +84,22 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 	    return query.executeUpdate();  
 	}
 	
+	/**
+	 * 根据用户和类型,删除分组明细信息
+	* @param userId	用户或部门id
+	* @param userType	1=用户 2=部门
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月22日
+	 */
+	public int deleteByUserOrDept(Integer userId,Integer userType){
+		Session session = getSession();
+		String hql = "delete BusiGroupDetail t where t.userId = :userId and t.userType = :userType ";
+		Query query = session.createQuery(hql);
+		query.setInteger("userId", userId);
+		query.setInteger("userType", userType);
+		return query.executeUpdate();
+	}
+	
 
 }

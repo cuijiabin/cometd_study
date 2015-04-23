@@ -163,7 +163,7 @@ function changeDept(){
 		dataType:"json",
 		success:function(data) {
 			alert(data.msg);
-			location.reload();
+			find();
 		},
 		error : function(data) {
 			alert("出现错误,请重试！");

@@ -23,6 +23,7 @@
             <td class="f-txtr tdbg">菜单名称:</td>
             <td class="f-txtr tdbg">
             	<input type="hidden" id="styleId" name="styleId" value="${styleId }"/>
+            	<input type="hidden" id="pId" name="pId" value="${pId }"/>
             	<input type="text" id="name" name="name" maxlength="20"/>
 			</td>
         </tr>

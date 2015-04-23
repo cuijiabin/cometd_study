@@ -26,20 +26,20 @@
 <div>
 	<table border="1" style="margin:20px 0 10px 50px">
 		<tr>
-			<td>客户端截图热键:</td> <td>Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="A"></td>
+			<td>客户端截图热键:</td> <td>Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="${key.picKey}" ></td>
 		</tr>
 		<tr>
-			<td>显示客户端热键:</td> <td>Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="Z"></td>
+			<td>显示客户端热键:</td> <td>Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="${key.showKey}"></td>
 		</tr>
 		<tr>
-			<td>上一个对话热键:</td> <td>Shift+Alt+<input type="text" id="lastKey" name="lastKey" style="width: 20px" value="3"></td>
+			<td>上一个对话热键:</td> <td>Shift+Alt+<input type="text" id="lastKey" name="lastKey" style="width: 20px" value="${key.lastKey}"></td>
 		</tr>
 		<tr>
-			<td>下一个对话热键:</td> <td>Shift+Alt+<input type="text" id="nextKey" name="nextKey" style="width: 20px" value="2"></td>
+			<td>下一个对话热键:</td> <td>Shift+Alt+<input type="text" id="nextKey" name="nextKey" style="width: 20px" value="${key.nextKey}"></td>
 		</tr>
 		<tr>
-			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey" value="1"/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="radio" id="sendKey" name="sendKey" value="2"/>Ctrl+Enter	</td>
+			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey" value="1" <c:if test='${key.sendKey==1}'>checked</c:if>/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" id="sendKey" name="sendKey" value="2" <c:if test='${key.sendKey==2}'>checked</c:if>/>Ctrl+Enter	</td>
 		</tr>
 	</table>
 	 <button style="margin-left:230px;" onclick="javascript:saveKey();" class="btn btn-primary btn-small" >&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
@@ -66,11 +66,7 @@ function saveKey(){
 			data : data,
 			dataType : "json",
 			success : function(data) {
-				if(data.result==2){
-					alert("dfjkdjf");
-				}else{
 					alert(data.msg);
-				}
 			},
 			error : function(msg) {
 				alert("出现错误,请重试!");

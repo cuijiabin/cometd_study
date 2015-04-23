@@ -98,5 +98,27 @@ public class BusiGroupDetailService {
 		}
 	}
 	
+	/**
+	 * 员工离职,删除业务分组中此员工信息
+	* @param userId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月22日
+	 */
+	public int deleteByUserId(Integer userId){
+		return busiGroupDetailDaoDaoImpl.deleteByUserOrDept(userId, 1);
+	}
+	
+	/**
+	 * 删除部门, 删除业务分组中部门信息
+	* @param deptId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月22日
+	 */
+	public int deleteByDeptId(Integer deptId){
+		return busiGroupDetailDaoDaoImpl.deleteByUserOrDept(deptId,2);
+	}
+	
 
 }

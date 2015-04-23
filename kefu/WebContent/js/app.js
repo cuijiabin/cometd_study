@@ -102,15 +102,16 @@ $("#openClose").click(function(){
 	return false;
 });
 
-// 客服端访客对话框架-手风琴菜单
-jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
-// 关闭按钮
-$(".u-close").click(function(){
-	$(this).parent().remove();
-})
-// 客户端访客对话框架
-jQuery(".slideTab").slide({trigger:"click"});
-jQuery(".slideTab2").slide({trigger:"click"});
-jQuery(".g-sd3").slide({mainCell:"ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1});
-
-
+/*
+ * 是否正整数
+ * 如果为空,则返回true
+ * 如果是 返回true,如果不是,返回false
+ */
+function isInteger(value){
+	if(value!=''){
+		if(!(/^(\+|-)?\d+$/.test( value ))||value<=0){  
+			return false;
+	    }
+	}
+	return true;
+}

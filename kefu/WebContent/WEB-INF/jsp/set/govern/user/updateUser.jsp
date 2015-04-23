@@ -65,7 +65,7 @@
         </tr>
         <tr>       
             <td>工号名片</td>
-            <td><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10"/></td>
+            <td><input type="text" id="cardName" name="cardName" value="${user.cardName}" maxlength="10"/></td>
             <td>入职日期</td>
             <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker({maxDate:'%y-%M-%d'})" class="c-wd120 Wdate" /></td>
         </tr>

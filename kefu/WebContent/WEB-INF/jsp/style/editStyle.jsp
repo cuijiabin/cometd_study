@@ -52,9 +52,8 @@ var W = api.opener;//获取父页面对象
 //先检验,后保存
 $('#btn_save').on('click',function(){
 	if($.trim($("#name").val()) == ''){
-		$.dialog.alert('名称不能为空!',function(){
-			return false;
-		});
+		$.dialog.alert('名称不能为空!');
+		return false;
 	}else{
 		$.ajax({
 		    type: "post",
@@ -75,6 +74,7 @@ $('#btn_save').on('click',function(){
 		    }
 		});
 	}
+	alert('www');
     return false;
 });
 

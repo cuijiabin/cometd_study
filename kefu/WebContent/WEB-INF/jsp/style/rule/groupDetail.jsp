@@ -8,7 +8,7 @@
      <div class="m-group-member">
      	<ul class="m-tag">
 	     	<c:forEach var="detail" items="${detailList }" varStatus="status">
-				<c:if test="${status.index % 5 == 0 }"> <br /> </c:if>  
+<%-- 				<c:if test="${status.index % 5 == 0 }"> <br /> </c:if>   --%>
 					<input type="hidden" name="id" value="${detail.id }">
 					<li>
 		             	<span>${detail.cardName }</span>

@@ -1,6 +1,10 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.service.BusiGroupService;
@@ -17,6 +22,7 @@ import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.SysConst;
 
 /**
  * *********************************
@@ -158,6 +164,14 @@ public class StyleController {
 	public String editCommon(Model model,Integer styleId) {
 		try {
 			Style style = styleService.get(styleId);
+			
+			//客服图片路径 写死. 暂时只有这一个图片,所有风格公用
+			String picUrl1 = DictMan.getDictItem("d_sys_param", 2).getItemName()
+					+ "/" + SysConst.STYLE_PATH //风格主目录
+					+ "/"+"serviceIocn_min.jpg";	//类别
+			
+			
+			model.addAttribute("picUrl1", picUrl1);
 			model.addAttribute("style", style);
 			return "/style/editCommon";
 		} catch (Exception e) {
@@ -188,6 +202,65 @@ public class StyleController {
 			model.addAttribute("result", Ajax.JSONResult(1, "失败!"));
 		}
 		return "resultjson";
+	}
+	
+	@RequestMapping(value = "getStyleDiv.action", method = RequestMethod.GET)
+	public String getStyleDiv(HttpServletRequest req,HttpServletResponse res){
+//		res.setContentType("text/plain");
+//	    String callbackFunName =req.getParameter("callbackparam");//得到js函数名称
+//	    try {
+//	        res.getWriter().write(callbackFunName + "([ { name:\"John\"}])"); //返回jsonp数据
+//	    } catch (IOException e) {
+//	        e.printStackTrace();
+//	    }
+		return "/styleDiv/divOne";
+	}
+	
+	@RequestMapping(value = "getIconDiv.action", method = RequestMethod.GET)
+	public void getIconDiv(Model model,HttpServletRequest req,HttpServletResponse res){
+		res.setContentType("text/plain");
+	    String callbackFunName =req.getParameter("callbackIcon");//得到js函数名称
+	    
+//	    单引号,双引号 都 \\\	OK
+	    String str = " <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
+		+ " <div style=\\\"position:absolute;top:0px;left:0;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div>  "
+		+ " <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"window.open(\\\'http://oc2.xiaoma.com/new/client.php?arg=53kf&amp;style=3&amp;l=zh-cn&amp;charset=utf-8&amp;lytype=0&amp;referer=http%3A%2F%2Fkecheng.xiaoma.com%2F&amp;isvip=bcf14bbb85a346c2fb52e8cea8822cce&amp;identifier=&amp;keyword=http%3A//kecheng.xiaoma.com/&amp;tfrom=1&amp;tpl=crystal_blue\\\',\\\'_blank\\\',\\\'height=573,width=803,top=200,left=200,status=yes,toolbar=no,menubar=no,resizable=yes,scrollbars=no,location=no,titlebar=no\\\')\\\" style=\\\"cursor:pointer\\\"> "
+		+ " </div> "
+		;
+	    
+//	    //单引号不管, 双引号 \\\	ok
+//	    String str = " <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
+//		+ " <div style=\\\"position:absolute;top:0px;left:0;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div>  "
+//		+ " <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"gotoKF()\\\" style=\\\"cursor:pointer\\\"> "
+//		+ " </div> "
+//		;
+	    
+	    
+	    try {
+	        res.getWriter().write(callbackFunName + "([ { name:\""+str+"\"}])"); //返回jsonp数据
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	@RequestMapping(value = "getDialogueDiv.action", method = RequestMethod.GET)
+	public void getDialogueDiv(Model model,HttpServletRequest req,HttpServletResponse res){
+		res.setContentType("text/plain");
+	    String callbackFunName =req.getParameter("callbackDialogue");//得到js函数名称
+	    
+	    String str = " <div id='w-kfcbox' style='position:fixed;top:300px;left:611px;display:block;overflow:hidden;width:680px;height:380px;z-index:7998;'> "
+	    		+ " <div id='w-kfbox-cnt' style='position:relative;overflow:hidden;width:680px;height:380px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1429507915.png);background-repeat:no-repeat;z-index:0;'>  "
+	    		+ " <div style='position:absolute;left:669px;top:0px;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;'></div>  "
+	    		+ "     	<div style='position:absolute;left:0px;top:0px;overflow:hidden;width:680px;height:380px;z-index:1;cursor:pointer;'></div> "
+	    		+ " </div> </div>"
+	    		;
+	    
+	    try {
+	        res.getWriter().write(callbackFunName + "([ { name:\""+str+"\"}])"); //返回jsonp数据
+//	        res.getWriter().write(callbackFunName + "([ { name:\"John\"}])"); //返回jsonp数据
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 }

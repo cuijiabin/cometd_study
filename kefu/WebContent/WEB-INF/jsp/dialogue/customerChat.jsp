@@ -34,6 +34,7 @@
                     <div class="g-mn5c c-bor">
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
+                        <input type="hidden" id="isForbidden" value="${isForbidden}"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -96,21 +97,17 @@
                                         		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
                                        		</c:forEach>
                                         </div>
-                                        <select id="teacher" name="teacher" style="display:none;" class="c-wd80">
+										<select id="teacher" name="teacher" style="display:none;" class="c-wd80">
                                         	<c:forEach varStatus="status" items="${userList}" var="user">
                                         		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
                                         	</c:forEach>
-                                        </select>
+                                        </select>                                    
                                     </div>
+                                    <c:forEach varStatus="status" items="${infoList}" var="d">
                                     <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">姓名：</label><input class="c-wd150" name="custName" id="custName" type="text" /> <span class="help-inline c-clred">* 必填</span>
+                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
                                     </div>
-                                    <div class="f-mbm">
-                                        <label class="c-wd80 f-txtr">Email：</label><input class="c-wd150" name="custEmail" id="custEmail" type="text" />
-                                    </div>
-                                    <div class="f-mbm">
-                                    	<label class="c-wd80 f-txtr">电话：</label><input class="c-wd150" name="custPhone" id="custPhone" type="text" /> <span class="help-inline c-clred">* 必填</span>
-                                    </div>
+                                    </c:forEach>
                                     <div class="f-mbm">
                                         <label class="c-wd80 f-txtr">留言内容：</label><textarea name="custContent" id="custContent" style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
                                     </div>
@@ -181,17 +178,24 @@
 				stop : function(cause, url, cId, engine) {
 					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
+					findWaitList();//获取等待列表
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
 					case 'on_message': // 收到聊天消息
 						onMessage(data);
 						break;
+					case 'on_switch_customer': //客服切换
+						switchCustomer(data);
+						break;
 					case 'on_open': // 上线
 						onOpen(data);
 						break;
 					case 'on_close': // 下线
 						onLeft(data);
+						break;
+					case 'end_dialogue': // 结束对话
+						endDialogue(data);
 						break;
 					default:
 					}
@@ -206,8 +210,13 @@
 		//}
 		//开启连接
 		function start(){
-			JS.Engine.start('/conn');
-			inputbox.focus();
+			var isForbidden =  $("#isForbidden").val();
+			if(isForbidden == 'false'){
+				JS.Engine.start('/conn');
+				inputbox.focus();
+			}else{
+				alert("对不起您已经被禁用");
+			}
 		}
 		
 		
@@ -238,10 +247,10 @@
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
 			
-			//修改cookie
-			//var cookieValue = data.cookieValue;
-			//console.log("设置cookie"+cookieValue);
-			//setCookie("KF_CUSTOMER_ID", cookieValue,20);  
+		}
+		
+		function switchCustomer(data){
+			alert("后台用户切换！");
 		}
 		
 		// 设置Cookie
@@ -258,6 +267,13 @@
 			name = name.HTMLEncode();
 			var t = data.transtime;
 			var str = ['<p class="r-visitor">',name,'&nbsp;',t,'&nbsp;离开了</p>'];
+			checkLogCount();
+			logbox.innerHTML += str.join('');
+			lastTalkId = null;
+			moveScroll();
+		}
+		function endDialogue(){
+			var str = ['<p class="r-visitor">','&nbsp;','&nbsp;对话结束了！</p>'];
 			checkLogCount();
 			logbox.innerHTML += str.join('');
 			lastTalkId = null;
@@ -398,12 +414,21 @@
 				$("#teacher").show();
 		}
 		function checkMessage(){
-			var custName = $("#custName").val();
+			//姓名
+			var custName = $("#custname").val();
 			if(!custName || custName.length>20){
 				$.dialog.alert("姓名不能为空或超过20个字符!");
 				return true;
 			}
-			var custPhone = $("#custPhone").val();
+			//邮箱
+			var email = $("#custemail").val();
+			var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+			if(email && (email.length>20 || !pattern.test(email))){
+				$.dialog.alert("请输入正确的邮箱!");
+				return true;
+			}
+			//电话
+			var custPhone = $("#custphone").val();
 			if (custPhone.replace("^[ ]+$", "").length != 0) {
 				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
 				if (!pattenPhone.test(custPhone)) {
@@ -414,11 +439,38 @@
 				$.dialog.alert("手机号码为空或者格式不正确!");
 				return true;
 			}
+			//QQ
+			var qq = $("#custqq").val();
+			var pattenQQ = /^[d]{20}$/;
+			if(qq && !pattenQQ.test(qq)){
+				$.dialog.alert("QQ号码格式不正确!");
+				return true;
+			}
+			//MSN
+			var msn = $("#custmsn").val();
+			if(msn && msn.length>40){
+				$.dialog.alert("MSN超长!");
+				return true;
+			}
+			//单位
+			var company = $("#custcompany").val();
+			if(company && company.length>100){
+				$.dialog.alert("单位超长!");
+				return true;
+			}
+			//地址
+			var address = $("#custaddress").val();
+			if(address && address.length>100){
+				$.dialog.alert("地址超长!");
+				return true;
+			}
+			//留言内容
 			var custContent = $("#custContent").val();
 			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
 				$.dialog.alert("留言内容应在10-200个字符之间!");
 				return true;
 			}
+			
 			return false;
 		}
 		function addMessage(){
@@ -444,9 +496,13 @@
 						"userId" : $("#teacher").val(),
 						"replyWay" : replyWay,
 						"replyType" :replyType,
-						"name": $("#custName").val(),
-						"email": $("#custEmail").val(),
-						"phone": $("#custPhone").val(),
+						"name": $("#custname").val()?$("#custname").val():"",
+						"email": $("#custemail").val()?$("#custemail").val():"",
+						"phone": $("#custphone").val()?$("#custphone").val():"",
+						"qq": $("#custqq").val()?$("#custqq").val():"",
+						"msn": $("#custmsn").val()?$("#custmsn").val():"",
+						"company": $("#custcompany").val()?$("#custcompany").val():"",
+						"address": $("#custaddress").val()?$("#custaddress").val():"",
 						"messageContent": $("#custContent").val().replace("^[ ]+$", "")
 					};
 			 $.ajax({
@@ -467,7 +523,34 @@
 		    		}
 		    	});
 		}
-		
+		function findWaitList(id){
+			return;
+			 $.ajax({
+		    		type : "post",
+		    		url : "/messageRecords/add.action",
+		    		data : data,
+		    		dataType : "json",
+		    		async:false,
+		    		success : function(data) {
+		    			if (data.result == 0) {
+		    				$.dialog.alert('留言成功!');
+		    			} else {
+		    				$.dialog.alert(data.msg);
+		    			}
+		    		},
+		    		error : function(msg) {
+		    			$.dialog.alert(data.msg);
+		    		}
+		    	});
+			if(id == 0){
+				
+			}
+		}
+	
+		// 客户端访客对话框架
+		jQuery(".slideTab").slide({trigger:"click"});
+		jQuery(".slideTab2").slide({trigger:"click"});
+		jQuery(".g-sd3").slide({mainCell:"ul",autoPage:true,effect:"topLoop",autoPlay:true,vis:1});
 </script> 
 
 </body>

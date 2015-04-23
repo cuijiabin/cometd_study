@@ -19,8 +19,8 @@
 <div class="m-crumb">
     <ul class="f-cb">
         <li><b>位置：</b></li>
-        <li><a href="#">记录中心</a></li>
-        <li><i>&gt;</i><a href="#">聊天记录</a></li>
+        <li>记录中心</li>
+        <li><i>&gt;</i>聊天记录</li>
     </ul>
 </div>
 <!-- 查询条件 -->
@@ -63,7 +63,7 @@
                 <label><input type="radio" name="numCondition" value='XY' />小于</label>
             </div>
             <div class="input-append">
-              	<input class="c-wd30" type="text" id="totalNum" name="totalNum" >
+              	<input class="c-wd30" type="text" id="totalNum" name="totalNum" maxlength="4">
               	<button class="btn btn-small" type="button">条</button>
             </div>
             <label>站点来源：</label><input class="c-wd150" type="text" id="styleName" name="styleName" />
@@ -90,7 +90,7 @@
 		</div> 
 	    <div class="u-hr"></div>
 	    <div class="m-query-bd">
-	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker()" />
+	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker({minDate:'2015-04-01',maxDate:'%y-%M-{%d-1}}'})" />
 	        <button type="button" class="btn btn-primary btn-small" onclick="expExcel();">下载</button>
 	    </div>
 	    <div class="u-hr"></div>
@@ -110,16 +110,16 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
 
 function find(currentPage){
 	
-	if(isNaN($("#totalNum").val())){
-		$.dialog.alert("交谈条数请填写数字!");
+	var totalNum = $("#totalNum").val();
+	if(!isInteger(totalNum)){
+		$.dialog.alert("交谈条数请填写正整数!");
 		return;
 	}
-	
-	
 	var isTalk = 0 ;
 	if(($("#isTalk").is(":checked"))){
 		isTalk = 1;
@@ -140,7 +140,7 @@ function find(currentPage){
 			"talkContent":$("#talkContent").val(),
 			"keywords":$("#keywords").val(),
 			"numCondition":$("input[name='numCondition']:checked").val(),
-			"totalNum":$("#totalNum").val(),
+			"totalNum":totalNum,
 			"styleName":$("#styleName").val(),
 			"openType":$("#openType").val(),
 			"closeType":$("#closeType").val(),

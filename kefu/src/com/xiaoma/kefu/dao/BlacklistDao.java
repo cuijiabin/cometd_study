@@ -77,5 +77,12 @@ public interface BlacklistDao extends BaseDao<Blacklist>{
      * @return
      */
 	public Integer checkBlacklist(Blacklist blacklist);
+	
+	/**
+	 * 根据客户id判断是否被加入黑名单
+	 * @param customerId
+	 * @return
+	 */
+	public Boolean judgeForbidden(Long customerId);
 
 }

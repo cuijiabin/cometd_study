@@ -2,6 +2,7 @@ package com.xiaoma.kefu.model;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +40,9 @@ import javax.persistence.Table;
 	@Column(name="lineEffectUrl")
 	private String lineEffectUrl;
 	
+	@Column(name="bubble")
+	private Integer bubble;
+	
 	@Column(name="jsoundEffect")
 	private Integer jsoundEffect;
 	
@@ -64,7 +68,7 @@ import javax.persistence.Table;
 	private Integer upWdInform;
 	
 	@Column(name="createDate")
-	private Integer createDate;
+	private Date createDate;
 
 	public Integer getId() {
 		return id;
@@ -96,6 +100,14 @@ import javax.persistence.Table;
 
 	public void setLineEffect(Integer lineEffect) {
 		this.lineEffect = lineEffect;
+	}
+
+	public Integer getBubble() {
+		return bubble;
+	}
+
+	public void setBubble(Integer bubble) {
+		this.bubble = bubble;
 	}
 
 	public String getLineEffectUrl() {
@@ -170,14 +182,15 @@ import javax.persistence.Table;
 		this.upWdInform = upWdInform;
 	}
 
-	public Integer getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Integer createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
+
+
 
 
     

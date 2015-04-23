@@ -3,7 +3,12 @@ package com.xiaoma.kefu.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.dict.DictMan;
@@ -93,6 +98,30 @@ public class FileUtil {
 	 */
 	public static boolean deleteDir(String path){
 		return deleteDir(new File(path));
+	}
+	
+	/**
+	 * 
+	* @param strDate	yyyy-MM-dd 格式
+	* @return	总跟路径/导出对话根目录/年/月
+	* @Author: wangxingfei
+	* @Date: 2015年4月23日
+	 */
+	public static String getExpTalkRootPath(String strDate) {
+		String basePath = DictMan.getDictItem("d_sys_param", 1).getItemName()
+				+"/" + SysConst.EXP_TALK_PATH;
+		if(StringUtils.isNotBlank(strDate)){
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = sdf.parse(strDate);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				basePath += "/"+calendar.get(Calendar.YEAR) + "/" +calendar.get(Calendar.MONTH);
+			} catch (ParseException e) {
+				
+			}
+		}
+		return basePath;
 	}
 	
 	

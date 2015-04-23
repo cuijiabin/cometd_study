@@ -34,9 +34,6 @@
       <td>身份：</td><td>${user.roleName}</td>
       </tr>
       <tr>
-      <td>身份：</td><td>${user.cardName}</td>
-      </tr>
-      <tr>
       <td>部门：</td><td>${user.deptId}</td>
       </tr>
       
