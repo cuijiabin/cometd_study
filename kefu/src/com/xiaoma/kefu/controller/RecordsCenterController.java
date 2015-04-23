@@ -33,7 +33,6 @@ import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
-import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
@@ -42,6 +41,7 @@ import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.CompareEnum;
@@ -514,8 +514,7 @@ public class RecordsCenterController {
 	 */
 	@RequestMapping(value = "/expTalk", method = RequestMethod.GET)
 	public void expTalk(String date,HttpServletResponse response) throws IOException {
-		String basePath = SystemConfiguration.getInstance().getFileUrl()
-				+"/" + SysConst.EXP_TALK_PATH ;
+		String basePath = FileUtil.getExpTalkRootPath(date) ;
 		String path = basePath + "/" + date + ".xlsx";
 		response.setContentType("application/octet-stream");// 二进制流
 		response.setHeader("Content-Disposition", "attachment;filename=\"" + date + ".xlsx\"");

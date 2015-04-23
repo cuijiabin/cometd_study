@@ -3,37 +3,38 @@
 
 <beans>
 	<!-- 要调用的工作类 -->
-	<bean id="custrecordQuartzJob" class="com.xiaoma.kefu.quartz.CustomerJob"></bean>
+	<bean id="quartzJobService" class="com.xiaoma.kefu.quartz.QuartzJobService"></bean>
 	
 	<!-- 定义调用对象和调用对象的方法 -->
-	<bean id="jobtask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="expTalk" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<!-- 调用的类 -->
 		<property name="targetObject">
-			<ref bean="custrecordQuartzJob" />
+			<ref bean="quartzJobService" />
 		</property>
 		
 		<!-- 调用类中的方法 -->
 		<property name="targetMethod">
-			<value>addDelay</value>
+			<value>expTalkRecord</value>
 		</property>
 	</bean>
 	
 	<!-- 定义触发时间 -->
-	<bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="expTalkTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail">
-			<ref bean="jobtask" />
+			<ref bean="expTalk" />
 		</property>
 		<!-- cron表达式 -->
 		<property name="cronExpression">
-		    <!-- 每天凌晨 15分钟调用 -->
-			<value>0 15 0 * * ?</value>
+		    <!-- 每天凌晨 1点调用 -->
+			<value>0 0 1 ? * *</value>
 		</property>
 	</bean>
+	
 	<!-- 总管理类 -->
 	<bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="doTime" />
+				<ref bean="expTalkTime" />
 			</list>
 		</property>
 	</bean>

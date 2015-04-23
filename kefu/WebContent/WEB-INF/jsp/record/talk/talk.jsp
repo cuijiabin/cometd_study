@@ -90,7 +90,7 @@
 		</div> 
 	    <div class="u-hr"></div>
 	    <div class="m-query-bd">
-	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker()" />
+	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker({minDate:'2015-04-01',maxDate:'%y-%M-{%d-1}}'})" />
 	        <button type="button" class="btn btn-primary btn-small" onclick="expExcel();">下载</button>
 	    </div>
 	    <div class="u-hr"></div>
