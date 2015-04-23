@@ -36,6 +36,8 @@ public class UserService {
 	private UserDao userDaoImpl;
 	@Autowired
 	private DepartmentDao deptDao;
+	@Autowired
+	private BusiGroupDetailService busiGroupDetailService;
 
 	public User login(String name) {
 		return userDaoImpl.findUser(name);
@@ -232,6 +234,7 @@ public class UserService {
 				Department dept = dlist.get(0);
 				if(status==2){
 				    dept.setUserCount(dept.getUserCount()-1);
+				    busiGroupDetailService.deleteByUserId(leup.getId());
 				}else{
 					dept.setUserCount(dept.getUserCount()+1);
 				}
@@ -251,6 +254,7 @@ public class UserService {
 			Department dept = dlist.get(0);
 			if(status==2){
 			    dept.setUserCount(dept.getUserCount()-1);
+			    busiGroupDetailService.deleteByUserId(leup.getId());
 			}else{
 				dept.setUserCount(dept.getUserCount()+1);
 			}

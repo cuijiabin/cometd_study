@@ -31,7 +31,7 @@
     	   <input  type ="checkbox" id="lsoundEffect" name="lsoundEffect" value="1" <c:if test='${remind.lsoundEffect==1}'>checked</c:if>/>播音效<br>
     	        <input  type ="radio" id="lineEffect" name="lineEffect"  value="1" checked="checked" <c:if test='${remind.lineEffect==1}'>checked</c:if>/>默认音效<br>
     	   		<input  type ="radio" id="lineEffect" name="lineEffect"  value="2" <c:if test='${remind.lineEffect==2}'>checked</c:if>/>自定义</t>
-    	   		<input type="file" id="lsound" name="lsound" size="12" onchange="checkfile(this.value)">
+    	   		<input type="file" id="lsound" name="lsound" size="12" onchange="checkfile()">
                 <br>
     	   <input  type ="checkbox" id="bubble" name="bubble" value="1" <c:if test='${remind.bubble==1}'>checked</c:if>/>冒气泡框
         </td>
@@ -59,7 +59,7 @@
     <tr>
       	<td align="center">
         <button onclick="saveRemind()" class="btn btn-primary btn-small" >确认</button>
-    	<button class="btn" >取消</button>
+    	<button class="btn" onclick="removecheck()">取消</button>
     	</td>
     </tr>
 </div>
@@ -100,7 +100,15 @@ function saveRemind(){
 	}
    $("#fform").submit();
 }
-
+function checkfile(){
+	alert();
+	var f = $("#lsound").files;
+	alert(f[0].size);
+}
+function removecheck(){
+    $(":checkbox[checked='checked']").attr("checked",false);
+    $(":radio[checked='checked']").attr("checked",false);
+}
 </script>
 </body>
 </html>

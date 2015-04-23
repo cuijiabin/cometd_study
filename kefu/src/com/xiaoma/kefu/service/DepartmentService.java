@@ -123,7 +123,7 @@ public class DepartmentService {
 	public Integer deleteDeptById(Integer id){
 		List<User> user = userDaoImpl.getUsertByDeptId(id);
 		if(user.isEmpty()||user==null){
-		//busiGroupDetailService.deleteByDeptId(id);
+		busiGroupDetailService.deleteByDeptId(id);
 		Department dept =deptDaoImpl.findById(Department.class, id);
 		dept.setIsDel(1);
         return deptDaoImpl.update(dept);
