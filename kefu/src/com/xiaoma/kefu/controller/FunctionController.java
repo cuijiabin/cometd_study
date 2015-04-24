@@ -227,7 +227,7 @@ public class FunctionController {
 				} else {
 					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
 				}		
-			return "resultjson";
+			return "redirect:/function/remind.action";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");

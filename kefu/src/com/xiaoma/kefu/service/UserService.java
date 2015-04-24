@@ -158,11 +158,12 @@ public class UserService {
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
 		} else if(StringHelper.isNotEmpty(pass) && pass.equals("1")){
-			toUpdateUser.setIsLock(1);
+			     toUpdateUser.setIsLock(1);
 		}else if(StringHelper.isNotEmpty(user.getPassword())){
 			String password = new String(DigestUtils.md5Hex(user.getPassword()
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
+			toUpdateUser.setIsLock(0);
 		}
 		toUpdateUser.setLoginName(user.getLoginName());
 		toUpdateUser.setCardName(user.getCardName());
@@ -295,11 +296,16 @@ public class UserService {
 			return 0;
 		} else {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
-			leup.setDeptId(deptId);
+			List<Department> dlist1 =deptDao.getDeptById(leup.getDeptId());
+			Department dept1 = dlist1.get(0);
+			dept1.setUserCount(dept1.getUserCount()-1);
+			deptDao.update(dept1);
 			List<Department> dlist =deptDao.getDeptById(deptId);
 			Department dept = dlist.get(0);
 			dept.setUserCount(dept.getUserCount()+1);
 			deptDao.update(dept);
+			leup.setDeptId(deptId);
+			leup.setDeptName(dept.getName());
 			return userDaoImpl.update(leup);
 		}
 	}
