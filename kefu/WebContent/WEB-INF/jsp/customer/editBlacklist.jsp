@@ -35,7 +35,7 @@
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description" value="${blacklist.description}"/><span id="descriptionInfo" style = "color: red;">*</span></td>
+           <td><input type ="text" maxlength="30" id ="description" name="description" value="${blacklist.description}"/><span id="descriptionInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td colspan="2" align="right">   <button type="submit" class="btn btn-primary" id="btn_save">保存</button>

@@ -22,16 +22,16 @@
           <tbody>
                  <tr>
                  <td class="f-txtr tdbg" width="150px">分类编号</td>
-                  <td class="f-txtl"><input type="text" id="typeId" name="typeId" value="${messageType.typeId }"/></td>
+                  <td class="f-txtl"><input type="text" readonly="readonly" id="typeId" name="typeId" value="${messageType.typeId }"/></td>
                  </tr>
               
                  <tr>
                     <td class="f-txtr tdbg">分类名称</td>
-                     <td class="f-txtl"><input type="text" type="text" id="title" name="title" value="${messageType.title} " /></td>
+                     <td class="f-txtl"><input type="text" type="text" maxlength="20" id="title" name="title" value="${messageType.title} " /></td>
                 </tr>
              <tr>
                   <td class="f-txtr tdbg">排序</td>
-                  <td class="f-txtl"><input type="text" type="text" id="sortId" name="sortId" value="${messageType.sortId }"/></td>
+                  <td class="f-txtl"><input type="text" type="text" readonly="readonly" id="sortId" name="sortId" value="${messageType.sortId }"/></td>
               </tr>
                <tr>
                  <td class="f-txtr tdbg">展示</td>

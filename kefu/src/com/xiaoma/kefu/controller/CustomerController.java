@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -40,6 +41,7 @@ import com.xiaoma.kefu.util.PageBean;
 @Controller
 @RequestMapping(value = "customer")
 public class CustomerController {
+	private Logger logger = Logger.getLogger(CustomerController.class);
 
 	@Autowired
 	private CustomerService customerService;
@@ -126,7 +128,6 @@ public class CustomerController {
 		}
 	}
 
-
 	/**
 	 * 查询所有
 	 * 
@@ -140,7 +141,33 @@ public class CustomerController {
 		return "customer/left";
 	}
 
-
+	/**
+	 * 添加前检查访客表中是否存在该访客
+	 * 
+	 * @param model
+	 * @param messageType
+	 * @return
+	 */
+	@RequestMapping(value = "check.action", method = RequestMethod.GET)
+	public String checkCus(Model model, Integer id) {
+		try {
+			if (id == null) {
+				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
+				return "resultjson";
+			}
+			Integer count = customerService.checkCus(id); // 查看是否存在该访客
+			System.out.println(count);
+			if (count != null && count == 0) {
+				model.addAttribute("result", Ajax.toJson(0, "该访客信息不存在,不可以添加"));
+			} else {
+				model.addAttribute("result", Ajax.toJson(1, "该访客信息存在，可以添加"));
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
+		}
+		return "resultjson";
+	}
 	/**
 	 * 添加
 	 */

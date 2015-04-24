@@ -28,7 +28,7 @@
     <div class="m-query-bd">
         <div class="f-mbm">
             <label>客户姓名：</label><input id="customerName" name="customerName"class="c-wd150" type="text" />
-            <label>客户编号：</label><input id="customerId" name="customerId"  class="c-wd150" type="text" />
+            <label>客户编号：</label><input id="customerId" name="customerId" maxlength="15" class="c-wd150" type="text" />
             <label>联系方式：</label><input id="phone" name="phone"  class="c-wd150" type="text" />
             <label>风格：</label><input id="customerStyle" name="customerStyle" class="c-wd150" type="text" />
         </div>
@@ -126,6 +126,20 @@ function find(currentPage){
 			alert("客户编号不得是汉字！");
 			return false;
 		}
+		//只能为整数
+		 var customer_trim = $("#customerId").val().trim();
+		var customer = customer_trim;
+		var   customerIdParam =/^(-|\+)?\d+$/; 
+		if(!customer.replace(/^ +| +$/g,'')==''){
+			
+			if (!customerIdParam.test(customer)) {
+				alert("请输入有效的客户编号");
+				return false;
+			}
+			return true;
+		}
+		
+	
 		return true;
 }
   

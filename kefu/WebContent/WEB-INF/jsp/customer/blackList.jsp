@@ -10,7 +10,7 @@
 <table id="blacklisttable" class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>
-             <td></td>
+             <td><input type="checkbox" id="titleCheckbox" name="titleCheckbox" onclick="javascript:checkedAll();" value="全选"></td>
              <td>客户编号</td>
              <td>IP地址</td>
              <td>地理位置</td>

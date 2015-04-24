@@ -20,6 +20,12 @@ public interface CustomerDao extends BaseDao<Customer>{
 	public Integer getAllCustomerCount(Map<String, String> conditions,String beginDate,String endDate, PageBean pageBean);
 
 	public List<Customer> getCustomerOrderById(Integer start, Integer offset);
+    /**
+     * 添加黑名时，查询是否存在该访客信息
+     * @param id
+     * @return
+     */
+	 public Integer checkCus(Integer id);
       
 	/**
 	 * 添加一条
@@ -82,5 +88,6 @@ public interface CustomerDao extends BaseDao<Customer>{
 	public List getCustomerByConExl(String beginDate, String endDate,
 			String customerName, String id, String phone, String styleName,
 			String consultPage, String keywords);
+  
 
 }

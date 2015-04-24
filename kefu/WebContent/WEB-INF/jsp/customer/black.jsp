@@ -28,7 +28,7 @@
     <div class="u-hr"></div>
     <div class="m-query-bd">
         <div class="f-mbm">
-            <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" />
+            <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" maxlength="15" />
             <label>添加工号：</label><input  id="userName" name="userName" class="c-wd150" type="text" />
             <label>阻止原因：</label><input id="description" name="description" value="${description}" class="c-wd150" type="text" />
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
@@ -64,6 +64,10 @@
 			"map[userName]":$("#userName").val(),
 			"map[typeId]":1
 	};
+	//校验搜索框中的参数
+	if (!checkParam()) {
+			return;
+		}
 	$.ajax({
 	    type: "get",
 	    url: url,
@@ -78,6 +82,32 @@
 	    }
 	});
   }
+  
+  /**
+   * js校验搜索参数
+   */
+   function checkParam() {
+ 	  var customerId = $("#customerId").val();
+ 		var chinesePatrn = /[\u4E00-\u9FA5]/g;
+ 		if(chinesePatrn.test(customerId)){
+ 			alert("客户编号不得是汉字！");
+ 			return false;
+ 		}
+ 		//只能为整数
+ 		 var customer = $("#customerId").val().trim();
+ 		var   customerIdParam =/^(-|\+)?\d+$/; 
+ 		if(!customer.replace(/^ +| +$/g,'')==''){
+ 			
+ 			if (!customerIdParam.test(customer)) {
+ 				alert("请输入有效的客户编号");
+ 				return false;
+ 			}
+ 			return true;
+ 		}
+ 		
+ 	
+ 		return true;
+ }
 	  /**
 	  * 跳转新增前的页面
 	  */
@@ -92,6 +122,15 @@
     	var c= $.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
     			width: 400,height: 300,id:'editBlackList'});
  }
+  //全选/全不选
+    function checkedAll(){
+    	if(($("#titleCheckbox").is(":checked"))){
+    		$("#table_data :checkbox").attr("checked", true);  
+    	}else{
+    		$("#table_data :checkbox").attr("checked", false);
+    	}
+ }
+    
 	/*
 	* 彻底删除
 	*/
@@ -133,6 +172,9 @@
 	//编辑黑名单回调
 	function editCallback(){
 		$.dialog({id:'editBlackList'}).close();
+		$("#customerId").val(''),  //为了清空之前不合法的数据
+		$("#userName").val(''),
+		$("#description").val('')
 		var pageNo = '${pageBean.currentPage}';
 		find(pageNo);
 	}
@@ -140,6 +182,9 @@
 	//新增黑名单回调
 	function addCallback(){
 		$.dialog({id:'addBlackList'}).close();
+		$("#customerId").val('');  //为了清空之前不合法的数据
+		$("#userName").val('');
+		$("#description").val('');
 		find(1);
   }
 </script>

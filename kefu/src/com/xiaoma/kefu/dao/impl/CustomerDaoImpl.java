@@ -199,6 +199,19 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 	}
 	
 	/**
+	 * 查询是否存在该访客
+	 */
+	@Override
+	public Integer checkCus(Integer id ){
+		Session session = getSession();
+		StringBuffer hqlBuffer = new StringBuffer(
+				"select count(m.id) from Customer m  where  m.id="+id+" " );
+	  Query query = session.createQuery(hqlBuffer.toString());
+	  Object obj = query.uniqueResult();
+		return Integer.parseInt(obj.toString());
+	}
+	
+	/**
 	 * 添加一条
 	 */
 	@Override
@@ -211,7 +224,6 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 			e.printStackTrace();
 		}
 		return false;
-
 	}
 
 	/**

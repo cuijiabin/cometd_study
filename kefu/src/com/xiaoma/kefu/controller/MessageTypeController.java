@@ -41,7 +41,7 @@ public class MessageTypeController {
 	 * 查询各个级别的树
 	 * 
 	 * @param model
-	 * @param id
+	 * @param id(类型ID)
 	 * @return
 	 */
 	@SuppressWarnings("static-access")
@@ -68,7 +68,7 @@ public class MessageTypeController {
 				}
 			}
 			model.addAttribute("json", json.toString());
-			model.addAttribute("typeId", id);  //参数id为 类型
+			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);
 			return "message/messageType";
 		} else {
@@ -83,8 +83,14 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(Model model, Integer treeId, Integer typeId) {
+	
+		Integer sortId =  messageTypeService.getChildCount(treeId,typeId);
+		if (sortId==null) {
+			sortId =0;
+		}
 		model.addAttribute("treeId", treeId);
 		model.addAttribute("typeId", typeId);
+		model.addAttribute("sortId", sortId+1);
 		return "message/addMessageType";
 	}
 

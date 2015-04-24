@@ -23,8 +23,8 @@ public class MessageTypeService {
     * @param tid
     * @return
     */
-	public List findTree(int tid) {
-		return messageTypeDaoImpl.findTree(tid);
+	public List findTree(int typeId) {
+		return messageTypeDaoImpl.findTree(typeId);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class MessageTypeService {
 	return messageTypeDaoImpl.deleteMessageTypeById(id);
    }
     /**
-     * 查询子节点
+     * 查询是否有子节点
      */
    public Integer checkChild(Integer id){
 	      Integer count =  messageTypeDaoImpl.checkChild(id);
@@ -62,6 +62,13 @@ public class MessageTypeService {
 	public MessageType getMessageTypeById(Integer id) {
 		return messageTypeDaoImpl.getMessageTypeById(id);
 	}
+	 /**
+     * 查询是否有子节点
+     */
+   public Integer getChildCount(Integer id,Integer typeId){
+	   Integer num =  messageTypeDaoImpl.checkChildMax(id,typeId);  // num 最大的排序号
+	      return num;
+   }
 	
 	
 	

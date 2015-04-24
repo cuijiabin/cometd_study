@@ -20,7 +20,7 @@
     <tbody>
         <tr>
           <td>客户编号</td>
-           <td><input type ="text" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span></td>
+           <td><input type ="text" maxlength="10" id ="customerId" name="customerId" value=""/><span id="customerIdInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
            <td>IP地址</td>
@@ -32,7 +32,7 @@
         </tr>
          <tr>
            <td>阻止原因</td>
-           <td><input type ="text" id ="description" name="description"  /><span id="descriptionInfo" style = "color: red;">*</span></td>
+           <td><input type ="text" maxlength="30" id ="description" name="description"  /><span id="descriptionInfo" style = "color: red;">*</span></td>
         </tr>
          <tr>
           
@@ -102,24 +102,31 @@ function addBlacklist(id){
  */
 function verificationParam(userData) {
 	var customerId = userData.customerId;
-	if (customerId.replace("^[ ]+$", "").length == 0) {
+	if (customerId.replace(/^ +| +$/g,'')=='') {
 		 alert("客户编号不得为空！");
+		return false;
+	}
+	var chinesePatrn = /[\u4E00-\u9FA5]/g;
+	if(chinesePatrn.test(customerId)){
+		alert("客户编号不得是汉字！");
 		return false;
 	}
 	
 	//只能为整数
 	var   customerIdParam =/^(-|\+)?\d+$/; 
-	if (!customerIdParam.test(customerId)) {
-		alert("请输入有效的客户编号");
-		return false;
+	if(!customerId.replace(/^ +| +$/g,'')==''){
+		if (!customerIdParam.test(customerId)) {
+			alert("请输入有效的客户编号！");
+			return false;
+		}
+		
 	}
-	
-//      //校验访客是否存在
-// 	if(checkCustomer()){
-// 	    alert("此IP地址已存在！");
-// 	   return false;
-//    }
-	
+	//检查该访客信息是否存在
+	if(checkBlacklist_cusId()){
+	    alert("请输入有效的客户编号！");
+	   return false;
+   }
+
 	var ip = userData.ip;
 	if (ip.replace("^[ ]+$", "").length == 0) {
 		 alert("IP地址不得为空！");
@@ -148,8 +155,6 @@ function verificationParam(userData) {
 		return false;
 	}
 	
-
- 
 	return true;
 }
 /*
@@ -187,6 +192,38 @@ function checkBlacklist(){
 	});
 	return flag;
 }
+
+/*
+ * 校验客户编号--查看数据中是否存在(添加)
+ */
+function checkBlacklist_cusId(){
+	var flag = false;
+	var  data ={
+			'id':$("#customerId").val()
+			}
+	$.ajax({
+		type : "get",
+		url : "/customer/check.action",
+		data : data ,
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		async:false,
+		success : function(data) {
+			if(data.code==0){
+				
+				flag = true;
+			}
+			else{
+				
+			}
+		},
+		error : function(msg){
+			alert("添加失败!");
+		}
+	});
+	return flag;
+}
+
 
 function cl(){
 	api.close();			

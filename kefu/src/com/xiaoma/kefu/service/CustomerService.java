@@ -65,6 +65,15 @@ public class CustomerService {
 		}
 		return null;
 	}
+	
+    /**
+     * 在黑名单添加前检查是否存在该访客
+     */
+   public Integer checkCus(Integer id){
+	      Integer count =  customerDaoImpl.checkCus(id);
+	      return count;
+   }
+	
 	/**
 	 * 添加
 	 */

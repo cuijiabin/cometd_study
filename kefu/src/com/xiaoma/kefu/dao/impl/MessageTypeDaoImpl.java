@@ -3,6 +3,7 @@ package com.xiaoma.kefu.dao.impl;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -18,13 +19,13 @@ import com.xiaoma.kefu.model.MessageType;
 public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements MessageTypeDao {
   
 	@Override
-	public List<MessageType> findTree(int tid) {
+	public List<MessageType> findTree(int typeId) {
 		Session session = getSession();
 		String hql="";
-		if(tid==1){
-			hql = "from MessageType m where m.typeId="+tid+" ";
+		if(typeId==1){
+			hql = "from MessageType m where m.typeId="+typeId+"order by sortId asc ";
 		}else{
-			hql = "from MessageType m where m.typeId="+tid+" and userId=";
+			hql = "from MessageType m where m.typeId="+typeId+" and userId=";
 		}
 		Query query = session.createQuery(hql);
 		return query.list();
@@ -105,6 +106,21 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 	  Query query = session.createQuery(hqlBuffer.toString());
 	  Object obj = query.uniqueResult();
 		return Integer.parseInt(obj.toString());
+	}
+	
+	/**
+	 * 查询子节点排序值为最大的 序号
+	 */
+	@Override
+	public Integer checkChildMax(Integer id,Integer typeId ){
+		Session session = getSession();
+
+		String hql="SELECT MAX(m.sortId)  FROM message_type m  WHERE 1=1 AND m.pId = "+id+" AND m.typeId ="+typeId;
+		SQLQuery sqlQuery = session.createSQLQuery(hql);
+
+		Integer count = (Integer)sqlQuery.uniqueResult();
+		return count;
+
 	}
 
 }
