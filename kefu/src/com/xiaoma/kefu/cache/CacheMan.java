@@ -67,15 +67,19 @@ public class CacheMan {
 
 	// 根绝key匹配删除
 	public static void removeByKeyPattern(String cacheName) {
-
-		Jedis jedis = JedisDao.getJedis();
-		Set<String> keys = jedis.keys(cacheName + "*");
-		if(keys == null || keys.size() < 1){
-			return ;
+		try {
+			Jedis jedis = JedisDao.getJedis();
+			Set<String> keys = jedis.keys(cacheName + "*");
+			if(keys == null || keys.size() < 1){
+				return ;
+			}
+			String[] delKeys = new String[keys.size()];
+			delKeys = keys.toArray(delKeys);
+			jedis.del(delKeys);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 		}
-		String[] delKeys = new String[keys.size()];
-		delKeys = keys.toArray(delKeys);
-		jedis.del(delKeys);
+		
 	}
 
 	// 删除所有服务器缓存对象，谨慎使用
