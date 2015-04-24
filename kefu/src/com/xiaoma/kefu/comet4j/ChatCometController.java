@@ -328,4 +328,33 @@ public class ChatCometController {
 		engine.sendTo(Constant.CHANNEL, ccn, nd);
 	}
 	
+	/**
+	 * 对话评分
+	 * @param request
+	 * @param response
+	 * @param customerCcnId
+	 * @param userCcnId
+	 * @param scoreType
+	 * @param remark
+	 */
+	@RequestMapping(value = "socreDialogue.action", method = RequestMethod.POST)
+	public void socreDialogue(HttpServletRequest request,HttpServletResponse response, String customerCcnId, String userCcnId, Integer scoreType,String remark){
+		
+		logger.info("socreDialogue param customerCcnId: "+customerCcnId+" ,userCcnId: "+userCcnId+" ,remark: "+remark+" ,scoreType: "+scoreType);
+		//参数检查
+		if(StringUtils.isBlank(userCcnId) || StringUtils.isBlank(customerCcnId) || scoreType == null){
+			logger.warn("socreDialogue param is illegal!");
+			return ;
+		}
+		
+		//会话 key
+        String key = JedisConstant.getDialogueListKey(userCcnId,customerCcnId);
+        DialogueScore dialogue = new DialogueScore();
+        dialogue.setScoreType(scoreType);
+        dialogue.setRemark(remark);
+        
+        JedisTalkDao.setDialogueScore(key, dialogue);
+        
+	}
+	
 }

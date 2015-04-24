@@ -320,7 +320,7 @@
                 +'<input type="radio" name="scoreType" value="5"/>非常差</td>'
                 +'</tr>'
                 +'<tr>'
-                +'<td>备注：<input id="updateName" type="textarea"/></td>'
+                +'<td>备注：<input id="scoreRemark" type="textarea"/></td>'
                 +'</tr>'
                 +'</table>';
                 
@@ -332,11 +332,26 @@
 			        {
 			            name: '提交',
 			            callback: function () {
-			            	
+			            	var scoreType="";
+			        		$('input[name="scoreType"]').each(function(){ if(this.checked){scoreType=this.value;} });
+			        		var remark = $("#scoreRemark").val();
+			        		console.log("评分参数：scoreType= "+scoreType+" ,remark= "+remark);
+			        		socreDialogue(scoreType,remark);
 			            },
 			            focus: true
 			        }
 			    ]
+			});
+		}
+		
+		//向后台提交评分
+		function socreDialogue(scoreType,remark){
+			var customerCcnId = JS.Engine.getId();
+			var userCcnId = $("#currentUserCcnId").val();
+			
+			var param = "customerCcnId="+customerCcnId+'&userCcnId='+userCcnId+'&scoreType='+scoreType+'&remark='+remark;
+			JS.AJAX.post('/chat/socreDialogue.action', param, function() {
+				alert("多谢评价！");
 			});
 		}
 		
