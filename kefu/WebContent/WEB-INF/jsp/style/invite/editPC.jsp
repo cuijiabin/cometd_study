@@ -102,13 +102,13 @@ $('#btn_save').on('click',function(){
 		$.dialog.alert("垂直定位像素请填写正整数!");
 		return;
 	}
-	var path = "/inviteIcon/save.action";  
+	var path = "/inviteIcon/savePC.action";  
     $('#mainForm').attr("action", path).submit();
 });
 
 //编辑元素
 function editElement(id){
-	var url = '/inviteElement/edit.action?inviteId='+id;
+	var url = '/inviteElement/editPC.action?inviteId='+id;
 	window.location = url;
 	return;
 }

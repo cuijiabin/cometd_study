@@ -217,15 +217,11 @@ public class WaitListController {
 			if(id == null)
 				id = 0;
 			List<WaitList> list = (List<WaitList>) CacheMan.getObject(CacheName.STYLEWAITLIST, styleId+"_"+id);
-			model.addAttribute("result", Ajax.JSONResult(0, "操作成功!"));
-			
+			model.addAttribute("waitList",list);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
-		return "resultjson";
+		return "/dialogue/waitList";
 	}
-	public static void main(String [] args){
-		
-	}
-	
 	
 }

@@ -10,6 +10,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.xiaoma.kefu.comet4j.DialogueScore;
+
 import redis.clients.jedis.Jedis;
 
 public class JedisTalkDao {
@@ -499,6 +501,24 @@ public class JedisTalkDao {
 		logger.info("redis zrem key:" + JedisConstant.OFF_LINE_USER_SET +" value: "+ userId);
 
 		return (id > 0);
+	}
+	// ######################
+	public static Boolean setDialogueScore(String key, DialogueScore dScore){
+		
+		JedisDao.setKO(JedisConstant.DIALOGUE_SCORE+key, dScore);
+		return true;
+	}
+	
+	public static Boolean delDialogueScore(String key){
+		
+		JedisDao.remove(JedisConstant.DIALOGUE_SCORE+key);
+		return true;
+	}
+	public DialogueScore getDialogueScore(String key){
+		
+		Object obj = JedisDao.getObject(JedisConstant.DIALOGUE_SCORE+key);
+		
+		return (DialogueScore) obj;
 	}
 
 	// ######################补充服务

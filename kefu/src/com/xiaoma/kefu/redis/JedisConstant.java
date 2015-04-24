@@ -72,6 +72,11 @@ public class JedisConstant {
 	 * 待保存对话队列
 	 */
 	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
+	
+	/**
+	 * 对话评分
+	 */
+	public static final String DIALOGUE_SCORE = "dialogue_score:";
 
 	/**
 	 * 缓存客服信息

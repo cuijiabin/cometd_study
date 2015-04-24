@@ -67,15 +67,19 @@ public class CacheMan {
 
 	// 根绝key匹配删除
 	public static void removeByKeyPattern(String cacheName) {
-
-		Jedis jedis = JedisDao.getJedis();
-		Set<String> keys = jedis.keys(cacheName + "*");
-		if(keys == null || keys.size() < 1){
-			return ;
+		try {
+			Jedis jedis = JedisDao.getJedis();
+			Set<String> keys = jedis.keys(cacheName + "*");
+			if(keys == null || keys.size() < 1){
+				return ;
+			}
+			String[] delKeys = new String[keys.size()];
+			delKeys = keys.toArray(delKeys);
+			jedis.del(delKeys);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
 		}
-		String[] delKeys = new String[keys.size()];
-		delKeys = keys.toArray(delKeys);
-		jedis.del(delKeys);
+		
 	}
 
 	// 删除所有服务器缓存对象，谨慎使用
@@ -89,6 +93,28 @@ public class CacheMan {
 	
 	public static void main(String[] args) {
 		removeByKeyPattern(CacheName.USERFUNCTION);
+	}
+	
+	
+	
+	/**
+	 * 更新缓存对象	,先删除,再add
+	* @param cacheName	缓存前缀
+	* @param value	对应的id
+	* @param obj	最新值
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	public static Object update(String cacheName, Object value, Object obj) {
+		try {
+			remove(cacheName, value);
+			obj = add(cacheName, value, obj);
+			return obj;
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return null;
+		}
 	}
 
 }

@@ -24,6 +24,7 @@
 </div>
 
 <!-- 表格有边框 -->
+<div style="margin:30px">
 <a href="/user/find.action?map[status]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2"style="font-size:18px">离职员工</a>
 <button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
 
@@ -41,6 +42,7 @@
   <c:if test="${status==2}">
   <button class="btn btn-primary btn-small" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
   </c:if>
+  </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -73,20 +75,20 @@ function find(currentPage){
 }
 
 function addUser(){
-	var d = $.dialog({id:'user',title:"添加工号",content:'url:/user/add.action',lock:true, width:	1000,height: 600,});
+	var d = $.dialog({id:'user',title:"添加工号",content:'url:/user/add.action',lock:true, width: 560,height: 350,});
 }
 function updateUser(id){
 
 	var d = $.dialog({id:'user',title:"修改工号",content:'url:/user/detail.action?id='+id+'',lock:true, width: 
 
-		1000,height: 600,});
+		560,height: 350,});
 
 }
 function findUser(id){
 
 	var d = $.dialog({id:'user',title:"查看工号",content:'url:/user/detail.action?id='+id+'&type='+5+'',lock:true, width: 
 
-		1000,height: 600,});
+		560,height: 350,});
 
 }
 function deptUser(dId){

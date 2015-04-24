@@ -23,22 +23,22 @@
         <li><i>&gt;</i>快捷键</li>
     </ul>
 </div>
-<div>
-	<table border="1" style="margin:20px 0 10px 50px">
+<div style="margin:50px">
+	<table class="table table-bordered m-table" style="width: 350px">
 		<tr>
-			<td>客户端截图热键:</td> <td>Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="${key.picKey}" ></td>
+			<td class="f-txtr tdbg" width="150px">客户端截图热键:</td> <td class="f-txtl">Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="${key.picKey}" ></td>
 		</tr>
 		<tr>
-			<td>显示客户端热键:</td> <td>Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="${key.showKey}"></td>
+			<td class="f-txtr tdbg" width="150px">显示客户端热键:</td> <td class="f-txtl">Shift+Alt+<input type="text" id="showKey" name="showKey" style="width: 20px" value="${key.showKey}"></td>
 		</tr>
 		<tr>
-			<td>上一个对话热键:</td> <td>Shift+Alt+<input type="text" id="lastKey" name="lastKey" style="width: 20px" value="${key.lastKey}"></td>
+			<td class="f-txtr tdbg" width="150px">上一个对话热键:</td> <td class="f-txtl">Shift+Alt+<input type="text" id="lastKey" name="lastKey" style="width: 20px" value="${key.lastKey}"></td>
 		</tr>
 		<tr>
-			<td>下一个对话热键:</td> <td>Shift+Alt+<input type="text" id="nextKey" name="nextKey" style="width: 20px" value="${key.nextKey}"></td>
+			<td class="f-txtr tdbg" width="150px">下一个对话热键:</td> <td class="f-txtl">Shift+Alt+<input type="text" id="nextKey" name="nextKey" style="width: 20px" value="${key.nextKey}"></td>
 		</tr>
 		<tr>
-			<td>访客对话发送热键:</td> <td><input type="radio" id="sendKey" name="sendKey" value="1" <c:if test='${key.sendKey==1}'>checked</c:if>/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
+			<td class="f-txtr tdbg" width="150px">访客对话发送热键:</td> <td class="f-txtl"><input type="radio" id="sendKey" name="sendKey" value="1" <c:if test='${key.sendKey==1}'>checked</c:if>/>Enter &nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="radio" id="sendKey" name="sendKey" value="2" <c:if test='${key.sendKey==2}'>checked</c:if>/>Ctrl+Enter	</td>
 		</tr>
 	</table>

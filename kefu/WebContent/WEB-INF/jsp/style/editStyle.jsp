@@ -74,7 +74,6 @@ $('#btn_save').on('click',function(){
 		    }
 		});
 	}
-	alert('www');
     return false;
 });
 

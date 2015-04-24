@@ -39,41 +39,61 @@ public class InviteIconController {
 	
 	
 	/**
-	 * 编辑
+	 * PC 编辑
 	* @Description: TODO
 	* @param model
 	* @param styleId
-	* @param deviceTypeId 1=PC 2=移动
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
-	public String edit(Model model,Integer styleId,Integer deviceTypeId) {
+	@RequestMapping(value = "editPC.action", method = RequestMethod.GET)
+	public String editPC(Model model,Integer styleId) {
 		try {
-			InviteIcon inviteIcon;
-			String picUrl;
-			if(deviceTypeId==1){
-				inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
-				picUrl = getViewPath(inviteIcon, StylePicName.邀请框PC);
-			}else{
-				inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.移动);
-				picUrl = getViewPath(inviteIcon, StylePicName.邀请框移动);
-			}
+			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
+			String picUrl = getViewPath(inviteIcon, StylePicName.邀请框PC);
 			List<DictItem> dict = DictMan.getDictList("d_location_model");
 			model.addAttribute("inviteIcon", inviteIcon);
 			model.addAttribute("picUrl", picUrl);
 			model.addAttribute("dict", dict);
-			return "/style/invite/edit";
+			return "/style/invite/editPC";
 		} catch (Exception e) {
-			logger.error("edit"+styleId+",deviceTypeId="+deviceTypeId,e);
+			logger.error("editPC"+styleId,e);
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+	}
+	
+	
+	/**
+	 * 移动 编辑
+	* @Description: TODO
+	* @param model
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月13日
+	 */
+	@RequestMapping(value = "editYD.action", method = RequestMethod.GET)
+	public String editYD(Model model,Integer styleId) {
+		try {
+			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.移动);
+			String picUrl = getViewPath(inviteIcon, StylePicName.邀请框移动);
+
+			List<DictItem> dict = DictMan.getDictList("d_location_model");
+			model.addAttribute("inviteIcon", inviteIcon);
+			model.addAttribute("picUrl", picUrl);
+			model.addAttribute("dict", dict);
+			return "/style/invite/editYD";
+		} catch (Exception e) {
+			logger.error("editYD"+styleId,e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
 	}
 	
 	/**
-	 * 保存
+	 * PC 保存
 	* @Description: TODO
 	* @param model
 	* @param inviteIcon
@@ -81,24 +101,50 @@ public class InviteIconController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Model model,
+	@RequestMapping(value = "savePC.action", method = RequestMethod.POST)
+	public String savePC(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
 //			//补充字段
 			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
 			inviteIcon.setCreateDate(oldModel.getCreateDate());
-//			inviteIcon.setDeviceType(oldModel.getDeviceType());
 			inviteIcon.setTruePic(oldModel.getTruePic());
 			inviteIcon.setButtonId(oldModel.getButtonId());
 			inviteIcon.setUpdateDate(new Date());
 			inviteIconService.update(inviteIcon);
 		} catch (Exception e) {
-			logger.error("save"+inviteIcon.getId(), e);
+			logger.error("savePC"+inviteIcon.getId(), e);
 			return "error500";
 		}
-		return "redirect:/inviteIcon/edit.action?styleId="+inviteIcon.getStyleId()
-				+"&deviceTypeId="+inviteIcon.getDeviceType(); 
+		return "redirect:/inviteIcon/editPC.action?styleId="+inviteIcon.getStyleId();
+	}
+	
+	
+	/**
+	 * 移动 保存
+	* @Description: TODO
+	* @param model
+	* @param inviteIcon
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月13日
+	 */
+	@RequestMapping(value = "saveYD.action", method = RequestMethod.POST)
+	public String saveYD(Model model,
+			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
+		try {
+//			//补充字段
+			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
+			inviteIcon.setCreateDate(oldModel.getCreateDate());
+			inviteIcon.setTruePic(oldModel.getTruePic());
+			inviteIcon.setButtonId(oldModel.getButtonId());
+			inviteIcon.setUpdateDate(new Date());
+			inviteIconService.update(inviteIcon);
+		} catch (Exception e) {
+			logger.error("saveYD"+inviteIcon.getId(), e);
+			return "error500";
+		}
+		return "redirect:/inviteIcon/editYD.action?styleId="+inviteIcon.getStyleId();
 	}
 	
 	/**

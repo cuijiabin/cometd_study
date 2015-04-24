@@ -13,28 +13,22 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 
 </head>
-
+<style type="text/css">
+	input{
+		width:150px;
+	}
+</style>
 <body>
-<!-- 面包屑 -->
-<!-- <div class="m-crumb"> -->
-<!--     <ul class="f-cb"> -->
-<!--         <li><b>位置：</b></li> -->
-<!--         <li><a href="#">设置中心</a></li> -->
-<!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
-<!--         <li><i>&gt;</i>角色管理</li> -->
-<!--     </ul> -->
-<!-- </div> -->
-<!-- 表格有边框 -->
-<c:if test="${empty role.id}"><h2>添加角色</h2></c:if> <c:if test="${not empty role.id}"><h2>修改角色</h2></c:if>
-<table  border="1" aglin="centert" class="table">
+<div style="margin:50px">
+<table class="table table-bordered m-table">
         <tr>
-           <td>角色名称</td>
-           <td><input type ="text" id ="name" name="name" value="${role.name}" maxlength="10"/><td>
+           <td class="f-txtr tdbg" width="80px">角色名称</td>
+           <td class="f-txtl"><input type ="text" id ="name" name="name" value="${role.name}" maxlength="10"/></td>
         </tr>
 </table>
  <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
  <button style="float:right;margin-right:40px;" onclick="javascript:addRole(${role.id});" class="btn btn-primary btn-small" >确认</button>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>

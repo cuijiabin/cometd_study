@@ -12,65 +12,57 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
-
+<style type="text/css">
+	input{
+		width:135px;
+	}
+</style>
 <body>
 <!-- 表格有边框 -->
-<h3>查看工号</h3>
-<table class="table table-bordered table-striped table-hover m-table">
+<div style="margin:30px;">
+<table class="table table-bordered m-table">
         <tr>
-            <td>工号</td>
-            <td><input type="text" id="loginName" name="loginName" value="${user.loginName}" readonly="readonly"/></td>
-            <td>姓名</td>
-            <td><input type="text" id="userName" name="userName" value="${user.userName}" readonly="readonly"/></td>
+            <td class="f-txtr tdbg" width="80px">工号</td>
+            <td class="f-txtl"><input type="text" id="loginName" name="loginName" value="${user.loginName}" readonly="readonly"/></td>
+            <td class="f-txtr tdbg" width="80px">姓名</td>
+            <td class="f-txtl"><input type="text" id="userName" name="userName" value="${user.userName}" maxlength="16" readonly="readonly"/></td>
         </tr>
         <tr>
          
-            <td>密码</td>
-            <td><input type="password" id="password" name="password" value="*********" readonly="readonly"/></td>
-            <td>确认密码</td>
-            <td><input type="password" id="password1" name="password1" value="*********" readonly="readonly"/></td>
+           <td class="f-txtr tdbg">密码</td>
+            <td class="f-txtl"><input type="password" id="password" name="password" value="********" readonly="readonly"/></td>
+            <td class="f-txtr tdbg">确认密码</td>
+            <td class="f-txtl"><input type="password" id="password1" name="password1" value="********" readonly="readonly"/></td>
         </tr>
         <tr>
          
-            <td>部门</td>
-            <td>
-                <select id="deptId" name="deptId" disabled="disabled">
-                    <c:forEach items="${deptList}" var="dept" >
-                	<option value="${dept.id}" <c:if test="${user.deptId==dept.id}">selected</c:if>>${dept.name}</option>
-                	</c:forEach>
-                </select>
+            <td class="f-txtr tdbg">部门</td>
+            <td class="f-txtl">
+                <input type="text" id="deptName" name="deptName" value="${user.deptName}" maxlength="6" readonly="readonly"/>
             </td>
-             <td>角色</td>
-            <td>
-                <select id="roleId" name="roleId" disabled="disabled">
-                	<c:forEach items="${roleList}" var="role">
-                	<option value="${role.id}" <c:if test="${user.roleId==role.id}">selected</c:if>>${role.name}</option>
-                	</c:forEach>
-                </select>
+            <td class="f-txtr tdbg">角色</td>
+            <td class="f-txtl">
+                <input type="text" id="roleName" name="roleName" value="${user.roleName}" maxlength="6" readonly="readonly"/>
             </td>
         </tr>
         <tr>
-            <td>接听等级</td>
-               <td>
-                <select id="listenLevel" name="listenLevel" disabled="disabled">
-                	<option <c:if test="${user.listenLevel==1}">selected</c:if>>1</option>
-                	<option <c:if test="${user.listenLevel==2}">selected</c:if>>2</option>
-                	<option <c:if test="${user.listenLevel==3}">selected</c:if>>3</option>
-                	<option <c:if test="${user.listenLevel==4}">selected</c:if>>4</option>
-                	<option <c:if test="${user.listenLevel==5}">selected</c:if>>5</option>
-                </select>
+            <td class="f-txtr tdbg">接听等级</td>
+               <td class="f-txtl">
+                  <input type="text" id="maxListen" name="maxListen" value="${user.listenLevel}" maxlength="6" readonly="readonly"/>
             </td>
-            <td>最大接听数</td>
-            <td><input type="text" id="maxListen" name="maxListen" value="${user.maxListen}" readonly="readonly"/></td>
+            <td class="f-txtr tdbg">最大接听数</td>
+            <td class="f-txtl"><input type="text" id="maxListen" name="maxListen" value="${user.maxListen}" maxlength="6" readonly="readonly"/></td>
         </tr>
         <tr>       
-            <td>工号名片</td>
-            <td><input type="text" id="cardName" name="cardName" value="${user.cardName}" readonly="readonly"/></td>
-            <td>入职日期</td>
-            <td><input type="text" id="createDate" name="createDate" value="${user.createDate}" onClick="WdatePicker()" class="c-wd120 Wdate" readonly="readonly"/></td>
+            <td class="f-txtr tdbg">工号名片</td>
+            <td class="f-txtl"><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10" readonly="readonly"/></td>
+            <td class="f-txtr tdbg">入职日期</td>
+            <td class="f-txtl"><input type="text" id="createDate" name="createDate" value="${user.createDate}"  readonly="readonly"/></td>
         </tr>
 </table>
+
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
+</div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

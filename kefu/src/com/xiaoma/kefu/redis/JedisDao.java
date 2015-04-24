@@ -58,8 +58,13 @@ public class JedisDao {
 	 * @return
 	 */
 	public static String setKV(String key, String value){
-		jedis = getJedis();
-		return jedis.set(key, value);
+		try {
+			jedis = getJedis();
+			return jedis.set(key, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 	
 	/**
@@ -69,60 +74,90 @@ public class JedisDao {
 	 * @param seconds -单位秒
 	 */
 	public static void setKVT(String key, String value, Integer seconds){
-		jedis = getJedis();
-		jedis.set(key, value);
-		jedis.expire(key, seconds);
+		try {
+			jedis = getJedis();
+			jedis.set(key, value);
+			jedis.expire(key, seconds);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public static void setKO(String key, Object obj){
-		jedis = getJedis();
-		
-		byte[] bKey = key.getBytes();
-		byte[] bObj = SerializeUtil.serialize(obj);
-		
-		jedis.set(bKey, bObj);
+		try {
+			jedis = getJedis();
+			
+			byte[] bKey = key.getBytes();
+			byte[] bObj = SerializeUtil.serialize(obj);
+			
+			jedis.set(bKey, bObj);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public static void setKOT(String key, Object obj, int seconds){
-		jedis = getJedis();
+		try {
+			jedis = getJedis();
+			
+			byte[] bKey = key.getBytes();
+			byte[] bObj = SerializeUtil.serialize(obj);
+			
+			jedis.set(bKey, bObj);
+			jedis.expire(bKey, seconds);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		byte[] bKey = key.getBytes();
-		byte[] bObj = SerializeUtil.serialize(obj);
-		
-		jedis.set(bKey, bObj);
-		jedis.expire(bKey, seconds);
 		
 	}
 	
 	public static String getValue(String key){
-		
-		jedis = getJedis();
-		return jedis.get(key);
+		try {
+			jedis = getJedis();
+			return jedis.get(key);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 		
 	}
 	
 	public static Object getObject(String key){
-		
-		jedis = getJedis();
-		
-		byte[] byteObj = jedis.get(key.getBytes());
-		
-		return SerializeUtil.unserialize(byteObj);
+		try {
+			jedis = getJedis();
+			
+			byte[] byteObj = jedis.get(key.getBytes());
+			
+			return SerializeUtil.unserialize(byteObj);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 		
 	}
 	
 	public static void remove(String key){
+		try {
+			jedis = getJedis();
+			jedis.del(key);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		jedis = getJedis();
-		jedis.del(key);
 	}
 	
 	/***
 	 * 删除全部缓存，慎用。
 	 */
 	public static void flushAll(){
-		jedis = getJedis();
-		jedis.flushAll();
+		try {
+			jedis = getJedis();
+			jedis.flushAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 	
 	public static void main(String[] args) {

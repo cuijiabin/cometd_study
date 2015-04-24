@@ -121,7 +121,7 @@
 	        	<div class="f-padd10 f-oh" id="customerInfo">
 	            	<p class="f-mbn f-cb"><a class="f-fl"><span id="showname"></span></a><a class="f-fr" onclick="javascript:addCustomerInfo()">添加访客信息</a></p>
 	            	<p class="f-mbm" name="customerIpInfo"><span id="showipInfo"></span></p>
-	                <p class="m-from-sm"><button class="btn btn-small" type="button">查看聊天记录</button></p>
+	                <p class="m-from-sm"><button class="btn btn-small" type="button" onclick="showDialugueHistory()">查看聊天记录</button></p>
 	            </div>
 	        </div>
 	        
@@ -521,8 +521,12 @@
 		}
 	}
 	
+	//阻止访客提示(**)
 	function forbidCuntomer(){
 		var customerId = $("#currentCustomerId").val();
+		if(customerId == null ||customerId.length == 0){
+			alert("请选择需要阻止的客户！");
+		}
 		var content ='<table>'
             +'<tr>'
             +' <td>客服编号：'+customerId+'</td>'
@@ -553,13 +557,36 @@
 		    ]
 		});
 	}
+	//确定阻止访客(**)
 	function realForbidCuntomer(remark){
 		var customerCcnId = $("#currentCcnId").val();
 		var ccnId = JS.Engine.getId();
-		alert(customerCcnId);
 		var param = "ccnId="+ccnId+'&customerCcnId='+customerCcnId+'&remark='+remark;
 		JS.AJAX.post('/chat/forbidCuntomer.action', param, function() {
 			$("#"+customerCcnId).remove();
+			setDefaultInfo();
+		});
+	}
+	
+	// 查看客户对话记录(**) 重复点击的话会变得重复！
+	function showDialugueHistory(){
+		var customerCcnId = $("#currentCcnId").val();
+		var data= {"customerId":$("#currentCustomerId").val()};
+		$.ajax({
+		    type: "get",
+		    url: "/dialogue/history.action",
+		    data: data,
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "html",
+		    success: function (content) {
+		    	createHiddenDiv(customerCcnId);
+		    	content = content + $("#D"+customerCcnId).html();
+		    	$("#D"+customerCcnId).html(content);
+		    	switchDialogueBox(customerCcnId);
+		    },
+		    error: function () {
+		        console.log("showDialugueHistory Error");
+		    }
 		});
 	}
 	

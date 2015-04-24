@@ -25,9 +25,11 @@
 </div>
 
 <!-- 表格有边框 -->
+<div style="margin:50px">
 <button style="float:right;margin-right:5px;" onclick="javascript:addDept()" class="btn btn-primary btn-small" >添加部门</button>
 <div id="table_data" style="margin-top: 30px">
 	<jsp:include page="deptList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -60,20 +62,20 @@ function find(currentPage){
 }
 
 function addDept(){
-	var d = $.dialog({id:'dept',title:"添加部门",content:'url:/dept/addDept.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'dept',title:"添加部门",content:'url:/dept/addDept.action',lock:true, width:	400,height: 240,});
 }
 function updateDept(id){
 
 	var d = $.dialog({id:'dept',title:"修改部门",content:'url:/dept/detail.action?id='+id+'',lock:true, width: 
 
-		500,height: 300,});
+		400,height: 240,});
 
 }
 function findUser(id){
 
 	var d = $.dialog({id:'dept',title:"查看部门成员",content:'url:/dept/findDeptUser.action?deptId='+id+'',lock:true, width: 
 
-		800,height: 600,});
+		900,height: 500,});
 
 }
 function deleteDept(id){

@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.service.BusiGroupService;
+import com.xiaoma.kefu.service.ServiceIconService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
@@ -41,6 +44,8 @@ public class StyleController {
 	private StyleService styleService;
 	@Autowired
 	private BusiGroupService busiGroupService;//业务分组
+	@Autowired
+	private ServiceIconService serviceIconService;//客服图标
 	
 	
 	/**
@@ -204,42 +209,25 @@ public class StyleController {
 		return "resultjson";
 	}
 	
-	@RequestMapping(value = "getStyleDiv.action", method = RequestMethod.GET)
-	public String getStyleDiv(HttpServletRequest req,HttpServletResponse res){
-//		res.setContentType("text/plain");
-//	    String callbackFunName =req.getParameter("callbackparam");//得到js函数名称
-//	    try {
-//	        res.getWriter().write(callbackFunName + "([ { name:\"John\"}])"); //返回jsonp数据
-//	    } catch (IOException e) {
-//	        e.printStackTrace();
-//	    }
-		return "/styleDiv/divOne";
-	}
 	
+	/**
+	 * 获取 客服图标的 div	PC
+	* @param req
+	* @param res
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
 	@RequestMapping(value = "getIconDiv.action", method = RequestMethod.GET)
-	public void getIconDiv(Model model,HttpServletRequest req,HttpServletResponse res){
+	public void getIconDiv(HttpServletRequest req,HttpServletResponse res){
 		res.setContentType("text/plain");
 	    String callbackFunName =req.getParameter("callbackIcon");//得到js函数名称
-	    
-//	    单引号,双引号 都 \\\	OK
-	    String str = " <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
-		+ " <div style=\\\"position:absolute;top:0px;left:0;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div>  "
-		+ " <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"window.open(\\\'http://oc2.xiaoma.com/new/client.php?arg=53kf&amp;style=3&amp;l=zh-cn&amp;charset=utf-8&amp;lytype=0&amp;referer=http%3A%2F%2Fkecheng.xiaoma.com%2F&amp;isvip=bcf14bbb85a346c2fb52e8cea8822cce&amp;identifier=&amp;keyword=http%3A//kecheng.xiaoma.com/&amp;tfrom=1&amp;tpl=crystal_blue\\\',\\\'_blank\\\',\\\'height=573,width=803,top=200,left=200,status=yes,toolbar=no,menubar=no,resizable=yes,scrollbars=no,location=no,titlebar=no\\\')\\\" style=\\\"cursor:pointer\\\"> "
-		+ " </div> "
-		;
-	    
-//	    //单引号不管, 双引号 \\\	ok
-//	    String str = " <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
-//		+ " <div style=\\\"position:absolute;top:0px;left:0;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div>  "
-//		+ " <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"gotoKF()\\\" style=\\\"cursor:pointer\\\"> "
-//		+ " </div> "
-//		;
-	    
-	    
+	    String styleId = req.getParameter("styleId");
+//	    String strDiv = serviceIconService.getDivByStyleId(Integer.valueOf(styleId),DeviceType.PC);
 	    try {
-	        res.getWriter().write(callbackFunName + "([ { name:\""+str+"\"}])"); //返回jsonp数据
+	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPC,styleId);
+	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	    	logger.error("获取图标div出错,风格id="+styleId,e);
 	    }
 	}
 	
@@ -257,7 +245,6 @@ public class StyleController {
 	    
 	    try {
 	        res.getWriter().write(callbackFunName + "([ { name:\""+str+"\"}])"); //返回jsonp数据
-//	        res.getWriter().write(callbackFunName + "([ { name:\"John\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

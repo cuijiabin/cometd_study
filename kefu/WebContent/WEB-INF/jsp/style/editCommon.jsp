@@ -95,7 +95,7 @@ function editServicePC(styleId){
 
 //对话邀请框设置 PC
 function editInvitePC(styleId){
-	var url = '/inviteIcon/edit.action?styleId='+styleId+'&deviceTypeId=1';
+	var url = '/inviteIcon/editPC.action?styleId='+styleId;
 	window.location = url;
 	return;
 }
@@ -109,7 +109,7 @@ function editServiceYD(styleId){
 
 //对话邀请框设置 移动
 function editInviteYD(styleId){
-	var url = '/inviteIcon/edit.action?styleId='+styleId+'&deviceTypeId=2';
+	var url = '/inviteIcon/editYD.action?styleId='+styleId;
 	window.location = url;
 	return;
 }

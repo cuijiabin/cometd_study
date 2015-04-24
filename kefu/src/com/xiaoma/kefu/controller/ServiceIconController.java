@@ -52,6 +52,7 @@ public class ServiceIconController {
 	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
 	public String edit(Model model,Integer styleId,Integer deviceTypeId) {
 		try {
+			String result = "/style/service/editPC";
 			ServiceIcon serviceIcon;
 			String onUrl,offUrl;
 			if(deviceTypeId==1){
@@ -62,13 +63,14 @@ public class ServiceIconController {
 				serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.移动);
 				onUrl = getViewPath(serviceIcon, StylePicName.客服图标移动在线);
 				offUrl = getViewPath(serviceIcon, StylePicName.客服图标移动离线);
+				result = "/style/service/editYD";
 			}
 			List<DictItem> dict = DictMan.getDictList("d_display_model");//显示方式
 			model.addAttribute("serviceIcon", serviceIcon);
 			model.addAttribute("onUrl", onUrl);
 			model.addAttribute("offUrl", offUrl);
 			model.addAttribute("dict", dict);
-			return "/style/service/edit";
+			return result;
 		} catch (Exception e) {
 			logger.error("edit"+styleId+",deviceTypeId="+deviceTypeId,e);
 			model.addAttribute("error", "对不起出错了");
@@ -77,32 +79,50 @@ public class ServiceIconController {
 	}
 	
 	/**
-	 * 保存
-	* @Description: TODO
+	 * PC 保存
 	* @param model
-	* @param customer
+	* @param fileOn
+	* @param fileOff
+	* @param serviceIcon
 	* @return
 	* @Author: wangxingfei
-	* @Date: 2015年4月13日
+	* @Date: 2015年4月24日
 	 */
-	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Model model,MultipartFile fileOn,
+	@RequestMapping(value = "savePC.action", method = RequestMethod.POST)
+	public String savePC(Model model,MultipartFile fileOn,
+			MultipartFile fileOff,
+			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
+		try {
+			serviceIconService.saveAndUpdatePC(fileOn,fileOff,serviceIcon);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/serviceIcon/edit.action?styleId="+serviceIcon.getStyleId()
+				+"&deviceTypeId="+serviceIcon.getDeviceType(); 
+	}
+	
+	/**
+	 * 移动 保存
+	* @param model
+	* @param fileOn
+	* @param fileOff
+	* @param serviceIcon
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	@RequestMapping(value = "saveYD.action", method = RequestMethod.POST)
+	public String saveYD(Model model,MultipartFile fileOn,
 			MultipartFile fileOff,
 			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
 		try {
 			//保存文件 ys
-			if(serviceIcon.getDeviceType().equals(DeviceType.PC.getCode())){
-				serviceIconService.saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标PC在线);
-				serviceIconService.saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标PC离线);
-			}else{
-				serviceIconService.saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标移动在线);
-				serviceIconService.saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标移动离线);
-			}
+			serviceIconService.saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标移动在线);
+			serviceIconService.saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标移动离线);
 //			
 //			//拿出旧的创建时间,类型,按钮id, 别的全用新的
 			ServiceIcon oldModel = serviceIconService.get(serviceIcon.getId());
 			serviceIcon.setCreateDate(oldModel.getCreateDate());
-//			serviceIcon.setDeviceType(oldModel.getDeviceType());
 			serviceIcon.setButtonId(oldModel.getButtonId());
 			serviceIcon.setUpdateDate(new Date());
 			if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址

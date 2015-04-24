@@ -23,22 +23,24 @@
         <li><i>&gt;</i>个人信息</li>
     </ul>
 </div>
-<table border=1 style="width: 300px;height: 200px;margin: 50px 0 10px 100px" >
+<div style="margin:50px">
+<table class="table table-bordered m-table" style="width: 360px">
       <tr>
-      <td width=30%>工号：</td><td>${user.loginName}</td>
+      <td class="f-txtr tdbg" width="150px">工号：</td><td class="f-txtl">${user.loginName}</td>
       </tr>
       <tr>
-      <td>姓名：</td><td>${user.userName}</td>
+      <td class="f-txtr tdbg" width="150px">姓名：</td><td class="f-txtl">${user.userName}</td>
       </tr>
       <tr>
-      <td>身份：</td><td>${user.roleName}</td>
+      <td class="f-txtr tdbg" width="150px">身份：</td><td class="f-txtl">${user.roleName}</td>
       </tr>
       <tr>
-      <td>部门：</td><td>${user.deptId}</td>
+      <td class="f-txtr tdbg" width="150px">部门：</td><td class="f-txtl">${user.deptId}</td>
       </tr>
       
 </table>
-<button style="margin-left:320px;" onclick="javascript:repass();" class="btn btn-primary btn-small" >重置密码</button>
+<button style="margin-left:280px;" onclick="javascript:repass();" class="btn btn-primary btn-small" >重置密码</button>
+</div>
 <!-- 表格有边框 -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -47,7 +49,7 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 function repass(){
-	var d = $.dialog({id:'pass',title:"重置密码",content:'url:/user/password.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'pass',title:"重置密码",content:'url:/user/password.action',lock:true, width:	460,height: 280,});
 }
 
 function callback(){

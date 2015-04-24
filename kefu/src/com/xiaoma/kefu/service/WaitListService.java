@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.dao.WaitListDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.WaitList;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * 等待菜单列表 业务处理类 *********************************
@@ -183,8 +184,12 @@ public class WaitListService {
 	 * @param styleId,id
 	 * @return
 	 */
-	public List<WaitList> findListById(Integer styleId,Integer id) {
-		return waitListDaoImpl.findListById(styleId,id);
+	public List<WaitList> findListById(String id) {
+		String [] str ;
+		if(StringHelper.isEmpty(id) || (str = id.split("_")).length<2){
+			return null;
+		}
+		return waitListDaoImpl.findListById(Integer.parseInt(str[0]),Integer.parseInt(str[1]));
 	}
 
 }
