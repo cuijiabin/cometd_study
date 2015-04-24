@@ -183,7 +183,7 @@ $('#btn_save').on('click',function(){
 	    }
 	}
 	
-	var path = "/serviceIcon/save.action";  
+	var path = "/serviceIcon/savePC.action";  
     $('#mainForm').attr("action", path).submit();
 });
 

@@ -41,7 +41,7 @@ public class InviteElementController {
 	
 	
 	/**
-	 * 编辑
+	 * PC编辑
 	* @Description: TODO
 	* @param model
 	* @param inviteId
@@ -50,8 +50,8 @@ public class InviteElementController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月13日
 	 */
-	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
-	public String edit(Model model,Integer inviteId,Integer id) {
+	@RequestMapping(value = "editPC.action", method = RequestMethod.GET)
+	public String editPC(Model model,Integer inviteId,Integer id) {
 		try {
 			List<InviteElement> list = inviteElementService.listByInviteId(inviteId);
 			Map<Integer,InviteElement> hm = new HashMap<Integer,InviteElement>();
@@ -71,16 +71,56 @@ public class InviteElementController {
 			model.addAttribute("elementList", list);
 			model.addAttribute("inviteElement", inviteElement);
 			model.addAttribute("inviteIcon", inviteIconService.get(inviteId));
-			return "/style/invite/editElement";
+			return "/style/invite/editElementPC";
 		} catch (Exception e) {
-			logger.error("edit"+inviteId+",id="+id,e);
+			logger.error("editPC"+inviteId+",id="+id,e);
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+	}
+	
+	
+	/**
+	 * 移动 编辑
+	* @Description: TODO
+	* @param model
+	* @param inviteId
+	* @param id 需要默认展示明细的元素id, 如果为空,则默认展示第一个元素明细
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月13日
+	 */
+	@RequestMapping(value = "editYD.action", method = RequestMethod.GET)
+	public String editYD(Model model,Integer inviteId,Integer id) {
+		try {
+			List<InviteElement> list = inviteElementService.listByInviteId(inviteId);
+			Map<Integer,InviteElement> hm = new HashMap<Integer,InviteElement>();
+			for(int i=0;i<list.size();i++){
+				InviteElement ele = list.get(i);
+				ele.setSortId(i+1);//设置序号
+				hm.put(ele.getId(), ele);
+			}
+			InviteElement inviteElement = new InviteElement();
+			if(id==null){//默认第一个
+				if(list.size()>0){
+					inviteElement = list.get(0);
+				}
+			}else{//按id取
+				inviteElement = hm.get(id);
+			}
+			model.addAttribute("elementList", list);
+			model.addAttribute("inviteElement", inviteElement);
+			model.addAttribute("inviteIcon", inviteIconService.get(inviteId));
+			return "/style/invite/editElementYD";
+		} catch (Exception e) {
+			logger.error("editYD"+inviteId+",id="+id,e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
 	}
 	
 	/**
-	 * 元素明细编辑
+	 * PC 元素明细编辑
 	* @param model
 	* @param id
 	* @param sortId
@@ -88,13 +128,36 @@ public class InviteElementController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月19日
 	 */
-	@RequestMapping(value = "editDetail.action", method = RequestMethod.GET)
-	public String editDetail(Model model,Integer id,Integer sortId) {
+	@RequestMapping(value = "editDetailPC.action", method = RequestMethod.GET)
+	public String editDetailPC(Model model,Integer id,Integer sortId) {
 		try {
 			InviteElement inviteElement = inviteElementService.get(id);
 			inviteElement.setSortId(sortId);
 			model.addAttribute("inviteElement", inviteElement);
-			return "/style/invite/elementDetail";
+			return "/style/invite/elementDetailPC";
+		} catch (Exception e) {
+			logger.error("editDetail"+id+",sortId="+sortId,e);
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+	}
+	
+	/**
+	 * 移动  元素明细编辑
+	* @param model
+	* @param id
+	* @param sortId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月19日
+	 */
+	@RequestMapping(value = "editDetailYD.action", method = RequestMethod.GET)
+	public String editDetailYD(Model model,Integer id,Integer sortId) {
+		try {
+			InviteElement inviteElement = inviteElementService.get(id);
+			inviteElement.setSortId(sortId);
+			model.addAttribute("inviteElement", inviteElement);
+			return "/style/invite/elementDetailYD";
 		} catch (Exception e) {
 			logger.error("editDetail"+id+",sortId="+sortId,e);
 			model.addAttribute("error", "对不起出错了");
@@ -112,8 +175,8 @@ public class InviteElementController {
 	* @Author: wangxingfei
 	* @Date: 2015年4月19日
 	 */
-	@RequestMapping(value = "save.action", method = RequestMethod.POST)
-	public String save(Model model,MultipartFile groupFile,
+	@RequestMapping(value = "savePC.action", method = RequestMethod.POST)
+	public String savePC(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
 			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
@@ -127,10 +190,41 @@ public class InviteElementController {
 			inviteElement.setUpdateDate(new Date());
 			inviteElementService.update(inviteElement);
 		} catch (Exception e) {
-			logger.error("save"+inviteElement.getId(), e);
+			logger.error("savePC"+inviteElement.getId(), e);
 			return "error500";
 		}
-		return "redirect:/inviteElement/edit.action?inviteId="+inviteElement.getInviteId()+"&id="+inviteElement.getId(); 
+		return "redirect:/inviteElement/editPC.action?inviteId="+inviteElement.getInviteId()+"&id="+inviteElement.getId(); 
+	}
+	
+	/**
+	 * 移动 保存
+	* @Description: TODO
+	* @param model
+	* @param groupFile
+	* @param inviteElement
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月19日
+	 */
+	@RequestMapping(value = "saveYD.action", method = RequestMethod.POST)
+	public String saveYD(Model model,MultipartFile groupFile,
+			@ModelAttribute("inviteElement") InviteElement inviteElement) {
+		try {
+			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
+//			//补充字段
+			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
+			if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
+				inviteElement.setPicUrl(oldModel.getPicUrl());;
+			}
+			inviteElement.setName(oldModel.getName());
+			inviteElement.setCreateDate(oldModel.getCreateDate());
+			inviteElement.setUpdateDate(new Date());
+			inviteElementService.update(inviteElement);
+		} catch (Exception e) {
+			logger.error("saveYD"+inviteElement.getId(), e);
+			return "error500";
+		}
+		return "redirect:/inviteElement/editYD.action?inviteId="+inviteElement.getInviteId()+"&id="+inviteElement.getId(); 
 	}
 	
 	/**

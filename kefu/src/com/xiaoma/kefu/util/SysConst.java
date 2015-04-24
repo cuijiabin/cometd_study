@@ -130,4 +130,34 @@ public class SysConst {
 	}
 	
 	
+	/**
+	 * 图标,邀请框 div 里面的字段名称 和 对应模板中的 变量名称
+	 * *********************************
+	* @Description: TODO
+	* @author: wangxingfei
+	* @createdAt: 2015年4月24日下午2:45:15
+	**********************************
+	 */
+	public enum DivFieldName{
+		top("${top}"),left("${left}");
+		private String value;
+		DivFieldName(String value){
+			this.value = value;
+		}
+		public String getCode(){
+			return this.value;
+		}
+	}
+	
+	
+	/**
+	 * 客服图标 DIV 模板
+	 */
+	public static final String DIV_TEMPLATE_ICON =
+				" <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
+				+	" <div style=\\\"position:absolute;${top};${left};overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div> "
+				+	" <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"window.open('http://oc2.xiaoma.com/new/client.php?arg=53kf&amp;style=3&amp;l=zh-cn&amp;charset=utf-8&amp;lytype=0&amp;referer=http%3A%2F%2Fkecheng.xiaoma.com%2F&amp;isvip=bcf14bbb85a346c2fb52e8cea8822cce&amp;identifier=&amp;keyword=http%3A//kecheng.xiaoma.com/&amp;tfrom=1&amp;tpl=crystal_blue','_blank','height=573,width=803,top=200,left=200,status=yes,toolbar=no,menubar=no,resizable=yes,scrollbars=no,location=no,titlebar=no')\\\" style=\\\"cursor:pointer\\\"> "
+				+ " </div> "	
+			;
+	
 }

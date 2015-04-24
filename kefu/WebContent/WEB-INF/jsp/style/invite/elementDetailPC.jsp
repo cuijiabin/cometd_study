@@ -109,7 +109,7 @@ function saveDetail(){
 	    	return;
 	    }
 	}
-	var path = "/inviteElement/save.action";  
+	var path = "/inviteElement/savePC.action";  
     $('#mainForm').attr("action", path).submit();
 }
 

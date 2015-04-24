@@ -43,5 +43,9 @@ public class CacheName {
 	//风格下面的等待列表
 	public static final String STYLEWAITLIST="STYLEWAITLIST";
 	
+	//客服图标的div格式 电脑版
+	public static final String DIVICONPC="divIconPC";
+	//客服图标的div格式 移动版
+	public static final String DIVICONYD="divIconYD";
 	
 }

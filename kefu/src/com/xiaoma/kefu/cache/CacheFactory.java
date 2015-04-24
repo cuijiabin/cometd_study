@@ -2,8 +2,10 @@ package com.xiaoma.kefu.cache;
 
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.service.FunctionService;
+import com.xiaoma.kefu.service.ServiceIconService;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.StringHelper;
+import com.xiaoma.kefu.util.SysConst.DeviceType;
 
 
 public class CacheFactory {
@@ -32,6 +34,10 @@ public class CacheFactory {
 				WaitListService waitListService = (WaitListService) SpringContextUtil
 						.getBean("waitListService");
 				obj=waitListService.findListById((String)key);
+			}else if(cacheName.equals(CacheName.DIVICONPC)){
+				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
+						.getBean("serviceIconService");
+				obj=serviceIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.PC);
 			}
 		}
 		return obj;

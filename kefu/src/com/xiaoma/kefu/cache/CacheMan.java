@@ -94,5 +94,27 @@ public class CacheMan {
 	public static void main(String[] args) {
 		removeByKeyPattern(CacheName.USERFUNCTION);
 	}
+	
+	
+	
+	/**
+	 * 更新缓存对象	,先删除,再add
+	* @param cacheName	缓存前缀
+	* @param value	对应的id
+	* @param obj	最新值
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	public static Object update(String cacheName, Object value, Object obj) {
+		try {
+			remove(cacheName, value);
+			obj = add(cacheName, value, obj);
+			return obj;
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return null;
+		}
+	}
 
 }
