@@ -25,8 +25,8 @@
         <li><i>&gt;</i>提醒方式</li>
     </ul>
 </div>
-
-<div class="g-cnt"> 
+<div style="margin:50px">
+<div class="g-cnt" style="width: 1000px"> 
     <div class="f-padd10">
     <form action="/function/saveRemind.action" enctype="multipart/form-data" method="post" id="fform">
     	<div class="m-tit">
@@ -94,6 +94,7 @@
             <button type="reset" class="btn" onclick="removecheck()">取消</button>
         </div>
     </div>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

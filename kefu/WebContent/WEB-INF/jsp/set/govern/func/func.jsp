@@ -24,6 +24,7 @@
         <li><i>&gt;</i>权限配置</li>
     </ul>
 </div>
+<div style="margin:50px">
 <h4>角色： ${role.name}</h4><input type="hidden" id="roleId" name="roleId" value="${role.id}"/><input type="hidden" id="deptId" name="deptId" value="${deptId}"/>
 <input type="hidden" id="strings" name="strings" value="${strs}"/>
     	<!-- 表格有边框 -->
@@ -56,7 +57,8 @@
                     <td><src href="/tree.jsp"/></td>
                 </tr>
             </tbody>
-        </table> 		
+        </table>
+   </div>	
 </body>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

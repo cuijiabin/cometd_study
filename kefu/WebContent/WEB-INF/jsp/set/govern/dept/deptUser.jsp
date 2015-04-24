@@ -13,7 +13,7 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<h3>查看部门成员</h3>
+<div style="margin:50px">
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>
@@ -40,14 +40,19 @@
         </c:forEach>
     </tbody>
 </table>
-
+<button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+var api = frameElement.api,W=api.opener;
 
+function cl(){
+	api.close();			
+}
 </script>
 </body>
 </html>

@@ -23,13 +23,15 @@
         <li><i>&gt;</i>角色管理</li>
     </ul>
 </div>
-<button style="float:right;margin-right:5px;" onclick="javascript:addRole()" class="btn btn-primary btn-small" >添加角色</button>
-<!-- 表格有边框 -->
 
-<div id="table_data" style="margin-top: 30px">
+<!-- 表格有边框 -->
+<div style="margin:50px">
+
+<div><button style="float:right;margin:5px;" onclick="javascript:addRole()" class="btn btn-primary btn-small" >添加角色</button></div>
+<div id="table_data" style="margin-top: 10px">
 	<jsp:include page="roleList.jsp"></jsp:include>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -59,13 +61,13 @@ function find(currentPage){
 }
 
 function addRole(){
-	var d = $.dialog({id:'role',title:"添加角色",content:'url:/role/addRole.action',lock:true, width:	500,height: 300,});
+	var d = $.dialog({id:'role',title:"添加角色",content:'url:/role/addRole.action',lock:true, width:	370,height: 210,});
 }
 function updateRole(id){
 
 	var d = $.dialog({id:'role',title:"修改角色",content:'url:/role/detail.action?id='+id+'',lock:true, width: 
 
-		500,height: 300,});
+		370,height: 210,});
 
 }
 //javascript:if(confirm('确实要删除吗?'))location='/role/delete.action?id=${role.id}

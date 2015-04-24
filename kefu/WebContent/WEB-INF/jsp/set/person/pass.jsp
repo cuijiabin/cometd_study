@@ -14,23 +14,21 @@
 </head>
 
 <body>
-<!-- 面包屑 -->
-</div>
-<table border=1 style="width: 300px;height: 130px;margin: 50px 0 10px 20px" >
+<div style="margin:50px">
+<table class="table table-bordered m-table" style="width:350px">
       <tr>
-      <td width=40%>旧密码</td><td><input type="password" id="oldpass" name="oldpass"/></td>
+      <td class="f-txtr tdbg" width="100px">旧密码</td><td class="f-txtl"><input type="password" id="oldpass" name="oldpass"/></td>
       </tr>
       <tr>
-      <td>新密码</td><td><input type="password" id="password" name="password"/></td>
+      <td class="f-txtr tdbg" width="100px">新密码</td><td class="f-txtl"><input type="password" id="password" name="password"/></td>
       </tr>
       <tr>
-      <td>重复密码</td><td><input type="password" id="password1" name="password1"/></td>
+      <td class="f-txtr tdbg" width="100px">重复密码</td><td class="f-txtl"><input type="password" id="password1" name="password1"/></td>
       </tr>    
 </table>
  <button style="float:left; margin-left:210px;" onclick="javascript:repass();" class="btn btn-primary btn-small" >确认</button>
  <button style="float:left; margin-left:10px;" onclick="javascript:cl();" class="btn" >关闭</button>
-
-<!-- 表格有边框 -->
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>

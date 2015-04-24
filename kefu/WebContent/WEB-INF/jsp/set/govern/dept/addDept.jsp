@@ -12,31 +12,27 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
-
+<style type="text/css">
+	input{
+		width:150px;
+	}
+</style>
 <body>
-<!-- 面包屑 -->
-<!-- <div class="m-crumb"> -->
-<!--     <ul class="f-cb"> -->
-<!--         <li><b>位置：</b></li> -->
-<!--         <li><a href="#">设置中心</a></li> -->
-<!--         <li><i>&gt;</i><a href="#">管理设置</a></li> -->
-<!--         <li><i>&gt;</i>部门管理</li> -->
-<!--     </ul> -->
-<!-- </div> -->
-<c:if test="${empty dept.id}"><h2>添加部门</h2></c:if> <c:if test="${not empty dept.id}"><h2>修改部门</h2></c:if>
+<div style="margin:50px">
 <!-- 表格有边框 -->
-<table class="table table-bordered table-striped table-hover m-table">
+<table class="table table-bordered m-table">
         <tr>
-            <td>部门名称</td>
-            <td><input type="text" id="name" name="name" value="${dept.name}" maxlength="10"/></td>
+            <td class="f-txtr tdbg" width="80px">部门名称</td>
+            <td class="f-txtl"><input type="text" id="name" name="name" value="${dept.name}" maxlength="10"/></td>
         </tr>
-            <tr>
-            <td>排序</td>
-            <td><input type ="text" id="sortNum" name="sortNum" value="${dept.sortNum}" readonly="readonly"/></td>
+        <tr>
+            <td class="f-txtr tdbg" width="80px">排序</td>
+            <td class="f-txtl"><input type ="text" id="sortNum" name="sortNum" value="${dept.sortNum}" readonly="readonly"/></td>
         </tr>
 </table>
 <button style="float:right;margin-right:40px;" onclick="javascript:cl();" class="btn" >关闭</button>
  <button style="float:right;margin-right:40px;" onclick="javascript:addDept(${dept.id});" class="btn btn-primary btn-small" >确认</button>
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
