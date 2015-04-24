@@ -100,11 +100,7 @@ function saveRemind(){
 	}
    $("#fform").submit();
 }
-function checkfile(){
-	alert();
-	var f = $("#lsound").files;
-	alert(f[0].size);
-}
+
 function removecheck(){
     $(":checkbox[checked='checked']").attr("checked",false);
     $(":radio[checked='checked']").attr("checked",false);
