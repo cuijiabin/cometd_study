@@ -57,7 +57,7 @@ public class DialogueController {
 	private BlacklistService blacklistService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
-
+	
 	/**
 	 * 获取转接用户列表
 	 * 
@@ -81,6 +81,22 @@ public class DialogueController {
 		model.addAttribute("customerId", customerId);
 
 		return "/dialogue/switch";
+	}
+
+	/**
+	 * 查看客户历史对话(最新的一次)
+	 * 
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "history.action", method = RequestMethod.GET)
+	public String historyList(HttpServletRequest request, HttpServletResponse response,HttpSession session, Model model, Long customerId) {
+
+		List<DialogueDetail> list = dialogueDetailService.getLastRecordsByCustomerId(customerId);
+		model.addAttribute("dialogueList", list);
+
+		return "/dialogue/historyRecord";
 	}
 	
 	/**

@@ -82,10 +82,11 @@ public class JoinListener extends ConnectListener {
 		        
 		        String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, allocateCnnId);
 		        User allocateUser = userService.getUserById(Integer.valueOf(uId));
+		        Message message = new Message(allocateCnnId, allocateUser.getCardName(), "", "", ccnId);
 		        
 		        //告知自己已经连接上
 		        CometConnection myCcn = engine.getConnection(ccnId);
-		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, allocateUser);
+		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
 		        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
 		        
 			} catch (Exception e) {

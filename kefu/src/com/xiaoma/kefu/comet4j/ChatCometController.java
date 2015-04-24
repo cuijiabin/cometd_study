@@ -265,7 +265,7 @@ public class ChatCometController {
 		CometConnection ccn = engine.getConnection(ccnId);
 		CometConnection ecn = engine.getConnection(endCcnId);
 		
-		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, null);
+		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, type);
 		
 		if(JedisConstant.USER_TYPE == type){
 			 JedisTalkDao.remCcnReceiveList(ccnId, endCcnId);
@@ -327,6 +327,5 @@ public class ChatCometController {
 		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, null);
 		engine.sendTo(Constant.CHANNEL, ccn, nd);
 	}
-	
 	
 }
