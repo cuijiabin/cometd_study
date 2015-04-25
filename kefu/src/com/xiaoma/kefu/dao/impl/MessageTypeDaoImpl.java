@@ -19,13 +19,13 @@ import com.xiaoma.kefu.model.MessageType;
 public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements MessageTypeDao {
   
 	@Override
-	public List<MessageType> findTree(int typeId) {
+	public List<MessageType> findTree(int typeId,int userId) {
 		Session session = getSession();
 		String hql="";
 		if(typeId==1){
 			hql = "from MessageType m where m.typeId="+typeId+"order by sortId asc ";
 		}else{
-			hql = "from MessageType m where m.typeId="+typeId+" and userId=";
+			hql = "from MessageType m where m.typeId="+typeId+" and userId="+userId+"order by sortId asc ";
 		}
 		Query query = session.createQuery(hql);
 		return query.list();
@@ -102,7 +102,7 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 	public Integer checkChild(Integer id ){
 		Session session = getSession();
 		StringBuffer hqlBuffer = new StringBuffer(
-				"select count(m.pId) from MessageType m  where  m.pId="+id+" and m.typeId=1 " );
+				"select count(m.pId) from MessageType m  where  m.pId="+id+"  " );
 	  Query query = session.createQuery(hqlBuffer.toString());
 	  Object obj = query.uniqueResult();
 		return Integer.parseInt(obj.toString());

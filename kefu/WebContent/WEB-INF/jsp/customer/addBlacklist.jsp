@@ -44,7 +44,6 @@
         </tbody>
    </table>
    </div>
-
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -224,11 +223,9 @@ function checkBlacklist_cusId(){
 	return flag;
 }
 
-
 function cl(){
 	api.close();			
 }
-
 </script>
 </body>
 </html>

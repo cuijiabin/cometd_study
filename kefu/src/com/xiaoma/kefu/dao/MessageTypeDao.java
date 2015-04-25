@@ -40,7 +40,7 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     * @param tid
     * @return
     */
-   public	List findTree(int tid);
+   public	List findTree(int typeId,int userId);
    /**
     * 查询子节点
     * @param id
@@ -54,5 +54,6 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     * @return
     */
    public Integer checkChildMax(Integer id, Integer typeId);
+
 
 }

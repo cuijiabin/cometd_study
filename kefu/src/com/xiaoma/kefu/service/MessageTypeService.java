@@ -23,8 +23,8 @@ public class MessageTypeService {
     * @param tid
     * @return
     */
-	public List findTree(int typeId) {
-		return messageTypeDaoImpl.findTree(typeId);
+	public List findTree(int typeId,int userId) {
+		return messageTypeDaoImpl.findTree(typeId,userId);
 	}
 	
 	/**

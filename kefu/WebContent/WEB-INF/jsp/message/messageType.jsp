@@ -68,10 +68,10 @@
 	 */
   function addMessageType(){
 
-	var treeId = id;
-	var tyd = typeId;
-	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
-			lock:true, width:	600,height: 400});
+	var treeId = $("#typeId").val()==1 ? 1:13;
+	var tyd = $("#typeId").val();
+ 	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
+ 			lock:true, width:	600,height: 400});
 }
 	//以下参数设置的是默认值
   	var id =  1;   //设置树节点ID默认为1
@@ -134,7 +134,7 @@
    	var flag = false;
     var treeId = id;
    	var data = {
-   			"treeId" : treeId
+   			"treeId" : $("#messageTypeId").val()
    	};
    	$.ajax({
    		type : "get",

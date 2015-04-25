@@ -44,8 +44,6 @@
           </tbody>
       </table>
  </div>
- 
-
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -53,8 +51,6 @@
 var api = frameElement.api,W=api.opener;
 
 function addMessageType(){
-	 
-	
 	  var isSelect = document.getElementById("statusCk").checked;
 	  var status = isSelect ? 1:2;
 
@@ -71,8 +67,6 @@ function addMessageType(){
 		if (!verificationParam(data)) {
 			return;
 		}
-
- 
        $.ajax({
     		type : "post",
     		url : url,
@@ -111,15 +105,12 @@ function verificationParam(userData) {
 		return false;
 	}
 	
-	
 	return true;
 }
-
 
 function cl(){
 	api.close();			
 }
-
 </script>
 </body>
 </html>

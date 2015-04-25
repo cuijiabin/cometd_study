@@ -46,10 +46,13 @@ public class MessageTypeController {
 	 */
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
-	public String main(Model model, Integer id) {
-
+	public String main(HttpSession session,Model model, Integer id) {
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null)
+			return "login";
+		 Integer userId = user.getId();
 		if (id != null) {
-			List list = messageTypeService.findTree(id);
+			List list = messageTypeService.findTree(id,userId);
 			MessageType mType = null;
 			JSONArray json = new JSONArray();
 			if (list != null && list.size() > 0) {
@@ -83,7 +86,7 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(Model model, Integer treeId, Integer typeId) {
-	
+	   
 		Integer sortId =  messageTypeService.getChildCount(treeId,typeId);
 		if (sortId==null) {
 			sortId =0;
@@ -261,12 +264,16 @@ public class MessageTypeController {
 	 * 刷新树
 	 */
 	@RequestMapping(value = "treeList.action", method = RequestMethod.GET)
-	public String treeList(Model model, Integer id, Integer typeId) {
+	public String treeList(HttpSession session, Model model, Integer id, Integer typeId) {
 		try {
+			User user = (User) session.getAttribute(CacheName.USER);
+			if (user == null)
+				return "login";
+			 Integer userId = user.getId();
 			MessageType mType = null;
 			if (id != null)
 				mType = messageTypeService.getMessageTypeById(id);
-			List list = messageTypeService.findTree(typeId);
+			List list = messageTypeService.findTree(typeId,userId);
 			JSONArray json = new JSONArray();
 			if (list != null && list.size() > 0) {
 				for (int i = 0; i < list.size(); i++) {
