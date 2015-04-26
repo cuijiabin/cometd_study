@@ -39,7 +39,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	public Integer getAllUserCount() {
 
 		Session session = getSession();
-		String hql = "select count(1) from User where status<>2 ";
+		String hql = "select count(1) from User where status<>2 and id <>1";
 		Query query = session.createQuery(hql);
 
 		return ((Number) query.uniqueResult()).intValue();
@@ -55,7 +55,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		offset = (offset == null) ? 20 : offset;
 
 		Session session = getSession();
-		String hql = "from User u where u.status<>2 limit order by id asc";
+		String hql = "from User u where u.status<>2 and id <>1 order by id asc";
 		Query query = session.createQuery(hql).setFirstResult(start)
 				.setMaxResults(offset);
 
@@ -77,7 +77,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
 		Session session = getSession();
 
-		String hql = "from User c where 1=1 and status<>2 ";
+		String hql = "from User c where 1=1 and status<>2 and id<>1";
 		if (StringHelper.isNotEmpty(userName)) {
 			hql += " and c.userName like '" + "%" + userName + "%" + "'";
 		}
@@ -96,7 +96,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	public Integer checkUser(User user) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(a.id) from User a where 1 = 1");
+				"select count(a.id) from User a where id<>1");
 		if (StringUtils.isNotBlank(user.getLoginName())) {
 			hqlBf.append(" and a.loginName  = '" + user.getLoginName() + "' ");
 		}
@@ -114,7 +114,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	public Integer getUserCountByuserNameOrPhone(String userName, String phone) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(1) from User where 1 = 1 and status<>2");
+				"select count(1) from User where id<>1 and status<>2");
 		if (StringUtils.isNotBlank(userName)) {
 			hqlBf.append(" and userName  like '%" + userName + "%'");
 		}
@@ -153,6 +153,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 					&& !"0".equals(conditions.get("status"))) {
 				role.add(Restrictions.eq("status",
 						Integer.parseInt(conditions.get("status"))));
+			}
+			if (StringHelper.isNotEmpty(conditions.get("id"))
+					&& !"0".equals(conditions.get("id"))) {
+				role.add(Restrictions.ne("id",
+						Integer.parseInt(conditions.get("id"))));
 			}
 		}
 		orders.add(Order.asc("id"));
