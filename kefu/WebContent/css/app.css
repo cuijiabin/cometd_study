@@ -584,7 +584,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .c-bor2{border:3px dashed #f00;}
 .c-bortit{border:1px solid #d9d9d9;border-bottom-color: #2e6da8;}
 .c-bgfff{background:#fff !important;}
-.c-bgtwinkle{background:url(../img/icon_twinkle.gif) !important;}
+.c-bgtwinkle{background:url(/img/icon_twinkle.gif) !important;}
 .c-bgtwinkle p{color:#fff !important;}
 .c-colf00{color:#f00 !important;}
 .u-txt{font-size:12px;color:#333;}
