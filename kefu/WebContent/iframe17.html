@@ -11,17 +11,82 @@
 </head>
 
 <body>
-<div id="w-kfcbox" style="position:fixed;top:300px;left:611px;display:block;overflow:hidden;width:680px;height:380px;z-index:7998;">
-	<div id="w-kfbox-cnt" style="position:relative;overflow:hidden;width:680px;height:380px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1429507915.png);background-repeat:no-repeat;z-index:0;">
-    	<div style="position:absolute;left:669px;top:0px;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;"></div>
-    	<div style="position:absolute;left:0px;top:0px;overflow:hidden;width:680px;height:380px;z-index:1;cursor:pointer;"></div>
+<div id="w-kfcbox" style="position:absolute;left:0px;top:0px;width:680px;height:380px;z-index:7998;overflow:hidden;">
+	<div id="w-kfbox-cnt" style="position:relative;width:680px;height:380px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1429507915.png);background-repeat:no-repeat;z-index:0;overflow:hidden;">
+    	<div style="position:absolute;left:669px;top:0px;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:3;cursor:pointer;overflow:hidden;" onclick="iconType=1;hiddenKfbox();"></div>
+    	<div style="position:absolute;left:0px;top:0px;overflow:hidden;width:680px;height:380px;z-index:1;cursor:pointer;" onclick="window.open('index_03.html', '_blank', 'height=573, width=803, top=200, left=200, status=yes, toolbar=no, menubar=no, resizable=yes, scrollbars=no, location=no, titlebar=no')"></div>
+        <a href="http://www.xiaoma.com/" target="_blank" style="cursor:pointer;text-decoration:none;"><div style="position:absolute;left:100px;top:200px;width:207px;height:54px;background-image:url(http://pics1.xiaoma.com.cn/xiaoma/common/logo.png);background-repeat:no-repeat;z-index:2;overflow:hidden;"></div></a>
     </div>
 </div>
 
-<div id="w-kfrbox" style="position:fixed;top:200px;right:10px;">
-	<div style="position:absolute;top:0px;left:0;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;"></div>
-	<img src="http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png" onclick="window.open('http://oc2.xiaoma.com/new/client.php?arg=53kf&amp;style=3&amp;l=zh-cn&amp;charset=utf-8&amp;lytype=0&amp;referer=http%3A%2F%2Fkecheng.xiaoma.com%2F&amp;isvip=bcf14bbb85a346c2fb52e8cea8822cce&amp;identifier=&amp;keyword=http%3A//kecheng.xiaoma.com/&amp;tfrom=1&amp;tpl=crystal_blue','_blank','height=573,width=803,top=200,left=200,status=yes,toolbar=no,menubar=no,resizable=yes,scrollbars=no,location=no,titlebar=no')" style="cursor:pointer">
+<div id="w-kfrbox" style="position:fixed;right:10px;top:200px;">
+	<img src="http://oc2.xiaoma.com//img/upload/53kf/zdytb/on_53kf1407116979.png" onclick="window.open('index_03.html', '_blank', 'height=573, width=803, top=200, left=200, status=yes, toolbar=no, menubar=no, resizable=yes, scrollbars=no, location=no, titlebar=no')" style="cursor:pointer" />
+    <img style="position:absolute;right:0px;top:0px;cursor:pointer;" src="http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif" onclick="iconType=2;hiddenKfbox();">
 </div>
+
+<script type="text/javascript">
+if(!Array.prototype.map){
+	Array.prototype.map = function(fn,scope) {
+  		var result = [],ri = 0;
+  		for (var i = 0,n = this.length; i < n; i++){
+			if(i in this){
+	  			result[ri++]  = fn.call(scope ,this[i],i,this);
+			}
+  		}
+		return result;
+	};
+}
+var getWindowSize = function(){
+	return ["Height","Width"].map(function(name){
+  		return window["inner"+name] ||
+		document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
+	});
+}
+window.onload = function (){
+	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
+	  document.body.onresize = resize;
+	  document.body.onscroll = resize;
+	} else { 
+	  window.onresize = resize;
+	  window.onscroll = resize;
+	}
+	function resize() {
+		findDimensions();
+		return false;
+	}
+	resize();
+}
+function findDimensions(){
+	// 这是一字符串
+	var winStr=getWindowSize();
+	var winStrs= new Array();
+	winStrs=winStr.toString().split(",");
+	var winHeight = winStrs[0],
+		winWidth = winStrs[1];
+	
+	// 获取邀请框自身的宽高
+	var boxWidth = document.getElementById("w-kfcbox").offsetWidth,
+		boxHeight = document.getElementById("w-kfcbox").offsetHeight;
+	var sTop = document.documentElement.scrollTop || document.body.scrollTop;
+	
+	// 自动居中
+	document.getElementById("w-kfcbox").style.left = (winWidth-boxWidth)/2 + "px";
+	document.getElementById("w-kfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+}
+
+// 隐藏漂浮框
+function hiddenKfbox(){
+	if(iconType == 1){
+		document.getElementById("w-kfcbox").style.display = "none";
+	}else if(iconType == 2){
+		document.getElementById("w-kfrbox").style.display = "none";
+	}else if(iconType == 3){
+		document.getElementById("w-mkfcbox").style.display = "none";
+	}
+	
+}
+</script>
+
 
 
 <br />

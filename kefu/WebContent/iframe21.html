@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="author" content="dobao">
+<title>手机端漂浮窗--客服信息管理系统</title>
+<link rel="icon" href="favicon.ico">
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
+<link href="css/app.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="w-mkfcbox" style="position:absolute;left:0px;top:0px;z-index:7998;overflow:hidden;">
+	<div id="w-mkfbox-cnt" style="position:relative;z-index:0;overflow:hidden;">
+    	<img id="w-mkfcbox-img" style="width:80%;cursor:pointer;" src="http://pics2.xiaoma.com/xiaoma/m/gw/images/big_alert.gif" onclick="window.open('index_03.html', '_blank', 'height=573, width=803, top=200, left=200, status=yes, toolbar=no, menubar=no, resizable=yes, scrollbars=no, location=no, titlebar=no')" alt="" />
+        <div style="position:absolute;right:10px;top:10px;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;overflow:hidden;" onclick="iconType=3;hiddenKfbox();"></div>
+    </div>
+</div>
+
+<div id="w-mkfrbox" style="position:fixed;right:0px;top:200px;width:32px;height:109px;z-index:7999;overflow:hidden;">
+	<div id="w-mkfrbox-cnt" style="width:32px;height:109px;background-image:url(http://oc2.xiaoma.com/new/Image/mobile/zxkf_rt/serv_rt3.png);background-repeat:no-repeat;z-index:9001;cursor:pointer;overflow:hidden;" onclick="window.open('index_03.html', '_blank', 'height=573, width=803, top=200, left=200, status=yes, toolbar=no, menubar=no, resizable=yes, scrollbars=no, location=no, titlebar=no')"></div>
+</div>
+
+<script type="text/javascript">
+if(!Array.prototype.map){
+	Array.prototype.map = function(fn,scope) {
+  		var result = [],ri = 0;
+  		for (var i = 0,n = this.length; i < n; i++){
+			if(i in this){
+	  			result[ri++]  = fn.call(scope ,this[i],i,this);
+			}
+  		}
+		return result;
+	};
+}
+var getWindowSize = function(){
+	return ["Height","Width"].map(function(name){
+  		return window["inner"+name] ||
+		document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
+	});
+}
+window.onload = function (){
+	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
+	  document.body.onresize = resize;
+	  document.body.onscroll = resize;
+	} else { 
+	  window.onresize = resize;
+	  window.onscroll = resize;
+	}
+	function resize() {
+		findDimensions();
+		return false;
+	}
+	resize();
+}
+function findDimensions(){
+	// 这是一字符串
+	var winStr=getWindowSize();
+	var winStrs= new Array();
+	winStrs=winStr.toString().split(",");
+	var winHeight = winStrs[0],
+		winWidth = winStrs[1];
+	
+	// 获取图片的宽高
+	var imgWidth = document.getElementById("w-mkfcbox-img").offsetWidth,
+		imgHeight = document.getElementById("w-mkfcbox-img").offsetHeight;
+	
+	// 设置邀请框外层宽高
+	var boxWidth = document.getElementById("w-mkfcbox").style.width = imgWidth,
+		boxHeight = document.getElementById("w-mkfcbox").style.height = imgHeight,
+		iconHeight = document.getElementById("w-mkfrbox").style.height;
+		document.getElementById("w-mkfcbox").style.width = imgWidth + "px";
+		document.getElementById("w-mkfcbox").style.height = imgHeight + "px";
+		document.getElementById("w-mkfcbox-img").style.width = 100 + "%";
+	var sTop = document.documentElement.scrollTop || document.body.scrollTop;
+	
+	// 自定居中
+	document.getElementById("w-mkfcbox").style.left = (winWidth-boxWidth)/2 + "px";
+	document.getElementById("w-mkfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+	document.getElementById("w-mkfrbox").style.top = ((winHeight-imgHeight)/2) + "px";
+}
+
+// 隐藏漂浮框
+function hiddenKfbox(){
+	if(iconType == 1){
+		document.getElementById("w-kfcbox").style.display = "none";
+	}else if(iconType == 2){
+		document.getElementById("w-kfrbox").style.display = "none";
+	}else if(iconType == 3){
+		document.getElementById("w-mkfcbox").style.display = "none";
+	}
+}
+</script>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+</body>
+</html>
