@@ -13,3 +13,5 @@
 	   <span class="u-close" onclick="javascript:endDialogue('${dq.ccnId }')">x</span>
 	</li>
 </c:forEach>
+
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>

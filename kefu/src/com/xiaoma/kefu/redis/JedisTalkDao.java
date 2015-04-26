@@ -112,7 +112,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis zadd key:" + key +" value: "+ ccnId);
 
-		return (id > 0);
+		return (id >= 0);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis zadd key:" + key +" value: "+ ccnId);
 		
-		return (id > 0);
+		return (id >= 0);
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis zadd key:" + key +" value: "+ opeCcnId);
 
-		return (id > 0);
+		return (id >= 0);
 	}
 
 	public static Boolean remCcnReceiveList(String ccnId, String opeCcnId) {
@@ -433,7 +433,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis rpush key:" + key +" value: "+ message);
 
-		return (id > 0);
+		return (id >= 0);
 	}
 
 	public static Boolean delDialogueList(String uccnId, String cccnId) {
@@ -471,7 +471,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis lpush key:" + JedisConstant.SAVE_DIALOGUE_LIST +" value: "+ value);
 
-		return (id > 0);
+		return (id >= 0);
 	}
 
 	// ######################
@@ -489,7 +489,7 @@ public class JedisTalkDao {
 		
 		logger.info("redis zadd key:" + JedisConstant.OFF_LINE_USER_SET +" value: "+ userId);
 
-		return (id > 0);
+		return (id >= 0);
 	}
 	
 	public static Boolean remOffLineUserSet(String userId){
@@ -500,7 +500,14 @@ public class JedisTalkDao {
 		
 		logger.info("redis zrem key:" + JedisConstant.OFF_LINE_USER_SET +" value: "+ userId);
 
-		return (id > 0);
+		return (id >= 0);
+	}
+	
+	public static Boolean isInOffLineUserSet(String userId){
+		Jedis jedis = JedisDao.getJedis();
+		Double score = jedis.zscore(JedisConstant.OFF_LINE_USER_SET, userId);
+		
+		return (score != null);
 	}
 	// ######################
 	public static Boolean setDialogueScore(String key, DialogueScore dScore){
@@ -577,5 +584,6 @@ public class JedisTalkDao {
 		result.removeAll(getOffLineUserSet());
 		return result;
 	}
+	
 
 }

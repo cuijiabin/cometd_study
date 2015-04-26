@@ -270,7 +270,7 @@
 		}
 		
 		function switchCustomer(data){
-			alert("后台用户切换！");
+			//alert("后台用户切换！");
 		}
 		
 		// 用户下线通知(**)
