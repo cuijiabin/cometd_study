@@ -23,7 +23,7 @@
         <li><i>&gt;</i>详情</li>
     </ul>
 </div>
-
+<div style="margin:50px">
 <div class="g-bd6 f-cb f-mar20">
     <div class="g-sd6 c-bor">
         <h3 class="u-tit c-bg">聊天记录时间线</h3>
@@ -41,11 +41,9 @@
 				<jsp:include page="talkDetailCommon.jsp"></jsp:include>
 			</div>
         </div>
-    </div>
-    
-    
+    </div>  
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>

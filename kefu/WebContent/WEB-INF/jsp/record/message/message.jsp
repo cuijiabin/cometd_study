@@ -23,6 +23,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <div class="m-query f-mar10">
 	<div class="m-query-hd">
         <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
@@ -40,6 +41,7 @@
 
 <div id="table_data">
 	<jsp:include page="messageList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

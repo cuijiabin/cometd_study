@@ -212,7 +212,7 @@
 					updateCustomerList();//转接给其他客服
 					break;
 				case 'on_switch_to':
-					updateCustomerList();//被客服转接
+					onSwitchToNotice();//被客服转接
 					break;
 				case 'on_open': 
 					updateCustomerList();//上线 发送更新用户列表请求
@@ -397,20 +397,6 @@
 		
 	}
 	
-	function switchCustomer1(remark,toUserId){
-		if (!JS.Engine.running)
-			return;
-		remark = remark.trim();
-		if (!remark)
-			return;
-		var ccnId = JS.Engine.getId();
-		var customerId = $("#currentCustomerId").val();
-		var customerCcnId = $("#currentCcnId").val();
-		var param = "ccnId="+ccnId+'&customerId='+customerId+'&customerCcnId='+customerCcnId+'&remark='+remark+'&toUserId='+toUserId;
-		JS.AJAX.post('/chat/switchDialogue.action', param, function() {
-		});
-	}
-	
 	//添加访客信息 (**) 不是很全
 	function addCustomerInfo(){
 		var customerId = $("#currentCustomerId").val();
@@ -477,7 +463,7 @@
 		inputbox.focus();
 	}
 	
-	//客服转接对话框
+	//客服转接对话框(**)
 	function switchCustomer(){
 		var customerId = $("#currentCustomerId").val();
 		
@@ -489,36 +475,57 @@
 			    url: "/dialogue/switchList.action?customerId="+customerId,
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "html",
-			    success: function (data) {
-			    	$.dialog({
-						content:data,
-						title:"客服转接",
-						width: 400,
-						height: 300,
-						id:'editBlackList',
-						button: [
-							        {
-							            name: '确定',
-							            callback: function () {
-							            	var switchUserId = $("#switchUserId").val();
-							        		var switchContent = $("#switchContent").val();
-							        		alert(switchContent+" ,== "+switchUserId);
-							        		switchCustomer1(switchContent,switchUserId);
-							            },
-							            focus: true
-							        },
-							        {
-							            name: '取消',
-							            callback: function () {
-							            }
-							        }
-							    ]});
+			    success: function (content) {
+			    	
+			    	switchCustomerPop(content);
 			    },
 			    error: function () {
 			    	$.dialog.alert("获取转接客户失败！");
 			    }
 			});
 		}
+	}
+	
+	function switchCustomerPop(content){
+		$.dialog({
+			id: 'switchCustomerPop',
+			content:content,
+			title:"客服转接",
+			width: 400,
+			height: 300,
+			id:'editBlackList',
+			button: [
+				        {
+				            name: '确定',
+				            callback: function () {
+				            	var switchUserId = $("#switchUserId").val();
+				        		var switchContent = $("#switchContent").val();
+				        		realSwitchCustomer(switchContent,switchUserId);
+				            },
+				            focus: true
+				        },
+				        {
+				            name: '取消',
+				            callback: function () {
+				            }
+				        }
+				    ]});
+	}
+	
+	//后台转接客户(**)
+	function realSwitchCustomer(remark,toUserId){
+		if (!JS.Engine.running)
+			return;
+		remark = remark.trim();
+		if (!remark)
+			return;
+		var ccnId = JS.Engine.getId();
+		var customerId = $("#currentCustomerId").val();
+		var customerCcnId = $("#currentCcnId").val();
+		var param = "ccnId="+ccnId+'&customerId='+customerId+'&customerCcnId='+customerCcnId+'&remark='+remark+'&toUserId='+toUserId;
+		JS.AJAX.post('/chat/switchDialogue.action', param, function() {
+			alert("客户转接成功！");
+		});
 	}
 	
 	//阻止访客提示(**)
@@ -589,6 +596,28 @@
 		    }
 		});
 	}
+	
+	//被转接通知
+	function onSwitchToNotice(){
+		var str = ['<div class="r-offline"><span class="alert alert-info">',
+		           '2015-01-02 10:53:04','<br>',
+		           'CC','将编号',
+		           '李同学','的对话转接给您<br>','</span></div>'];
+		logbox.innerHTML += str.join('');
+		updateCustomerList();
+	}
+	
+	
+	//用户上下线操作
+	$( ".c-wdat" ).change(function() {
+		if (!JS.Engine.running)
+			return;
+		var userCcnId = JS.Engine.getId();
+		var param = "userCcnId="+userCcnId;
+		JS.AJAX.post('/chat/userOnLine.action', param, function() {
+		});
+		
+	 });
 	
 </script>
 <script type="text/javascript">

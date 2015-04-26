@@ -68,4 +68,19 @@ public class InviteElementDaoImpl extends BaseDaoImpl<InviteElement> implements 
 		}
 		return	result;
 	}
+	
+	/**
+	 * 获取邀请框的第一个元素, 就是外框
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月26日
+	 */
+	public InviteElement findFirstEle(Integer inviteId){
+		Session session = getSession();
+		String hql = "from InviteElement t where t.inviteId = :inviteId order by t.createDate ";
+		Query query = session.createQuery(hql).setFirstResult(0).setMaxResults(1);
+		query.setInteger("inviteId", inviteId);
+		return	(InviteElement) query.uniqueResult();
+	}
 }

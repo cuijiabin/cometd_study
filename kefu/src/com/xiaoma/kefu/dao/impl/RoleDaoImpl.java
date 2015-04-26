@@ -32,6 +32,11 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 				role.add(Restrictions.like("name", "%"
 						+ conditions.get("name").trim() + "%"));
 			}
+			if (StringHelper.isNotEmpty(conditions.get("id"))
+					&& !"0".equals(conditions.get("id"))) {
+				role.add(Restrictions.ne("id",
+						Integer.parseInt(conditions.get("id"))));
+			}
 		}
 		role.add(Restrictions.eq("isDel", 0));
 		orders.add(Order.desc("createDate"));
@@ -45,7 +50,7 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 	public Integer getAllRoleCount() {
 
 		Session session = getSession();
-		String hql = "select count(1) from Role where isDel<>1 ";
+		String hql = "select count(1) from Role where isDel<>1 and id <>1";
 		Query query = session.createQuery(hql);
 		return ((Number) query.uniqueResult()).intValue();
 
@@ -59,7 +64,7 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 		offset = (offset == null) ? 20 : offset;
 
 		Session session = getSession();
-		String hql = "from Role where isDel<>1 order by id asc";
+		String hql = "from Role where isDel<>1 and id<>1 order by id asc";
 		Query query = session.createQuery(hql).setFirstResult(start)
 				.setMaxResults(offset);
 
@@ -70,7 +75,7 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 	public Integer checkRole(Role role) {
 		Session session = getSession();
 		StringBuffer hqlBf = new StringBuffer(
-				"select count(a.id) from Role a where a.isDel<>1");
+				"select count(a.id) from Role a where a.isDel<>1 and a.id<>1");
 		if (StringUtils.isNotBlank(role.getName())) {
 			hqlBf.append(" and a.name  = '" + role.getName() + "' ");
 		}
@@ -83,7 +88,7 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 	@Override
 	public List<Role> findRole() {
 		Session session = getSession();
-		String hql = "from Role where isDel<>1 ";
+		String hql = "from Role where isDel<>1 and id<>1";
 		Query query = session.createQuery(hql);
 		return query.list();
 	}

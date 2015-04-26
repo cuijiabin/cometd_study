@@ -23,6 +23,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <div class="m-query f-mar10" style="height: 30px">
     <div style="float:right;margin-right: 30px;height: 24px">
        <button type="button" class="btn btn-primary btn-small" onclick="add();">添加风格</button>
@@ -31,6 +32,7 @@
 
 <div id="table_data">
 	<jsp:include page="styleList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -67,7 +69,7 @@ function add(){
 // 	return;
 	$.dialog({content:'url:/style/edit.action',
 		id: 'add',
-		width: 400,height: 80,
+		width: 400,height: 180,
 		title:'添加风格'
 	});
 }
@@ -84,7 +86,7 @@ function editCallback(){
 function rename(id){
 	$.dialog({content:'url:/style/edit.action?styleId='+id,
 		id: 'edit',
-		width: 400,height: 80,
+		width: 400,height: 180,
 		title:'重命名风格'
 	});
 }

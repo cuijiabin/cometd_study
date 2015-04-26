@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.dao.StyleDao;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
-import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.util.PageBean;
@@ -68,18 +68,6 @@ public class StyleService {
 	}
 	
 	/**
-	 * 创建风格
-	* @Description: TODO
-	* @param style
-	 * @return 
-	* @Author: wangxingfei
-	* @Date: 2015年4月13日
-	 */
-	public Integer create(Style style) {
-		return (Integer) styleDaoImpl.add(style);
-	}
-	
-	/**
 	 * 更新风格
 	* @Description: TODO
 	* @param style
@@ -114,6 +102,7 @@ public class StyleService {
 	 */
 	public Integer initStyle(Style style) {
 		//创建风格
+		style.setCreateDate(new Date());
 		Integer num = (Integer) styleDaoImpl.add(style);
 		Integer styleId = style.getId();
 		
@@ -133,13 +122,7 @@ public class StyleService {
 		serviceIconService.create(serviceIcon);
 		
 		//对话邀请框PC
-		InviteIcon inviteIcon = new InviteIcon();
-		inviteIcon.setStyleId(styleId);
-		inviteIcon.setDeviceType(DeviceType.PC.getCode());
-		inviteIcon.setLocationMode(2);//默认自动居中
-		buttonId = Integer.valueOf(styleId+""+StyleIconType.对话邀请框.getCode());
-		inviteIcon.setButtonId(buttonId);
-		inviteIconService.create(inviteIcon);
+		inviteIconService.initInviteIcon(styleId,DeviceType.PC);
 		
 		//客服图标-移动
 		serviceIcon = new ServiceIcon();
@@ -152,13 +135,7 @@ public class StyleService {
 		serviceIconService.create(serviceIcon);
 		
 		//对话邀请框-移动
-		inviteIcon = new InviteIcon();
-		inviteIcon.setStyleId(styleId);
-		inviteIcon.setDeviceType(DeviceType.移动.getCode());
-		inviteIcon.setLocationMode(2);//默认自动居中
-		buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端对话邀请框.getCode());
-		inviteIcon.setButtonId(buttonId);
-		inviteIconService.create(inviteIcon);
+		inviteIconService.initInviteIcon(styleId,DeviceType.移动);
 		
 		//分配机制
 		AllotRule allotRule = new AllotRule();

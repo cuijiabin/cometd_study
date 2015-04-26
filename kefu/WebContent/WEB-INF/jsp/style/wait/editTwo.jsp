@@ -7,7 +7,7 @@
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 
-
+<div style="margin:50px">
  <div class="f-txtr">
      <button type="submit" class="btn btn-primary" onclick="addTwo();">添加</button>
  </div>
@@ -36,7 +36,7 @@
      <button type="submit" class="btn" onclick="cancel();">关闭</button>
  </div>
 
-
+</div>
 <script type="text/javascript">
 
 var api = frameElement.api;//调用父页面数据  

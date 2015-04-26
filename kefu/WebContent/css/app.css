@@ -342,7 +342,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 /* 登录页 */
 .m-login{width:690px;height:600px;margin:0 auto;background:#dfdfdf url(../img/login_main_bg.png) no-repeat;}
 .m-login-info{float:left;width:200px;height:40px;margin:300px 0 0 100px;_margin-left:100px;line-height:40px;text-align:center;color:#f00;}
-.m-login .form_info{float:right;display:inline;width:250px;height:150px;margin:200px 100px 0 0;}
+.m-login .form_info{float:right;display:inline;width:440px;height:150px;margin:200px -100px 0 0;}
 .m-login .field{margin:10px;}
 .m-login .field label{float:left;padding:6px;margin-bottom:0;line-height:15px;font-size:12px;}
 .m-login .field input.text{width:169px;height:15px;padding:6px;margin-bottom:0;background:url(../img/field_text_bg.jpg) repeat-x left center;border:1px solid #c5c5c5;}
@@ -355,6 +355,9 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .g-sd6{position:relative;float:left;width:188px;margin-right:-190px;background:#fff;}
 .g-mn6{float:right;width:100%;}
 .g-mn6c{margin-left:200px;}
+
+.g-bd6-2 .g-sd6{width:278px;margin-right:-280px;}
+.g-bd6-2 .g-mn6c{margin-left:290px;}
 
 /* 聊天记录时间线 */
 .m-recordtime{margin-bottom:0;padding:10px 0;overflow-y:scroll;}
@@ -384,8 +387,16 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .m-group-member{padding:10px;overflow:hidden;}
 .m-tag,.m-tag li{margin:0;padding:0;list-style:none;}
 .m-tag{min-height:26px;}
-.m-tag li{position:relative;float:left;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;background-color:#dae4f6;color:#222;font-family:Arial,\5b8b\4f53;border:1px solid #dae4f6;line-height:23px;padding:0 19px 0 5px;margin:2px;cursor:default;}
+.m-tag1{display:inline-block;margin-bottom:0;}
+.m-tag1 span label{margin-bottom:0;font-size:12px;}
+.m-tag1 td{border:0;}
+.m-tag li,.m-tag1 span{position:relative;float:left;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;background-color:#dae4f6;color:#222;font-family:Arial,\5b8b\4f53;border:1px solid #dae4f6;line-height:23px;padding:0 19px 0 5px;margin:2px;cursor:default;}
 .m-tag li .u-close{display:block;position:absolute;right:3px;top:4px;width:12px;height:13px;text-align:center;line-height:16px;font-size:17px;font-weight:700;color:#444;outline:none;cursor:pointer;}
+
+/* 设置字段 */
+.m-field{width:600px;}
+.m-field h3{margin:0 auto;padding:0;text-align:center;font-size:14px;overflow:hidden;}
+.m-field p{padding:0 10px;margin-bottom:0;line-height:30px;border:solid #d9d9d9;border-width:1px 0;}
 
 /*========== 访客移动端对话框架 ==========*/
 .m-mob-hd{position:fixed;top:0;left:0;width:100%;height:auto;line-height:43px;text-align:center;background:#333;border-bottom:2px solid #606060;z-index:110;}
@@ -570,8 +581,11 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .u-hr{height:10px;margin-top:10px;border-top:1px solid #bbb;}
 .c-bg{background:#fafafa;background-image:-moz-linear-gradient(top, #ffffff, #ededed);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ededed));background-image:-webkit-linear-gradient(top, #ffffff, #ededed);background-image:-o-linear-gradient(top, #ffffff, #ededed);background-image:linear-gradient(to bottom, #ffffff, #ededed);background-repeat:repeat-x;filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);}
 .c-bor{border:1px solid #d9d9d9;}
+.c-bor2{border:3px dashed #f00;}
 .c-bortit{border:1px solid #d9d9d9;border-bottom-color: #2e6da8;}
 .c-bgfff{background:#fff !important;}
+.c-bgtwinkle{background:url(/img/icon_twinkle.gif) !important;}
+.c-bgtwinkle p{color:#fff !important;}
 .c-colf00{color:#f00 !important;}
 .u-txt{font-size:12px;color:#333;}
 .u-txt a{text-decoration:none;}

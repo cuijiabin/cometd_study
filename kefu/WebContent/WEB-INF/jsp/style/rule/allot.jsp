@@ -25,8 +25,8 @@
     </ul>
 </div>
 
-
-<div class="g-cnt">
+<div style="margin:50px">
+<div class="g-cnt" style="width:900px">
     <div class="f-padd10">
     	<form id="mainForm" method="post">
     		<input type="hidden" id="id" name="id" value="${rule.id}"/>
@@ -73,7 +73,7 @@
         </div>
     </div>  
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>

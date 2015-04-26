@@ -214,7 +214,7 @@ public class ChatCometController {
         JedisTalkDao.lpushSaveDialogue(key);
 		
         //添加到离线客户列表
-        JedisTalkDao.addOffLineUserSet(uId);
+//        JedisTalkDao.addOffLineUserSet(uId);
         
         //修改接待列表
         JedisTalkDao.remCcnReceiveList(ccnId, customerCcnId);
@@ -355,6 +355,26 @@ public class ChatCometController {
         
         JedisTalkDao.setDialogueScore(key, dialogue);
         
+	}
+	
+	@RequestMapping(value = "userOnLine.action", method = RequestMethod.POST)
+	public void userOnLine(HttpServletRequest request,HttpServletResponse response, String userCcnId){
+		
+		logger.info("userOnLine param userCcnId: "+userCcnId);
+		//参数检查
+		if(StringUtils.isBlank(userCcnId)){
+			logger.warn("socreDialogue param is illegal!");
+			return ;
+		}
+		
+		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCcnId);
+		Boolean isOnline = JedisTalkDao.isInOffLineUserSet(userId);
+		if(isOnline){
+			JedisTalkDao.addOffLineUserSet(userId);
+		}else{
+			JedisTalkDao.remOffLineUserSet(userId);
+		}
+		
 	}
 	
 }

@@ -7,7 +7,7 @@
 	src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript" src="/js/app.js"></script>	
 <!-- 表格有边框 -->
-
+<div style="margin:50px">
 <form id="mainForm" enctype="multipart/form-data" method="post">
 	<input type="hidden" id="id" name="id" value="${inviteElement.id }"/>
 	<input type="hidden" id="inviteId" name="inviteId" value="${inviteElement.inviteId }" />
@@ -15,7 +15,7 @@
 		<tbody>
 			<tr>
 				<td class="f-txtl" colspan="2"><b class="c-colf00">（${inviteElement.sortId }）</b> <span id="spanName">${inviteElement.name }</span>
-					<c:if test="${inviteElement.id != null }">
+					<c:if test="${inviteElement.id != null && inviteElement.sortId !=1 }">
 						<button type="button" class="btn btn-primary btn-small" onclick="updateName(${inviteElement.id })">修改名称</button>
 					</c:if>
 				</td>
@@ -72,7 +72,7 @@
     	<button type="button" class="btn btn-primary btn-small">刷新预览图</button>
 	</c:if>
 </div>
-
+</div>
 
 <script type="text/javascript">
 

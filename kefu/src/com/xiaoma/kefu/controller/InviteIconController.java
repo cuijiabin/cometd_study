@@ -105,13 +105,7 @@ public class InviteIconController {
 	public String savePC(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
-//			//补充字段
-			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
-			inviteIcon.setCreateDate(oldModel.getCreateDate());
-			inviteIcon.setTruePic(oldModel.getTruePic());
-			inviteIcon.setButtonId(oldModel.getButtonId());
-			inviteIcon.setUpdateDate(new Date());
-			inviteIconService.update(inviteIcon);
+			inviteIconService.saveAndUpdateDiv4PC(inviteIcon);
 		} catch (Exception e) {
 			logger.error("savePC"+inviteIcon.getId(), e);
 			return "error500";

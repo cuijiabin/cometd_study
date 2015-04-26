@@ -14,7 +14,7 @@
 </head>
 
 <body>
-<h3>	留言详情	</h3>
+<div style="margin:50px">
 <table class="table table-bordered m-table">
     <tbody>
         <tr>
@@ -55,5 +55,6 @@
         </tr>
     </tbody>
 </table>
+</div>
 </body>
 </html>

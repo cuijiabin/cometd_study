@@ -16,6 +16,7 @@
 <body>
 
 <!-- 表格有边框 -->
+<div style="margin:50px">
 <form id="mainForm">
 <table class="table table-bordered m-table">
     <tbody>
@@ -31,7 +32,7 @@
         </tr>
     </tbody>
 </table>
-                    
+ </div>                  
 </form>
 
 

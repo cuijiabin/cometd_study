@@ -43,7 +43,9 @@ function find(currentPage){
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
-			"map[typeId]":1
+			"map[typeId]":1,
+			"map[id]":1,
+			
 	};
 	$.ajax({
 	    type: "get",

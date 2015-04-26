@@ -222,9 +222,12 @@ public class StyleController {
 		res.setContentType("text/plain");
 	    String callbackFunName =req.getParameter("callbackIcon");//得到js函数名称
 	    String styleId = req.getParameter("styleId");
-//	    String strDiv = serviceIconService.getDivByStyleId(Integer.valueOf(styleId),DeviceType.PC);
 	    try {
-	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPC,styleId);
+//	    	String isOnLine = CacheMan.getObject("是否有人在线", styleId);
+	    	
+	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+	    	logger.info(CacheName.DIVICONPCON+"="+strDiv);
+//	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
 	    	logger.error("获取图标div出错,风格id="+styleId,e);
@@ -235,16 +238,12 @@ public class StyleController {
 	public void getDialogueDiv(Model model,HttpServletRequest req,HttpServletResponse res){
 		res.setContentType("text/plain");
 	    String callbackFunName =req.getParameter("callbackDialogue");//得到js函数名称
-	    
-	    String str = " <div id='w-kfcbox' style='position:fixed;top:300px;left:611px;display:block;overflow:hidden;width:680px;height:380px;z-index:7998;'> "
-	    		+ " <div id='w-kfbox-cnt' style='position:relative;overflow:hidden;width:680px;height:380px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1429507915.png);background-repeat:no-repeat;z-index:0;'>  "
-	    		+ " <div style='position:absolute;left:669px;top:0px;overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;'></div>  "
-	    		+ "     	<div style='position:absolute;left:0px;top:0px;overflow:hidden;width:680px;height:380px;z-index:1;cursor:pointer;'></div> "
-	    		+ " </div> </div>"
-	    		;
+	    String styleId = req.getParameter("styleId");
 	    
 	    try {
-	        res.getWriter().write(callbackFunName + "([ { name:\""+str+"\"}])"); //返回jsonp数据
+	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEPC,styleId);
+	    	logger.info(CacheName.DIVINVITEPC+"="+strDiv);
+	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

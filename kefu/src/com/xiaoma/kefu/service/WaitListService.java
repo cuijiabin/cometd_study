@@ -1,12 +1,19 @@
 package com.xiaoma.kefu.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.controller.AllotRuleController;
 import com.xiaoma.kefu.dao.WaitListDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.WaitList;
@@ -22,7 +29,7 @@ import com.xiaoma.kefu.util.StringHelper;
  */
 @Service
 public class WaitListService {
-
+	private Logger logger = Logger.getLogger(WaitListService.class);
 	@Autowired
 	private WaitListDao waitListDaoImpl;
 
@@ -185,11 +192,67 @@ public class WaitListService {
 	 * @return
 	 */
 	public List<WaitList> findListById(String id) {
-		String [] str ;
-		if(StringHelper.isEmpty(id) || (str = id.split("_")).length<2){
-			return null;
+		List<WaitList> list;
+		try {
+			String [] str ;
+			if(StringHelper.isEmpty(id) || (str = id.split("_")).length<2){
+				return null;
+			}
+			list = waitListDaoImpl.findListById(
+					Integer.parseInt(str[0]), Integer.parseInt(str[1]));
+			if(list == null || list.size() < 12){
+				List<WaitList> l = new ArrayList<WaitList>();
+				int n =  Integer.parseInt(str[1])==0?12:9;
+				int num = list == null?n:n-list.size();
+				for(int i=0;i<num;i++){
+					WaitList w = new WaitList();
+					w.setId(99999);
+					l.add(w);
+				}
+				list.addAll(l);
+			}
+			return list;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
-		return waitListDaoImpl.findListById(Integer.parseInt(str[0]),Integer.parseInt(str[1]));
+		return null;
+	}
+	
+	
+	public static void main(String [] args){
+		Queue<String> q = new LinkedList<String>();
+		q.offer("1");
+		q.offer("2");
+		q.offer("3");
+		q.offer("4");
+		q.offer("5");
+		CacheMan.add("asdasd",1, q);
+		Queue<String> qq = (Queue<String>)CacheMan.getObject("asdasd", 1);
+		for (String string : qq){  
+            System.out.println(string);  
+        } 
+		System.out.println("==========删除一个==========");
+		String s = q.poll();
+		System.out.println("==========取出的一个=========="+s);
+		for (String string : q){  
+			System.out.println(string);  
+		} 
+		CacheMan.update("asdasd",1, qq);
+		qq = (Queue<String>)CacheMan.getObject("asdasd", 1);
+		System.out.println("==========又删除一个==========");
+		q.poll();
+		for (String string : qq){  
+			System.out.println(string);  
+		} 
+		System.out.println("==========增加一个1==========");
+		q.offer("1");
+		for (String string : q){  
+			System.out.println(string);  
+		} 
+		System.out.println("==========删除一个5==========");
+		for (String string : q){  
+			System.out.println(string);  
+		} 
 	}
 
 }

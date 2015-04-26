@@ -24,6 +24,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <div class="m-query f-mar10">
 	<div class="m-query-bd">
 	    <div class="f-mbm">
@@ -62,6 +63,7 @@
 
 <div id="table_data">
 	<jsp:include page="talkRecycleList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

@@ -14,7 +14,7 @@
 </head>
 
 <body>
-
+<div style="margin:50px">
 <div class="g-cnt f-padd20">
 	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9;">
         <div class="f-txtr">
@@ -48,7 +48,7 @@
 		</div>
     </div>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -88,7 +88,7 @@ function add(){
 		content:'url:/waitList/add.action?styleId='+'${styleId}',
 		lock:true,
 		parent:api,
-		width: 400,height: 100,
+		width: 400,height: 160,
 		title:'添加一级菜单'
 	});
 }
