@@ -92,9 +92,9 @@ function _MP(menuid,targetUrl){
 	});
 })(jQuery);
 
-// 调用浏览器窗口
+// 调用客户端对话窗口
 function openwin(openHtml,i,j){
-	window.open(""+openHtml+"", "newwindow", "width="+i+", height="+j+", toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no, top=200, left=200");
+	window.open(openHtml, "_blank", "width="+i+", height="+j+", top=200, left=200, status=yes, toolbar=no, menubar=no, resizable=yes, scrollbars=no, location=no, titlebar=no");
 }
 </script>
 </body>
