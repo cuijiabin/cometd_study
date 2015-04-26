@@ -24,6 +24,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <div class="m-query f-mar10">
 	<div class="m-query-hd">
 		<label>栏目：</label>
@@ -58,6 +59,7 @@
 
 <div id="table_data">
 	<jsp:include page="operateLogList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

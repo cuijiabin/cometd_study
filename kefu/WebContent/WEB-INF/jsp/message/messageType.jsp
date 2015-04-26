@@ -21,6 +21,7 @@
         <li><i>&gt;</i>公共常用语分类</li>
     </ul>
 </div>
+<div style="margin:50px">
 <div class="g-cnt">
 	<input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
@@ -47,7 +48,7 @@
 		</div>
 	</div>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -68,10 +69,10 @@
 	 */
   function addMessageType(){
 
-	var treeId = $("#typeId").val()==1 ? 1:13;
-	var tyd = $("#typeId").val();
- 	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
- 			lock:true, width:	600,height: 400});
+	var treeId = id;
+	var tyd = typeId;
+	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
+			lock:true, width:	600,height: 360});
 }
 	//以下参数设置的是默认值
   	var id =  1;   //设置树节点ID默认为1
@@ -86,7 +87,7 @@
  function updateMessageType(){
 
 	var d = $.dialog({id:'updateMessageType' ,title:"编辑分类信息",content:'url:/messageType/toUpdate.action?treeId='+$("#messageTypeId").val(),
-			lock:true, width:	600,height: 400});
+			lock:true, width:	600,height: 360});
  }
 	/**
 	 * 删除

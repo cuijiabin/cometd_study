@@ -24,7 +24,7 @@
 </div>
 
 <!-- 表格有边框 -->
-<div style="margin:30px">
+<div style="margin:40px">
 <a href="/user/find.action?map[status]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2"style="font-size:18px">离职员工</a>
 <button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
 

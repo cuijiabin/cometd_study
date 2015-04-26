@@ -15,6 +15,7 @@
 
 <body>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <h3 class="u-tit c-bg">配置显示字段</h3>
 <table class="table table-bordered table-striped table-hover m-table">
 	<thead>
@@ -38,7 +39,7 @@
 	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
 	<button type="reset" class="btn" id="btn_cancel">取消</button>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>

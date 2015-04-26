@@ -7,7 +7,7 @@
 	src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript" src="/js/app.js"></script>	
 <!-- 表格有边框 -->
-
+<div style="margin:50px">
 <form id="mainForm" enctype="multipart/form-data" method="post">
 	<input type="hidden" id="id" name="id" value="${inviteElement.id }"/>
 	<input type="hidden" id="inviteId" name="inviteId" value="${inviteElement.inviteId }" />
@@ -72,7 +72,7 @@
     	<button type="button" class="btn btn-primary btn-small">刷新预览图</button>
 	</c:if>
 </div>
-
+</div>
 
 <script type="text/javascript">
 

@@ -16,6 +16,7 @@
 <body>
 
 <!-- 表格有边框 -->
+<div style="margin:50px">
 <form id="mainForm">
 <table class="table table-bordered m-table">
     <tbody>
@@ -51,7 +52,7 @@
                     <button type="reset" class="btn" id="btn_cancel">取消</button>
 </form>
 
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>

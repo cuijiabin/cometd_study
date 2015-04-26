@@ -24,6 +24,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
+<div style="margin:50px">
 <div class="m-query f-mar10">
     <div class="u-hr"></div>
     <div class="m-query-bd">
@@ -45,6 +46,7 @@
 
 <div id="table_data">
 	<jsp:include page="blackList.jsp"></jsp:include>
+</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -112,7 +114,7 @@
 	  * 跳转新增前的页面
 	  */
      function addBlacklist(){
-    	var d = $.dialog({title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 400,id:'addBlackList'});
+    	var d = $.dialog({title:"添加黑名单",content:'url:/blacklist/new.action',lock:true, width:	600,height: 300,id:'addBlackList'});
  }
 
     /**
@@ -120,7 +122,7 @@
     */
     function toUpdate(blacklistId){
     	var c= $.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
-    			width: 400,height: 300,id:'editBlackList'});
+    			width: 400,height: 200,id:'editBlackList'});
  }
   //全选/全不选
     function checkedAll(){

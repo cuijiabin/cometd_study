@@ -14,7 +14,6 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  	<h3  class="u-tit c-bg c-bortit">分类信息</h3>
   	<input type="hidden" id="treeId" name="treeId" value="${messageType.id }"/>
     <input type="hidden" id="pId" name="pId" value="${messageType.pId }"/>
     <div style="margin:50px;">

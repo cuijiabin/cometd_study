@@ -27,7 +27,7 @@
         <li><i>&gt;</i>样式设置</li>
     </ul>
 </div>
-
+<div style="margin:50px">
 <div class="g-cnt">
     <div class="m-query f-mar10">
         <div class="m-query-hd">
@@ -68,7 +68,7 @@
         </table>
     </div>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
