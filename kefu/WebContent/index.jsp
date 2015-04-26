@@ -18,7 +18,7 @@
 			<div class="m-login-info" id="err"></div>
 			<div class="form_info">
 				<div class="field">
-					<label>工号：</label>
+					<label>工　号：</label>
 					<input type="text" name="loginName" id="loginName" class="text" size="20">
 				</div>
 				<div class="field">
@@ -34,7 +34,6 @@
 					<label></label>
 					<button class="button" style="margin-left:50px;_margin-left:48px" onclick="javascript:login();"></button>
 				</div>
-				<button onclick="relogin()">取消</button>
 			</div>
 		</div>
 	</div>

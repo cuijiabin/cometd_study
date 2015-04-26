@@ -199,7 +199,7 @@
 				stop : function(cause, url, cId, engine) {
 					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
-					findWaitList();//获取等待列表
+					findWaitList(0);//获取等待列表
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -565,9 +565,8 @@
 		    		}
 		    	});
 		}
-		findWaitList(0);//获取等待列表
+		//findWaitList(0);//获取等待列表
 		function findWaitList(id){
-			return;
 			var data = {
 					   "styleId":$("#styleId").val(),
 						"id" : id
@@ -580,7 +579,11 @@
 		    		contentType : "application/json; charset=utf-8",
 		    		async:false,
 		    		success : function(data) {
-	    				logbox.innerHTML += data;
+		    			if(id == 0){
+		    				logbox.innerHTML += "<div id='waitList'>"+data+"</div>";
+		    			}else{
+		    				$("#waitList").html(data);
+		    			}
 		    		},
 		    		error : function(msg) {
 		    			$.dialog.alert(data.msg);

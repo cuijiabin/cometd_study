@@ -342,7 +342,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 /* 登录页 */
 .m-login{width:690px;height:600px;margin:0 auto;background:#dfdfdf url(../img/login_main_bg.png) no-repeat;}
 .m-login-info{float:left;width:200px;height:40px;margin:300px 0 0 100px;_margin-left:100px;line-height:40px;text-align:center;color:#f00;}
-.m-login .form_info{float:right;display:inline;width:250px;height:150px;margin:200px 100px 0 0;}
+.m-login .form_info{float:right;display:inline;width:440px;height:150px;margin:200px -100px 0 0;}
 .m-login .field{margin:10px;}
 .m-login .field label{float:left;padding:6px;margin-bottom:0;line-height:15px;font-size:12px;}
 .m-login .field input.text{width:169px;height:15px;padding:6px;margin-bottom:0;background:url(../img/field_text_bg.jpg) repeat-x left center;border:1px solid #c5c5c5;}
