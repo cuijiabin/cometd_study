@@ -30,6 +30,11 @@ public class SysConst {
 	public static final String CHAT_CONTENT = "chatContent";
 	
 	/**
+	 * 邀请框第一个元素名称
+	 */
+	public static final String FIRST_ELEMENT_NAME = "外框";
+	
+	/**
 	 * 角色的ID
 	 * *********************************
 	* @Description: TODO
@@ -139,7 +144,10 @@ public class SysConst {
 	**********************************
 	 */
 	public enum DivFieldName{
-		top("${top}"),left("${left}");
+		top("${top}"),left("${left}"),onlinePic("${onlinePic}"),offlinePic("${offlinePic}"),
+		isDisplay("${isDisplay}"),position("${position}"),buttonId("${buttonId}"),
+		width("${width}"),height("${height}"),backgroundImg("${backgroundImg}"),
+		index("${index}"),onclick("${onclick}"),target("${target}"),openUrl("${openUrl}");
 		private String value;
 		DivFieldName(String value){
 			this.value = value;
@@ -151,13 +159,56 @@ public class SysConst {
 	
 	
 	/**
-	 * 客服图标 DIV 模板
+	 * 客服图标 DIV PC_在线 模板
 	 */
-	public static final String DIV_TEMPLATE_ICON =
-				" <div id=\\\"w-kfrbox\\\" style=\\\"position:fixed;top:200px;right:10px;\\\"> "
-				+	" <div style=\\\"position:absolute;${top};${left};overflow:hidden;width:11px;height:11px;background-image:url(http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif);background-repeat:no-repeat;z-index:2;cursor:pointer;\\\"></div> "
-				+	" <img src=\\\"http://pics2.xiaoma.com/xiaoma/sem/float/kc_rtel_05.png\\\" onclick=\\\"window.open('http://oc2.xiaoma.com/new/client.php?arg=53kf&amp;style=3&amp;l=zh-cn&amp;charset=utf-8&amp;lytype=0&amp;referer=http%3A%2F%2Fkecheng.xiaoma.com%2F&amp;isvip=bcf14bbb85a346c2fb52e8cea8822cce&amp;identifier=&amp;keyword=http%3A//kecheng.xiaoma.com/&amp;tfrom=1&amp;tpl=crystal_blue','_blank','height=573,width=803,top=200,left=200,status=yes,toolbar=no,menubar=no,resizable=yes,scrollbars=no,location=no,titlebar=no')\\\" style=\\\"cursor:pointer\\\"> "
-				+ " </div> "	
-			;
+	public static final String DIV_ICON_PC_ON =
+			" <div id=\\\"w-kfrbox\\\" style=\\\"${isDisplay};${position};${top};${left};${width};${height};\\\"> "
+			+	" <img src=\\\"${onlinePic}\\\" onclick=\\\"gotoKF('${buttonId}')\\\" style=\\\"cursor:pointer\\\" /> "
+			+	" <img style=\\\"position:absolute;right:0px;top:0px;cursor:pointer;\\\" src=\\\"http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif\\\" onclick=\\\"iconType=2;hiddenKfbox();\\\"> "
+			+ " </div> "	;
 	
+	/**
+	 * 客服图标 DIV PC_离线 模板
+	 */
+	public static final String DIV_ICON_PC_OFF =
+			" <div id=\\\"w-kfrbox\\\" style=\\\"${isDisplay};${position};${top};${left};${width};${height};\\\"> "
+			+	" <img src=\\\"${offlinePic}\\\" onclick=\\\"gotoKF('${buttonId}')\\\" style=\\\"cursor:pointer\\\" /> "
+			+	" <img style=\\\"position:absolute;right:0px;top:0px;cursor:pointer;\\\" src=\\\"http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif\\\" onclick=\\\"iconType=2;hiddenKfbox();\\\" /> "
+			+ " </div> "	;
+			
+	/**
+	 * 邀请框最顶层 模板 ,注意没有结束标签,要自己加
+	 */
+	public static final String DIV_TEMPLATE_INVITE = 
+			" <div id=\\\"w-kfcbox\\\" style=\\\"${position};${top};${left};${width};${height};z-index:7998;overflow:hidden;\\\"> " ;
+	
+	/**
+	 * 邀请框中 第一个元素(外框) 的模板 ,注意没有结束标签,要自己加
+	 */
+	public static final String DIV_TEMPLATE_ELE_FIRST =
+			" <div id=\\\"w-kfbox-cnt\\\" style=\\\"position:relative;${width};${height};background-image:url(${backgroundImg});background-repeat:no-repeat;z-index:${index};overflow:hidden;\\\" ${onclick} > " ;
+			
+	/**
+	 * 邀请框中 除第一个元素外,其他元素的模板
+	 */
+	public static final String DIV_TEMPLATE_ELE_OTHER = 
+			" <div style=\\\"position:absolute;${top};${left};${width};${height};background-image:url(${backgroundImg});background-repeat:no-repeat;z-index:${index};cursor:pointer;overflow:hidden;\\\" ${onclick} ></div> " ;
+	
+	/**
+	 * 邀请框中 元素的超链接标签
+	 */
+	public static final String DIV_TEMPLATE_ELE_A = 
+			" <a href=\\\"${openUrl}\\\" target=\\\"${target}\\\" style=\\\"cursor:pointer;text-decoration:none;\\\"> ";
+	
+	/**
+	 * div结束标签
+	 */
+	public static final String DIV_END = " </div> " ;
+	
+	/**
+	 * a结束标签
+	 */
+	public static final String A_END = " </a> " ;
+			
+
 }

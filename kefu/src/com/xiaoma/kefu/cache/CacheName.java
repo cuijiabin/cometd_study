@@ -43,9 +43,17 @@ public class CacheName {
 	//风格下面的等待列表
 	public static final String STYLEWAITLIST="STYLEWAITLIST";
 	
-	//客服图标的div格式 电脑版
-	public static final String DIVICONPC="divIconPC";
+	//客服图标的div格式 电脑版 在线
+	public static final String DIVICONPCON="divIconPCOn";
+	//客服图标的div格式 电脑版 离线
+	public static final String DIVICONPCOFF="divIconPCOff";
 	//客服图标的div格式 移动版
-	public static final String DIVICONYD="divIconYD";
+	public static final String DIVICONYDON="divIconYDOn";
+	//客服图标的div格式 移动版
+	public static final String DIVICONYDOFF="divIconYDOff";
+	//邀请框的div格式 电脑版
+	public static final String DIVINVITEPC ="divInvitePC";
+	//邀请框的div格式 移动版
+	public static final String DIVINVITEYD ="divInviteYD";
 	
 }

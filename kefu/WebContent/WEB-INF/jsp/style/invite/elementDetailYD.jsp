@@ -15,7 +15,7 @@
 		<tbody>
 			<tr>
 				<td class="f-txtl" colspan="2"><b class="c-colf00">（${inviteElement.sortId }）</b> <span id="spanName">${inviteElement.name }</span>
-					<c:if test="${inviteElement.id != null }">
+					<c:if test="${inviteElement.id != null && inviteElement.sortId !=1 }">
 						<button type="button" class="btn btn-primary btn-small" onclick="updateName(${inviteElement.id })">修改名称</button>
 					</c:if>
 				</td>

@@ -34,5 +34,14 @@ public interface InviteElementDao extends BaseDao<InviteElement>{
 	 */
 	public Integer validateName(InviteElement inviteElement);
 	
+	/**
+	 * 获取邀请框的第一个元素, 就是外框
+	* @param id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月26日
+	 */
+	public InviteElement findFirstEle(Integer inviteId);
+	
 	
 }

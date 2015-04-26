@@ -2,6 +2,7 @@ package com.xiaoma.kefu.cache;
 
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.service.FunctionService;
+import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.service.ServiceIconService;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.StringHelper;
@@ -34,10 +35,18 @@ public class CacheFactory {
 				WaitListService waitListService = (WaitListService) SpringContextUtil
 						.getBean("waitListService");
 				obj=waitListService.findListById((String)key);
-			}else if(cacheName.equals(CacheName.DIVICONPC)){
+			}else if(cacheName.equals(CacheName.DIVICONPCON)){
 				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
 						.getBean("serviceIconService");
-				obj=serviceIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.PC);
+				obj=serviceIconService.getDivOnline(Integer.valueOf((String) key), DeviceType.PC);
+			}else if(cacheName.equals(CacheName.DIVICONPCOFF)){
+				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
+						.getBean("serviceIconService");
+				obj=serviceIconService.getDivOffline(Integer.valueOf((String) key), DeviceType.PC);
+			}else if(cacheName.equals(CacheName.DIVINVITEPC)){
+				InviteIconService inviteIconService = (InviteIconService)SpringContextUtil
+						.getBean("inviteIconService");
+				obj=inviteIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.PC);
 			}
 		}
 		return obj;

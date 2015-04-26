@@ -3,12 +3,11 @@ package com.xiaoma.kefu.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.coobird.thumbnailator.Thumbnails;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.ServiceIconDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.FieldMapping;
 import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.util.FileUtil;
@@ -132,7 +132,7 @@ public class ServiceIconService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public void saveAndUpdatePC(MultipartFile fileOn, MultipartFile fileOff,
+	public void saveAndUpdateDiv4PC(MultipartFile fileOn, MultipartFile fileOff,
 			ServiceIcon serviceIcon) throws IOException {
 		//保存文件 ys
 		saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标PC在线);
@@ -152,93 +152,208 @@ public class ServiceIconService {
 		update(serviceIcon);
 		
 		//更新div字符串 到缓存
-		String template = SysConst.DIV_TEMPLATE_ICON;
-		List<FieldMapping> fmList = getFieldValueList(serviceIcon);
-		for(FieldMapping fm : fmList){
-			template = template.replace(fm.getDynaName(), fm.getDbValue());
-		}
-		CacheMan.update(CacheName.DIVICONPC,serviceIcon.getStyleId(),template);
+		updateDivCache(serviceIcon);
 		
 	}
 	
 	/**
-	 * 获取字段和字段的值, 如果字段值为空,则用默认值
+	 * 更新div缓存
 	* @param serviceIcon
-	* @return
 	* @Author: wangxingfei
-	* @Date: 2015年4月24日
+	* @Date: 2015年4月26日
 	 */
-	private List<FieldMapping> getFieldValueList(ServiceIcon serviceIcon) {
-		Map<String,String> hm = packFieldValue2Map(serviceIcon);
-		List<FieldMapping> fieldList = getDefaultFieldValueList();
-		//设置dbValue
-		for(FieldMapping fm : fieldList){
-			fm.setDbValue(hm.get(fm.getFieldName()));
-		}
+	private void updateDivCache(ServiceIcon serviceIcon) {
+		List<FieldMapping> fmList = getFieldValueList(serviceIcon);
 		
-		return fieldList;
+		//在线
+		String divOn = SysConst.DIV_ICON_PC_ON;
+		for(FieldMapping fm : fmList){//替换变量
+			divOn = divOn.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		System.out.println(divOn);
+		CacheMan.update(CacheName.DIVICONPCON,serviceIcon.getStyleId(),divOn);
+		
+		//离线
+		String divOff = SysConst.DIV_ICON_PC_OFF;
+		for(FieldMapping fm : fmList){//替换变量
+			divOff = divOff.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		System.out.println(divOff);
+		CacheMan.update(CacheName.DIVICONPCOFF,serviceIcon.getStyleId(),divOff);
+		
+		
 	}
+
 	
 	/**
-	 * 获得 初始化的  字段映射 列表, 带默认值
-	* @return
+	 * 获得 字段映射 list
+	* @param icon
+	* @return	
 	* @Author: wangxingfei
-	* @Date: 2015年4月24日
+	* @Date: 2015年4月26日
 	 */
-	private List<FieldMapping> getDefaultFieldValueList() {
+	private List<FieldMapping> getFieldValueList(ServiceIcon icon) {
 		List<FieldMapping> list = new ArrayList<FieldMapping>(10);
 		
+		//是否隐藏
 		FieldMapping fm = new FieldMapping();
-		fm.setFieldName(DivFieldName.top.toString());
-		fm.setDefaultValue("top:0px");
-		fm.setDynaName(DivFieldName.top.getCode());
+		fm.setFieldName(DivFieldName.isDisplay.toString());
+		fm.setDefaultValue("display:block");
+		fm.setDynaName(DivFieldName.isDisplay.getCode());
+		if(icon.getIsDisplay()!=null && icon.getIsDisplay()==0){//不显示
+			fm.setDbValue("display:none");
+		}
 		list.add(fm);
 		
+		//显示方式
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.position.toString());
+		fm.setDefaultValue("position:fixed");
+		fm.setDynaName(DivFieldName.position.getCode());
+		if(icon.getDisplayMode()!=null && icon.getDisplayMode()!=2){//非浮动固定
+			fm.setDbValue("position:absolute");
+		}
+		list.add(fm);
+		
+		//浮动位置水平
 		fm = new FieldMapping();
 		fm.setFieldName(DivFieldName.left.toString());
-		fm.setDefaultValue("left:0px");
+		fm.setDefaultValue("right:10px");
 		fm.setDynaName(DivFieldName.left.getCode());
+		if(icon.getSiteZyPx()!=null){
+			fm.setDbValue(icon.getSiteZy()+":"+icon.getSiteZyPx()+"px");
+		}
+		list.add(fm);
+		
+		//浮动位置垂直
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.top.toString());
+		fm.setDefaultValue("top:200px");
+		fm.setDynaName(DivFieldName.top.getCode());
+		if(icon.getSiteDdPx()!=null){
+			fm.setDbValue(icon.getSiteDd()+":"+icon.getSiteDdPx()+"px");
+		}
+		list.add(fm);
+		
+		//在线图片
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.onlinePic.toString());
+		fm.setDefaultValue("http://oc2.xiaoma.com//img/upload/53kf/zdytb/on_53kf1407116979.png");
+		fm.setDynaName(DivFieldName.onlinePic.getCode());
+		if(StringUtils.isNotBlank(icon.getOnlinePic())){
+			fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC在线));
+		}
+		list.add(fm);
+		
+		//离线图片
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.offlinePic.toString());
+		fm.setDefaultValue("http://oc2.xiaoma.com//img/upload/53kf/zdytb/on_53kf1407116979.png");
+		fm.setDynaName(DivFieldName.offlinePic.getCode());
+		if(StringUtils.isNotBlank(icon.getOfflinePic())){
+			fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC离线));
+		}
+		list.add(fm);
+
+		//宽
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.width.toString());
+		fm.setDefaultValue("width:auto");
+		fm.setDynaName(DivFieldName.width.getCode());
+		if(icon.getWidth()!=null){
+			fm.setDbValue("width:"+icon.getWidth()+"px");
+		}
+		list.add(fm);
+		
+		//高
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.height.toString());
+		fm.setDefaultValue("height:auto");
+		fm.setDynaName(DivFieldName.height.getCode());
+		if(icon.getHeight()!=null){
+			fm.setDbValue("height:"+icon.getHeight()+"px");
+		}
+		list.add(fm);
+		
+		//按钮id
+		fm = new FieldMapping();
+		fm.setFieldName(DivFieldName.buttonId.toString());
+		fm.setDefaultValue("0");
+		fm.setDynaName(DivFieldName.buttonId.getCode());
+		fm.setDbValue(icon.getButtonId().toString());
 		list.add(fm);
 		
 		return list;
 	}
 
-	/**
-	 * 将 属性 和 value ,按照固定模式, 封装成map
-	* @param serviceIcon
-	* @return	key=字段名称	value=dbvalue
-	* @Author: wangxingfei
-	* @Date: 2015年4月24日
-	 */
-	private Map<String, String> packFieldValue2Map(ServiceIcon serviceIcon) {
-		Map<String,String> hm = new HashMap<String,String>();
-		hm.put(DivFieldName.top.toString(), serviceIcon.getSiteDd()+":"+serviceIcon.getSiteDdPx()+"px");
-		hm.put(DivFieldName.left.toString(), serviceIcon.getSiteZy()+":"+serviceIcon.getSiteZyPx()+"px");
-		
-		return hm;
-	}
 	
 	/**
-	 * 根据风格id,获取div 格式
-	* @param styleId
-	 * @param type 
+	 * 根据风格id,获取 在线 div 格式
+	* @param styleId	风格id
+	 * @param type 	手机or移动
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public String getDivByStyleId(Integer styleId, DeviceType type) {
+	public String getDivOnline(Integer styleId, DeviceType type) {
 		ServiceIcon icon = getByStyleId(styleId, type);
-		
-		String template = SysConst.DIV_TEMPLATE_ICON;
+		String template = SysConst.DIV_ICON_PC_ON;
 		List<FieldMapping> fmList = getFieldValueList(icon);
-		//替换变量
-		for(FieldMapping fm : fmList){
+		for(FieldMapping fm : fmList){//替换变量
 			template = template.replace(fm.getDynaName(), fm.getDbValue());
 		}
 		
 		return template;
 	}
 	
+	/**
+	 * 根据风格id,获取 离线 div 格式
+	* @param styleId	风格id
+	 * @param type 	手机or移动
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	public String getDivOffline(Integer styleId, DeviceType type) {
+		ServiceIcon icon = getByStyleId(styleId, type);
+		String template = SysConst.DIV_ICON_PC_OFF;
+		List<FieldMapping> fmList = getFieldValueList(icon);
+		for(FieldMapping fm : fmList){//替换变量
+			template = template.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		
+		return template;
+	}
+	
+	
+	/**
+	 * 客服图标 展示的路径
+	* @Description: TODO
+	* @param serviceIcon
+	* @param type
+	* @return http://xxxx/style/styleId/xx.xx
+	* @Author: wangxingfei
+	* @Date: 2015年4月15日
+	 */
+	private String getViewPath(ServiceIcon serviceIcon,StylePicName type) {
+		String extensionName = "";
+		if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
+			String fileName = serviceIcon.getOnlinePic();
+			if(StringUtils.isBlank(fileName)) return extensionName;
+			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
+		}else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
+			String fileName = serviceIcon.getOfflinePic();
+			if(StringUtils.isBlank(fileName)) return extensionName;
+			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
+		}
+		return 
+				DictMan.getDictItem("d_sys_param", 15).getItemName()
+				+ "/" + SysConst.STYLE_PATH //风格主目录
+				+ "/"+serviceIcon.getStyleId()	//风格id
+				+ "/"+type.getCode()	//类别
+				+ extensionName	//后缀
+				;
+	}  
 
 
 }

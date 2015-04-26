@@ -52,7 +52,9 @@
 	                            		<b class="c-colf00">（${ele.sortId }）</b> 
 	                            		<span id="listName${ele.id }">${ele.name }</span>
 	                            	</a>
-                            		<span onclick="delDetail(${ele.id})" class="u-close f-fr"> &times;</span>
+	                            	<c:if test="${ele.sortId !=1 }">
+	                            		<span onclick="delDetail(${ele.id})" class="u-close f-fr"> &times;</span>
+                            		</c:if>
                             	</li>
 							</c:forEach>
                         </ul>

@@ -93,7 +93,7 @@ public class ServiceIconController {
 			MultipartFile fileOff,
 			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
 		try {
-			serviceIconService.saveAndUpdatePC(fileOn,fileOff,serviceIcon);
+			serviceIconService.saveAndUpdateDiv4PC(fileOn,fileOff,serviceIcon);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

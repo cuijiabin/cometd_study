@@ -179,6 +179,9 @@ public class InviteElementController {
 	public String savePC(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
+			
+			inviteElementService.saveAndUpdateDiv4PC(groupFile,inviteElement);
+			
 			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
 //			//补充字段
 			InviteElement oldModel = inviteElementService.get(inviteElement.getId());

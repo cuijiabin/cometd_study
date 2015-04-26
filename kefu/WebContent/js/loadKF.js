@@ -1,5 +1,7 @@
+var styleId = 1;
+
 $(function() {
-	alert('loadKF.js onload');
+	alert('loadKF.js onload'+styleId);
 	//set refer
 	var oldRefer = getCookie("KF_refer");
 	if(oldRefer==''){
@@ -51,6 +53,7 @@ function addDialogueDiv(){
 	     async: true,
 	     url: "http://localhost:9090/style/getDialogueDiv.action",
 	     dataType: "jsonp",
+	     data: {"styleId":1},
 	     jsonp: "callbackDialogue", //服务端用于接收callback调用的function名的参数  
 	     jsonpCallback: "success_jsonpCallback", //callback的function名称,服务端会把名称和data一起传递回来 ,success_jsonpCallback是jQuery的默认实现,可以自定义
 	     success: function(json) {
@@ -90,10 +93,74 @@ function addIconDiv(){
 }
 
 //跳转到客服窗口
-function gotoKF(){
+function gotoKF(buttonId){
 	var url = "http://localhost:9090/dialogue/customerChat.action";
 	var refer = getCookie('KF_refer');
 	var landingPage = getCookie('KF_landingPage');
 	var consultPage = window.location.href;
-	window.open (url+"?refer="+refer+"&landingPage="+landingPage+"&consultPage="+consultPage) ;
+	window.open (url+"?refer="+refer+"&landingPage="+landingPage+"&consultPage="+consultPage+"&btnCode="+buttonId+"&styleId="+1) ;
 }
+
+
+if(!Array.prototype.map){
+	Array.prototype.map = function(fn,scope) {
+  		var result = [],ri = 0;
+  		for (var i = 0,n = this.length; i < n; i++){
+			if(i in this){
+	  			result[ri++]  = fn.call(scope ,this[i],i,this);
+			}
+  		}
+		return result;
+	};
+}
+var getWindowSize = function(){
+	return ["Height","Width"].map(function(name){
+  		return window["inner"+name] ||
+		document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
+	});
+}
+window.onload = function (){
+	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
+	  document.body.onresize = resize;
+	  document.body.onscroll = resize;
+	} else { 
+	  window.onresize = resize;
+	  window.onscroll = resize;
+	}
+	function resize() {
+		findDimensions();
+		return false;
+	}
+	resize();
+}
+function findDimensions(){
+	// 这是一字符串
+	var winStr=getWindowSize();
+	var winStrs= new Array();
+	winStrs=winStr.toString().split(",");
+	var winHeight = winStrs[0],
+		winWidth = winStrs[1];
+	
+	// 获取邀请框自身的宽高
+	var boxWidth = document.getElementById("w-kfcbox").offsetWidth,
+		boxHeight = document.getElementById("w-kfcbox").offsetHeight;
+	var sTop = document.documentElement.scrollTop || document.body.scrollTop;
+	
+	// 自动居中
+	document.getElementById("w-kfcbox").style.left = (winWidth-boxWidth)/2 + "px";
+	document.getElementById("w-kfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+}
+
+//隐藏漂浮框
+function hiddenKfbox(){
+	if(iconType == 1){
+		document.getElementById("w-kfcbox").style.display = "none";
+	}else if(iconType == 2){
+		document.getElementById("w-kfrbox").style.display = "none";
+	}else if(iconType == 3){
+		document.getElementById("w-mkfcbox").style.display = "none";
+	}
+	
+}
+
+
