@@ -75,10 +75,6 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 		return false;
 	}
 	
-
-
-
-	
 	/**
 	 * 删除
 	 */

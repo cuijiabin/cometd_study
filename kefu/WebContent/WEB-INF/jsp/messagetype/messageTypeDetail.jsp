@@ -18,7 +18,7 @@
         <tr>
             <td class="f-txtr tdbg">展示</td>
             <td class="f-txtl" >
-               <input type="checkbox" a <c:if test="${messageType.status==1 }"> checked="checked" </c:if> />
+               <input type="checkbox"  <c:if test="${messageType.status==1 }"> checked="checked" </c:if> />
             </td>
          </tr>
    

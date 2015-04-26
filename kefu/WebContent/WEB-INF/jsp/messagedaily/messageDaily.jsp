@@ -18,7 +18,7 @@
         <li><b>位置：</b></li>
         <li><a href="#">首页</a></li>
         <li><i>&gt;</i><a href="#">常用语管理</a></li>
-        <li><i>&gt;</i>公共常用语分类</li>
+        <li><i>&gt;</i>常用语设置</li>
     </ul>
 </div>
 <div class="g-cnt">
@@ -26,9 +26,7 @@
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
-            <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageType();">添加</button>
-            <button type="button" class="btn btn btn-warning btn-small f-fl" onclick="javascript:updateMessageType();">编辑</button>
-            <button type="button" class="btn btn btn-danger btn-small f-fl" onclick="javascript:deleteMessageType();">删除</button>
+            <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageDaily();">添加</button>
             <input class="c-wd150" type="text" />
             <button type="button" class="btn btn-primary btn-small">搜索</button>
         </div>
@@ -38,13 +36,12 @@
 		<div class="g-sd6 c-bor" >
 		    <h3 class="u-tit c-bg">常用语分类设置</h3>
 			<div id="tree_data">
-				<jsp:include page="messageTree.jsp"></jsp:include>
+				<jsp:include page="messageTree.jsp"/>
 			</div>
 		</div >
-		
-		 <div id="table_data" class="g-mn6">
-		     <jsp:include page="messageTypeDetail.jsp"></jsp:include>
-		</div>
+		<div id="table_data" class="g-mn6c">
+		     <jsp:include page="messageDailyList.jsp"/>
+	     </div>
 	</div>
 </div>
 
@@ -66,11 +63,10 @@
 	/**
 	 * 跳转新增前的页面
 	 */
-  function addMessageType(){
+  function addMessageDaily(){
 
-	var treeId = $("#typeId").val()==1 ? 1:13;
-	var tyd = $("#typeId").val();
- 	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
+	var treeId = id;
+ 	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+' ',
  			lock:true, width:	600,height: 400});
 }
 	//以下参数设置的是默认值
@@ -83,9 +79,9 @@
 	/**
 	 * 跳转编辑前的页面
 	 */
- function updateMessageType(){
+ function updateMessageDaily(){
 
-	var d = $.dialog({id:'updateMessageType' ,title:"编辑分类信息",content:'url:/messageType/toUpdate.action?treeId='+$("#messageTypeId").val(),
+	var d = $.dialog({id:'updateMessageDaily' ,title:"编辑常用语信息",content:'url:/messageType/toUpdate.action?treeId='+$("#messageTypeId").val(),
 			lock:true, width:	600,height: 400});
  }
 	/**
@@ -206,14 +202,14 @@ function changeDetail(id){
 }
 //新增常用语分类
 function addCallback(){
-	$.dialog({id:'addMessageType'}).close();
+	$.dialog({id:'addMessageDaily'}).close();
 	changeTree();
 	changeDetail();
 }
 
 //编辑常用语分类
 function editCallback(){
-	$.dialog({id:'updateMessageType'}).close();
+	$.dialog({id:'updateMessageDaily'}).close();
 	changeTree();
 	changeDetail();
 	

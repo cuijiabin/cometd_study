@@ -73,9 +73,9 @@ public class MessageTypeController {
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);
-			return "message/messageType";
+			return "messagetype/messageType";
 		} else {
-			return "null";
+			return "/error500";
 		}
 	}
 
@@ -94,7 +94,7 @@ public class MessageTypeController {
 		model.addAttribute("treeId", treeId);
 		model.addAttribute("typeId", typeId);
 		model.addAttribute("sortId", sortId+1);
-		return "message/addMessageType";
+		return "messagetype/addMessageType";
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class MessageTypeController {
     	MessageType messageType = messageTypeService.getMessageTypeById(treeId); 
     	 model.addAttribute("messageType", messageType);
 	   
-        return "message/editMessageType";
+        return "messagetype/editMessageType";
      }
 
 	/**
@@ -257,7 +257,7 @@ public class MessageTypeController {
 
 		MessageType messageType = messageTypeService.getMessageTypeById(id);
 		model.addAttribute("messageType", messageType);
-		return "message/messageTypeDetail";
+		return "messagetype/messageTypeDetail";
 	}
 
 	/***
@@ -295,7 +295,7 @@ public class MessageTypeController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		return "message/messageTree";
+		return "messagetype/messageTree";
 	}
 
 }
