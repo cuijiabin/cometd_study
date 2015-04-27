@@ -220,29 +220,50 @@ public class StyleController {
 	@RequestMapping(value = "getIconDiv.action", method = RequestMethod.GET)
 	public void getIconDiv(HttpServletRequest req,HttpServletResponse res){
 		res.setContentType("text/plain");
-	    String callbackFunName =req.getParameter("callbackIcon");//得到js函数名称
-	    String styleId = req.getParameter("styleId");
+		String callbackFunName =req.getParameter("callbackIcon");//得到js函数名称
+		String styleId = req.getParameter("styleId");
+		String isPC = req.getParameter("isPC");
 	    try {
 //	    	String isOnLine = CacheMan.getObject("是否有人在线", styleId);
-	    	
-	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
-	    	logger.info(CacheName.DIVICONPCON+"="+strDiv);
+//	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+//	    	strDiv = serviceIconService.getDivOnline(Integer.valueOf(styleId), DeviceType.移动);
 //	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId);
+	    	
+	    	String strDiv = null;
+	    	if(isPC!=null && isPC.equals("false")){
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDON,styleId);
+	    	}else{
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+	    	}
+	    	logger.info("图标div="+strDiv);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
 	    	logger.error("获取图标div出错,风格id="+styleId,e);
 	    }
 	}
 	
+	/**
+	 * 获取 邀请框的 div 
+	* @param model
+	* @param req
+	* @param res
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
 	@RequestMapping(value = "getDialogueDiv.action", method = RequestMethod.GET)
 	public void getDialogueDiv(Model model,HttpServletRequest req,HttpServletResponse res){
 		res.setContentType("text/plain");
 	    String callbackFunName =req.getParameter("callbackDialogue");//得到js函数名称
 	    String styleId = req.getParameter("styleId");
-	    
+	    String isPC = req.getParameter("isPC");
 	    try {
-	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEPC,styleId);
-	    	logger.info(CacheName.DIVINVITEPC+"="+strDiv);
+	    	String strDiv = null;
+	    	if(isPC!=null && isPC.equals("false")){
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEYD,styleId);
+	    	}else{
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEPC,styleId);
+	    	}
+	    	logger.info("邀请框div="+strDiv);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
 	        e.printStackTrace();

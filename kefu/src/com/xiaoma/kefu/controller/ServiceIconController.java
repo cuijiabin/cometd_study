@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -116,22 +115,7 @@ public class ServiceIconController {
 			MultipartFile fileOff,
 			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
 		try {
-			//保存文件 ys
-			serviceIconService.saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标移动在线);
-			serviceIconService.saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标移动离线);
-//			
-//			//拿出旧的创建时间,类型,按钮id, 别的全用新的
-			ServiceIcon oldModel = serviceIconService.get(serviceIcon.getId());
-			serviceIcon.setCreateDate(oldModel.getCreateDate());
-			serviceIcon.setButtonId(oldModel.getButtonId());
-			serviceIcon.setUpdateDate(new Date());
-			if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址
-				serviceIcon.setOnlinePic(oldModel.getOnlinePic());;
-			}
-			if(serviceIcon.getOfflinePic()==null){//如果这次没上传图片,则取上次的地址
-				serviceIcon.setOfflinePic(oldModel.getOfflinePic());
-			}
-			serviceIconService.update(serviceIcon);
+			serviceIconService.saveAndUpdateDiv4YD(fileOn,fileOff,serviceIcon);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

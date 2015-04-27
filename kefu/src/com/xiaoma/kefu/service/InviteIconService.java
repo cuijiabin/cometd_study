@@ -130,7 +130,7 @@ public class InviteIconService {
 	 */
 	public String getDivByStyleId(Integer styleId,DeviceType type){
 		InviteIcon inviteIcon = getByStyleId(styleId, type);
-		return getDiv(inviteIcon);
+		return getDiv(inviteIcon,type);
 	}
 	
 	/**
@@ -140,19 +140,22 @@ public class InviteIconService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public String getDiv(InviteIcon inviteIcon) {
+	public String getDiv(InviteIcon inviteIcon,DeviceType type) {
 		StringBuffer sbf = new StringBuffer();
 		//邀请框模板
 		String template = SysConst.DIV_TEMPLATE_INVITE;
+		if(type.equals(DeviceType.移动)){
+			template = SysConst.DIV_TEMPLATE_INVITE_YD;
+		}
 		List<FieldMapping> inviteFmList = getFieldValueList(inviteIcon);
 		for(FieldMapping fm : inviteFmList){
 			template = template.replace(fm.getDynaName(), fm.getDbValue());
 		}
 		
 		sbf.append(template);
-		sbf.append(inviteElementService.getDivByInviteId(inviteIcon.getId()));//元素明细的
+		sbf.append(inviteElementService.getDivByInviteId(inviteIcon.getId(), type));//元素明细的
 		sbf.append(SysConst.DIV_END); //邀请框的结束标签
-		
+		System.out.println("邀请框div="+sbf.toString());
 		return sbf.toString();
 	}
 
@@ -238,9 +241,31 @@ public class InviteIconService {
 		update(inviteIcon);
 		
 		//更新div
-		String div = getDiv(inviteIcon);
+		String div = getDiv(inviteIcon,DeviceType.PC);
 		System.out.println(div);
 		CacheMan.update(CacheName.DIVINVITEPC,inviteIcon.getStyleId(),div);
+	}
+	
+	/**
+	 * 移动 端保存. 保存到数据库,并且更新 div
+	* @param inviteIcon
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	public void saveAndUpdateDiv4YD(InviteIcon inviteIcon) {
+		//补充字段
+		InviteIcon oldModel = get(inviteIcon.getId());
+		inviteIcon.setCreateDate(oldModel.getCreateDate());
+		inviteIcon.setTruePic(oldModel.getTruePic());
+		inviteIcon.setButtonId(oldModel.getButtonId());
+		inviteIcon.setUpdateDate(new Date());
+		update(inviteIcon);
+		
+		//更新div
+		String div = getDiv(inviteIcon,DeviceType.移动);
+		System.out.println(div);
+		CacheMan.update(CacheName.DIVINVITEYD,inviteIcon.getStyleId(),div);
+		
 	}
 
 }

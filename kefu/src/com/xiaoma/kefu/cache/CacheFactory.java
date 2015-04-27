@@ -43,10 +43,22 @@ public class CacheFactory {
 				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
 						.getBean("serviceIconService");
 				obj=serviceIconService.getDivOffline(Integer.valueOf((String) key), DeviceType.PC);
+			}else if(cacheName.equals(CacheName.DIVICONYDON)){
+				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
+						.getBean("serviceIconService");
+				obj=serviceIconService.getDivOnline(Integer.valueOf((String) key), DeviceType.移动);
+			}else if(cacheName.equals(CacheName.DIVICONYDOFF)){
+				ServiceIconService serviceIconService = (ServiceIconService)SpringContextUtil
+						.getBean("serviceIconService");
+				obj=serviceIconService.getDivOffline(Integer.valueOf((String) key), DeviceType.移动);
 			}else if(cacheName.equals(CacheName.DIVINVITEPC)){
 				InviteIconService inviteIconService = (InviteIconService)SpringContextUtil
 						.getBean("inviteIconService");
 				obj=inviteIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.PC);
+			}else if(cacheName.equals(CacheName.DIVINVITEYD)){
+				InviteIconService inviteIconService = (InviteIconService)SpringContextUtil
+						.getBean("inviteIconService");
+				obj=inviteIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.移动);
 			}
 		}
 		return obj;

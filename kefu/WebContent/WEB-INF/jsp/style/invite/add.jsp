@@ -16,7 +16,6 @@
 <body>
 
 <!-- 表格有边框 -->
-<div style="margin:50px">
 <form id="mainForm1">
 <table class="table table-bordered m-table">
     <tbody>
@@ -35,7 +34,6 @@
                     
 </form>
 
-</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
