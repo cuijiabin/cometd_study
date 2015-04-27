@@ -603,25 +603,22 @@ public class JedisTalkDao {
 	 */
 	public static String allocateCcnId() {
 		
-		String key = JedisConstant.genCcnListKey(JedisConstant.USER_TYPE);
-
-		Jedis jedis = JedisDao.getJedis();
-		
-		Long size = jedis.zcard(key);
-		size = (size == 0) ? 0L : size-1;
-		
-		Set<String> set = jedis.zrange(key, size.intValue(), -1);
-		
-		if(CollectionUtils.isEmpty(set)){
+		List<String> userIds = getSwitchList();
+		if(CollectionUtils.isEmpty(userIds)){
 			return null;
 		}
+		Integer max = 0;
+		String allocateUserId = null;
+	    for(String userId : userIds){
+	    	Integer result = getMaxReceiveCount(userId)-getReceiveCount(userId);
+	    	
+	    	if(result > max){
+	    		max = result;
+	    		allocateUserId = userId;
+	    	}
+	    }
 		
-		Iterator<String> it = set.iterator();
-		if(!it.hasNext()){
-			return null;
-		}
-		
-		return it.next();
+		return  getUserCcnList(allocateUserId).get(0);
 
 	}
 	
@@ -656,6 +653,20 @@ public class JedisTalkDao {
 			result = new ArrayList<String>();
 		}
 		result.removeAll(getOffLineUserSet());
+		return result;
+	}
+	
+	public static Integer getReceiveCount(String userId){
+		List<String> ccnIds = getUserCcnList(userId);
+		if(CollectionUtils.isEmpty(ccnIds)){
+			return 0;
+		}
+		Integer result = 0;
+		for(String ccnId : ccnIds){
+			Integer part = getCurrentReceiveCount(ccnId);
+			result += part;
+		}
+		
 		return result;
 	}
 	

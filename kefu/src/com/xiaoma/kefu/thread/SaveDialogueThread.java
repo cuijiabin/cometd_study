@@ -109,14 +109,29 @@ public class SaveDialogueThread implements Runnable{
 	 * @return
 	 */
 	private Dialogue genDialogueByList(List<DialogueDetail> list,User user,Customer customer){
+		Integer last = list.size()-1;
+		
+		last = (last == -1) ? 0 : last;
 		Date beginDate = list.get(0).getCreateDate();
+		Date endDate = list.get(last).getCreateDate();
+		
+		Long duration = endDate.getTime() - beginDate.getTime();
+		Integer durationTime = duration.intValue()/1000;
 		
 		Dialogue dialogue = new Dialogue();
 		
-		dialogue.setBeginDate(beginDate);
-		dialogue.setCustomerId(customer.getId());
 		dialogue.setUserId(user.getId());
+		dialogue.setCardName(user.getCardName());
+		dialogue.setDeptId(user.getDeptId());
+		dialogue.setCustomerId(customer.getId());
+		
+		dialogue.setBeginDate(beginDate);
+		dialogue.setEndDate(endDate);
+		dialogue.setDurationTime(durationTime);
+		
+		
 		dialogue.setIp(customer.getIp());
+		dialogue.setIpInfo(customer.getIpInfo());
 		
 		return dialogue;
 	}

@@ -329,5 +329,15 @@ public class UserService {
 		}
 		return userDaoImpl.findByIds(User.class, userIds);
 	}
+	
+	/**
+	 * 获取全部用户
+	 * @return
+	 */
+	public List<User> getAll(){
+		
+		return userDaoImpl.findAll(User.class);
+		
+	}
 
 }

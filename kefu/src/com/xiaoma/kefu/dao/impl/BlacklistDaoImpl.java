@@ -19,6 +19,7 @@ import com.xiaoma.kefu.dao.BlacklistDao;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
+import com.xiaoma.kefu.util.TimeHelper;
 
 /**
  * @author frongji
@@ -221,7 +222,8 @@ public class BlacklistDaoImpl extends BaseDaoImpl<Blacklist> implements Blacklis
 		public Boolean judgeForbidden(Long customerId) {
 			
 			Session session = getSession();
-			String hql = "select count(1) from black_list where customerId ="+customerId;
+			String endDate = TimeHelper.convertMillisecondToStr(System.currentTimeMillis(), TimeHelper.OTHER_PATTERN);
+			String hql = "select count(1) from black_list where customerId ="+customerId+" and endDate > '" +endDate+"'";
 			Query query = session.createSQLQuery(hql);
 			Integer count = ((Number)query.uniqueResult()).intValue();
 			

@@ -12,7 +12,6 @@ import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.UserService;
-import com.xiaoma.kefu.util.PageBean;
 
 //@Ignore
 @RunWith(SpringJUnit4ClassRunner.class) 
@@ -25,12 +24,13 @@ public class UserTest {
 	private UserDao userDaoImpl;
 	@Test
 	public void test(){
-	PageBean<User> pageBean = userService.getResultByuserNameOrPhone(1, 10, null, null);
 		
-		List<User> users = pageBean.getObjList();
+		List<User> users = userService.getAll();
 		for(User user : users){
-			JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
+			System.out.println(user.getCardName());
+			if(user.getMaxListen() != null){
+				JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
+			}
 		}
-		
 	}
 }
