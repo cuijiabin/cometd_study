@@ -37,7 +37,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -49,7 +48,6 @@
 			"password":$("#password").val(),
 			"yzm":$("#yzm").val()
 		};
-		//alert(111);
 		$.ajax({
 			type: "post",
 		    url: "/user/login.action",
