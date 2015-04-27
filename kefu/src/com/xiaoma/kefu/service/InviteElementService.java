@@ -474,6 +474,7 @@ public class InviteElementService {
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
 		return 
 				DictMan.getDictItem("d_sys_param", 15).getItemName()
+				+ "/" + DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
 				+ "/" + inviteIcon.getStyleId()	//风格id
 				+ "/" + inviteElement.getId()	//元素id

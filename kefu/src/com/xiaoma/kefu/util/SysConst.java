@@ -35,6 +35,21 @@ public class SysConst {
 	public static final String FIRST_ELEMENT_NAME = "外框";
 	
 	/**
+	 * 风格div文件 目录
+	 */
+	public static final String JS_DIV_PATH = "style";
+	
+	/**
+	 * js文件前缀
+	 */
+	public static final String JS_NAME = "loadKF";
+	
+	/**
+	 * 风格div的模板文件
+	 */
+	public static final String JS_DIV_TEMPLATE = "template.js";
+	
+	/**
 	 * 角色的ID
 	 * *********************************
 	* @Description: TODO

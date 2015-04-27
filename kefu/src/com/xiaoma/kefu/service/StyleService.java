@@ -11,6 +11,7 @@ import com.xiaoma.kefu.dao.StyleDao;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Style;
+import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 
@@ -95,10 +96,11 @@ public class StyleService {
 	 * 2.创建风格下的图标等表
 	* @param style
 	* @return
+	 * @throws Exception 
 	* @Author: wangxingfei
 	* @Date: 2015年4月19日
 	 */
-	public Integer initStyle(Style style) {
+	public Integer initStyle(Style style) throws Exception {
 		//创建风格
 		style.setCreateDate(new Date());
 		Integer num = (Integer) styleDaoImpl.add(style);
@@ -126,7 +128,11 @@ public class StyleService {
 		allotRule.setStyleId(styleId);
 		allotRuleService.create(allotRule);
 		
+		//创建js文件
+		FileUtil.createStyleJsFile(styleId);
+		
 		return num;
 	}
+	
 
 }

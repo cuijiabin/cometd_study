@@ -367,6 +367,7 @@ public class ServiceIconService {
 		}
 		return 
 				DictMan.getDictItem("d_sys_param", 15).getItemName()
+				+ "/" + DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
 				+ "/"+serviceIcon.getStyleId()	//风格id
 				+ "/"+type.getCode()	//类别

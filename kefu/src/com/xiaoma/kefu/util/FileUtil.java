@@ -1,8 +1,11 @@
 package com.xiaoma.kefu.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -124,5 +127,52 @@ public class FileUtil {
 		return basePath;
 	}
 	
+	
+	/**
+	 * 根据风格id,生成风格js文件
+	* @param styleId
+	* @throws Exception
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	public static void createStyleJsFile(Integer styleId) throws Exception{
+		BufferedReader br = null;
+		PrintStream ps = null;
+		try{
+			String sourcePath = 
+					DictMan.getDictItem("d_sys_param", 16).getItemName()
+//					"E:/space/.metadata/.plugins/org.eclipse.wst.server.core/tmp3/wtpwebapps/kefu"
+					+ "/" + SysConst.JS_DIV_PATH
+					+ "/" + SysConst.JS_DIV_TEMPLATE ;
+			br = new BufferedReader(new FileReader(new File(sourcePath)));
+			
+			String targePath =  
+					DictMan.getDictItem("d_sys_param", 16).getItemName()
+//					"E:/space/.metadata/.plugins/org.eclipse.wst.server.core/tmp3/wtpwebapps/kefu"
+					+ "/" + SysConst.JS_DIV_PATH
+					+ "/" + SysConst.JS_NAME + styleId + ".js" ;
+			
+			ps = new PrintStream(new File(targePath));
+			ps.println("var styleId = "+ styleId +";");//第一行写入styleId
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				ps.println(line);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}finally{
+			try {
+				br.close();
+				ps.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws Exception{
+		createStyleJsFile(3);
+	}
 	
 }
