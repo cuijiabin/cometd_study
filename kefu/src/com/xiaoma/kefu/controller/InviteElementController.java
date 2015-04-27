@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import com.xiaoma.kefu.model.InviteElement;
 import com.xiaoma.kefu.service.InviteElementService;
 import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.util.Ajax;
-import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
  * 邀请框元素	controller
@@ -179,19 +177,7 @@ public class InviteElementController {
 	public String savePC(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
-			
 			inviteElementService.saveAndUpdateDiv4PC(groupFile,inviteElement);
-			
-			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
-//			//补充字段
-			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
-			if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
-				inviteElement.setPicUrl(oldModel.getPicUrl());;
-			}
-			inviteElement.setName(oldModel.getName());
-			inviteElement.setCreateDate(oldModel.getCreateDate());
-			inviteElement.setUpdateDate(new Date());
-			inviteElementService.update(inviteElement);
 		} catch (Exception e) {
 			logger.error("savePC"+inviteElement.getId(), e);
 			return "error500";
@@ -213,16 +199,7 @@ public class InviteElementController {
 	public String saveYD(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
-			inviteElementService.saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
-//			//补充字段
-			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
-			if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
-				inviteElement.setPicUrl(oldModel.getPicUrl());;
-			}
-			inviteElement.setName(oldModel.getName());
-			inviteElement.setCreateDate(oldModel.getCreateDate());
-			inviteElement.setUpdateDate(new Date());
-			inviteElementService.update(inviteElement);
+			inviteElementService.saveAndUpdateDiv4YD(groupFile,inviteElement);
 		} catch (Exception e) {
 			logger.error("saveYD"+inviteElement.getId(), e);
 			return "error500";

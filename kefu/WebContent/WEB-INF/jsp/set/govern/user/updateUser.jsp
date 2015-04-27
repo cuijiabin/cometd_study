@@ -23,7 +23,7 @@
 <table class="table table-bordered m-table">
         <tr>
             <td class="f-txtr tdbg" width="80px">工号</td>
-            <td class="f-txtl"><input type="text" id="loginName" name="loginName" value="${user.loginName}"/></td>
+            <td class="f-txtl"><input type="text" id="loginName" name="loginName" value="${user.loginName}" readonly="readonly"/></td>
             <td class="f-txtr tdbg" width="80px">姓名</td>
             <td class="f-txtl"><input type="text" id="userName" name="userName" value="${user.userName}" maxlength="16"/></td>
         </tr>

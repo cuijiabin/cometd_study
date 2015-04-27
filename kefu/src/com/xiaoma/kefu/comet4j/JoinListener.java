@@ -4,6 +4,7 @@ package com.xiaoma.kefu.comet4j;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
 import org.comet4j.core.CometEngine;
@@ -43,6 +44,8 @@ public class JoinListener extends ConnectListener {
 		
 		// 连接点
 		String ccnId = conn.getId();
+		
+		CometEngine engine = (CometEngine) anEvent.getTarget();
 
 		// 优先使用userId
 		if (user != null) {
@@ -52,6 +55,32 @@ public class JoinListener extends ConnectListener {
 			JedisTalkDao.addUserCcnList(userId, ccnId);
 			JedisTalkDao.addCcnList( JedisConstant.USER_TYPE, ccnId);
 			logger.info("客服："+userId+" ,进入对话系统; 通信点id： "+ccnId);
+			
+			//为客服分配客户
+			if(JedisTalkDao.sizeCustomerWaitSet() > 0){
+				
+				String customerCcnId = JedisTalkDao.popCustomerWaitSet();
+				JedisTalkDao.addCcnReceiveList(ccnId, customerCcnId);
+				
+				//设置被谁接待
+				JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
+				
+				//通知客更新后台列表
+		        CometConnection ccn = engine.getConnection(ccnId);
+		        CometConnection myCcn = engine.getConnection(customerCcnId);
+		        
+				//通知数据
+				NoticeData nd = new NoticeData(Constant.ON_OPEN, null);
+		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
+		        
+		        Message message = new Message(ccnId, user.getCardName(), "", "", ccnId);
+		        
+		        //告知自己已经连接上
+		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
+		        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
+			}
+			
+			
 		} else {
 			try {
 				
@@ -62,9 +91,17 @@ public class JoinListener extends ConnectListener {
 				JedisTalkDao.addUserCcnList(customerId, ccnId);
 				JedisTalkDao.addCcnList(JedisConstant.CUSTOMER_TYPE, ccnId);
 
+				CometConnection myCcn = engine.getConnection(ccnId);
 
 				// 分配客服
 				String allocateCnnId = JedisTalkDao.allocateCcnId();
+				if(StringUtils.isBlank(allocateCnnId)){
+					//对不起，客服不在线，请留言
+					JedisTalkDao.addCustomerWaitSet(ccnId);
+					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
+					
+					return true;
+				}
 				
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
 				
@@ -73,7 +110,6 @@ public class JoinListener extends ConnectListener {
 				logger.info("前端用户："+customerId+" ,进入对话系统; 通信点id： "+ccnId+"被通知客服通信点id："+allocateCnnId);
 				
 				//通知客更新后台列表
-				CometEngine engine = (CometEngine) anEvent.getTarget();
 		        CometConnection ccn = engine.getConnection(allocateCnnId);
 		        
 				//通知数据
@@ -85,7 +121,7 @@ public class JoinListener extends ConnectListener {
 		        Message message = new Message(allocateCnnId, allocateUser.getCardName(), "", "", ccnId);
 		        
 		        //告知自己已经连接上
-		        CometConnection myCcn = engine.getConnection(ccnId);
+		       
 		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
 		        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
 		        

@@ -16,7 +16,7 @@
 <body>
 <div style="margin:50px">
 <div class="g-cnt f-padd20">
-	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9;">
+	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9; float: left">
         <div class="f-txtr">
             <button type="submit" class="btn btn-primary" onclick="add();">添加</button>
         </div>
@@ -41,8 +41,7 @@
             </tbody>
         </table>
 	</div>
-	
-	<div class="f-padd20 f-fl">
+	<div class="f-padd20 f-fl" style="float: right">
        	<div id="table_data">
 			<jsp:include page="editTwo.jsp"></jsp:include>
 		</div>
@@ -88,7 +87,7 @@ function add(){
 		content:'url:/waitList/add.action?styleId='+'${styleId}',
 		lock:true,
 		parent:api,
-		width: 400,height: 160,
+		width: 400,height: 180,
 		title:'添加一级菜单'
 	});
 }

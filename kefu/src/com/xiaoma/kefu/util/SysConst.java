@@ -175,13 +175,29 @@ public class SysConst {
 			+	" <img src=\\\"${offlinePic}\\\" onclick=\\\"gotoKF('${buttonId}')\\\" style=\\\"cursor:pointer\\\" /> "
 			+	" <img style=\\\"position:absolute;right:0px;top:0px;cursor:pointer;\\\" src=\\\"http://oc2.xiaoma.com/img/upload/53kf/zdyivt/zdyivt_53kf_1414986002.gif\\\" onclick=\\\"iconType=2;hiddenKfbox();\\\" /> "
 			+ " </div> "	;
+	
+	/**
+	 * 客服图标 DIV 移动_在线 模板
+	 */
+	public static final String DIV_ICON_YD_ON =
+			" <div id=\\\"w-mkfrbox\\\" style=\\\"${isDisplay};${position};${top};${left};${width};${height};z-index:7999;overflow:hidden;\\\"> "
+			+	" <div id=\\\"w-mkfrbox-cnt\\\" style=\\\"${width};${height};background-image:url(${onlinePic});background-repeat:no-repeat;z-index:9001;cursor:pointer;overflow:hidden;\\\" onclick=\\\"gotoKF('${buttonId}')\\\"></div> "
+			+ " </div> "	;
+	
+	/**
+	 * 客服图标 DIV 移动_离线 模板
+	 */
+	public static final String DIV_ICON_YD_OFF =
+			" <div id=\\\"w-mkfrbox\\\" style=\\\"${isDisplay};${position};${top};${left};${width};${height};z-index:7999;overflow:hidden;\\\"> "
+			+	" <div id=\\\"w-mkfrbox-cnt\\\" style=\\\"background-image:url(${offlinePic});background-repeat:no-repeat;z-index:9001;cursor:pointer;overflow:hidden;\\\" onclick=\\\"gotoKF('${buttonId}')\\\"></div> "
+			+ " </div> "	;
 			
 	/**
 	 * 邀请框最顶层 模板 ,注意没有结束标签,要自己加
 	 */
 	public static final String DIV_TEMPLATE_INVITE = 
 			" <div id=\\\"w-kfcbox\\\" style=\\\"${position};${top};${left};${width};${height};z-index:7998;overflow:hidden;\\\"> " ;
-	
+			
 	/**
 	 * 邀请框中 第一个元素(外框) 的模板 ,注意没有结束标签,要自己加
 	 */
@@ -199,6 +215,28 @@ public class SysConst {
 	 */
 	public static final String DIV_TEMPLATE_ELE_A = 
 			" <a href=\\\"${openUrl}\\\" target=\\\"${target}\\\" style=\\\"cursor:pointer;text-decoration:none;\\\"> ";
+	
+	
+	/**
+	 * 手机 邀请框最顶层 模板 ,注意没有结束标签,要自己加
+	 */
+	public static final String DIV_TEMPLATE_INVITE_YD = 
+			" <div id=\\\"w-mkfcbox\\\" style=\\\"${position};${top};${left};z-index:7998;overflow:hidden;\\\"> " ;
+	
+	/**
+	 * 手机 邀请框中 第一个元素(外框) 的模板 ,注意没有结束标签,要自己加
+	 */
+	public static final String DIV_TEMPLATE_ELE_FIRST_YD =
+			" <div id=\\\"w-mkfbox-cnt\\\" style=\\\"position:relative;z-index:${index};overflow:hidden;\\\"> " 
+			+ " <img id=\\\"w-mkfcbox-img\\\" style=\\\"${width};cursor:pointer;\\\" src=\\\"${backgroundImg}\\\" ${onclick} alt=\\\"\\\" /> "
+			;
+			
+	/**
+	 * 手机 邀请框中 除第一个元素外,其他元素的模板
+	 */
+	public static final String DIV_TEMPLATE_ELE_OTHER_YD = 
+			" <div style=\\\"position:absolute;${top};${left};${width};${height};background-image:url(${backgroundImg});background-repeat:no-repeat;z-index:${index};cursor:pointer;overflow:hidden;\\\" ${onclick} ></div> " ;
+	
 	
 	/**
 	 * div结束标签

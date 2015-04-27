@@ -22,6 +22,7 @@ import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.DivFieldName;
+import com.xiaoma.kefu.util.SysConst.StyleIconType;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
@@ -152,17 +153,17 @@ public class ServiceIconService {
 		update(serviceIcon);
 		
 		//更新div字符串 到缓存
-		updateDivCache(serviceIcon);
+		updateDivCachePC(serviceIcon);
 		
 	}
 	
 	/**
-	 * 更新div缓存
+	 * 更新div缓存	PC
 	* @param serviceIcon
 	* @Author: wangxingfei
 	* @Date: 2015年4月26日
 	 */
-	private void updateDivCache(ServiceIcon serviceIcon) {
+	private void updateDivCachePC(ServiceIcon serviceIcon) {
 		List<FieldMapping> fmList = getFieldValueList(serviceIcon);
 		
 		//在线
@@ -194,13 +195,17 @@ public class ServiceIconService {
 	 */
 	private List<FieldMapping> getFieldValueList(ServiceIcon icon) {
 		List<FieldMapping> list = new ArrayList<FieldMapping>(10);
+		boolean isPC = true; //是否PC 端
+		if(icon.getDeviceType()!=null && icon.getDeviceType().equals(DeviceType.移动.getCode())){
+			isPC = false;
+		}
 		
 		//是否隐藏
 		FieldMapping fm = new FieldMapping();
 		fm.setFieldName(DivFieldName.isDisplay.toString());
 		fm.setDefaultValue("display:block");
 		fm.setDynaName(DivFieldName.isDisplay.getCode());
-		if(icon.getIsDisplay()!=null && icon.getIsDisplay()==0){//不显示
+		if(icon.getIsHidden()!=null && icon.getIsHidden()==1){//不显示
 			fm.setDbValue("display:none");
 		}
 		list.add(fm);
@@ -241,7 +246,11 @@ public class ServiceIconService {
 		fm.setDefaultValue("http://oc2.xiaoma.com//img/upload/53kf/zdytb/on_53kf1407116979.png");
 		fm.setDynaName(DivFieldName.onlinePic.getCode());
 		if(StringUtils.isNotBlank(icon.getOnlinePic())){
-			fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC在线));
+			if(isPC){
+				fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC在线));
+			}else{
+				fm.setDbValue(getViewPath(icon,StylePicName.客服图标移动在线));
+			}
 		}
 		list.add(fm);
 		
@@ -251,7 +260,11 @@ public class ServiceIconService {
 		fm.setDefaultValue("http://oc2.xiaoma.com//img/upload/53kf/zdytb/on_53kf1407116979.png");
 		fm.setDynaName(DivFieldName.offlinePic.getCode());
 		if(StringUtils.isNotBlank(icon.getOfflinePic())){
-			fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC离线));
+			if(isPC){
+				fm.setDbValue(getViewPath(icon,StylePicName.客服图标PC离线));
+			}else{
+				fm.setDbValue(getViewPath(icon,StylePicName.客服图标移动离线));
+			}
 		}
 		list.add(fm);
 
@@ -298,6 +311,9 @@ public class ServiceIconService {
 	public String getDivOnline(Integer styleId, DeviceType type) {
 		ServiceIcon icon = getByStyleId(styleId, type);
 		String template = SysConst.DIV_ICON_PC_ON;
+		if(type.equals(DeviceType.移动)){
+			template = SysConst.DIV_ICON_YD_ON;
+		}
 		List<FieldMapping> fmList = getFieldValueList(icon);
 		for(FieldMapping fm : fmList){//替换变量
 			template = template.replace(fm.getDynaName(), fm.getDbValue());
@@ -317,6 +333,9 @@ public class ServiceIconService {
 	public String getDivOffline(Integer styleId, DeviceType type) {
 		ServiceIcon icon = getByStyleId(styleId, type);
 		String template = SysConst.DIV_ICON_PC_OFF;
+		if(type.equals(DeviceType.移动)){
+			template = SysConst.DIV_ICON_YD_OFF;
+		}
 		List<FieldMapping> fmList = getFieldValueList(icon);
 		for(FieldMapping fm : fmList){//替换变量
 			template = template.replace(fm.getDynaName(), fm.getDbValue());
@@ -353,7 +372,95 @@ public class ServiceIconService {
 				+ "/"+type.getCode()	//类别
 				+ extensionName	//后缀
 				;
-	}  
+	}
+	
+	/**
+	 * 移动端保存. 保存到数据库,并且更新 div
+	* @param fileOn
+	* @param fileOff
+	* @param serviceIcon
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	public void saveAndUpdateDiv4YD(MultipartFile fileOn,
+			MultipartFile fileOff, ServiceIcon serviceIcon) throws IOException {
+		//保存文件 ys
+		saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标移动在线);
+		saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标移动离线);
+		
+//		//拿出旧的创建时间,类型,按钮id, 别的全用新的
+		ServiceIcon oldModel = get(serviceIcon.getId());
+		serviceIcon.setCreateDate(oldModel.getCreateDate());
+		serviceIcon.setButtonId(oldModel.getButtonId());
+		serviceIcon.setUpdateDate(new Date());
+		if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址
+			serviceIcon.setOnlinePic(oldModel.getOnlinePic());;
+		}
+		if(serviceIcon.getOfflinePic()==null){//如果这次没上传图片,则取上次的地址
+			serviceIcon.setOfflinePic(oldModel.getOfflinePic());
+		}
+		update(serviceIcon);
+		
+		//更新div字符串 到缓存
+		updateDivCacheYD(serviceIcon);
+		
+	}
+	
+	
+	/**
+	 * 更新div缓存	移动
+	* @param serviceIcon
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	private void updateDivCacheYD(ServiceIcon serviceIcon) {
+		List<FieldMapping> fmList = getFieldValueList(serviceIcon);
+		
+		//在线
+		String divOn = SysConst.DIV_ICON_YD_ON;
+		for(FieldMapping fm : fmList){//替换变量
+			divOn = divOn.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		System.out.println(divOn);
+		CacheMan.update(CacheName.DIVICONYDON,serviceIcon.getStyleId(),divOn);
+		
+		//离线
+		String divOff = SysConst.DIV_ICON_YD_OFF;
+		for(FieldMapping fm : fmList){//替换变量
+			divOff = divOff.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		System.out.println(divOff);
+		CacheMan.update(CacheName.DIVICONYDOFF,serviceIcon.getStyleId(),divOff);
+		
+	}
+	
+	/**
+	 * 初始化图标	用于增加风格时
+	* @param styleId	风格id
+	* @param type
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	public void initServiceIcon(Integer styleId, DeviceType type) {
+		ServiceIcon serviceIcon = new ServiceIcon();
+		serviceIcon.setStyleId(styleId);
+		serviceIcon.setDeviceType(type.getCode());
+		serviceIcon.setIsHidden(0);//默认显示
+		serviceIcon.setDisplayMode(2);//默认浮动固定图标
+		serviceIcon.setSiteZy("right");
+		serviceIcon.setSiteZyPx(10);
+		serviceIcon.setSiteDd("top");
+		serviceIcon.setSiteDdPx(200);
+		if(type.equals(DeviceType.PC)){
+			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.客服图标.getCode());
+			serviceIcon.setButtonId(buttonId);
+		}else{
+			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端客服图标.getCode());
+			serviceIcon.setButtonId(buttonId);
+		}
+		create(serviceIcon);
+	}
 
 
 }

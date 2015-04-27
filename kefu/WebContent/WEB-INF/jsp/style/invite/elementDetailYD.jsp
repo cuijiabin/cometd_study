@@ -117,7 +117,7 @@ function saveDetail(){
 function updateName(id){
 	$.dialog({content:'url:/inviteElement/editName.action?id='+id,
 		id: 'editName',
-		width: 400,height: 80,
+		width: 400,height: 180,
 		title:'修改名称'
 	});
 }

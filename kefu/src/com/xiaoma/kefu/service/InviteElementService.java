@@ -23,6 +23,7 @@ import com.xiaoma.kefu.model.InviteElement;
 import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.DivFieldName;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
@@ -188,7 +189,7 @@ public class InviteElementService {
 		update(inviteElement);
 		
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
-		String div = inviteIconService.getDiv(inviteIcon);
+		String div = inviteIconService.getDiv(inviteIcon,DeviceType.PC);
 		CacheMan.update(CacheName.DIVINVITEPC,inviteIcon.getStyleId(),div);
 		
 	}
@@ -200,12 +201,16 @@ public class InviteElementService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public String getDivByInviteId(Integer inviteId){
+	public String getDivByInviteId(Integer inviteId,DeviceType type){
 		StringBuffer sbf = new StringBuffer();
 		//邀请框下元素
 		List<InviteElement> list = listByInviteId(inviteId);
 		boolean hasFirst = false;//是否包含第一个元素
 		boolean firstHasUrl = false;//第一个元素是否包含 连接地址
+		boolean isPC = true;
+		if(type.equals(DeviceType.移动)){
+			isPC = false;
+		}
 		//循环更新元素
 		for(InviteElement ele : list){
 			boolean thisIsFirst = false;//当前元素是否是第一个元素
@@ -228,7 +233,7 @@ public class InviteElementService {
 			}
 			
 			//增加元素 div
-			String eleStr = getEleDiv(ele,thisIsFirst);
+			String eleStr = getEleDiv(ele,thisIsFirst,isPC);
 			sbf.append(eleStr); 
 			
 			//如果不是第一个元素, 并且有a标签,则增加 结束a标签
@@ -251,19 +256,28 @@ public class InviteElementService {
 	 * 获取元素 div 字符串
 	* @param ele
 	* @param thisIsFirst  是否第一个元素  true=是,false=否
+	 * @param isPC 是否PC端
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月26日
 	 */
-	private String getEleDiv(InviteElement ele,boolean thisIsFirst) {
+	private String getEleDiv(InviteElement ele,boolean thisIsFirst, boolean isPC) {
 		String temp = null;
 		List<FieldMapping> eleFmList = null;
-		if(thisIsFirst){
-			temp = SysConst.DIV_TEMPLATE_ELE_FIRST;
-			eleFmList = getFieldValueList(ele,true);
+		if(isPC){
+			if(thisIsFirst){
+				temp = SysConst.DIV_TEMPLATE_ELE_FIRST;
+			}else{
+				temp = SysConst.DIV_TEMPLATE_ELE_OTHER;
+			}
+			eleFmList = getFieldValueList(ele,thisIsFirst,isPC);
 		}else{
-			temp = SysConst.DIV_TEMPLATE_ELE_OTHER;
-			eleFmList = getFieldValueList(ele,false);
+			if(thisIsFirst){
+				temp = SysConst.DIV_TEMPLATE_ELE_FIRST_YD;
+			}else{
+				temp = SysConst.DIV_TEMPLATE_ELE_OTHER_YD;
+			}
+			eleFmList = getFieldValueList(ele,thisIsFirst,isPC);
 		}
 		//替换变量
 		for(FieldMapping fm : eleFmList){
@@ -292,11 +306,12 @@ public class InviteElementService {
 	 * 获取第一个元素 字段和字段的值, 如果字段值为空,则用默认值
 	* @param ele
 	* @param isFirst 是否第一个元素, true 是, false 否
+	 * @param isPC 是否PC
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	private List<FieldMapping> getFieldValueList(InviteElement ele,boolean isFirst) {
+	private List<FieldMapping> getFieldValueList(InviteElement ele,boolean isFirst, boolean isPC) {
 		
 		List<FieldMapping> list = new ArrayList<FieldMapping>(7);
 		
@@ -304,12 +319,16 @@ public class InviteElementService {
 		FieldMapping fm = new FieldMapping();
 		fm.setFieldName(DivFieldName.width.toString());
 		fm.setDefaultValue("width:auto");
-		if(isFirst){
-			fm.setDefaultValue("width:680px");
-		}
 		fm.setDynaName(DivFieldName.width.getCode());
 		if(ele.getWidth()!=null){
 			fm.setDbValue("width:"+ele.getWidth()+"px");
+		}
+		if(isPC && isFirst){
+			fm.setDefaultValue("width:680px");
+		}
+		if(!isPC && isFirst){
+			fm.setDefaultValue("width:80%");
+			fm.setDbValue("width:"+ele.getWidth()+"%");
 		}
 		list.add(fm);
 		
@@ -346,7 +365,11 @@ public class InviteElementService {
 				InviteIcon tempIcon = inviteIconService.get(ele.getInviteId());
 				fm.setDbValue("onclick=\\\"gotoKF('"+tempIcon.getButtonId()+"');\\\"  ");
 			}else if(ele.getOperationType()==3){//点击关闭
-				fm.setDbValue("onclick=\\\"iconType=1;hiddenKfbox();\\\"  ");
+				if(isPC){
+					fm.setDbValue("onclick=\\\"iconType=1;hiddenKfbox();\\\"  ");
+				}else{
+					fm.setDbValue("onclick=\\\"iconType=3;hiddenKfbox();\\\"  ");
+				}
 			}
 		}
 		list.add(fm);
@@ -457,6 +480,38 @@ public class InviteElementService {
 				+ "/" + StylePicName.元素背景图.getCode()
 				+ extensionName	//后缀
 				;
+	}
+	
+	/**
+	 * 移动端保存. 保存到数据库,并且更新 整个div
+	* @param groupFile
+	* @param inviteElement
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	public void saveAndUpdateDiv4YD(MultipartFile groupFile,
+			InviteElement inviteElement) throws IOException {
+		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
+//		//补充字段
+		InviteElement oldModel = get(inviteElement.getId());
+		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
+			inviteElement.setPicUrl(oldModel.getPicUrl());;
+		}
+		if(inviteElement.getHeight()==null){//高
+			inviteElement.setHeight(oldModel.getHeight());
+		}
+		if(inviteElement.getWidth()==null){//宽
+			inviteElement.setWidth(oldModel.getWidth());
+		}
+		inviteElement.setName(oldModel.getName());
+		inviteElement.setCreateDate(oldModel.getCreateDate());
+		inviteElement.setUpdateDate(new Date());
+		update(inviteElement);
+		
+		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
+		String div = inviteIconService.getDiv(inviteIcon,DeviceType.移动);
+		CacheMan.update(CacheName.DIVINVITEYD,inviteIcon.getStyleId(),div);
 	}  
 
 }

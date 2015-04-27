@@ -1,7 +1,27 @@
 var styleId = 1;
 
+//是否PC
+function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
+
+var isPc = IsPC();
+
 $(function() {
-	alert('loadKF.js onload'+styleId);
+//	alert('loadKF1.js onload'+styleId);
+//	alert("isPc="+isPc); 
+	
 	//set refer
 	var oldRefer = getCookie("KF_refer");
 	if(oldRefer==''){
@@ -53,7 +73,8 @@ function addDialogueDiv(){
 	     async: true,
 	     url: "http://localhost:9090/style/getDialogueDiv.action",
 	     dataType: "jsonp",
-	     data: {"styleId":1},
+	     data: {"styleId":styleId,"isPC":isPc},
+	     timeout:30000,
 	     jsonp: "callbackDialogue", //服务端用于接收callback调用的function名的参数  
 	     jsonpCallback: "success_jsonpCallback", //callback的function名称,服务端会把名称和data一起传递回来 ,success_jsonpCallback是jQuery的默认实现,可以自定义
 	     success: function(json) {
@@ -76,8 +97,9 @@ function addIconDiv(){
 	     type: "get",
 	     async: true,
 	     url: "http://localhost:9090/style/getIconDiv.action",
-	     data: {"styleId":1},
+	     data: {"styleId":styleId,"isPC":isPc},
 	     dataType: "jsonp",
+	     timeout:30000,
 	     jsonp: "callbackIcon", //服务端用于接收callback调用的function名的参数  
 	     jsonpCallback: "success_jsonpCallback1", //callback的function名称,服务端会把名称和data一起传递回来  
 	     success: function(json) {
@@ -98,7 +120,7 @@ function gotoKF(buttonId){
 	var refer = getCookie('KF_refer');
 	var landingPage = getCookie('KF_landingPage');
 	var consultPage = window.location.href;
-	window.open (url+"?refer="+refer+"&landingPage="+landingPage+"&consultPage="+consultPage+"&btnCode="+buttonId+"&styleId="+1) ;
+	window.open (url+"?refer="+refer+"&landingPage="+landingPage+"&consultPage="+consultPage+"&btnCode="+buttonId+"&styleId="+styleId) ;
 }
 
 
@@ -141,14 +163,35 @@ function findDimensions(){
 	var winHeight = winStrs[0],
 		winWidth = winStrs[1];
 	
-	// 获取邀请框自身的宽高
-	var boxWidth = document.getElementById("w-kfcbox").offsetWidth,
-		boxHeight = document.getElementById("w-kfcbox").offsetHeight;
-	var sTop = document.documentElement.scrollTop || document.body.scrollTop;
-	
-	// 自动居中
-	document.getElementById("w-kfcbox").style.left = (winWidth-boxWidth)/2 + "px";
-	document.getElementById("w-kfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+	if(isPc){
+		// 获取邀请框自身的宽高
+		var boxWidth = document.getElementById("w-kfcbox").offsetWidth,
+			boxHeight = document.getElementById("w-kfcbox").offsetHeight;
+		var sTop = document.documentElement.scrollTop || document.body.scrollTop;
+		
+		// 自动居中
+		document.getElementById("w-kfcbox").style.left = (winWidth-boxWidth)/2 + "px";
+		document.getElementById("w-kfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+	}else{
+		// 获取图片的宽高
+		var imgWidth = document.getElementById("w-mkfcbox-img").offsetWidth,
+			imgHeight = document.getElementById("w-mkfcbox-img").offsetHeight;
+		
+		// 设置邀请框外层宽高
+		var boxWidth = document.getElementById("w-mkfcbox").style.width = imgWidth,
+			boxHeight = document.getElementById("w-mkfcbox").style.height = imgHeight,
+			iconHeight = document.getElementById("w-mkfrbox").style.height;
+			document.getElementById("w-mkfcbox").style.width = imgWidth + "px";
+			document.getElementById("w-mkfcbox").style.height = imgHeight + "px";
+			document.getElementById("w-mkfcbox-img").style.width = 100 + "%";
+		var sTop = document.documentElement.scrollTop || document.body.scrollTop;
+		
+		// 自定居中
+		document.getElementById("w-mkfcbox").style.left = (winWidth-boxWidth)/2 + "px";
+		document.getElementById("w-mkfcbox").style.top = ((winHeight-boxHeight)/2 + sTop) + "px";
+		document.getElementById("w-mkfrbox").style.top = ((winHeight-imgHeight)/2) + "px";
+	}
+
 }
 
 //隐藏漂浮框

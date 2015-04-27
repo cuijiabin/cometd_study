@@ -1,6 +1,5 @@
 package com.xiaoma.kefu.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -127,13 +126,7 @@ public class InviteIconController {
 	public String saveYD(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
-//			//补充字段
-			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
-			inviteIcon.setCreateDate(oldModel.getCreateDate());
-			inviteIcon.setTruePic(oldModel.getTruePic());
-			inviteIcon.setButtonId(oldModel.getButtonId());
-			inviteIcon.setUpdateDate(new Date());
-			inviteIconService.update(inviteIcon);
+			inviteIconService.saveAndUpdateDiv4YD(inviteIcon);
 		} catch (Exception e) {
 			logger.error("saveYD"+inviteIcon.getId(), e);
 			return "error500";

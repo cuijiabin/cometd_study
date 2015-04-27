@@ -26,6 +26,7 @@ import com.xiaoma.kefu.comet4j.DialogueQuene;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
@@ -33,9 +34,12 @@ import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
+import com.xiaoma.kefu.util.AddressUtil;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.ParseURLKeywordUtil;
 import com.xiaoma.kefu.util.StudyMapUtil;
 
 @Controller
@@ -55,6 +59,9 @@ public class DialogueController {
 	
 	@Autowired
 	private BlacklistService blacklistService;
+	
+	@Autowired
+	private StyleService styleService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 	
@@ -161,25 +168,27 @@ public class DialogueController {
 
 	}
 
+	
 	/**
 	 * 客户对话框请求页 负责用户的创建与cookie的读写还有聊天历史记录！
 	 * 
 	 * @param request
 	 * @param response
 	 * @param model
+	 * @param refer 
+	 * @param styleId -风格id
+	 * @param btnCode - 按钮id
+	 * @param landingPage - 着陆页
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "customerChat.action", method = RequestMethod.GET)
-	public String customerChat(HttpServletRequest request,
-			HttpServletResponse response, Model model, String refer,
-			Integer styleId, String btnCode, String landingPage)
-			throws Exception {
+	public String customerChat(HttpServletRequest request,HttpServletResponse response, Model model, String refer,Integer styleId, String btnCode, String landingPage)throws Exception {
 
 		String customerId = CookieUtil.getCustomerIdFromCookie(request);
 
 		Long id = null;
-		Boolean isNew = true;
+		Boolean isNew = true; //判断是否是新用户标识
 		Boolean isForbidden = false;
 		if (StringUtils.isNotBlank(customerId)) {
 			try {
@@ -191,11 +200,28 @@ public class DialogueController {
 		}
 		Customer customer = null;
 		if (isNew) {
-
+			
 			customer = new Customer();
+			
 			// 收集信息创建新客户
-			String ip = CookieUtil.getIpAddr(request);
+			String ip = CookieUtil.getIpAddr(request); //获取ip地址
 			customer.setIp(ip);
+			
+			String ipInfo = AddressUtil.getAddresses("ip=" + ip, "utf-8");
+			customer.setIpInfo(ipInfo);
+			customer.setStyleId(styleId);
+			
+			if(styleId != null){
+				Style style = styleService.get(styleId);
+				if(style != null) customer.setStyleName(style.getName());
+			}
+			customer.setCustomerType(1);
+			customer.setStatus(0); //0-正常 1-删除
+			customer.setFirstLandingPage(landingPage);
+			
+			String firstVisitSource = ParseURLKeywordUtil.getKeyword(refer); //搜索关键字
+			customer.setFirstVisitSource(firstVisitSource);
+			
 			id = customerService.insert(customer);
 
 		} else {

@@ -12,6 +12,11 @@ public class Constant {
 	public static final String UPDATE_LIST = "update_list";
 	public static final String END_DIALOGUE = "end_dialogue";
 	
+	//客服不在
+	public static final String NO_USER = "no_user";
+	//客服繁忙
+	public static final String USER_BUSY = "user_busy";
+	
 	//客户转接通知
 	public static final String ON_SWITCH_CUSTOMER = "on_switch_customer";
 	public static final String ON_SWITCH_FROM = "on_switch_from";
