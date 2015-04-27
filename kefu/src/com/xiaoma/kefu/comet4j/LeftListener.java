@@ -45,6 +45,9 @@ public class LeftListener extends DropListener {
 				//保存会话
 		        String key = JedisConstant.getDialogueListKey(toUserCcnId,ccnId);
 		        JedisTalkDao.lpushSaveDialogue(key);
+		        
+		        //移除等待列表
+		        JedisTalkDao.remCustomerWaitSet(ccnId);
 				
 				logger.info("前端用户customerId："+customerId+" ,退出联接; 通信点id："+ccnId+" ,关联客服通信点id："+toUserCcnId
 						+" ,客服id: "+JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, toUserCcnId));

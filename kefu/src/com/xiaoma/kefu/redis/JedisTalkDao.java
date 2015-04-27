@@ -509,6 +509,71 @@ public class JedisTalkDao {
 		
 		return (score != null);
 	}
+	
+	//######################
+	/**
+	 * 获取客户等待列表
+	 * @return
+	 */
+	public static Set<String> getCustomerWaitSet(){
+		
+		Jedis jedis = JedisDao.getJedis();
+		
+		return jedis.zrange(JedisConstant.CUSTOMER_WAIT_SET, 0, -1);
+	}
+	
+	/**
+	 * 添加连接点至客户等待列表
+	 * @param ccnId
+	 * @return
+	 */
+	public static Boolean addCustomerWaitSet(String ccnId){
+		
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.zadd(JedisConstant.CUSTOMER_WAIT_SET, System.currentTimeMillis(), ccnId);
+		
+		logger.info("redis zadd key:" + JedisConstant.CUSTOMER_WAIT_SET +" value: "+ ccnId);
+
+		return (id >= 0);
+	}
+	
+	public static Boolean remCustomerWaitSet(String ccnId){
+		
+		Jedis jedis = JedisDao.getJedis();
+
+		Long id = jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, ccnId);
+		
+		logger.info("redis zrem key:" + JedisConstant.CUSTOMER_WAIT_SET +" value: "+ ccnId);
+
+		return (id >= 0);
+	}
+	
+	public static Integer sizeCustomerWaitSet(){
+		Jedis jedis = JedisDao.getJedis();
+		Long card = jedis.zcard(JedisConstant.CUSTOMER_WAIT_SET);
+		
+		return card.intValue();
+	}
+	public static String popCustomerWaitSet(){
+		
+		Jedis jedis = JedisDao.getJedis();
+		Integer start = sizeCustomerWaitSet()-1;
+		Set<String> set = jedis.zrange(JedisConstant.CUSTOMER_WAIT_SET, start, -1);
+		if(CollectionUtils.isEmpty(set)){
+			return null;
+		}
+		
+		Iterator<String> it = set.iterator();
+		if(!it.hasNext()){
+			return null;
+		}
+		
+		String member = it.next();
+		jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
+		
+		return member;
+	}
 	// ######################
 	public static Boolean setDialogueScore(String key, DialogueScore dScore){
 		
@@ -542,11 +607,20 @@ public class JedisTalkDao {
 
 		Jedis jedis = JedisDao.getJedis();
 		
-		Long size = jedis.zcount(key, Long.MIN_VALUE, Long.MAX_VALUE);
+		Long size = jedis.zcard(key);
 		size = (size == 0) ? 0L : size-1;
 		
-		Set<String> set = jedis.zrange(key, Integer.parseInt(size.toString()), -1);
+		Set<String> set = jedis.zrange(key, size.intValue(), -1);
+		
+		if(CollectionUtils.isEmpty(set)){
+			return null;
+		}
+		
 		Iterator<String> it = set.iterator();
+		if(!it.hasNext()){
+			return null;
+		}
+		
 		return it.next();
 
 	}
@@ -585,5 +659,15 @@ public class JedisTalkDao {
 		return result;
 	}
 	
+	public static void main(String[] args) {
+//		addCustomerWaitSet("100000044");
+//		addCustomerWaitSet("100000045");
+//		addCustomerWaitSet("100000046");
+		
+		System.out.println(popCustomerWaitSet());
+		System.out.println(popCustomerWaitSet());
+		System.out.println(popCustomerWaitSet());
+		System.out.println(popCustomerWaitSet());
+	}
 
 }

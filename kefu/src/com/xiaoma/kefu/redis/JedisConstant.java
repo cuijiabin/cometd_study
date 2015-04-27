@@ -92,6 +92,11 @@ public class JedisConstant {
 	 * 离线用户列表
 	 */
 	public static final String OFF_LINE_USER_SET = "off_line_user_set";
+	
+	/**
+	 * 客户等待列表
+	 */
+	public static final String CUSTOMER_WAIT_SET = "customer_wait_set";
 
 	// #######生成key方法
 	/**

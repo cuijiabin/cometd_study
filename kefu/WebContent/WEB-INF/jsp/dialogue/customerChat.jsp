@@ -192,8 +192,11 @@
 					case 'on_close': 
 						onLeft(data); // 下线
 						break;
-					case 'end_dialogue': // 结束对话
-						endDialogueNotice(data);
+					case 'end_dialogue':
+						endDialogueNotice(data); // 结束对话
+						break;
+					case 'no_user': 
+						noUser(data);// 客服不在
 						break;
 					default:
 					}
@@ -258,6 +261,11 @@
 			moveScroll();
 			//弹出评分对话框
 			
+		}
+		
+		function noUser(data){
+			var str = '<div class="r-offline"><span class="alert alert-block">对不起，客服不在线，请留言</span></div>';
+			logbox.innerHTML += str;
 		}
 		
 		//通过按钮结束对话(**)
