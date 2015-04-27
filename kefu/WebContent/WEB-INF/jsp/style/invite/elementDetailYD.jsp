@@ -78,24 +78,24 @@
 
 //保存
 function saveDetail(){
-	if(!isInteger($("#width").val())){
-		$.dialog.alert("宽度请填写正整数!");
+	if(!isNaturalNum($("#width").val())){
+		$.dialog.alert("宽度请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#height").val())){
-		$.dialog.alert("高度请填写正整数!");
+	if(!isNaturalNum($("#height").val())){
+		$.dialog.alert("高度请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#siteLeft").val())){
-		$.dialog.alert("距左距离请填写正整数!");
+	if(!isNaturalNum($("#siteLeft").val())){
+		$.dialog.alert("距左距离请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#siteTop").val())){
-		$.dialog.alert("距顶距离请填写正整数!");
+	if(!isNaturalNum($("#siteTop").val())){
+		$.dialog.alert("距顶距离请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#level").val())){
-		$.dialog.alert("层叠顺序请填写正整数!");
+	if(!isNaturalNum($("#level").val())){
+		$.dialog.alert("层叠顺序请填写大于等于0的整数!");
 		return;
 	}
 	
