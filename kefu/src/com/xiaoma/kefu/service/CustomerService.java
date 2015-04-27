@@ -69,7 +69,7 @@ public class CustomerService {
     /**
      * 在黑名单添加前检查是否存在该访客
      */
-   public Integer checkCus(Integer id){
+   public Integer checkCus(Long id){
 	      Integer count =  customerDaoImpl.checkCus(id);
 	      return count;
    }

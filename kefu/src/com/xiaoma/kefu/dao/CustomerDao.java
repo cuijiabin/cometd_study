@@ -25,7 +25,7 @@ public interface CustomerDao extends BaseDao<Customer>{
      * @param id
      * @return
      */
-	 public Integer checkCus(Integer id);
+	 public Integer checkCus(Long id);
       
 	/**
 	 * 添加一条

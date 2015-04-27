@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.MessageDao;
+import com.xiaoma.kefu.dao.impl.MessageDaoImpl;
 import com.xiaoma.kefu.model.Message;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -18,7 +19,7 @@ import com.xiaoma.kefu.util.PageBean;
 public class MessageService {
       
 	   @Autowired
-	   private MessageDao messageDaoImplDao;
+	   private MessageDao messageDaoImpl;
 	   
 		/**
 		 * 分页查询
@@ -28,22 +29,28 @@ public class MessageService {
 		 * @return
 		 */
 		public void getResult(Map<String, String> conditions,PageBean<Message> pageBean,Integer id) {
-			messageDaoImplDao.findByCondition(conditions, pageBean, id);
+			messageDaoImpl.findByCondition(conditions, pageBean, id);
 		}
 		
 		 /**
 	     * 查询最大的id 值
 	     */
 	   public Integer maxId(){
-		   Integer num =  messageDaoImplDao.getMaxId();  // num 最大的排序号
+		   Integer num =  messageDaoImpl.getMaxId();  // num 最大的排序号
 		      return num;
 	   }
 	   
+	   /**
+	    * 查询一条
+	    */
+	   public Message getMessageById(Integer id){
+		   return messageDaoImpl.getMessageById(id);
+	   }
 		/**
 		 * 添加
 		 */
 	   public boolean createNewMessage(Message message){
-	      return messageDaoImplDao.createNewMessage(message);
+	      return messageDaoImpl.createNewMessage(message);
 	   }
 	  
 
@@ -51,14 +58,13 @@ public class MessageService {
 	    * 修改
 	    */
 	   public boolean updateMessage(Message message){
-		  return messageDaoImplDao.updateMessage(message); 
+		  return messageDaoImpl.updateMessage(message); 
 	   }
 	   
 	    /**
 		 * 删除
 		 */
-	   public boolean deleteMessageById(Integer id){
-		
-		return messageDaoImplDao.deleteMessageById(id);
+	   public Integer deleteMessageById(Integer id){
+		return messageDaoImpl.deleteMessageById(id);
 	   }
 }

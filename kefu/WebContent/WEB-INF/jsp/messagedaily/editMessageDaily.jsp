@@ -14,31 +14,28 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  	<input type="hidden" id="treeId" name="treeId" value="${messageType.id }"/>
-    <input type="hidden" id="pId" name="pId" value="${messageType.pId }"/>
     <div style="margin:50px;">
 		<table class="table table-bordered m-table">
           <tbody>
-                 <tr>
-                 <td class="f-txtr tdbg" width="150px">分类编号</td>
-                  <td class="f-txtl"><input type="text" readonly="readonly" id="typeId" name="typeId" value="${messageType.typeId }"/></td>
-                 </tr>
-              
-                 <tr>
-                    <td class="f-txtr tdbg">分类名称</td>
-                     <td class="f-txtl"><input type="text" type="text" maxlength="20" id="title" name="title" value="${messageType.title} " /></td>
-                </tr>
-             <tr>
-                  <td class="f-txtr tdbg">排序</td>
-                  <td class="f-txtl"><input type="text" type="text" readonly="readonly" id="sortId" name="sortId" value="${messageType.sortId }"/></td>
-              </tr>
-               <tr>
-                 <td class="f-txtr tdbg">展示</td>
-                  <td class="f-txtl"><input style="margin-left: 90px" type="checkbox" id="statusCk"  value="${messageType.status }" <c:if test="${messageType.status==1 }"> checked </c:if>  /></td>
-              </tr>
+                  <tr>
+	          <td class="f-txtr tdbg" width="150px">编号</td>
+	          <td class="f-txtl"><input type="text" readonly="readonly"  id="numId" name="numId" value="${message.id }"/></td>
+           </tr>
+            <tr>
+               <td class="f-txtr tdbg">标题</td>
+                <td class="f-txtl"><input type="text" type="text" maxlength="20" id="title" name="title" value="${message.title }"/></td>
+           </tr>
+           <tr>
+                <td class="f-txtr tdbg">内容</td>
+                <td class="f-txtl"><input type="text" type="text"   id="content" name="content" value="${message.content }"/></td>
+            </tr>
+            <tr>
+              <td class="f-txtr tdbg">展示</td>
+               <td class="f-txtl"><input style="margin-left: 90px" id="statusCk" name="statusCk" type="checkbox" value="${message.status }" <c:if test="${message.status==1 }"> checked</c:if> /></td>
+           </tr>
               <tr>
 		           <td colspan="2" align="right">
-		            <button  onclick="javascript:editMessageType();"  class="btn btn-primary" >保存</button>
+		            <button  onclick="javascript:editMessageDaily();"  class="btn btn-primary" >保存</button>
 		            <button  onclick="javascript:cl();" class="btn btn-primary" >取消</button>
 		            </td>
 		        </tr>
@@ -52,17 +49,16 @@
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 
-function editMessageType(){
+function editMessageDaily(){
 	  var isSelect = document.getElementById("statusCk").checked;
 	  var status = isSelect ? 1:2;
     
-	  var url = "/messageType/update.action";
+	  var url = "/messageDaily/update.action";
 	  var data = {
-	   "id"   : $("#treeId").val(),  
-	    "pId"   : $("#pId").val(),  
-	  	"typeId" : $("#typeId").val(),
-	  	"title" : $("#title").val(),
-	  	"sortId" : $("#sortId").val(),
+	   "id"   : $("#numId").val(),  
+	    "title"   : $("#title").val(),  
+	  	
+	  	"content" : $("#content").val(),
 	  	"status" : status
 	   };
 	  //修改时验证参数
@@ -98,7 +94,7 @@ function verificationParam(userData) {
 
 	var title = userData.title;
 	if (title.replace(/^ +| +$/g,'')=='') {
-		 alert("分类名称不得为空 ！");
+		 alert("标题不得为空 ！");
 		return false;
 	}
 	

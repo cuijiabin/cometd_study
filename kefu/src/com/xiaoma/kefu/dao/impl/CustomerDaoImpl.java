@@ -202,7 +202,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 	 * 查询是否存在该访客
 	 */
 	@Override
-	public Integer checkCus(Integer id ){
+	public Integer checkCus(Long id ){
 		Session session = getSession();
 		StringBuffer hqlBuffer = new StringBuffer(
 				"select count(m.id) from Customer m  where  m.id="+id+" " );

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,7 @@ import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
 /**
- * 
+ * @time 2015-04-27
  * @author frongji
  *  常用语控制层
  */
@@ -36,6 +37,9 @@ import com.xiaoma.kefu.util.PageBean;
 @Controller
 @RequestMapping(value = "messageDaily")
 public class MessageController {
+	
+	private Logger logger = Logger.getLogger(MessageController.class);
+	
 	@Autowired
 	private MessageTypeService messageTypeService;
 	@Autowired
@@ -150,5 +154,83 @@ public class MessageController {
 		}
 		return "resultjson";
 	}
+	
+	/**
+	 * 编辑前页面跳转
+	 * 
+	 * @return 返回值
+	 */
+	@RequestMapping(value = "toUpdate.action",method=RequestMethod.GET)
+    public String toUpdate(Model model,Integer messageDailyId) {
+	
+    	Message message = messageService.getMessageById(messageDailyId); 
+    	 model.addAttribute("message", message);
+	   
+        return "messagedaily/editMessageDaily";
+     }
 
+	/**
+	 * 修改
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "update.action", method = RequestMethod.POST)
+	public String update(HttpSession session, Model model,Message message) {
+		try {
+			Message toUpdateMessage = messageService.getMessageById(message.getId());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			User user = (User) session.getAttribute(CacheName.USER);
+			if (user == null)
+				return "login";
+			Integer userId = user.getId();
+			toUpdateMessage.setUserId(userId);
+
+			Date now = new Date();
+			String nowString = sdf.format(now); // Date型 时间 转换为 String型
+			Date nowDate = sdf.parse(nowString);
+			toUpdateMessage.setCreateDate(nowDate);
+
+	        toUpdateMessage.setId(message.getId());
+			toUpdateMessage.setTitle(message.getTitle());
+		    toUpdateMessage.setContent(message.getContent());
+			toUpdateMessage.setStatus(message.getStatus());
+			boolean isSuccess = messageService.updateMessage(toUpdateMessage);
+
+			if (isSuccess) {
+				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			}
+		} catch (Exception e) {
+			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+		}
+
+		return "resultjson";
+
+	}
+	/**
+	 * 删除
+	 */
+	@RequestMapping(value = "delete.action" , method = RequestMethod.GET)
+    public String deleteMessageDaily(Model model,Integer id){
+    	
+		try {
+			Integer isSuccess = messageService.deleteMessageById(id);
+			
+			if (isSuccess!=null) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} 
+			else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("result",Ajax.JSONResult(1, "删除失败！"));
+		
+		}
+		return "resultjson";
+    }
 }

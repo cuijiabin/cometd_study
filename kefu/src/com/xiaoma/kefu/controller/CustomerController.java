@@ -149,7 +149,7 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "check.action", method = RequestMethod.GET)
-	public String checkCus(Model model, Integer id) {
+	public String checkCus(Model model, Long id) {
 		try {
 			if (id == null) {
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));

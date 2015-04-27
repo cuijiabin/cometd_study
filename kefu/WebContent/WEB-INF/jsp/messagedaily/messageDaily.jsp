@@ -27,8 +27,8 @@
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageDaily();">添加</button>
-            <input class="c-wd150" type="text" />
-            <button type="button" class="btn btn-primary btn-small">搜索</button>
+            <input class="c-wd150" type="text" id="serchTitle" />
+            <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">搜索</button>
         </div>
     </div>
     
@@ -60,6 +60,34 @@
 	});
 })(jQuery);
 
+/*
+ * 条件查询
+ */
+  function find(currentPage){
+	var url="/messageDaily/find.action";
+	var data = {
+			"currentPage":currentPage,
+			"pageRecorders" : $("#pageRecorders").val(),
+			"map[title]":$("#serchTitle").val(),
+			"map[typeId]":1
+	};
+	
+	$.ajax({
+	    type: "get",
+	    url: url,
+	    data: data,
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "html",
+	    success: function (data) {
+	       $("#table_data").html(data);
+	    },
+	    error: function (msg) {
+	        alert(msg);
+	    }
+	});
+  }
+
+
 	/**
 	 * 跳转新增前的页面
 	 */
@@ -79,24 +107,21 @@
 	/**
 	 * 跳转编辑前的页面
 	 */
- function updateMessageDaily(){
+ function toUpdate(messageDailyId){
 
-	var d = $.dialog({id:'updateMessageDaily' ,title:"编辑常用语信息",content:'url:/messageType/toUpdate.action?treeId='+$("#messageTypeId").val(),
+	var d = $.dialog({id:'updateMessageDaily' ,title:"编辑常用语信息",content:'url:/messageDaily/toUpdate.action?messageDailyId='+messageDailyId,
 			lock:true, width:	600,height: 400});
  }
 	/**
 	 * 删除
 	 */
-   function deleteMessageType(){
-	  var treeId = id;
- 	  var url = "/messageType/delete.action";
+   function deleteMessageDaily(id){
+	
+ 	  var url = "/messageDaily/delete.action";
 	 var data = {
-			 "treeId" :treeId
+			 "id" :id
 	 };
-	 if(checkChild()){
-		    alert("请先删除子节点信息！");
-		   return false;
-	   }
+
 	 $.dialog.confirm('你确定要彻底删除吗？', function(){
 	 $.ajax({
 		 type :"get" ,
@@ -106,16 +131,7 @@
 	     dataType : "json",
 	     success: function (data) {
 	    	alert("删除成功 ！");
-	    	var node;
-	    	   var nodes = zTree.getSelectedNodes();
-	    	   if (nodes.length > 0) {
-			  	   node =nodes[0].getParentNode();
-			  	   zTree.selectNode(node);
-			   }
-		  	   for (var i=0, l=nodes.length; i < l; i++) {
-		  	   	  zTree.removeNode(nodes[i]);
-		  	   }
-		  	   changeDetail(node.id);
+	    
 		    },
 		    error: function (msg) {
 		    alert("删除失败！");
@@ -123,37 +139,7 @@
 	    });
 	 })
  }
-   /*
-    * 删除前检查是否有子节点信息
-    */
-   function checkChild(){
-   	var flag = false;
-    var treeId = id;
-   	var data = {
-   			"treeId" : $("#messageTypeId").val()
-   	};
-   	$.ajax({
-   		type : "get",
-   	     url : "/messageType/check.action",
-   		data : data,
-   		contentType : "application/json; charset=utf-8",
-   		dataType : "json",
-   		async:false,
-   		success : function(data) {
-   			if(data.code==0){
-   				
-   			}else{
-   				flag = true;
-   			}
-   		},
-   		error : function(msg){
-   			alert(flag);
-   			alert("删除失败！");
-   			flag = true;
-   		}
-   	});
-   	return flag;
-   }
+  
 
 //更新树
 //获取树选中节点，提交。查询出新的树，替换相应的div

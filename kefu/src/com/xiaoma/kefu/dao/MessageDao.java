@@ -49,6 +49,6 @@ public interface MessageDao extends BaseDao<Message> {
 	 * @param id
 	 * @return
 	 */
-	public boolean deleteMessageById(Integer id);
+	public Integer deleteMessageById(Integer id);
 
 }

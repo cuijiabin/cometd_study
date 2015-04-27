@@ -119,16 +119,17 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		 * 删除
 		 */
 		@Override
-		public boolean deleteMessageById(Integer id){
+		public Integer deleteMessageById(Integer id){
 			Message message = this.getMessageById(id);
-			try {	
-			delete(message);
-			return true;
 			
+			try {
+			 delete(message);
+				
 			} catch (Exception e) {
+			
 				e.printStackTrace();
 			}
-			return false;
-			
+			return id;
+		
 		}
 }

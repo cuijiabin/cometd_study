@@ -122,7 +122,7 @@ function verificationParam(userData) {
 	}
 	//检查该访客信息是否存在
 	if(checkBlacklist_cusId()){
-	    alert("请输入有效的客户编号！");
+	    alert("请输入已存在的客户编号！");
 	   return false;
    }
 
@@ -200,6 +200,7 @@ function checkBlacklist_cusId(){
 	var  data ={
 			'id':$("#customerId").val()
 			}
+	   var  a =  $("#customerId").val();
 	$.ajax({
 		type : "get",
 		url : "/customer/check.action",
@@ -209,11 +210,10 @@ function checkBlacklist_cusId(){
 		async:false,
 		success : function(data) {
 			if(data.code==0){
-				
 				flag = true;
 			}
 			else{
-				
+				flag = false;
 			}
 		},
 		error : function(msg){
