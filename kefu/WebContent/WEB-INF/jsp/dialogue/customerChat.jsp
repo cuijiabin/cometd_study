@@ -16,168 +16,145 @@
 </head>
 
 <body onload="init()" scroll="no" class="g-body">
-	<div class="m-chat">
-	
-		<div class="m-chat-hd f-cb">
-	        <div class="m-chat-hdc f-cb c-bg">
-	            <div class="u-teach f-fl">
-	                <img src="/img/pic_02.png" alt="" />
-	                <p>艾丽娅老师 <span>托福口语</span></p>
-	            </div>
-	        </div>
-	    </div>
-	    
-		<div class="m-chat-mn f-cb">
-	        <div class="g-mn5">
-	        	<div class="slideTab2">
-	            	<div class="hd"><ul class="f-cb"><li class="u-borl">咨询</li><li class="u-borl">留言</li><li>帮助</li></ul></div>
-	                <div class="bd">
-	                    <div class="g-mn5c c-bor">
-	                        <h3 class="u-tit c-bg f-txtl" ><span id="dialogueTitle">等待咨询...</span>  <a class="f-fr c-colf00" href="javascript:endDialogue()"><b>X 结束对话</b></a></h3>
-	                        
-	                        <!-- 隐藏用户信息 -->
-	                        <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
-	                        <input type="hidden" id="isForbidden" value="${isForbidden}"/>
-	                        <input type="hidden" id="styleId" value="${customer.styleId}"/>
-	                        <input type="hidden" id="currentUserCcnId"/>
-	                        
-	                        <div class="m-dialog">
-	                            <div class="u-record r-sms-visitor" id="logbox">
-		                            <!-- 默认历史聊天记录 start -->
-		                            <c:if test="${dialogueList != null}">
-		                                <c:forEach var="dialogue" items="${dialogueList}">
-		                                <c:choose>
-									         <c:when test="${dialogue.dialogueType == 1}">
-									           <p class="r-manager">我： <fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
-									           <p class="r-manager-txt">${dialogue.content }</p>
-									        </c:when>
-									         <c:otherwise>
-									            <p class="r-visitor">${dialogue.cardName } <fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
-									            <p class="r-visitor-txt">${dialogue.content }</p>
-									        </c:otherwise>
-									     </c:choose>
-									     </c:forEach>
-			                            <div class="r-history"><h3>历史记录</h3></div>
-			                        </c:if>
-			                        <!-- 默认历史聊天记录 end -->
-	                            </div>
-	                            
-	                            <div class="u-operate">
-	                                <!-- 图标操作按钮  start -->
-	                                <div class="u-operatebar c-bg">
-	                                    <ul class="u-operatebar-btn">
-	                                        <li><a class="exp-block-trigger" href="javascript:;"><img src="/img/icon_01.png" alt="" /></a></li>
-	                                        <li><img src="/img/icon_02.png" alt="" /></li> 
-	                                        <li><img src="/img/icon_03.png" alt="" /></li>
-	                                        <li><img src="/img/icon_04.png" alt="" /></li>
-	                                        <li><img src="/img/icon_05.png" alt="" /></li>
-	                                        <a class="f-fr" href="javascript:socreUserNotice()">客服评分</a>
-	                                    </ul>
-	                                    
-	                                </div>
-	                                <!-- 图标操作按钮  end -->
-	                                
-	                                <div class="u-input f-cb">
-	                                    <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
-	                                    <div class="u-send">
-	                                        <div class="btn-group">
-	                                            <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
-	                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="send(inputbox.value);">
-	                                            <span class="caret"></span>
-	                                            </button>
-	                                            <ul class="dropdown-menu f-txtl">
-	                                                <li><a href="#"><label><input type="radio" name="2" checked>Enter 发送</label></a></li>
-	                                                <li><a href="#"><label><input type="radio" name="2">Ctrl + Enter 发送</label></a></li>
-	                                            </ul>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                                
-	                            </div>                
-	                        </div>
-	                    </div>
-	                    <div class="g-mn5c c-bor">
-	                        <h3 class="u-tit c-bg f-txtl">请填写留言信息</h3>
-	                        <div class="m-message">
-	                            <div class="m-query f-mar10">
-	                                <div class="m-query-hd">
-	                                    <p class="u-txt">您好，现在是非咨询时段。如需帮助请留言。我们的留学顾问会第一时间与您联系。</p>
-	                                </div>
-	                                <div class="u-hr"></div>
-	                                <div class="m-query-bd">
-	                                    <div class="f-mbm">
-	                                        <label class="c-wd80 f-txtr">回复方式：</label>
-	                                        <div class="u-subsec">
-	                                        	<c:forEach varStatus="status" items="${replyWay}" var="d">
-	                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="true" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
-	                                       		</c:forEach>
-	                                        </div>
-	                                    </div>
-	                                    <div class="f-mbm">
-	                                        <label class="c-wd80 f-txtr">回复对象：</label>
-	                                        <div class="u-subsec">
-	                                        	<c:forEach varStatus="status" items="${replyType}" var="d">
-	                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
-	                                       		</c:forEach>
-	                                        </div>
-											<select id="teacher" name="teacher" style="display:none;" class="c-wd80">
-	                                        	<c:forEach varStatus="status" items="${userList}" var="user">
-	                                        		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
-	                                        	</c:forEach>
-	                                        </select>                                    
-	                                    </div>
-	                                    <c:forEach varStatus="status" items="${infoList}" var="d">
-	                                    <div class="f-mbm">
-	                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
-	                                    </div>
-	                                    </c:forEach>
-	                                    <div class="f-mbm">
-	                                        <label class="c-wd80 f-txtr">留言内容：</label><textarea name="custContent" id="custContent" style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
-	                                    </div>
-	                                    <div class="u-hr"></div>
-	                                    <div class="m-query-bd">
-	                                        <button type="button" onclick="javascript:addMessage();" class="btn btn-primary">提交</button>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="g-sd5 c-bor">
-	            <div class="slideTab">
-	                <div class="hd c-bg">
-	                    <ul><li class="u-borl">公司简介</li><li>客服信息</li></ul>
-	                </div>
-	                <div class="bd">
-	                	<div class="tabBox"></div>
-	                	<div class="tabBox"></div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-		<div class="m-chat-sd"></div>
-	    <div class="clear"></div>
-	    <div class="g-bd3 f-cb c-bor">
-	        <div class="g-bd3c f-cb">
-	            <div class="g-sd3 f-fl">
-	                <ul class="f-cb u-txt">
-	                    <li><a href="#" target="_blank">小马过河留学考试全日制</a></li>
-	                    <li><a href="#" target="_blank">小马过河国际教育</a></li>
-	                </ul>
-	            </div>
-	            <div class="g-mn34 f-fr">
-	                <div class="g-mn3c">
-	                    <ul class="f-cb">
-	                        <li>网址：<a href="#" target="_blank">www.xiaoma.com</a></li>
-	                    </ul>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	
+<div class="m-chat">
+	<div class="m-chat-hd f-cb">
+        <div class="m-chat-hdc f-cb c-bg">
+            <div class="u-teach f-fl">
+                <img src="/img/pic_02.png" alt="" />
+                <p>艾丽娅老师 <span>托福口语</span></p>
+            </div>
+        </div>
+    </div>
+    
+	<div class="m-chat-mn f-cb">
+        <div class="g-mn5">
+        	<div class="slideTab2">
+            	<div class="hd">
+                	<ul class="f-cb"><li class="u-borl">咨询</li><li class="u-borl">留言</li><li>帮助</li></ul>
+                </div>
+                <div class="bd">
+                    <div class="g-mn5c c-bor">
+                        <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
+                        <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
+                        <div class="m-dialog">
+                            <div class="u-record r-sms-visitor" id="logbox">
+                            <c:if test="${dialogueList != null}">
+	                            <c:forEach var="dialogue" items="${dialogueList}">
+	                              <p class="r-visitor">${dialogue.customerId}&nbsp;${dialogue.createDate}</p>
+	                              <p class="r-visitor-txt">${dialogue.content}</p>
+	                            </c:forEach>
+	                            <div class="r-history"><h3>历史记录</h3></div>
+	                        </c:if>
+                            </div>
+                            <div class="u-operate">
+                                <div class="u-operatebar c-bg">
+                                    <ul class="u-operatebar-btn">
+                                        <li><a class="exp-block-trigger" href="javascript:;"><img src="/img/icon_01.png" alt="" /></a></li>
+<!--                                         <li><img src="/img/icon_02.png" alt="" /></li> -->
+<!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
+                                        <li><img src="/img/icon_04.png" alt="" /></li>
+                                        <li><img src="/img/icon_05.png" alt="" /></li>
+                                    </ul>
+                                </div>
+                                <div class="u-input f-cb">
+                                    <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
+                                    <div class="u-send">
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
+                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="send(inputbox.value);">
+                                            <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu f-txtl">
+                                                <li><a href="#"><label><input type="radio" name="2" checked>Enter 发送</label></a></li>
+                                                <li><a href="#"><label><input type="radio" name="2">Ctrl + Enter 发送</label></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                
+                        </div>
+                    </div>
+                    <div class="g-mn5c c-bor">
+                        <h3 class="u-tit c-bg f-txtl">请填写留言信息</h3>
+                        <div class="m-message">
+                            <div class="m-query f-mar10">
+                                <div class="m-query-hd">
+                                    <p class="u-txt">您好，现在是非咨询时段。如需帮助请留言。我们的留学顾问会第一时间与您联系。</p>
+                                </div>
+                                <div class="u-hr"></div>
+                                <div class="m-query-bd">
+                                    <div class="f-mbm">
+                                        <label class="c-wd80 f-txtr">回复方式：</label>
+                                        <div class="u-subsec">
+                                        	<c:forEach varStatus="status" items="${replyWay}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" >  checked="true" </c:if> onclick="changeRadio(this)" name="replyWay" value="${d.itemCode}" />${ d.itemName }</label>
+                                       		</c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="f-mbm">
+                                        <label class="c-wd80 f-txtr">回复对象：</label>
+                                        <div class="u-subsec">
+                                        	<c:forEach varStatus="status" items="${replyType}" var="d">
+                                        		<label><input type="radio" <c:if test="${status.first}" > id="messageRadio" checked="true" </c:if> name="replyType" value="${d.itemCode}" onclick="changeRadio(this)" onchange="changeMessage(this);" />${ d.itemName }</label>
+                                       		</c:forEach>
+                                        </div>
+										<select id="teacher" name="teacher" style="display:none;" class="c-wd80">
+                                        	<c:forEach varStatus="status" items="${userList}" var="user">
+                                        		<option  value="${user.id }" <c:if test="${status.first}" > selected="selected"</c:if>>${user.cardName}</option>
+                                        	</c:forEach>
+                                        </select>                                    
+                                    </div>
+                                    <c:forEach varStatus="status" items="${infoList}" var="d">
+                                    <div class="f-mbm">
+                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
+                                    </div>
+                                    </c:forEach>
+                                    <div class="f-mbm">
+                                        <label class="c-wd80 f-txtr">留言内容：</label><textarea name="custContent" id="custContent" style="width:300px;height:130px;height:128px\9;*height:118px;height:133px\9\0;resize:none;"></textarea> <span class="help-inline c-clred">* 必填</span>
+                                    </div>
+                                    <div class="u-hr"></div>
+                                    <div class="m-query-bd">
+                                        <button type="button" onclick="javascript:addMessage();" class="btn btn-primary">提交</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="g-sd5 c-bor">
+            <div class="slideTab">
+                <div class="hd c-bg">
+                    <ul><li class="u-borl">公司简介</li><li>客服信息</li></ul>
+                </div>
+                <div class="bd">
+                	<div class="tabBox"></div>
+                	<div class="tabBox"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="m-chat-sd"></div>
+    <div class="clear"></div>
+    <div class="g-bd3 f-cb c-bor">
+        <div class="g-bd3c f-cb">
+            <div class="g-sd3 f-fl">
+                <ul class="f-cb u-txt">
+                    <li><a href="#" target="_blank">小马过河留学考试全日制</a></li>
+                    <li><a href="#" target="_blank">小马过河国际教育</a></li>
+                </ul>
+            </div>
+            <div class="g-mn34 f-fr">
+                <div class="g-mn3c">
+                    <ul class="f-cb">
+                        <li>网址：<a href="#" target="_blank">www.xiaoma.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
