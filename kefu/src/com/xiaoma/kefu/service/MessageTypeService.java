@@ -62,6 +62,13 @@ public class MessageTypeService {
 	public MessageType getMessageTypeById(Integer id) {
 		return messageTypeDaoImpl.getMessageTypeById(id);
 	}
+	/**
+	 * 条件查询
+	 */
+	public MessageType getResultBySearch(String typeId, String title){
+		return  messageTypeDaoImpl.getResultBySearch(typeId,title);
+		
+	}
 	 /**
      * 查询是否有子节点
      */

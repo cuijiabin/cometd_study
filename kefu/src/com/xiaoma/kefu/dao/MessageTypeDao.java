@@ -54,6 +54,12 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     * @return
     */
    public Integer checkChildMax(Integer id, Integer typeId);
+   /**
+    * 条件查询
+    * @param title
+    * @return
+    */
+    public  MessageType getResultBySearch(String typeId,String title);
 
 
 }

@@ -30,8 +30,8 @@
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageType();">添加</button>
             <button type="button" class="btn btn btn-warning btn-small f-fl" onclick="javascript:updateMessageType();">编辑</button>
             <button type="button" class="btn btn btn-danger btn-small f-fl" onclick="javascript:deleteMessageType();">删除</button>
-            <input class="c-wd150" type="text" />
-            <button type="button" class="btn btn-primary btn-small">搜索</button>
+            <input class="c-wd150" type="text" id="searTitle" />
+            <button type="button" class="btn btn-primary btn-small" onclick="javascript:find();">搜索</button>
         </div>
     </div>
     
@@ -65,6 +65,31 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
+
+/**
+ *查询
+ */
+function find(){
+	var url="/messageType/search.action";
+	var data = {
+			"title" : $("#searTitle").val().trim(),
+			"typeId" : $("#typeId").val().trim()
+	};
+	$.ajax({
+	    type: "get",
+	    url: url,
+	    data: data,
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "html",
+	    success: function (data) {
+	       $("#table_data").html(data);
+	    },
+	    error: function (msg) {
+	        alert(msg);
+	    }
+	});
+}
+
 
 	/**
 	 * 跳转新增前的页面

@@ -259,6 +259,17 @@ public class MessageTypeController {
 		model.addAttribute("messageType", messageType);
 		return "messagetype/messageTypeDetail";
 	}
+	/**
+	 * 条件查询
+	 */
+	
+	@RequestMapping(value = "search.action",method = RequestMethod.GET)
+	public String search(Model model,String typeId,String title){
+		MessageType messageType = messageTypeService.getResultBySearch(typeId,title);
+		model.addAttribute("messageType", messageType);
+		return "messagetype/messageTypeDetail";
+	}
+	 
 
 	/***
 	 * 刷新树

@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
 <!-- 表格有边框 -->
-<table class="table table-bordered table-striped table-hover m-table">
+<table class="table table-bordered table-striped table-hover m-table" id="customerTable">
     <thead>
         <tr>
             <td>风格</td>

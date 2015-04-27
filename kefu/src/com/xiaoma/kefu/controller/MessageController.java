@@ -87,9 +87,10 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Message> pageBean ,Integer id) {
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Message> pageBean ,Model model,Integer id) {
 		try {
 			messageService.getResult(conditions.getMap(), pageBean,id);
+			model.addAttribute("messageDailyId",id);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
 				return "messagedaily/messageDailyList";

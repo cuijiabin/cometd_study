@@ -22,7 +22,6 @@
     </ul>
 </div>
 <div class="g-cnt">
-	<input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
@@ -87,7 +86,6 @@
 	});
   }
 
-
 	/**
 	 * 跳转新增前的页面
 	 */
@@ -131,6 +129,7 @@
 	     dataType : "json",
 	     success: function (data) {
 	    	alert("删除成功 ！");
+	    	changeTabal();
 	    
 		    },
 		    error: function (msg) {
@@ -141,37 +140,14 @@
  }
   
 
-//更新树
-//获取树选中节点，提交。查询出新的树，替换相应的div
-function changeTree(){
-	var url="/messageType/treeList.action";
+//更新右侧表格数据
+function changeTabal(){
+	var url="/messageDaily/find.action";
 	var data = {
-			"typeId":$("#typeId").val(),
-			"id": $("#messageTypeId").val()
+			
+			"id": $("#messageDaily").val(),
+		
 	};
-	$.ajax({
-	    type: "get",
-	    url: url,
-	    data: data,
-	    contentType: "application/json; charset=utf-8",
-	    dataType: "html",
-	    success: function (data) {
-	       $("#tree_data").html(data);
-	    },
-	    error: function (msg) {
-	        alert(msg);
-	    }
-	});
-}
-//更新右侧详细页 
-//获取树选中节点，提交。查询出新的节点详细，替换相应的div
-function changeDetail(id){
-	var url="/messageType/detail.action";
-	var data = {
-			"typeId":$("#typeId").val(),
-			"id": id==null?$("#messageTypeId").val():id
-	};
-	
 	$.ajax({
 	    type: "get",
 	    url: url,
@@ -189,15 +165,15 @@ function changeDetail(id){
 //新增常用语分类
 function addCallback(){
 	$.dialog({id:'addMessageDaily'}).close();
-	changeTree();
-	changeDetail();
+	
+	changeTabal();
 }
 
 //编辑常用语分类
 function editCallback(){
 	$.dialog({id:'updateMessageDaily'}).close();
-	changeTree();
-	changeDetail();
+
+	changeTabal();
 	
 }
 </script>

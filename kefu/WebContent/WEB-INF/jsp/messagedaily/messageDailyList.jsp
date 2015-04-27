@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 
 <h3  class="u-tit c-bg c-bortit">常用语信息</h3>
-
+<input type="hidden" name="messageDaily" id="messageDaily" value="${messageDailyId}" />
 <table class="table table-bordered m-table">
         <thead>
               <tr>

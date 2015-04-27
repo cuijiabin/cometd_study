@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.MessageTypeDao;
 import com.xiaoma.kefu.model.MessageType;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * @author frongji
@@ -41,6 +42,23 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 			return null;
 		}
 		return findById(MessageType.class,id);
+	}
+	
+	/**
+	 * 条件查询
+	 */
+	@Override
+	public MessageType getResultBySearch(String typeId ,String title){
+		Session session = getSession();
+		String hql = "select a.* from message_type a where 1=1 ";
+		 hql += "and a.typeId="+typeId+" "; 
+		 if (StringHelper.isNotEmpty(title)) {
+			 hql +=" and a.title like '"+"%"+title+"%" +"'";
+		}
+		 Query query = session.createSQLQuery(hql).addEntity("a",MessageType.class);
+		 List list = query.list();
+		 MessageType messageType =(MessageType) list.get(0);
+		return messageType;
 	}
 	
 	/**

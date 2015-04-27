@@ -90,6 +90,7 @@ function find(currentPage){
 	    url: url,
 	    data: data,
 	    contentType: "application/json; charset=utf-8",
+	    async:false,
 	    dataType: "html",
 	    success: function (data) {
 	       $("#table_data").html(data);
@@ -140,8 +141,6 @@ function find(currentPage){
 			}
 			return true;
 		}
-		
-	
 		return true;
 }
   
@@ -149,6 +148,15 @@ function find(currentPage){
    *导出满足查询条件的所有数据
    */
   function exportExcel(){
+	  //用来解决没有数据不让导出的问题
+	  find(1);
+	  var rowNum = $("#customerTable tbody tr").length;
+	  console.log("总行数试试"+rowNum);
+	  if(rowNum <=0){
+		  alert("该范围内没有数据可供导出 ！");
+		  return;
+	  }
+
 	    //校验搜索框中的参数
 	    var customerId = $("#customerId").val();
         var chinesePatrn = /[\u4E00-\u9FA5]/g;
@@ -168,6 +176,7 @@ function find(currentPage){
 			  console.log(beginDate);
 			  console.log(endDate);
 		  }
+		  
  	 window.open("/customer/exportExcel.action?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()
  			       +"&customerName="+$("#customerName").val()
  			       +"&id="+$("#customerId").val()

@@ -116,6 +116,8 @@ public class CustomerController {
 			model.addAttribute("endDate", initDate(endDate));
 			model.addAttribute("list", list);
 			model.addAttribute("pageBean", pageBean);
+			
+			
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null){
 				return "customer/customer";
@@ -392,6 +394,8 @@ public class CustomerController {
             cell7.setCellValue("备注");  
             
 	         List list = customerService.getResultByConExl(beginDate,endDate,customerName,id,phone,styleName,consultPage,keywords);
+	        
+	         
 	         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	         for (int i = 0; i < list.size() ; i++){
 	        	 
@@ -419,7 +423,8 @@ public class CustomerController {
 	         }  
 	         fOut = response.getOutputStream();  
 	         workbook.write(fOut);  
-	     }  
+	     
+	     }
 	     catch (UnsupportedEncodingException e1){
 	    	 e1.printStackTrace();
 	     }catch (Exception e){

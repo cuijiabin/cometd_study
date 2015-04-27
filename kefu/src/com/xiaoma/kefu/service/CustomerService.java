@@ -45,6 +45,7 @@ public class CustomerService {
 		try {
 			Integer totalCount = customerDaoImpl.getAllCustomerCount(conditions,beginDate ,endDate,pageBean);
 			pageBean.setTotalRows(totalCount);
+			
 			List list = customerDaoImpl.getCustomerByCon(conditions,beginDate ,endDate,pageBean);
 			return list;
 		} catch (Exception e) {
