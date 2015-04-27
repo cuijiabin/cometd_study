@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.dao.StyleDao;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
-import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
-import com.xiaoma.kefu.util.SysConst.StyleIconType;
 
 /**
  **********************************
@@ -112,27 +110,13 @@ public class StyleService {
 		clientStyleService.create(clientStyle);
 		
 		//客服图标PC
-		ServiceIcon serviceIcon = new ServiceIcon();
-		serviceIcon.setStyleId(styleId);
-		serviceIcon.setDeviceType(DeviceType.PC.getCode());
-		serviceIcon.setIsDisplay(1);//默认显示
-		serviceIcon.setDisplayMode(1);//默认浮动图标
-		Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.客服图标.getCode());
-		serviceIcon.setButtonId(buttonId);
-		serviceIconService.create(serviceIcon);
+		serviceIconService.initServiceIcon(styleId,DeviceType.PC);
 		
 		//对话邀请框PC
 		inviteIconService.initInviteIcon(styleId,DeviceType.PC);
 		
 		//客服图标-移动
-		serviceIcon = new ServiceIcon();
-		serviceIcon.setStyleId(styleId);
-		serviceIcon.setDeviceType(DeviceType.移动.getCode());
-		serviceIcon.setIsDisplay(1);//默认显示
-		serviceIcon.setDisplayMode(1);//默认浮动图标
-		buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端客服图标.getCode());
-		serviceIcon.setButtonId(buttonId);
-		serviceIconService.create(serviceIcon);
+		serviceIconService.initServiceIcon(styleId,DeviceType.移动);
 		
 		//对话邀请框-移动
 		inviteIconService.initInviteIcon(styleId,DeviceType.移动);

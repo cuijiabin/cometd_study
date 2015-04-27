@@ -107,7 +107,7 @@ function addEle(){
 	var inviteId = '${inviteIcon.id}';
 	$.dialog({content:'url:/inviteElement/editName.action?inviteId='+inviteId,
 		id: 'addName',
-		width: 400,height: 80,
+		width: 400,height: 180,
 		title:'添加元素'
 	});
 }

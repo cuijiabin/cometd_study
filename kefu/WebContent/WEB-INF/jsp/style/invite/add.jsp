@@ -16,6 +16,7 @@
 <body>
 
 <!-- 表格有边框 -->
+<div style="margin:50px">
 <form id="mainForm1">
 <table class="table table-bordered m-table">
     <tbody>
@@ -33,6 +34,7 @@
 </table>
                     
 </form>
+</div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

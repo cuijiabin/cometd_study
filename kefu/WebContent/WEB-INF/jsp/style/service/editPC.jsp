@@ -41,8 +41,8 @@
 	                <tr>
 	                    <td class="c-wd100">隐藏图标</td>
 	                    <td class="f-db f-txtl">
-	                        <label><input type="radio" name="isDisplay" value="1" <c:if test="${serviceIcon.isDisplay==1 }"> checked </c:if> />是</label>
-	                        <label><input type="radio" name="isDisplay" value="0" <c:if test="${serviceIcon.isDisplay==0 }"> checked </c:if> />否</label>
+	                        <label><input type="radio" name="isHidden" value="1" <c:if test="${serviceIcon.isHidden==1 }"> checked </c:if> />是</label>
+	                        <label><input type="radio" name="isHidden" value="0" <c:if test="${serviceIcon.isHidden==0 }"> checked </c:if> />否</label>
 	                    </td>
 	                    <td class="f-txtl"></td>
 	                </tr>

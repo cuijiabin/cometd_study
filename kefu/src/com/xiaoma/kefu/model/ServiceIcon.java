@@ -33,8 +33,8 @@ public class ServiceIcon implements Serializable {
 	private Integer styleId;
 	@Column(name="deviceType")
 	private Integer deviceType;
-	@Column(name="isDisplay")
-	private Integer isDisplay;
+	@Column(name="isHidden")
+	private Integer isHidden;
 	@Column(name="displayMode")
 	private Integer displayMode;
 	@Column(name="siteZy")
@@ -77,12 +77,6 @@ public class ServiceIcon implements Serializable {
 	}
 	public void setDeviceType(Integer deviceType) {
 		this.deviceType = deviceType;
-	}
-	public Integer getIsDisplay() {
-		return isDisplay;
-	}
-	public void setIsDisplay(Integer isDisplay) {
-		this.isDisplay = isDisplay;
 	}
 	public Integer getDisplayMode() {
 		return displayMode;
@@ -155,6 +149,12 @@ public class ServiceIcon implements Serializable {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public Integer getIsHidden() {
+		return isHidden;
+	}
+	public void setIsHidden(Integer isHidden) {
+		this.isHidden = isHidden;
 	}
 	
 	

@@ -74,6 +74,7 @@ function addDialogueDiv(){
 	     url: "http://localhost:9090/style/getDialogueDiv.action",
 	     dataType: "jsonp",
 	     data: {"styleId":styleId,"isPC":isPc},
+	     timeout:30000,
 	     jsonp: "callbackDialogue", //服务端用于接收callback调用的function名的参数  
 	     jsonpCallback: "success_jsonpCallback", //callback的function名称,服务端会把名称和data一起传递回来 ,success_jsonpCallback是jQuery的默认实现,可以自定义
 	     success: function(json) {
@@ -98,6 +99,7 @@ function addIconDiv(){
 	     url: "http://localhost:9090/style/getIconDiv.action",
 	     data: {"styleId":styleId,"isPC":isPc},
 	     dataType: "jsonp",
+	     timeout:30000,
 	     jsonp: "callbackIcon", //服务端用于接收callback调用的function名的参数  
 	     jsonpCallback: "success_jsonpCallback1", //callback的function名称,服务端会把名称和data一起传递回来  
 	     success: function(json) {

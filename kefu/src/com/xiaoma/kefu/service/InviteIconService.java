@@ -111,11 +111,8 @@ public class InviteIconService {
 		InviteElement ele = new InviteElement();
 		ele.setInviteId(inviteIcon.getId());
 		ele.setName(SysConst.FIRST_ELEMENT_NAME);
-		ele.setWidth(80);
-		ele.setHeight(90);
-		ele.setSiteLeft(9);
-		ele.setSiteTop(1);
-		ele.setLevel(1);
+		ele.setLevel(0);
+		ele.setOperationType(2);//默认点击咨询
 		inviteElementService.create(ele);
 		
 	}

@@ -22,6 +22,7 @@ import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.DivFieldName;
+import com.xiaoma.kefu.util.SysConst.StyleIconType;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
@@ -204,7 +205,7 @@ public class ServiceIconService {
 		fm.setFieldName(DivFieldName.isDisplay.toString());
 		fm.setDefaultValue("display:block");
 		fm.setDynaName(DivFieldName.isDisplay.getCode());
-		if(icon.getIsDisplay()!=null && icon.getIsDisplay()==1){//不显示
+		if(icon.getIsHidden()!=null && icon.getIsHidden()==1){//不显示
 			fm.setDbValue("display:none");
 		}
 		list.add(fm);
@@ -432,6 +433,33 @@ public class ServiceIconService {
 		System.out.println(divOff);
 		CacheMan.update(CacheName.DIVICONYDOFF,serviceIcon.getStyleId(),divOff);
 		
+	}
+	
+	/**
+	 * 初始化图标	用于增加风格时
+	* @param styleId	风格id
+	* @param type
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	public void initServiceIcon(Integer styleId, DeviceType type) {
+		ServiceIcon serviceIcon = new ServiceIcon();
+		serviceIcon.setStyleId(styleId);
+		serviceIcon.setDeviceType(type.getCode());
+		serviceIcon.setIsHidden(0);//默认显示
+		serviceIcon.setDisplayMode(2);//默认浮动固定图标
+		serviceIcon.setSiteZy("right");
+		serviceIcon.setSiteZyPx(10);
+		serviceIcon.setSiteDd("top");
+		serviceIcon.setSiteDdPx(200);
+		if(type.equals(DeviceType.PC)){
+			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.客服图标.getCode());
+			serviceIcon.setButtonId(buttonId);
+		}else{
+			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端客服图标.getCode());
+			serviceIcon.setButtonId(buttonId);
+		}
+		create(serviceIcon);
 	}
 
 
