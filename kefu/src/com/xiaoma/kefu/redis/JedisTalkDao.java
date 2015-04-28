@@ -10,7 +10,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.xiaoma.kefu.comet4j.DialogueScore;
+import com.xiaoma.kefu.comet4j.DialogueInfo;
+import com.xiaoma.kefu.util.SerializeUtil;
 
 import redis.clients.jedis.Jedis;
 
@@ -570,27 +571,94 @@ public class JedisTalkDao {
 		}
 		
 		String member = it.next();
-		jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
+		//jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
 		
 		return member;
 	}
-	// ######################
-	public static Boolean setDialogueScore(String key, DialogueScore dScore){
+	
+	public static void delCustomerWaitSet(String member){
 		
-		JedisDao.setKO(JedisConstant.DIALOGUE_SCORE+key, dScore);
+		Jedis jedis = JedisDao.getJedis();
+		jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
+	}
+	
+	public static Long getCustomerWaitScore(String member) {
+
+		Jedis jedis = JedisDao.getJedis();
+		Double socre = jedis.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
+        if(socre == null){
+        	return null;
+        }
+
+		return socre.longValue();
+	}
+	
+	public static Integer getCustomerWaitTime(String member) {
+
+		Jedis jedis = JedisDao.getJedis();
+		Double socre = jedis.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
+        if(socre == null){
+        	return null;
+        }
+        Long diff = System.currentTimeMillis() - socre.longValue();
+        diff = diff/1000;
+        
+		return diff.intValue();
+	}
+	// ######################
+	public static Boolean setDialogueInfo(String customerId, String userCcnId,DialogueInfo dInfo){
+		
+		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
+		
+		byte[] key = keyStr.getBytes();
+		byte[] field = userCcnId.getBytes();
+		byte[] value = SerializeUtil.serialize(dInfo);
+		Jedis jedis = JedisDao.getJedis();
+		Long result = jedis.hset(key, field, value);
+		
+		return (result >=0);
+	}
+	
+	public static Boolean delDialogueInfo(String customerId, String userCcnId){
+		
+		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
+		
+		byte[] key = keyStr.getBytes();
+		byte[] field = userCcnId.getBytes();
+		Jedis jedis = JedisDao.getJedis();
+		jedis.hdel(key, field);
+		
+		Long size = jedis.hlen(key);
+		if(size <= 0){
+			jedis.del(key);
+		}
 		return true;
 	}
 	
-	public static Boolean delDialogueScore(String key){
+	public static DialogueInfo getDialogueScore(String customerId,String userCcnId){
 		
-		JedisDao.remove(JedisConstant.DIALOGUE_SCORE+key);
-		return true;
-	}
-	public DialogueScore getDialogueScore(String key){
+		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 		
-		Object obj = JedisDao.getObject(JedisConstant.DIALOGUE_SCORE+key);
+		byte[] key = keyStr.getBytes();
+		byte[] field = userCcnId.getBytes();
 		
-		return (DialogueScore) obj;
+		Jedis jedis = JedisDao.getJedis();
+		byte[] value = jedis.hget(key, field);
+		
+		if(null == value){
+			DialogueInfo dInfo = new DialogueInfo();
+			dInfo.setCustomerId(Long.valueOf(customerId));
+			dInfo.setUserCcnId(userCcnId);
+			
+			return dInfo;
+		}
+		
+		Object obj = SerializeUtil.unserialize(value);
+		
+		return (DialogueInfo) obj;
 	}
 
 	// ######################补充服务

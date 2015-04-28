@@ -60,10 +60,24 @@ public class JoinListener extends ConnectListener {
 			if(JedisTalkDao.sizeCustomerWaitSet() > 0){
 				
 				String customerCcnId = JedisTalkDao.popCustomerWaitSet();
+				Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
+				JedisTalkDao.delCustomerWaitSet(customerCcnId);
+				
 				JedisTalkDao.addCcnReceiveList(ccnId, customerCcnId);
 				
 				//设置被谁接待
 				JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
+				
+				//修改对话缓存
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+				DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,null);
+				JedisTalkDao.delDialogueInfo(customerId, null);
+				dInfo.setUserCcnId(ccnId);
+				dInfo.setUserId(user.getId());
+				dInfo.setDeptId(user.getDeptId());
+				dInfo.setCardName(user.getCardName());
+				dInfo.setWaitTime(waitTime);
+				JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 				
 				//通知客更新后台列表
 		        CometConnection ccn = engine.getConnection(ccnId);
@@ -98,12 +112,19 @@ public class JoinListener extends ConnectListener {
 				if(StringUtils.isBlank(allocateCnnId)){
 					//对不起，客服不在线，请留言
 					JedisTalkDao.addCustomerWaitSet(ccnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+					dInfo.setIsWait(1);
+					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
+					
 					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
 					
 					return true;
 				}
 				
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
+				DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+				JedisTalkDao.delDialogueInfo(customerId, null);
+				
 				
 				//设置被谁接待
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
@@ -119,6 +140,12 @@ public class JoinListener extends ConnectListener {
 		        String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, allocateCnnId);
 		        User allocateUser = userService.getUserById(Integer.valueOf(uId));
 		        Message message = new Message(allocateCnnId, allocateUser.getCardName(), "", "", ccnId);
+		        
+		        dInfo.setUserCcnId(allocateCnnId);
+				dInfo.setUserId(allocateUser.getId());
+				dInfo.setDeptId(allocateUser.getDeptId());
+				dInfo.setCardName(allocateUser.getCardName());
+				JedisTalkDao.setDialogueInfo(customerId, allocateCnnId, dInfo);
 		        
 		        //告知自己已经连接上
 		       

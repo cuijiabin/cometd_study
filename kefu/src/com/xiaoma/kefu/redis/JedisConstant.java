@@ -74,9 +74,9 @@ public class JedisConstant {
 	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
 	
 	/**
-	 * 对话评分
+	 * 对话信息
 	 */
-	public static final String DIALOGUE_SCORE = "dialogue_score:";
+	public static final String DIALOGUE_INFO = "dialogue_info:";
 
 	/**
 	 * 缓存客服信息
@@ -184,6 +184,25 @@ public class JedisConstant {
 	public static String getDialogueListKey(String uccnId, String cccnId) {
 
 		return DIALOGUE_LIST + uccnId + CCN_ID + cccnId;
+	}
+	
+	public static String getUccnIdFromDialogueListKey(String dialogueListKey){
+		
+		int start = dialogueListKey.indexOf(DIALOGUE_LIST) + DIALOGUE_LIST.length();
+		if (start < 0) {
+			return null;
+		}
+
+		int end = dialogueListKey.indexOf(CCN_ID);
+		
+		return dialogueListKey.substring(start, end);
+	}
+	
+	public static String getCccnIdFromDialogueListKey(String dialogueListKey){
+
+		int end = dialogueListKey.indexOf(CCN_ID);
+		
+		return dialogueListKey.substring(end);
 	}
 
 	/**

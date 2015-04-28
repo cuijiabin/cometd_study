@@ -2,9 +2,12 @@ package com.xiaoma.kefu.util;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -83,6 +86,16 @@ public class StudyMapUtil {
 		}
 		return valueSet;
 	}
+	
+	public static <T> void sort(List<T> list, Comparator<? super T> c) {
+	    Object[] a = list.toArray();
+	    Arrays.sort(a, (Comparator)c);
+		ListIterator i = list.listIterator();
+	    for (int j=0; j<a.length; j++) {
+	        i.next();
+	        i.set(a[j]);
+	    }
+	    }
 	
 //	public static void main(String[] args) {
 //		Test test0 = new Test();

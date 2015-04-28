@@ -32,7 +32,7 @@ public class LeftListener extends DropListener {
 			
 			//移除缓存
 			if(isCustomer){
-				
+			     
 				JedisTalkDao.remCcnList( JedisConstant.CUSTOMER_TYPE, ccnId);
 				JedisTalkDao.remUserCcnList(customerId, ccnId);
 				JedisTalkDao.delCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
@@ -42,6 +42,10 @@ public class LeftListener extends DropListener {
 				JedisTalkDao.delCcnPassiveId(ccnId);
 				JedisTalkDao.remCcnReceiveList(toUserCcnId, ccnId);
 				
+				 DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,toUserCcnId);
+			     dInfo.setCloseType(1);
+			     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+			     
 				//保存会话
 		        String key = JedisConstant.getDialogueListKey(toUserCcnId,ccnId);
 		        JedisTalkDao.lpushSaveDialogue(key);
@@ -71,6 +75,12 @@ public class LeftListener extends DropListener {
 				
 				List<String> receiveCnnIds = JedisTalkDao.getCcnReceiveList(ccnId);
 				for(String rCnnId : receiveCnnIds){
+					
+					customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, rCnnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,ccnId);
+				    dInfo.setCloseType(2);
+				    JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+				     
 					JedisTalkDao.delCcnPassiveId(rCnnId);
 					//保存会话
 			        String key = JedisConstant.getDialogueListKey(ccnId,rCnnId);
