@@ -34,7 +34,6 @@
             <button type="button" class="btn btn-primary btn-small" onclick="javascript:find();">搜索</button>
         </div>
     </div>
-    
 	<div class="g-bd6 f-cb f-mar20">
 		<div class="g-sd6 c-bor" >
 		    <h3 class="u-tit c-bg">常用语分类设置</h3>
@@ -83,6 +82,10 @@ function find(){
 	    dataType: "html",
 	    success: function (data) {
 	       $("#table_data").html(data);
+	     	var messageTypeId = $("#messageTypeId").val();
+			  	//获取节点id 等于  messageTypeId 的节点数据
+		   var node = zTree.getNodeByParam("id", messageTypeId,null);
+	       zTree.selectNode(node);
 	    },
 	    error: function (msg) {
 	        alert(msg);

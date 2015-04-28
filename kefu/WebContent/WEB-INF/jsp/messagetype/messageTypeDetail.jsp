@@ -7,7 +7,7 @@
 <input type="hidden" name="messageTypeId" id="messageTypeId" value="${messageType.id }" />
 <table class="table table-bordered m-table">
         <tr>
-         	<td class="f-txtr tdbg">分类编号</td><td class="f-txtl"><input type="text" id="typeId" name="typeId" value="${messageType.typeId }"/></td>
+         	<td class="f-txtr tdbg">分类编号</td><td class="f-txtl">${messageType.typeId }</td>
         </tr>
         <tr>
            	<td class="f-txtr tdbg">分类名称</td><td class="f-txtl"><input type="text" type="text" id="title" name="title" value="${messageType.title }" /></td>
