@@ -53,7 +53,7 @@ HttpSession session1 = request.getSession(); User user = (User)session1.getAttri
 				</td>
 				<td>
 				<% if(getcode) {%>
-				<a href="#" onClick="showDetail(${style.id})">获取代码</a>
+				<a href="#" onClick="getCode(${style.id})">获取代码</a>
 				<%}else{%>
 					获取代码
 				<%}%>
