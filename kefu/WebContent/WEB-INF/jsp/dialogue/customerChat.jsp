@@ -30,7 +30,7 @@
         <div class="g-mn5">
         	<div class="slideTab2">
             	<div class="hd">
-                	<ul class="f-cb"><li class="u-borl">咨询</li><li class="u-borl">留言</li><li>帮助</li></ul>
+                	<ul class="f-cb"><li class="u-borl" id="advisory">咨询</li><li class="u-borl" id="leaveMessage">留言</li><li>帮助</li></ul>
                 </div>
                 <div class="bd">
                     <div class="g-mn5c c-bor">
@@ -268,6 +268,7 @@
 		function noUser(data){
 			var str = '<div class="r-offline"><span class="alert alert-block">对不起，客服不在线，请留言</span></div>';
 			logbox.innerHTML += str;
+			$("#leaveMessage").click();
 		}
 		
 		//通过按钮结束对话(**)

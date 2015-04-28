@@ -158,17 +158,17 @@
 	<div class="g-bd3 f-cb c-bor">
 		<div class="g-bd3c f-cb">
 		
-	        <div class="g-sd3 f-fl">
+	        <div class="g-sd3 f-fl" id="dialogueSize">
 	            <ul class="f-cb">
-	                <li><span>在线访客：100</span></li>
-	                <li><i>|</i><span>等待咨询：10</span></li>
+	                <li><span>在线访客：0</span></li>
+	                <li><i>|</i><span>等待咨询：0</span></li>
 	            </ul>
 	        </div>
 	        
 	        <div class="g-mn3 f-fr">
 	            <div class="g-mn3c">
 	                <ul class="f-cb">
-	                    <li><span>工号：cc</span></li>
+	                    <li><span>工号：${user.cardName}</span></li>
 	                    <li><i>|</i><span>身份：一般员工</span></li>
 	                </ul>
 	            </div>
@@ -185,6 +185,7 @@
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script language="javascript" for="window" event="onload"> 
 	
+    setInterval('dialogueSize()',5000);
 	// 引擎事件绑定
 	JS.Engine.on({
 		start : function(cId, aml, engine) {
@@ -280,6 +281,7 @@
 		$("#currentCcnId").val(ccnId);
 		$("#currentCustomerId").val(customerId);
 		
+		$("#"+ccnId).removeClass().addClass("on");
 		switchDialogueBox(ccnId);
 		showCustomerInfo(customerId);
 	}
@@ -349,7 +351,12 @@
 		console.log(id);
 		if(id == JS.Engine.getId()){
 			id = $("#currentCcnId").val();
+		}else{
+			$("#"+id).removeClass().addClass("on c-bgtwinkle");
+			 $('embed').remove();  
+	         $('body').append('<embed src="/sound/1.mp3" autostart="true" hidden="true" loop="false">');
 		}
+		
 		//创建隐藏div
 		createHiddenDiv(id);
 		var name = data.name || '';
@@ -618,6 +625,22 @@
 		});
 		
 	 });
+	
+	//在线情况
+	function dialogueSize(){
+		$.ajax({
+		    type: "get",
+		    url: "/dialogue/dialogueSize.action",
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "html",
+		    success: function (content) {
+		    	$("#dialogueSize").html(content);
+		    },
+		    error: function () {
+		        console.log("dialogueSize Error");
+		    }
+		});
+	}
 	
 </script>
 <script type="text/javascript">

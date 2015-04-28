@@ -154,6 +154,17 @@ public class JedisTalkDao {
 
 		return new ArrayList<String>(set);
 	}
+	
+	public static Integer getCcnListSize(Integer type) {
+
+		String key = JedisConstant.genCcnListKey(type);
+
+		Jedis jedis = JedisDao.getJedis();
+
+		Long size = jedis.zcard(key);
+
+		return size.intValue();
+	}
 
 	/**
 	 * 当前通信点列表操作 add
