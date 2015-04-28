@@ -1,8 +1,13 @@
 package com.xiaoma.kefu.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +15,16 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.InviteIconDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.FieldMapping;
 import com.xiaoma.kefu.model.InviteElement;
 import com.xiaoma.kefu.model.InviteIcon;
+import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.DivFieldName;
 import com.xiaoma.kefu.util.SysConst.StyleIconType;
+import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
  * 对话邀请框	业务实现类
@@ -89,10 +97,11 @@ public class InviteIconService {
 	 * 附带初始化邀请框元素
 	* @param styleId
 	* @param deviceType
+	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public void initInviteIcon(Integer styleId, DeviceType deviceType) {
+	public void initInviteIcon(Integer styleId, DeviceType deviceType) throws IOException {
 		InviteIcon inviteIcon = new InviteIcon();
 		inviteIcon.setStyleId(styleId);
 		inviteIcon.setDeviceType(deviceType.getCode());
@@ -113,10 +122,47 @@ public class InviteIconService {
 		ele.setName(SysConst.FIRST_ELEMENT_NAME);
 		ele.setLevel(0);
 		ele.setOperationType(2);//默认点击咨询
+		
 		inviteElementService.create(ele);
+		initIconPic(ele,styleId,deviceType);//初始化邀请框图片
+		inviteElementService.update(ele);
 		
 	}
 
+	/**
+	 * 初始化 邀请框图片
+	* @param ele
+	 * @param styleId 
+	* @param type
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	private void initIconPic(InviteElement ele, Integer styleId, DeviceType type) throws IOException {
+		String sourcePath = null;
+		if(type.equals(DeviceType.PC)){
+			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+					+ "/" + SysConst.TEMPLATE_PATH
+					+ "/" + SysConst.PIC_TEMPLATE_PC_INVITE;
+			BufferedImage image = ImageIO.read(new File(sourcePath));  
+        	ele.setHeight(image.getHeight());
+        	ele.setWidth(image.getWidth());
+		}else{
+			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+					+ "/" + SysConst.TEMPLATE_PATH
+					+ "/" + SysConst.PIC_TEMPLATE_YD_INVITE;
+			BufferedImage image = ImageIO.read(new File(sourcePath));  
+        	ele.setHeight(image.getHeight());
+        	ele.setWidth(30);//手机默认宽度30%
+		}
+		
+		String targetPath = FileUtil.getStyleRootPath(styleId) + "/" + ele.getId()
+				+ "/" + StylePicName.元素背景图.getCode()
+				+ SysConst.MIN_EXTENSION;//目前都使用 png
+		ele.setPicUrl(targetPath);
+		FileUtil.copyFile(sourcePath, targetPath);
+		
+	}
 
 	/**
 	 * 获取字段和字段的值, 如果字段值为空,则用默认值

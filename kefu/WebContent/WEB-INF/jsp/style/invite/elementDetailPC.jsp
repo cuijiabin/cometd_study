@@ -25,6 +25,7 @@
 				<td class="f-txtl"> 
 					宽<input class="c-wd50" type="text" id="width" name="width" value="${inviteElement.width }" maxlength="4" />px
 					高 <input class="c-wd50" type="text" id="height" name="height" value="${inviteElement.height }" maxlength="4" />px
+					<span class="help-inline c-clred">注：如果为空,则默认为背景图的宽高</span>
 				</td>
 			</tr>
 			<tr>

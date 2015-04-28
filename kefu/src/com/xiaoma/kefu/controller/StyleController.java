@@ -260,7 +260,7 @@ public class StyleController {
 	
 	
 	/**
-	 * 获取 客服图标的 div	PC
+	 * 获取 客服图标的 div	
 	* @param req
 	* @param res
 	* @Author: wangxingfei
@@ -273,16 +273,24 @@ public class StyleController {
 		String styleId = req.getParameter("styleId");
 		String isPC = req.getParameter("isPC");
 	    try {
-//	    	String isOnLine = CacheMan.getObject("是否有人在线", styleId);
-//	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
-//	    	strDiv = serviceIconService.getDivOnline(Integer.valueOf(styleId), DeviceType.移动);
-//	    	String strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId);
-	    	
+	    	List<Integer> userList = CacheMan.getOnlineUserIdsByStyleId(Integer.valueOf(styleId));
+	    	boolean isOnline = true; //在线
+	    	if(userList!=null && userList.size()==0){
+	    		isOnline = false;
+	    	}
 	    	String strDiv = null;
 	    	if(isPC!=null && isPC.equals("false")){
-	    		strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDON,styleId);
+	    		if(isOnline){
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDON,styleId);
+	    		}else{
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDOFF,styleId);
+	    		}
 	    	}else{
-	    		strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+	    		if(isOnline){
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+	    		}else{
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId);
+	    		}
 	    	}
 	    	logger.info("图标div="+strDiv);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据

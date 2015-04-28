@@ -2,7 +2,6 @@ package com.xiaoma.kefu.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +14,7 @@ import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.service.InviteIconService;
-import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
-import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
  * 对话邀请框	controller
@@ -133,32 +130,6 @@ public class InviteIconController {
 		}
 		return "redirect:/inviteIcon/editYD.action?styleId="+inviteIcon.getStyleId();
 	}
-	
-	/**
-	 * 缩略图展示的路径
-	* @Description: TODO
-	* @param inviteIcon
-	* @param type
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月15日
-	 */
-	private String getViewPath(InviteIcon inviteIcon,StylePicName type) {
-		String extensionName = "";
-		String fileName = inviteIcon.getTruePic();
-		if(StringUtils.isBlank(fileName)) return extensionName;
-		extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		
-		return 
-//				SystemConfiguration.getInstance().getPicPrefix() //前缀
-				DictMan.getDictItem("d_sys_param", 2).getItemName()
-				+ "/" + SysConst.STYLE_PATH //风格主目录
-				+ "/"+inviteIcon.getStyleId()	//风格id
-				+ "/"+type.getCode()	//类别
-//				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀	这里暂时不需要缩略图
-				+ extensionName	//后缀
-				;
-	}  
 	
 	
 }

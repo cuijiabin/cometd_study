@@ -23,8 +23,9 @@
 			<tr>
 				<td class="c-wd100">大小</td>
 				<td class="f-txtl"> 
-					宽<input class="c-wd50" type="text" id="width" name="width" value="${inviteElement.width }" maxlength="4" />px
+					宽<input class="c-wd50" type="text" id="width" name="width" value="${inviteElement.width }" maxlength="4" />%
 					高 <input class="c-wd50" type="text" id="height" name="height" value="${inviteElement.height }" maxlength="4" />px
+					<span class="help-inline c-clred">注：如为空,则宽为30%,高为背景图高度</span>
 				</td>
 			</tr>
 			<tr>
@@ -45,7 +46,7 @@
 			<tr>
 				<td class="c-wd100">层叠顺序</td>
 				<td class="f-txtl">
-					<input class="c-wd50" type="text" id="level" name="level" value="${inviteElement.level }" maxlength="2" /> 
+					<input class="c-wd50" type="text" id="level" name="level" value="${inviteElement.level }" maxlength="4" /> 
 					<span class="help-inline c-clred">注：数值大的覆盖数值小的</span>
 				</td>
 			</tr>

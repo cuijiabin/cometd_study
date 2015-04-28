@@ -1,9 +1,13 @@
 package com.xiaoma.kefu.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -440,10 +444,11 @@ public class ServiceIconService {
 	 * 初始化图标	用于增加风格时
 	* @param styleId	风格id
 	* @param type
+	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月27日
 	 */
-	public void initServiceIcon(Integer styleId, DeviceType type) {
+	public void initServiceIcon(Integer styleId, DeviceType type) throws IOException {
 		ServiceIcon serviceIcon = new ServiceIcon();
 		serviceIcon.setStyleId(styleId);
 		serviceIcon.setDeviceType(type.getCode());
@@ -460,7 +465,88 @@ public class ServiceIconService {
 			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端客服图标.getCode());
 			serviceIcon.setButtonId(buttonId);
 		}
+		initIconPic(serviceIcon,type);//初始化图标
+		
 		create(serviceIcon);
+	}
+	
+	/**
+	 * 初始化图标
+	 * @param icon 
+	* @param type
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	private void initIconPic(ServiceIcon icon, DeviceType type) throws IOException {
+		//复制文件
+		String sourcePath = null;
+		String targetPath = null;
+		if(type.equals(DeviceType.PC)){
+			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+					+ "/" + SysConst.TEMPLATE_PATH
+					+ "/" + SysConst.PIC_TEMPLATE_PC_SERVICE;
+			String temp = FileUtil.getStyleRootPath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标PC在线.getCode();
+			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+			
+			BufferedImage image = ImageIO.read(new File(sourcePath));  
+			icon.setHeight(image.getHeight());
+			icon.setWidth(image.getWidth());
+			icon.setOnlinePic(targetPath);
+			FileUtil.copyFile(sourcePath, targetPath);
+			
+            //生成缩略图
+            Thumbnails.of(targetPath)//原始路径
+            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+			
+            
+            temp = FileUtil.getStyleRootPath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标PC离线.getCode();
+			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+			
+			icon.setOfflinePic(targetPath);
+			FileUtil.copyFile(sourcePath, targetPath);
+			
+            //生成缩略图
+            Thumbnails.of(targetPath)//原始路径
+            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+            
+		}else{
+			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+					+ "/" + SysConst.TEMPLATE_PATH
+					+ "/" + SysConst.PIC_TEMPLATE_YD_SERVICE;
+			String temp = FileUtil.getStyleRootPath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标移动在线.getCode();
+			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+			
+			BufferedImage image = ImageIO.read(new File(sourcePath));  
+			icon.setHeight(image.getHeight());
+			icon.setWidth(image.getWidth());
+			icon.setOnlinePic(targetPath);
+			FileUtil.copyFile(sourcePath, targetPath);
+			
+            //生成缩略图
+            Thumbnails.of(targetPath)//原始路径
+            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+			
+            
+            temp = FileUtil.getStyleRootPath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标移动离线.getCode();
+			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+			
+			icon.setOfflinePic(targetPath);
+			FileUtil.copyFile(sourcePath, targetPath);
+			
+            //生成缩略图
+            Thumbnails.of(targetPath)//原始路径
+            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+		}
+		
 	}
 
 

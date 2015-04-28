@@ -40,9 +40,14 @@ public class SysConst {
 	public static final String FIRST_ELEMENT_NAME = "外框";
 	
 	/**
-	 * 风格div文件 目录
+	 * 风格div文件 存放目录
 	 */
 	public static final String JS_DIV_PATH = "style";
+	
+	/**
+	 * 风格div文件 模板目录
+	 */
+	public static final String TEMPLATE_PATH = "style/template";
 	
 	/**
 	 * js文件前缀
@@ -53,6 +58,27 @@ public class SysConst {
 	 * 风格div的模板文件
 	 */
 	public static final String JS_DIV_TEMPLATE = "template.js";
+	
+	/**
+	 * 初始化图片	图标PC版
+	 */
+	public static final String PIC_TEMPLATE_PC_SERVICE = "pcServiceIcon.png";
+	
+	/**
+	 * 初始化图片	图标 移动版
+	 */
+	public static final String PIC_TEMPLATE_YD_SERVICE = "ydServiceIcon.png";
+	
+	/**
+	 * 初始化图片	邀请框pc版
+	 */
+	public static final String PIC_TEMPLATE_PC_INVITE = "pcInviteIcon.png";
+	
+	/**
+	 * 初始化图片	邀请框移动版
+	 */
+	public static final String PIC_TEMPLATE_YD_INVITE = "ydInviteIcon.png";
+	
 	
 	/**
 	 * 角色的ID

@@ -86,12 +86,13 @@ public class InviteElementService {
 	* @param file
 	* @param inviteElement
 	 * @param type 
+	 * @param deviceType 
 	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月19日
 	 */
 	public void saveUplaodFile(MultipartFile file,
-			InviteElement inviteElement, StylePicName type) throws IOException {
+			InviteElement inviteElement, StylePicName type, DeviceType deviceType) throws IOException {
 		 if (file != null && !file.isEmpty()) {
 			
 			InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
@@ -114,7 +115,11 @@ public class InviteElementService {
             if(inviteElement.getHeight()==null || inviteElement.getWidth()==null){
             	BufferedImage image = ImageIO.read(new File(inviteElement.getPicUrl()));  
             	inviteElement.setHeight(image.getHeight());
-            	inviteElement.setWidth(image.getWidth());
+            	if(deviceType.equals(DeviceType.移动)){
+            		inviteElement.setWidth(30);//手机默认宽度30%
+            	}else{
+            		inviteElement.setWidth(image.getWidth());
+            	}
             }
 
         }
@@ -172,7 +177,7 @@ public class InviteElementService {
 	 */
 	public void saveAndUpdateDiv4PC(MultipartFile groupFile,
 			InviteElement inviteElement) throws IOException {
-		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
+		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图,DeviceType.PC);
 //		//补充字段
 		InviteElement oldModel = get(inviteElement.getId());
 		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
@@ -446,7 +451,7 @@ public class InviteElementService {
 	 */
 	public void saveAndUpdateDiv4YD(MultipartFile groupFile,
 			InviteElement inviteElement) throws IOException {
-		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图);
+		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图,DeviceType.移动);
 //		//补充字段
 		InviteElement oldModel = get(inviteElement.getId());
 		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
@@ -481,8 +486,14 @@ public class InviteElementService {
 	 */
 	public String refreshPvwDiv(MultipartFile groupFile,
 			InviteElement inviteElement) throws IOException {
+		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
+		DeviceType type = DeviceType.PC;
+		if(inviteIcon.getDeviceType().equals(DeviceType.移动.getCode())){
+			type = DeviceType.移动;
+		}
+		
 		//保存图片 预览用
-		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图预览保存);
+		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图预览保存,type);
 //		//补充字段
 		InviteElement oldModel = get(inviteElement.getId());
 		
@@ -499,13 +510,6 @@ public class InviteElementService {
 		}
 		inviteElement.setName(oldModel.getName());
 		
-		
-		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
-		
-		DeviceType type = DeviceType.PC;
-		if(inviteIcon.getDeviceType().equals(DeviceType.移动.getCode())){
-			type = DeviceType.移动;
-		}
 		String div = inviteIconService.getPvwDiv(inviteIcon,inviteElement,true,type);
 		return div;
 	}

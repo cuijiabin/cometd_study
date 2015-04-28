@@ -110,7 +110,7 @@
 	                    	<div>
 	                        	高度
 	                            <input class="c-wd50" type="text" id="height" name="height" value="${serviceIcon.height }" maxlength="4" >
-	                            像素
+	                            像素<span class="help-inline c-clred">注：如果为空,则默认为在线图标的宽高</span>
 	                        </div>
 	                    </td>
 	                    <td class="f-txtl"></td>
