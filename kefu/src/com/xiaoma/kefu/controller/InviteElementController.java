@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoma.kefu.model.InviteElement;
+import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.service.InviteElementService;
 import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.SysConst.DeviceType;
 
 /**
  * 邀请框元素	controller
@@ -66,9 +68,12 @@ public class InviteElementController {
 			}else{//按id取
 				inviteElement = hm.get(id);
 			}
+			InviteIcon inviteIcon = inviteIconService.get(inviteId);
+			String strDiv = inviteIconService.getPvwDiv(inviteIcon, null, true, DeviceType.PC);
 			model.addAttribute("elementList", list);
 			model.addAttribute("inviteElement", inviteElement);
-			model.addAttribute("inviteIcon", inviteIconService.get(inviteId));
+			model.addAttribute("inviteIcon", inviteIcon);
+			model.addAttribute("strDiv", strDiv);
 			return "/style/invite/editElementPC";
 		} catch (Exception e) {
 			logger.error("editPC"+inviteId+",id="+id,e);
@@ -106,9 +111,13 @@ public class InviteElementController {
 			}else{//按id取
 				inviteElement = hm.get(id);
 			}
+			
+			InviteIcon inviteIcon = inviteIconService.get(inviteId);
+			String strDiv = inviteIconService.getPvwDiv(inviteIcon, null, true, DeviceType.移动);
 			model.addAttribute("elementList", list);
 			model.addAttribute("inviteElement", inviteElement);
-			model.addAttribute("inviteIcon", inviteIconService.get(inviteId));
+			model.addAttribute("inviteIcon", inviteIcon);
+			model.addAttribute("strDiv", strDiv);
 			return "/style/invite/editElementYD";
 		} catch (Exception e) {
 			logger.error("editYD"+inviteId+",id="+id,e);
@@ -317,6 +326,32 @@ public class InviteElementController {
 		} catch (Exception e) {
 			logger.error("delete失败!",e);
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		}
+		return "resultjson";
+	}
+	
+	
+	/**
+	 * 刷新预览图 PC
+	* @param model
+	* @param groupFile
+	* @param inviteElement
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	@RequestMapping(value = "refreshPvwDiv.action", method = RequestMethod.POST)
+	public String refreshPvwDiv(Model model,MultipartFile groupFile,
+			@ModelAttribute("inviteElement") InviteElement inviteElement) {
+		try {
+			String strDiv = inviteElementService.refreshPvwDiv(groupFile,inviteElement);
+//			System.out.println("替换前="+strDiv);
+//			strDiv = strDiv.replaceAll("\\\\\"", "\"");
+//			System.out.println("替换后="+strDiv);
+			model.addAttribute("result", Ajax.JSONResult(0, strDiv));
+		} catch (Exception e) {
+			logger.error("savePC"+inviteElement.getId(), e);
+			model.addAttribute("result", Ajax.JSONResult(1, "预览失败!"));
 		}
 		return "resultjson";
 	}

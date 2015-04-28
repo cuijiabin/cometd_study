@@ -116,54 +116,17 @@ public class InviteIconService {
 		inviteElementService.create(ele);
 		
 	}
-	
-	/**
-	 * 根据风格id,获取div 格式
-	* @param styleId
-	 * @param type 
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月24日
-	 */
-	public String getDivByStyleId(Integer styleId,DeviceType type){
-		InviteIcon inviteIcon = getByStyleId(styleId, type);
-		return getDiv(inviteIcon,type);
-	}
-	
-	/**
-	 * 根据 邀请框, 获取 div 格式
-	* @param inviteIcon
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月24日
-	 */
-	public String getDiv(InviteIcon inviteIcon,DeviceType type) {
-		StringBuffer sbf = new StringBuffer();
-		//邀请框模板
-		String template = SysConst.DIV_TEMPLATE_INVITE;
-		if(type.equals(DeviceType.移动)){
-			template = SysConst.DIV_TEMPLATE_INVITE_YD;
-		}
-		List<FieldMapping> inviteFmList = getFieldValueList(inviteIcon);
-		for(FieldMapping fm : inviteFmList){
-			template = template.replace(fm.getDynaName(), fm.getDbValue());
-		}
-		
-		sbf.append(template);
-		sbf.append(inviteElementService.getDivByInviteId(inviteIcon.getId(), type));//元素明细的
-		sbf.append(SysConst.DIV_END); //邀请框的结束标签
-		System.out.println("邀请框div="+sbf.toString());
-		return sbf.toString();
-	}
+
 
 	/**
 	 * 获取字段和字段的值, 如果字段值为空,则用默认值
 	* @param icon
+	 * @param pvwEle 预览的元素	,如果为空,则不是预览
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	private List<FieldMapping> getFieldValueList(InviteIcon icon) {
+	private List<FieldMapping> getFieldValueList(InviteIcon icon, InviteElement pvwEle) {
 		List<FieldMapping> list = new ArrayList<FieldMapping>(5);
 		
 		FieldMapping fm = new FieldMapping();
@@ -197,6 +160,11 @@ public class InviteIconService {
 		
 		//宽和高, 取外框里面的宽和高
 		InviteElement firstEle = inviteElementService.getFirstEle(icon.getId());
+		
+		//如果是预览,且是第一个元素, 则取预览的值
+		if(pvwEle!=null && pvwEle.getId()== firstEle.getId()){
+			firstEle = pvwEle;
+		}
 		//宽
 		fm = new FieldMapping();
 		fm.setFieldName(DivFieldName.width.toString());
@@ -238,7 +206,7 @@ public class InviteIconService {
 		update(inviteIcon);
 		
 		//更新div
-		String div = getDiv(inviteIcon,DeviceType.PC);
+		String div = getViewDiv(inviteIcon,DeviceType.PC);
 		System.out.println(div);
 		CacheMan.update(CacheName.DIVINVITEPC,inviteIcon.getStyleId(),div);
 	}
@@ -259,10 +227,65 @@ public class InviteIconService {
 		update(inviteIcon);
 		
 		//更新div
-		String div = getDiv(inviteIcon,DeviceType.移动);
+		String div = getViewDiv(inviteIcon,DeviceType.移动);
 		System.out.println(div);
 		CacheMan.update(CacheName.DIVINVITEYD,inviteIcon.getStyleId(),div);
 		
+	}
+	
+	/**
+	 * 获取div
+	* @param inviteIcon
+	 * @param inviteElement 当前预览的元素,还没保存到数据库
+	 * @param isEdit	是否是编辑  如果是,则内层div\"要替换
+	* @param type	PC,移动
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	public String getPvwDiv(InviteIcon inviteIcon, InviteElement inviteElement,boolean isEdit, DeviceType type) {
+		StringBuffer sbf = new StringBuffer();
+		//邀请框模板
+		String template = SysConst.DIV_TEMPLATE_INVITE;
+		if(type.equals(DeviceType.移动)){
+			template = SysConst.DIV_TEMPLATE_INVITE_YD;
+		}
+		List<FieldMapping> inviteFmList = getFieldValueList(inviteIcon,inviteElement);
+		for(FieldMapping fm : inviteFmList){
+			template = template.replace(fm.getDynaName(), fm.getDbValue());
+		}
+		
+		sbf.append(template);
+		sbf.append(inviteElementService.getViewDiv(inviteIcon.getId(),inviteElement,isEdit, type));//元素明细的
+		sbf.append(SysConst.DIV_END); //邀请框的结束标签
+		System.out.println("邀请框div="+sbf.toString());
+		return sbf.toString();
+	}
+	
+	
+	/**
+	 * 根据风格id,获取div 格式	用于引用站点使用
+	* @param styleId
+	 * @param type 
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月24日
+	 */
+	public String getDivByStyleId(Integer styleId,DeviceType type){
+		InviteIcon inviteIcon = getByStyleId(styleId, type);
+		return getViewDiv(inviteIcon,type);
+	}
+	
+	/**
+	 * 获取最终展示div
+	* @param inviteIcon
+	* @param type
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	public String getViewDiv(InviteIcon inviteIcon, DeviceType type){
+		return getPvwDiv(inviteIcon,null,false,type);
 	}
 
 }

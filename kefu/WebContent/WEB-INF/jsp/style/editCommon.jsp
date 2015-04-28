@@ -44,22 +44,22 @@
                 </tr>
                 <tr>
                     <td class="c-wd150">客服图标</td>
-                    <td class="f-txtl"><img src="http://oc2.xiaoma.com/img/upload/53lx/zdytb/on_53lx1406714337.png" alt="" /></td>
+                    <td class="f-txtl"><img src="${picUrl2 }" alt="" /></td>
                     <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editServicePC(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">对话邀请框</td>
-                    <td class="f-txtl"><img src="http://oc2.xiaoma.com/img/upload/53lx/zdyivt/zdyivt_53kf_1427443841.jpg" alt="" /></td>
+                    <td class="f-txtl">${picUrl3 }</td>
                     <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editInvitePC(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">手机端客服图标</td>
-                    <td class="f-txtl"><img src="" alt="" /></td>
+                    <td class="f-txtl"><img src="${picUrl4 }" alt="" /></td>
                     <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editServiceYD(${style.id})" >设置</button></td>
                 </tr>
                 <tr>
                     <td class="c-wd150">手机端对话邀请框</td>
-                    <td class="f-txtl"><img src="" alt="" /></td>
+                    <td class="f-txtl">${picUrl5 }</td>
                     <td class="c-wd120"><button type="button" class="btn btn-small" onclick="editInviteYD(${style.id})" >设置</button></td>
                 </tr>
             </tbody>

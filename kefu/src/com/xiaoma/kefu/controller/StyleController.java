@@ -18,14 +18,18 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.BusiGroup;
+import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.service.BusiGroupService;
+import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.service.ServiceIconService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.util.SysConst.DeviceType;
+import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
  * *********************************
@@ -46,6 +50,8 @@ public class StyleController {
 	private BusiGroupService busiGroupService;//业务分组
 	@Autowired
 	private ServiceIconService serviceIconService;//客服图标
+	@Autowired
+	private InviteIconService inviteIconService;//邀请框
 	
 	
 	/**
@@ -176,7 +182,18 @@ public class StyleController {
 					+ "/"+"serviceIocn_min.jpg";	//类别
 			
 			
+			InviteIcon icon = inviteIconService.getByStyleId(styleId, DeviceType.PC);
+			String picUrl3 = inviteIconService.getPvwDiv(icon,null,true,DeviceType.PC);
+			icon = inviteIconService.getByStyleId(styleId, DeviceType.移动);
+			String picUrl5 = inviteIconService.getPvwDiv(icon,null,true,DeviceType.移动);
+			
 			model.addAttribute("picUrl1", picUrl1);
+			model.addAttribute("picUrl2", styleService.getMinPicPath(styleId, StylePicName.客服图标PC在线));
+			model.addAttribute("picUrl3", picUrl3);
+			model.addAttribute("picUrl4", styleService.getMinPicPath(styleId, StylePicName.客服图标移动在线));
+			model.addAttribute("picUrl5", picUrl5);
+			
+			
 			model.addAttribute("style", style);
 			return "/style/editCommon";
 		} catch (Exception e) {

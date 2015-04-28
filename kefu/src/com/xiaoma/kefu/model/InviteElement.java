@@ -59,6 +59,8 @@ public class InviteElement implements Serializable {
 	
 	@Transient
 	private Integer sortId;//虚拟列,排序id
+	@Transient
+	private Boolean isUpPic;//虚拟列, 是否上传了图片 用于预览图时候
 	
 	public Integer getId() {
 		return id;
@@ -149,6 +151,12 @@ public class InviteElement implements Serializable {
 	}
 	public void setSortId(Integer sortId) {
 		this.sortId = sortId;
+	}
+	public Boolean getIsUpPic() {
+		return isUpPic;
+	}
+	public void setIsUpPic(Boolean isUpPic) {
+		this.isUpPic = isUpPic;
 	}
 	
 	

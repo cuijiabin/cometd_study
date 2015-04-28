@@ -105,6 +105,7 @@ public class InviteElementService {
             //路径+文件名
             String tempPath = savePath+"/"+saveName;
             inviteElement.setPicUrl(tempPath+extensionName);
+            inviteElement.setIsUpPic(true);
             
             //保存文件
             FileUtil.saveFile(savePath, saveName+extensionName, file);
@@ -189,67 +190,9 @@ public class InviteElementService {
 		update(inviteElement);
 		
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
-		String div = inviteIconService.getDiv(inviteIcon,DeviceType.PC);
+		String div = inviteIconService.getViewDiv(inviteIcon,DeviceType.PC);
 		CacheMan.update(CacheName.DIVINVITEPC,inviteIcon.getStyleId(),div);
 		
-	}
-	
-	/**
-	 * 获取所有元素 的div
-	* @param inviteId
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月24日
-	 */
-	public String getDivByInviteId(Integer inviteId,DeviceType type){
-		StringBuffer sbf = new StringBuffer();
-		//邀请框下元素
-		List<InviteElement> list = listByInviteId(inviteId);
-		boolean hasFirst = false;//是否包含第一个元素
-		boolean firstHasUrl = false;//第一个元素是否包含 连接地址
-		boolean isPC = true;
-		if(type.equals(DeviceType.移动)){
-			isPC = false;
-		}
-		//循环更新元素
-		for(InviteElement ele : list){
-			boolean thisIsFirst = false;//当前元素是否是第一个元素
-			boolean thisHasUrl = false;//当前元素是否有a标签
-			
-			//如果是第一个元素
-			if(ele.getName().equals(SysConst.FIRST_ELEMENT_NAME)){
-				hasFirst = true;
-				thisIsFirst = true;
-			}
-			
-			//如果有连接地址,先增加a标签
-			if(StringUtils.isNotBlank(ele.getOpenUrl())){
-				String aurl = getOperUrlDiv(ele);
-				sbf.append(aurl);
-				thisHasUrl = true;
-				if(thisIsFirst){
-					firstHasUrl = true;
-				}
-			}
-			
-			//增加元素 div
-			String eleStr = getEleDiv(ele,thisIsFirst,isPC);
-			sbf.append(eleStr); 
-			
-			//如果不是第一个元素, 并且有a标签,则增加 结束a标签
-			if(!thisIsFirst && thisHasUrl){
-				sbf.append(SysConst.A_END); 
-			}
-		}
-		
-		if(hasFirst){//如果有第一个元素, 则加个结束标签
-			sbf.append(SysConst.DIV_END); 
-		}
-		if(firstHasUrl){//如果第一个元素有 a标签, 则在这里增加结束标签
-			sbf.append(SysConst.A_END); 
-		}
-		
-		return sbf.toString();
 	}
 	
 	/**
@@ -257,11 +200,12 @@ public class InviteElementService {
 	* @param ele
 	* @param thisIsFirst  是否第一个元素  true=是,false=否
 	 * @param isPC 是否PC端
+	 * @param thisIsPvw 当前元素是否预览元素  
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月26日
 	 */
-	private String getEleDiv(InviteElement ele,boolean thisIsFirst, boolean isPC) {
+	private String getEleDiv(InviteElement ele,boolean thisIsFirst, boolean isPC, boolean thisIsPvw) {
 		String temp = null;
 		List<FieldMapping> eleFmList = null;
 		if(isPC){
@@ -270,14 +214,14 @@ public class InviteElementService {
 			}else{
 				temp = SysConst.DIV_TEMPLATE_ELE_OTHER;
 			}
-			eleFmList = getFieldValueList(ele,thisIsFirst,isPC);
+			eleFmList = getFieldValueList(ele,thisIsFirst,isPC,thisIsPvw);
 		}else{
 			if(thisIsFirst){
 				temp = SysConst.DIV_TEMPLATE_ELE_FIRST_YD;
 			}else{
 				temp = SysConst.DIV_TEMPLATE_ELE_OTHER_YD;
 			}
-			eleFmList = getFieldValueList(ele,thisIsFirst,isPC);
+			eleFmList = getFieldValueList(ele,thisIsFirst,isPC,thisIsPvw);
 		}
 		//替换变量
 		for(FieldMapping fm : eleFmList){
@@ -307,11 +251,12 @@ public class InviteElementService {
 	* @param ele
 	* @param isFirst 是否第一个元素, true 是, false 否
 	 * @param isPC 是否PC
+	 * @param thisIsPvw 当前元素是否预览元素	(目前就图片路径有区分)
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	private List<FieldMapping> getFieldValueList(InviteElement ele,boolean isFirst, boolean isPC) {
+	private List<FieldMapping> getFieldValueList(InviteElement ele,boolean isFirst, boolean isPC, boolean thisIsPvw) {
 		
 		List<FieldMapping> list = new ArrayList<FieldMapping>(7);
 		
@@ -384,7 +329,7 @@ public class InviteElementService {
 			fm.setDefaultValue("");
 		}
 		if(ele.getPicUrl()!=null){
-			fm.setDbValue(getViewPath(ele));
+			fm.setDbValue(getViewPath(ele,thisIsPvw));
 		}
 		list.add(fm);
 		
@@ -460,25 +405,33 @@ public class InviteElementService {
 	/**
 	 * 客服图标 展示的路径
 	* @Description: TODO
-	* @param inviteElement
+	* @param ele
+	 * @param thisIsPvw 是否是预览
 	* @param type
-	* @return http://xxxx/style/styleId/eleId/xx.xx
+	* @return http://xxxx/style/styleId/eleId/group.xx
 	* @Author: wangxingfei
 	* @Date: 2015年4月15日
 	 */
-	private String getViewPath(InviteElement inviteElement) {
+	private String getViewPath(InviteElement ele, boolean thisIsPvw) {
 		String extensionName = "";
-		String fileName = inviteElement.getPicUrl();
+		String picName = null;
+		String fileName = ele.getPicUrl();
 		if(StringUtils.isBlank(fileName)) return extensionName;
 		extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
+		if(thisIsPvw && ele.getIsUpPic()!=null && ele.getIsUpPic()){//如果是预览,且上传了图片
+			picName = StylePicName.元素背景图预览保存.getCode();
+		}else{
+			picName = StylePicName.元素背景图.getCode();
+		}
+		
+		InviteIcon inviteIcon = inviteIconService.get(ele.getInviteId());
 		return 
 				DictMan.getDictItem("d_sys_param", 15).getItemName()
 				+ "/" + DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
 				+ "/" + inviteIcon.getStyleId()	//风格id
-				+ "/" + inviteElement.getId()	//元素id
-				+ "/" + StylePicName.元素背景图.getCode()
+				+ "/" + ele.getId()	//元素id
+				+ "/" + picName
 				+ extensionName	//后缀
 				;
 	}
@@ -497,6 +450,7 @@ public class InviteElementService {
 //		//补充字段
 		InviteElement oldModel = get(inviteElement.getId());
 		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
+			inviteElement.setIsUpPic(false);
 			inviteElement.setPicUrl(oldModel.getPicUrl());;
 		}
 		if(inviteElement.getHeight()==null){//高
@@ -511,8 +465,120 @@ public class InviteElementService {
 		update(inviteElement);
 		
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
-		String div = inviteIconService.getDiv(inviteIcon,DeviceType.移动);
+		String div = inviteIconService.getViewDiv(inviteIcon,DeviceType.移动);
 		CacheMan.update(CacheName.DIVINVITEYD,inviteIcon.getStyleId(),div);
+	}
+	
+	/**
+	 * 刷新预览图  PC
+	 * 当前图片单独保存, 当前元素不保存,但是要缓存起来
+	* @param groupFile
+	* @param inviteElement
+	 * @return 
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	public String refreshPvwDiv(MultipartFile groupFile,
+			InviteElement inviteElement) throws IOException {
+		//保存图片 预览用
+		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图预览保存);
+//		//补充字段
+		InviteElement oldModel = get(inviteElement.getId());
+		
+		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
+			inviteElement.setIsUpPic(false);
+			inviteElement.setPicUrl(oldModel.getPicUrl());
+		}
+		
+		if(inviteElement.getHeight()==null){//高
+			inviteElement.setHeight(oldModel.getHeight());
+		}
+		if(inviteElement.getWidth()==null){//宽
+			inviteElement.setWidth(oldModel.getWidth());
+		}
+		inviteElement.setName(oldModel.getName());
+		
+		
+		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
+		
+		DeviceType type = DeviceType.PC;
+		if(inviteIcon.getDeviceType().equals(DeviceType.移动.getCode())){
+			type = DeviceType.移动;
+		}
+		String div = inviteIconService.getPvwDiv(inviteIcon,inviteElement,true,type);
+		return div;
+	}
+	
+	/**
+	 * 获取元素div
+	* @param inviteId
+	* @param pvwEle	当前预览的元素,还没保存到数据库, 如果不是预览,则为空
+	* @param isEdit 是否是编辑  如果是,则内层div\"要替换
+	* @param type
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	public String getViewDiv(Integer inviteId, InviteElement pvwEle,boolean isEdit,
+			DeviceType type) {
+		StringBuffer sbf = new StringBuffer();
+		//邀请框下元素
+		List<InviteElement> list = listByInviteId(inviteId);
+		boolean hasFirst = false;//是否包含第一个元素
+		boolean firstHasUrl = false;//第一个元素是否包含 连接地址
+		boolean isPC = true;//是否PC端
+		if(type.equals(DeviceType.移动)){
+			isPC = false;
+		}
+		//循环更新元素
+		for(InviteElement ele : list){
+			boolean thisIsFirst = false;//当前元素是否是第一个元素
+			boolean thisHasUrl = false;//当前元素是否有a标签
+			boolean thisIsPvw = false;//当前元素是否预览元素
+			
+			if(pvwEle!=null && pvwEle.getId()==ele.getId()){
+				thisIsPvw = true;//预览元素目前就 图片地址需要变
+				ele = pvwEle; //使用预览元素
+			}
+			
+			//如果是第一个元素
+			if(ele.getName().equals(SysConst.FIRST_ELEMENT_NAME)){
+				hasFirst = true;
+				thisIsFirst = true;
+			}
+			
+			//如果有连接地址,先增加a标签
+			if(StringUtils.isNotBlank(ele.getOpenUrl())){
+				String aurl = getOperUrlDiv(ele);
+				sbf.append(aurl);
+				thisHasUrl = true;
+				if(thisIsFirst){
+					firstHasUrl = true;
+				}
+			}
+			
+			//增加元素 div
+			String eleStr = getEleDiv(ele,thisIsFirst,isPC,thisIsPvw);
+			sbf.append(eleStr); 
+			
+			//如果不是第一个元素, 并且有a标签,则增加 结束a标签
+			if(!thisIsFirst && thisHasUrl){
+				sbf.append(SysConst.A_END); 
+			}
+		}
+		
+		if(hasFirst){//如果有第一个元素, 则加个结束标签
+			sbf.append(SysConst.DIV_END); 
+		}
+		if(firstHasUrl){//如果第一个元素有 a标签, 则在这里增加结束标签
+			sbf.append(SysConst.A_END); 
+		}
+		String result = sbf.toString();
+		if(isEdit){
+			result = result.replaceAll("\\\\\"", "\"");
+		}
+		return result;
 	}  
 
 }

@@ -108,7 +108,7 @@ public class ServiceIconService {
             //生成缩略图
             Thumbnails.of(tempPath+extensionName)//原始路径
             	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
-            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+extensionName);//压缩后的路径
+            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
         }
 		
 	}
