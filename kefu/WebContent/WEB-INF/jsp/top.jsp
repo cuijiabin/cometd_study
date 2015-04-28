@@ -14,7 +14,7 @@
 	<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
     <ul class="u-admin f-fr">
 
-        <li><a href="#"><i class="icon-user"></i>欢迎 ${Session.user.loginName}</a></li>
+        <li><a href="#"><i class="icon-user"></i>欢迎 ${sessionScope.user.loginName}</a></li>
         <li><a href="javascript:window.location='/user/main.action';"><i class="icon-home"></i>首页</a></li>
         <li><a target="_blank" href="/dialogue/user.action"><i class="icon-logout"></i>访客对话</a></li>
         <li><a href="/user/exit.action"><i class="icon-logout"></i>退出</a></li>
@@ -28,7 +28,6 @@
         <li id="_M${i.index+1}" class="nLi <c:if test='${ top.id==func.id }' >on</c:if>">
             <h3><a href="javascript:_M(${i.index+1},'${top.url}')">${top.name}</a></h3>
         </li>
-
        </c:forEach>
     </ul>
 </div>
