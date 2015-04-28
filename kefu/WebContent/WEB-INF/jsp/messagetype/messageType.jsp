@@ -99,7 +99,7 @@ function find(){
 	       zTree.selectNode(node);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        alert("没找到相应的分类 ！");
 	    }
 	});
 }

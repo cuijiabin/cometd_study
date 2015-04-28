@@ -33,7 +33,6 @@ import com.xiaoma.kefu.util.PageBean;
  * @author frongji
  *  常用语控制层
  */
-
 @Controller
 @RequestMapping(value = "messageDaily")
 public class MessageController {
@@ -71,13 +70,11 @@ public class MessageController {
 				}
 			}
 			PageBean<Message> pageBean = new PageBean<Message>();
-			
-           
+		    Integer  treeId=  mType.getId();
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
-			model.addAttribute("messageType", mType);
-			model.addAttribute("pageBean", pageBean);
-			
+			model.addAttribute("messageType", mType);   //树的默认选中项
+		   
 			return "messagedaily/messageDaily";
 		} else {
 			return "/error500";
@@ -94,24 +91,24 @@ public class MessageController {
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
 	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Message> pageBean ,Model model,Integer id) {
 		try {
-			messageService.getResult(conditions.getMap(), pageBean,id);
-			model.addAttribute("messageDailyId",id);
+			messageService.getResult(conditions.getMap(), pageBean,id);//这个id是节点ID
+			model.addAttribute("messageDailyId",id);   //messageDailyId 是常用语的类别
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
 				return "messagedaily/messageDailyList";
 			else
 				return "messagedaily/messageDailyList";
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "/error500";
 		}
-		
 	}
 	/**
 	 * 添加分类 前检查 该分类下是否有 常用语
 	 */
 	@RequestMapping(value = "check.action", method = RequestMethod.GET)
 	public String checkChild(Model model, Integer messageTypeId) {
-
+        
 		try {
 			if (messageTypeId == null) {
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
@@ -129,7 +126,6 @@ public class MessageController {
 		}
 		return "resultjson";
 	}
-	
 	
 	/**
 	 * 保存前页面跳转
@@ -235,7 +231,6 @@ public class MessageController {
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
-
 		return "resultjson";
 
 	}
@@ -254,12 +249,10 @@ public class MessageController {
 			else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
-
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("result",Ajax.JSONResult(1, "删除失败！"));
-		
 		}
 		return "resultjson";
     }

@@ -16,7 +16,7 @@
                    Integer count =1;
             }
             %>
-<table class="table table-bordered m-table">
+<table class="table table-bordered m-table" id="messageDaily_table">
         <thead>
               <tr>
                   <td class="c-wd50">编号</td>
@@ -39,8 +39,19 @@
             </td>
         </tr>
         </c:forEach>
+        	
+	   
+	 
         <tr>
-        	<td  colspan="5"> <jsp:include page="../page.jsp"></jsp:include></td>
+              <c:if test="${pageBean.objList!=null && pageBean.objList.size()>0  }">
+              <td  colspan="5"> <jsp:include page="../page.jsp"></jsp:include></td>
+        	  </c:if>
+        	  <c:if test="${pageBean.objList==null || pageBean.objList!=null && pageBean.objList.size()==0 }">
+        	  <td  colspan="5">暂无数据可展示 ！ </td>
+        	  </c:if>
         </tr>
+       
+      
+        
         </tbody>
      </table>
