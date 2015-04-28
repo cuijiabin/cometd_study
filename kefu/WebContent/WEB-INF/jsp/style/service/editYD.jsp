@@ -144,20 +144,20 @@
 //保存
 $('#btn_save').on('click',function(){
 	
-	if(!isInteger($("#siteZyPx").val())){
-		$.dialog.alert("水平定位像素请填写正整数!");
+	if(!isNaturalNum($("#siteZyPx").val())){
+		$.dialog.alert("水平定位像素请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#siteDdPx").val())){
-		$.dialog.alert("垂直定位像素请填写正整数!");
+	if(!isNaturalNum($("#siteDdPx").val())){
+		$.dialog.alert("垂直定位像素请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#width").val())){
-		$.dialog.alert("宽度请填写正整数!");
+	if(!isNaturalNum($("#width").val())){
+		$.dialog.alert("宽度请请填写大于等于0的整数!");
 		return;
 	}
-	if(!isInteger($("#height").val())){
-		$.dialog.alert("高度请填写正整数!");
+	if(!isNaturalNum($("#height").val())){
+		$.dialog.alert("高度请请填写大于等于0的整数!");
 		return;
 	}
 	

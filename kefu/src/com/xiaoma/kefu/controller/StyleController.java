@@ -185,6 +185,38 @@ public class StyleController {
 		}
 	}
 	
+	
+	/**
+	 * 获取代码
+	* @param model
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月27日
+	 */
+	@RequestMapping(value = "getCode.action", method = RequestMethod.GET)
+	public String getCode(Model model,Integer styleId) {
+		try {
+			Style style = styleService.get(styleId);
+			
+			String code = "<script type='text/javascript' src='"+ 
+					DictMan.getDictItem("d_sys_param", 15).getItemName()
+					+"/" + SysConst.JS_DIV_PATH
+					+"/" + SysConst.JS_NAME + styleId + ".js"
+					+"'></script>";
+			String code2 = " [url= " + DictMan.getDictItem("d_sys_param", 15).getItemName() + "/dialogue/customerChat.action?styleId="+styleId
+					+ "][img]" + "http://oc1.xiaoma.com/kfimg.php?arg=53kf&style=1" +" [/img]超酷签名，点击这里和我直接沟通[/url]";
+			
+			model.addAttribute("style", style);
+			model.addAttribute("code", code);
+			model.addAttribute("code2", code2);
+			return "/style/styleCode";
+		} catch (Exception e) {
+			model.addAttribute("error", "对不起出错了");
+			return "error500";
+		}
+	}
+	
 	/**
 	 * 校验风格下 是否存在 业务分组
 	* @Description: TODO

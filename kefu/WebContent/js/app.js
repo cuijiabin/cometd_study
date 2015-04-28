@@ -115,3 +115,17 @@ function isInteger(value){
 	}
 	return true;
 }
+
+/*
+ * 是否是自然数	(非负整数)
+ * 如果为空,则返回true
+ * 如果是 返回true,如果不是,返回false
+ */
+function isNaturalNum(value){
+	if(value!=''){
+		if(!(/^(\+|-)?\d+$/.test( value ))||value<0){  
+			return false;
+	    }
+	}
+	return true;
+}

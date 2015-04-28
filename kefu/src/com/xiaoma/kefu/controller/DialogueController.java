@@ -179,11 +179,13 @@ public class DialogueController {
 	 * @param styleId -风格id
 	 * @param btnCode - 按钮id
 	 * @param landingPage - 着陆页
+	 * @param consultPage - 咨询页
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "customerChat.action", method = RequestMethod.GET)
-	public String customerChat(HttpServletRequest request,HttpServletResponse response, Model model, String refer,Integer styleId, String btnCode, String landingPage)throws Exception {
+	public String customerChat(HttpServletRequest request,HttpServletResponse response, Model model, String refer,Integer styleId, 
+			String btnCode, String landingPage,String consultPage)throws Exception {
 
 		String customerId = CookieUtil.getCustomerIdFromCookie(request);
 
@@ -193,44 +195,47 @@ public class DialogueController {
 		if (StringUtils.isNotBlank(customerId)) {
 			try {
 				id = Long.parseLong(customerId);
-				isNew = false;
+				Customer check = customerService.getCustomerById(id);
+				if(check != null){
+					isNew = false;
+				}
 			} catch (Exception e) {
 				logger.info("this is a new customer!");
 			}
 		}
-		Customer customer = null;
+		
 		if (isNew) {
 			
-			customer = new Customer();
+			Customer newCus = new Customer();
 			
 			// 收集信息创建新客户
 			String ip = CookieUtil.getIpAddr(request); //获取ip地址
-			customer.setIp(ip);
+			newCus.setIp(ip);
 			
 			String ipInfo = AddressUtil.getAddresses("ip=" + ip, "utf-8");
-			customer.setIpInfo(ipInfo);
-			customer.setStyleId(styleId);
+			newCus.setIpInfo(ipInfo);
+			newCus.setStyleId(styleId);
 			
 			if(styleId != null){
 				Style style = styleService.get(styleId);
-				if(style != null) customer.setStyleName(style.getName());
+				if(style != null) newCus.setStyleName(style.getName());
 			}
-			customer.setCustomerType(1);
-			customer.setStatus(0); //0-正常 1-删除
-			customer.setFirstLandingPage(landingPage);
+			newCus.setCustomerType(1);
+			newCus.setStatus(0); //0-正常 1-删除
+			newCus.setFirstLandingPage(landingPage);
 			
 			String firstVisitSource = ParseURLKeywordUtil.getKeyword(refer); //搜索关键字
-			customer.setFirstVisitSource(firstVisitSource);
+			newCus.setFirstVisitSource(firstVisitSource);
 			
-			id = customerService.insert(customer);
+			id = customerService.insert(newCus);
 
 		} else {
 			isForbidden = blacklistService.judgeForbidden(id);
-			customer = customerService.getCustomerById(id);
-			List<DialogueDetail> list = dialogueDetailService
-					.getLastRecordsByCustomerId(id);
+			List<DialogueDetail> list = dialogueDetailService.getLastRecordsByCustomerId(id);
 			model.addAttribute("dialogueList", list);
 		}
+		
+		Customer customer = customerService.getCustomerById(id);
 
 		// cookie操作
 		Cookie cookie = CookieUtil.genCookieByCustomerId(id.toString());

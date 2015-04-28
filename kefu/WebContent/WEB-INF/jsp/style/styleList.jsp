@@ -23,7 +23,7 @@
 			<tr>
 				<td>${style.name}</td>
 				<td><a href="#" onClick="rename(${style.id})">重命名</a></td>
-				<td><a href="#" onClick="showDetail(${style.id})">获取代码</a></td>
+				<td><a href="#" onClick="getCode(${style.id})">获取代码</a></td>
 				<td><a href="#" onClick="editCommon(${style.id})">设置</a></td>
 				<td>
 					<a href="#" onClick="fenzu(${style.id})">业务分组</a>

@@ -91,6 +91,15 @@ function rename(id){
 	});
 }
 
+//获取代码
+function getCode(id){
+	$.dialog({content:'url:/style/getCode.action?styleId='+id,
+		id: 'getCode',
+		width: 800,height: 700,
+		title:'获取代码'
+	});
+}
+
 //业务分组
 function fenzu(id){
 	var url = '/busiGroup/viewGroup.action?styleId='+id;

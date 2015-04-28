@@ -35,6 +35,8 @@
                 <div class="bd">
                     <div class="g-mn5c c-bor">
                         <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
+                        
+                        <input type="hidden" id=isForbidden value="${isForbidden }"/>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">

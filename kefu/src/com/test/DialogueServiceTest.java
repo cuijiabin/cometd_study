@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.DialogueService;
 
 /**
@@ -26,6 +27,8 @@ public class DialogueServiceTest {
 	@Autowired
 	private DialogueService dialogueService;
 	
+	@Autowired
+	private BlacklistService blacklistService;
 //	@Test
 	public void testDelete4Logic(){
 //		List<Dialogue> list = new ArrayList<Dialogue>();
@@ -62,6 +65,13 @@ public class DialogueServiceTest {
 	@Test
 	public void testExp() throws Exception{
 		dialogueService.writeExcelByTime();
+	}
+	
+	@Test
+	public void testJudge() throws Exception{
+		Boolean result = blacklistService.judgeForbidden(100000030L);
+		
+		System.out.println(result);
 	}
 	
 	public static void main(String[] args) throws Exception{

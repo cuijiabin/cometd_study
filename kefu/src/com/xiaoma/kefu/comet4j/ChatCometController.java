@@ -306,11 +306,28 @@ public class ChatCometController {
 		}
 		String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
 		String cId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+		Long customerId = Long.valueOf(cId);
+		Integer userId = Integer.valueOf(uId);
+		
+		Customer customer  = customerService.getCustomerById(customerId);
+		User user = userService.getUserById(userId);
+		
+		Date startDate = new Date(System.currentTimeMillis());
+		Date endDate = TimeHelper.addHour(startDate, 8);
 		
 		Blacklist blacklist = new Blacklist();
+		blacklist.setIp(customer.getIp());
+		blacklist.setIpInfo(customer.getIpInfo());
+		
+		blacklist.setStartDate(startDate);
+		blacklist.setEndDate(endDate);
+		
+		blacklist.setCustomerId(customerId);
+		blacklist.setDescription(remark);
+		blacklist.setUserId(userId);
+		blacklist.setUserName(user.getCardName());
 		blacklist.setCreateDate(new Date());
-		blacklist.setCustomerId(Long.valueOf(cId));
-		blacklist.setUserId(Integer.valueOf(uId));
+		
 		blacklistService.createNewBlacklist(blacklist);
 		
 		//修改对话关系

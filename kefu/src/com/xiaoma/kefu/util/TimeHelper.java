@@ -56,6 +56,16 @@ public class TimeHelper {
   
     }  
 	
+	public static Date addHour(Date d, Integer hour){ 
+		
+		Calendar fromCal=Calendar.getInstance();
+		fromCal.setTime(d);
+		fromCal.add(Calendar.HOUR, hour);
+		  
+        return fromCal.getTime();  
+  
+    }  
+	
 	public static boolean isOverdue(Date date){
 		if(date.getTime()<=new Date().getTime())
 			return true;
@@ -101,4 +111,5 @@ public class TimeHelper {
             retStr = "" + i;
         return retStr;
     }
+    
 }
