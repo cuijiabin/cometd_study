@@ -1,14 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>   
-<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
+<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>  
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %> 
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
-
 <h3  class="u-tit c-bg c-bortit">常用语信息</h3>
 <input type="hidden" name="messageDaily" id="messageDaily" value="${messageDailyId}" />
+     <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+            <% if(CheckCodeUtil.isCheckFunc(userId,"f_check_dialog")) {     
+                   Integer count =1;
+            }
+            %>
 <table class="table table-bordered m-table">
         <thead>
               <tr>
