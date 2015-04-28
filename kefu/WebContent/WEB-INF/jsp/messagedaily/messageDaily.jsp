@@ -25,7 +25,7 @@
     </ul>
 </div>
  <% HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();
-    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("messageDailyId")));
+    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("typeId")));
     String adds="";
     String updates="";
     String dels="";

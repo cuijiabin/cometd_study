@@ -12,7 +12,7 @@
 <h3  class="u-tit c-bg c-bortit">常用语信息</h3>
 <input type="hidden" name="messageDaily" id="messageDaily" value="${messageDailyId}" />
  <% HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();
-    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("messageDailyId")));
+    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("typeId")));
     String adds="";
     String updates="";
     String dels="";
