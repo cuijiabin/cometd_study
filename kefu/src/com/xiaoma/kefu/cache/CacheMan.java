@@ -1,13 +1,19 @@
 package com.xiaoma.kefu.cache;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import redis.clients.jedis.Jedis;
 
 import com.xiaoma.kefu.redis.JedisDao;
+import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.util.JsonUtil;
 
 public class CacheMan {
 
@@ -24,6 +30,30 @@ public class CacheMan {
 					JedisDao.setKO(key, obj);
 			}
 			return obj;
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return null;
+		}
+	}
+	
+	public static List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
+		try {
+			String key = CacheUtil.getCacheName(CacheName.ONLINE_USER_STYLEID, styleId);
+			Object obj = JedisDao.getObject(key);
+			if (obj == null) {
+				obj = CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
+				if (obj != null)
+					JedisDao.setKO(key, obj);
+			}
+			List<Integer> list = (List<Integer>) obj;
+			Set<Integer> userIds = new HashSet<Integer>(list);
+			List<String> ids = JedisTalkDao.getSwitchList();
+			Set<Integer> onUserIds = JsonUtil.convertString2IntegerSet(ids);
+			if(CollectionUtils.isEmpty(onUserIds)){
+				return null;
+			}
+			onUserIds.retainAll(userIds);
+			return new ArrayList<Integer>(onUserIds);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 			return null;
@@ -92,7 +122,10 @@ public class CacheMan {
 	}
 	
 	public static void main(String[] args) {
-		removeByKeyPattern(CacheName.USERFUNCTION);
+		List<Integer> list = getOnlineUserIdsByStyleId(1);
+		for(Integer i : list){
+			System.out.println(i);
+		}
 	}
 	
 	

@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
+<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>  
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %>  
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -27,7 +30,7 @@
 <div style="margin:50px">
 <div class="m-query f-mar10">
     <div class="u-hr"></div>
-    <div class="m-query-bd">
+    <div class="m-query-bd">${Session.user.id}
         <div class="f-mbm">
             <label>客户编号：</label><input id="customerId" name="customerId" value="${customerId }" class="c-wd150" type="text" maxlength="15" />
             <label>添加工号：</label><input  id="userName" name="userName" class="c-wd150" type="text" />
@@ -35,9 +38,14 @@
                <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">查询</button>
         </div>
         <div class="f-mbm">
+        <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+            <% if(CheckCodeUtil.isCheckFunc(userId,"f_bald_add")) {%>
            <button type="button" class="btn btn-primary btn-small" onclick="javascript:addBlacklist();">添加黑名单</button>
+           <%} %>
             <label></label>
+            <% if(CheckCodeUtil.isCheckFunc(userId,"f_bald_del")) {%>
             <button type="button" class="btn btn-primary btn-small" onclick="delTrue();">删除</button>
+             <%} %>
         </div>
         <div class="m-query-hd">
     </div>

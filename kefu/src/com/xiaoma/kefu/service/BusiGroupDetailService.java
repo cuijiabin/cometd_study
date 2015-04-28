@@ -121,4 +121,12 @@ public class BusiGroupDetailService {
 	}
 	
 
+	/**
+	 * 根据风格id获取userId列表
+	 * @param styleId
+	 * @return
+	 */
+	public List<Integer> findUserIdsByStyleId(Integer styleId){
+		return busiGroupDetailDaoDaoImpl.findUserIdsByStyleId(styleId);
+	}
 }

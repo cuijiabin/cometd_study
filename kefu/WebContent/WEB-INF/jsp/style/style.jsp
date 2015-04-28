@@ -114,7 +114,7 @@ function fenliu(id){
 		url :  "/style/checkHasGroup.action",
 		dataType : 'json',
 		data: {"styleId":id} ,
-		async: true,//true异步, false 同步
+		async:true,//true异步, false 同步
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		var url = '/busiGroupDetail/editDetail.action?styleId='+id;

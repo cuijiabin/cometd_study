@@ -55,5 +55,7 @@ public class CacheName {
 	public static final String DIVINVITEPC ="divInvitePC";
 	//邀请框的div格式 移动版
 	public static final String DIVINVITEYD ="divInviteYD";
+	//根据风格id获取客服
+	public static final String ONLINE_USER_STYLEID ="online_user_styleid";
 	
 }

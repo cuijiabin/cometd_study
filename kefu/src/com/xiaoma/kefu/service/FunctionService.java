@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.xiaoma.kefu.cache.CacheMan;
-import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.FunctionDao;
 import com.xiaoma.kefu.dao.KeyboardDao;
 import com.xiaoma.kefu.dao.RemindTypeDao;
@@ -35,6 +33,7 @@ import com.xiaoma.kefu.util.FileUtil;
  */
 @Service
 public class FunctionService {
+	@SuppressWarnings("unused")
 	private Logger logger = Logger.getLogger(FunctionService.class);
 	@Autowired
 	private FunctionDao funcDao;
@@ -159,24 +158,6 @@ public class FunctionService {
 		return listFunc;
 	}
     
-	/**
-	 * 根据用户id和code值来检验改用户的页面是否有某个权限
-	 * @param id
-	 * @param code
-	 * @return
-	 */
-	public boolean isCheckFunc(Integer id, String code) {
-		try{
-		String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id);
-			int count = codes.indexOf(","+code+",");
-			if(count>=0){
-				return true;
-			}
-		}catch(Exception e){
-			logger.error(e.getMessage());
-		}
-		 return false;
-	}
     /**
      * 保存快捷键
      * @param keyboard

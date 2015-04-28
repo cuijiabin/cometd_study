@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %> 
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>   
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
@@ -9,6 +13,12 @@
 <link rel="stylesheet" type="text/css"
 	href="/jsplugin/kkpager/src/kkpager.css" />
 <!-- 表格有边框 -->
+ <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+            <% Integer count=0;
+            if(CheckCodeUtil.isCheckFunc(userId,"f_check_dialog")) {     
+                    count=1;
+            }
+            %>
 <table class="table table-bordered table-striped table-hover m-table">
 	<thead>
 		<tr>
@@ -31,12 +41,12 @@
 					<c:forEach var="mapItem" items="${contentMap }">
 						<c:if test="${mapItem.key ==record.key}"> 
 							<c:choose>
-								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName == 1 }"> 
+								<c:when test="${mapItem.key == 'customerName' and showDetail == count and contentMap.hasName == 1 }"> 
 									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>
 										<img src="/img/u168.png"/>
 									</td>
 								</c:when>
-								<c:when test="${mapItem.key == 'customerName' and showDetail == 1 and contentMap.hasName != 1 }"> 
+								<c:when test="${mapItem.key == 'customerName' and showDetail == count and contentMap.hasName != 1 }"> 
 									<td><a href="#" onClick="showDetail(${contentMap.dialogueId})">${mapItem.value}</a>
 										[<a href="#" onClick="updateCusl(${contentMap.customerId},${contentMap.dialogueId})">创建</a>]
 									</td>

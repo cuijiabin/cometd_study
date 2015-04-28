@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
+<%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%> 
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %>      
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -33,8 +36,13 @@
         </div>
     </div>
     <div class="u-subsec">
+     <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+       <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
        <button type="button" class="btn btn-primary btn-small" onclick="del();">删除</button>
+       <%} %>
+       <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_recycel")) {%>
        <button type="button" class="btn btn-primary btn-small" onclick="toRecycle();">回收站</button>
+       <%} %>
    	</div>
     <div class="u-hr"></div>
 </div>

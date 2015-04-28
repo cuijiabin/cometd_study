@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.cache;
 
 import com.xiaoma.kefu.common.SpringContextUtil;
+import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.FunctionService;
 import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.service.ServiceIconService;
@@ -59,6 +60,10 @@ public class CacheFactory {
 				InviteIconService inviteIconService = (InviteIconService)SpringContextUtil
 						.getBean("inviteIconService");
 				obj=inviteIconService.getDivByStyleId(Integer.valueOf((String) key), DeviceType.移动);
+			}else if(cacheName.equals(CacheName.ONLINE_USER_STYLEID)){
+				BusiGroupDetailService busiGroupDetailService = (BusiGroupDetailService)SpringContextUtil
+						.getBean("busiGroupDetailService");
+				obj=busiGroupDetailService.findUserIdsByStyleId((Integer) key);
 			}
 		}
 		return obj;

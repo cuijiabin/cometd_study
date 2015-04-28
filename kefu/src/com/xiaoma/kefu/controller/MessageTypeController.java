@@ -73,6 +73,7 @@ public class MessageTypeController {
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);
+			model.addAttribute("userId", userId);
 			return "messagetype/messageType";
 		} else {
 			return "/error500";

@@ -129,6 +129,12 @@ public class SaveDialogueThread implements Runnable{
 		dialogue.setEndDate(endDate);
 		dialogue.setDurationTime(durationTime);
 		
+		dialogue.setMaxSpace(null);
+		dialogue.setIsWait(null);
+		dialogue.setWaitTime(null);
+		dialogue.setFirstTime(null);
+		dialogue.setIsTalk(null);
+		
 		
 		dialogue.setIp(customer.getIp());
 		dialogue.setIpInfo(customer.getIpInfo());
