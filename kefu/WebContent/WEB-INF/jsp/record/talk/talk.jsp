@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>    
 <%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %>  
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -91,15 +94,26 @@
 		</div> 
 	    <div class="u-hr"></div>
 	    <div class="m-query-bd">
+	     <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
 	    	<label>对话日期：</label><input class="c-wd120 Wdate" type="text" id="expDate" onClick="WdatePicker({minDate:'2015-04-01',maxDate:'%y-%M-{%d-1}}'})" />
+	    	<% if(CheckCodeUtil.isCheckFunc(userId,"f_down_load")) {%>
 	        <button type="button" class="btn btn-primary btn-small" onclick="expExcel();">下载</button>
+	        <%} %>
 	    </div>
 	    <div class="u-hr"></div>
 	    <div class="u-subsec">
+	       <% if(CheckCodeUtil.isCheckFunc(userId,"f_oncheck_log")) {%>
         	<label><input type="checkbox" id="isShowTel">显式查看聊天记录中的电话号码</label>
+        	 <%} %>
+        	<% if(CheckCodeUtil.isCheckFunc(userId,"f_fieldon_del")) {%>
 	        <button type="button" class="btn btn-primary btn-small" onclick="del();">删除</button>
+	         <%} %>
+	        <% if(CheckCodeUtil.isCheckFunc(userId,"f_recycel_up")) {%>
 	        <button type="button" class="btn btn-primary btn-small" onclick="toRecycle();">回收站</button>
+	         <%} %>
+	        <% if(CheckCodeUtil.isCheckFunc(userId,"f_set_fieldon")) {%>
 	        <button type="button" class="btn btn-primary btn-small" onclick="editDisplay();">配置显示字段</button>
+	         <%} %>
      	</div>
     </div>
 </div>

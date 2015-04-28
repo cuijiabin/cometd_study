@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
+<%@ page import="javax.servlet.http.HttpSession"  %>  
+<%@ page import="com.xiaoma.kefu.model.User"  %>  
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -27,11 +31,18 @@
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
+            <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+            <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageType();">添加</button>
+            <%}%>
+             <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
             <button type="button" class="btn btn btn-warning btn-small f-fl" onclick="javascript:updateMessageType();">编辑</button>
+            <%}%>
+             <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
             <button type="button" class="btn btn btn-danger btn-small f-fl" onclick="javascript:deleteMessageType();">删除</button>
-            <input class="c-wd150" type="text" id="searTitle" />
-            <button type="button" class="btn btn-primary btn-small" onclick="javascript:find();">搜索</button>
+            <%}%>
+            <input class="c-wd150" type="text" />
+            <button type="button" class="btn btn-primary btn-small">搜索</button>
         </div>
     </div>
 	<div class="g-bd6 f-cb f-mar20">

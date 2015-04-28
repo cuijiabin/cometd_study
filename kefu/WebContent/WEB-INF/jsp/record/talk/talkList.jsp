@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>
+<%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>   
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
