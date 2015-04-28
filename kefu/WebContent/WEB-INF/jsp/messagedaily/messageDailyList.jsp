@@ -57,9 +57,6 @@
             </td>
         </tr>
         </c:forEach>
-        	
-	   
-	 
         <tr>
               <c:if test="${pageBean.objList!=null && pageBean.objList.size()>0  }">
               <td  colspan="5"> <jsp:include page="../page.jsp"></jsp:include></td>
@@ -68,8 +65,6 @@
         	  <td  colspan="5">暂无数据可展示 ！ </td>
         	  </c:if>
         </tr>
-       
-      
         
         </tbody>
      </table>

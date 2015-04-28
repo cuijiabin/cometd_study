@@ -66,6 +66,7 @@ var zTree;
 		var url = "/messageDaily/find.action";
 		var data = {
 			"id" : treeNode.id,
+			"typeId" :treeNode.typeId,
 		};
 		id=treeNode.id;    
 		title = treeNode.name;

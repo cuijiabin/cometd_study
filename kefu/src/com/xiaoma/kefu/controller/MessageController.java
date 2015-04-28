@@ -89,10 +89,11 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Message> pageBean ,Model model,Integer id) {
+	public String queryAll(MapEntity conditions, @ModelAttribute("pageBean") PageBean<Message> pageBean ,Model model,Integer id,Integer typeId) {
 		try {
 			messageService.getResult(conditions.getMap(), pageBean,id);//这个id是节点ID
 			model.addAttribute("messageDailyId",id);   //messageDailyId 是常用语的类别
+			model.addAttribute("typeId",typeId);  //常用语 的分类
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
 				return "messagedaily/messageDailyList";
