@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.controller.AllotRuleController;
 import com.xiaoma.kefu.dao.WaitListDao;
 import com.xiaoma.kefu.dict.DictMan;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.util.StringHelper;
 
@@ -220,6 +222,10 @@ public class WaitListService {
 	
 	
 	public static void main(String [] args){
+		List<DictItem> list = DictMan.getDictList("d_dialog_android");
+		for (DictItem dictItem : list){  
+			System.out.println(dictItem.getItemName());  
+		} 
 		Queue<String> q = new LinkedList<String>();
 		q.offer("1");
 		q.offer("2");
