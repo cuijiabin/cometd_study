@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.StyleDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
+import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
  **********************************
@@ -134,5 +137,23 @@ public class StyleService {
 		return num;
 	}
 	
+	/**
+	 * 获取缩略图路径
+	* @param styleId	风格id
+	* @param type	图片类型
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月28日
+	 */
+	public String getMinPicPath(Integer styleId,StylePicName type){
+		return 
+				DictMan.getDictItem("d_sys_param", 2).getItemName()
+				+ "/" + SysConst.STYLE_PATH //风格主目录
+				+ "/"+styleId	//风格id
+				+ "/"+type.getCode()	//类别
+				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀
+				+ SysConst.MIN_EXTENSION	//后缀
+				;
+	}
 
 }

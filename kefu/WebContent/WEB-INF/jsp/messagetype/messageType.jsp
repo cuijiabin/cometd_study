@@ -25,20 +25,35 @@
         <li><i>&gt;</i>常用语分类</li>
     </ul>
 </div>
+ <% HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();
+    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("typeId")));
+    String adds="";
+    String updates="";
+    String dels="";
+    if(typeId==1){
+    	adds="f_calset_add";
+    	updates="f_calset_update";
+    	dels="f_calset_del";
+    }else{
+    	adds="f_perclass_add";
+    	updates="f_perclass_update";
+    	dels="f_perclass_del";
+    }
+ %>
 <div style="margin:50px">
 <div class="g-cnt">
 	<input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
-            <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
-            <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
+           
+            <% if(CheckCodeUtil.isCheckFunc(userId,adds)) {%>
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageType();">添加</button>
             <%}%>
-             <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
+             <% if(CheckCodeUtil.isCheckFunc(userId,updates)) {%>
             <button type="button" class="btn btn btn-warning btn-small f-fl" onclick="javascript:updateMessageType();">编辑</button>
             <%}%>
-             <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
+             <% if(CheckCodeUtil.isCheckFunc(userId,dels)) {%>
             <button type="button" class="btn btn btn-danger btn-small f-fl" onclick="javascript:deleteMessageType();">删除</button>
             <%}%>
             <input class="c-wd150" type="text" id="searTitle" name="searTitle"/>

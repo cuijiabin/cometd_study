@@ -5,9 +5,9 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript"
 	src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript"	src="/jsplugin/form/jquery-form.js"></script>	
 <script type="text/javascript" src="/js/app.js"></script>	
 <!-- 表格有边框 -->
-<div style="margin:50px">
 <form id="mainForm" enctype="multipart/form-data" method="post">
 	<input type="hidden" id="id" name="id" value="${inviteElement.id }"/>
 	<input type="hidden" id="inviteId" name="inviteId" value="${inviteElement.inviteId }" />
@@ -69,34 +69,40 @@
 <div class="m-query-hd">
 	<c:if test="${inviteElement.id != null }">
 		<button type="button" class="btn btn-primary btn-small" onclick="saveDetail()">保存</button>
-    	<button type="button" class="btn btn-primary btn-small">刷新预览图</button>
+    	<button type="button" class="btn btn-primary btn-small" onclick="refreshDiv()">刷新预览图</button>
 	</c:if>
-</div>
 </div>
 
 <script type="text/javascript">
 
 //保存
 function saveDetail(){
-	if(!isNaturalNum($("#width").val())){
-		$.dialog.alert("宽度请填写大于等于0的整数!");
+	var msg = validate();
+	if(msg!=''){
+		$.dialog.alert(msg);
 		return;
+	}
+	var path = "/inviteElement/saveYD.action";  
+    $('#mainForm').attr("action", path).submit();
+}
+
+//校验
+function validate(){
+	var msg = '';
+	if(!isNaturalNum($("#width").val())){
+		msg += '宽度请填写大于等于0的整数! </br>';
 	}
 	if(!isNaturalNum($("#height").val())){
-		$.dialog.alert("高度请填写大于等于0的整数!");
-		return;
+		msg += '高度请填写大于等于0的整数! </br>'
 	}
 	if(!isNaturalNum($("#siteLeft").val())){
-		$.dialog.alert("距左距离请填写大于等于0的整数!");
-		return;
+		msg += '距左距离请填写大于等于0的整数! </br>'
 	}
 	if(!isNaturalNum($("#siteTop").val())){
-		$.dialog.alert("距顶距离请填写大于等于0的整数!");
-		return;
+		msg += '距顶距离请填写大于等于0的整数! </br>'
 	}
 	if(!isNaturalNum($("#level").val())){
-		$.dialog.alert("层叠顺序请填写大于等于0的整数!");
-		return;
+		msg += '层叠顺序请填写大于等于0的整数! </br>'
 	}
 	
 	//校验文件类型
@@ -105,12 +111,10 @@ function saveDetail(){
 	    var extStart=filepath.lastIndexOf(".");
 	    var ext=filepath.substring(extStart,filepath.length).toUpperCase();
 	    if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
-	    	$.dialog.alert("图片限于bmp,png,gif,jpeg,jpg格式!");
-	    	return;
+	    	msg += '图片限于bmp,png,gif,jpeg,jpg格式! </br>'
 	    }
 	}
-	var path = "/inviteElement/saveYD.action";  
-    $('#mainForm').attr("action", path).submit();
+	return msg;
 }
 
 //修改元素名称
@@ -129,5 +133,28 @@ function editCallback(id,newName){
 	$("#listName"+id).html(newName);
 }
 
+//刷新div
+function refreshDiv(){
+	var msg = validate();
+	if(msg!=''){
+		$.dialog.alert(msg);
+		return;
+	}
+    $("#mainForm").ajaxSubmit({
+        type:'post',
+        url:'/inviteElement/refreshPvwDiv.action',
+        dataType : 'json',
+        success:function(data){
+        	if(data.result==0){
+        		$("#divView").html(data.msg);
+	    	}else{
+	    		$.dialog.alert(data.msg);
+	    	}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        	$.dialog.alert('error');	
+        }
+    });
+}
 
 </script>

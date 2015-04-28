@@ -50,10 +50,10 @@ public class InviteIconController {
 	public String editPC(Model model,Integer styleId) {
 		try {
 			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.PC);
-			String picUrl = getViewPath(inviteIcon, StylePicName.邀请框PC);
 			List<DictItem> dict = DictMan.getDictList("d_location_model");
+			String strDiv = inviteIconService.getPvwDiv(inviteIcon,null,true,DeviceType.PC);
 			model.addAttribute("inviteIcon", inviteIcon);
-			model.addAttribute("picUrl", picUrl);
+			model.addAttribute("strDiv", strDiv);
 			model.addAttribute("dict", dict);
 			return "/style/invite/editPC";
 		} catch (Exception e) {
@@ -77,11 +77,11 @@ public class InviteIconController {
 	public String editYD(Model model,Integer styleId) {
 		try {
 			InviteIcon inviteIcon = inviteIconService.getByStyleId(styleId,DeviceType.移动);
-			String picUrl = getViewPath(inviteIcon, StylePicName.邀请框移动);
-
 			List<DictItem> dict = DictMan.getDictList("d_location_model");
+			String strDiv = inviteIconService.getPvwDiv(inviteIcon,null,true,DeviceType.移动);
+			
 			model.addAttribute("inviteIcon", inviteIcon);
-			model.addAttribute("picUrl", picUrl);
+			model.addAttribute("strDiv", strDiv);
 			model.addAttribute("dict", dict);
 			return "/style/invite/editYD";
 		} catch (Exception e) {

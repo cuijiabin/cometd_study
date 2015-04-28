@@ -33,6 +33,7 @@
 				<div class="field">
 					<label></label>
 					<button class="button" style="margin-left:50px;_margin-left:48px" onclick="javascript:login();"></button>
+					<button class="button" style="background:url('/img/reset_button.jpg');" onclick="javascript:relogin();"></button>
 				</div>
 			</div>
 		</div>
@@ -61,7 +62,7 @@
 		    	}
 		    },
 		    error: function (data) {
-		    	$("#err").text("出现错误,请重新登录");
+		    	$("#err").text("出现错误,请重新登录!");
 		    }
 		});
 	}
@@ -70,12 +71,12 @@
 		$("#loginName").val("");
 		$("#password").val("");
 		$("#yzm").val("");
-
+		reloadImage();
 	}
 	
-	  function reloadImage(imgurl){
+	  function reloadImage(){
           var getimagecode=document.getElementById("pic");
-          getimagecode.src= imgurl + "?id=" + Math.random();
+          getimagecode.src= "image.jsp?id=" + Math.random();
       }
 </script>
 </body>

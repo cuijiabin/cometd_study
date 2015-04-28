@@ -25,6 +25,11 @@ public class SysConst {
 	public static final String MIN_PIC_SUFFIX="_min";
 	
 	/**
+	 * 缩略图路径文件格式
+	 */
+	public static final String MIN_EXTENSION=".png";
+	
+	/**
 	 * 聊天及记录结果展示中-聊天内容字段code
 	 */
 	public static final String CHAT_CONTENT = "chatContent";
@@ -101,7 +106,7 @@ public class SysConst {
 		,客服图标PC在线("servicePCon"),客服图标PC离线("servicePCoff")
 		,客服图标移动在线("serviceYDon"),客服图标移动离线("serviceYDoff")
 		,邀请框PC("invitePC"),邀请框移动("inviteYD")
-		,元素背景图("group");
+		,元素背景图("group"),元素背景图预览保存("group_pvw");
 		private String value;
 		StylePicName(String value){
 			this.value = value;

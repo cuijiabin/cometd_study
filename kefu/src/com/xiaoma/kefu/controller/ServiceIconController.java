@@ -2,7 +2,6 @@ package com.xiaoma.kefu.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,7 @@ import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.ServiceIcon;
 import com.xiaoma.kefu.service.ServiceIconService;
-import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.SysConst.DeviceType;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
@@ -36,6 +35,8 @@ public class ServiceIconController {
 
 	@Autowired
 	private ServiceIconService serviceIconService;
+	@Autowired
+	private StyleService styleService;//风格
 	
 	
 	/**
@@ -56,12 +57,12 @@ public class ServiceIconController {
 			String onUrl,offUrl;
 			if(deviceTypeId==1){
 				serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.PC);
-				onUrl = getViewPath(serviceIcon, StylePicName.客服图标PC在线);
-				offUrl = getViewPath(serviceIcon, StylePicName.客服图标PC离线);
+				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC在线);
+				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC离线);
 			}else{
 				serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.移动);
-				onUrl = getViewPath(serviceIcon, StylePicName.客服图标移动在线);
-				offUrl = getViewPath(serviceIcon, StylePicName.客服图标移动离线);
+				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动在线);
+				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动离线);
 				result = "/style/service/editYD";
 			}
 			List<DictItem> dict = DictMan.getDictList("d_display_model");//显示方式
@@ -122,37 +123,6 @@ public class ServiceIconController {
 		return "redirect:/serviceIcon/edit.action?styleId="+serviceIcon.getStyleId()
 				+"&deviceTypeId="+serviceIcon.getDeviceType(); 
 	}
-	
-	/**
-	 * 缩略图展示的路径
-	* @Description: TODO
-	* @param serviceIcon
-	* @param type
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月15日
-	 */
-	private String getViewPath(ServiceIcon serviceIcon,StylePicName type) {
-		String extensionName = "";
-		if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
-			String fileName = serviceIcon.getOnlinePic();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
-			String fileName = serviceIcon.getOfflinePic();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}
-		return 
-//				SystemConfiguration.getInstance().getPicPrefix() //前缀
-				DictMan.getDictItem("d_sys_param", 2).getItemName()
-				+ "/" + SysConst.STYLE_PATH //风格主目录
-				+ "/"+serviceIcon.getStyleId()	//风格id
-				+ "/"+type.getCode()	//类别
-				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀
-				+ extensionName	//后缀
-				;
-	}  
 	
 	
 }

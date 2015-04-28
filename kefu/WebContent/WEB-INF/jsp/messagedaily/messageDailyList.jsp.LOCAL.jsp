@@ -11,29 +11,11 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <h3  class="u-tit c-bg c-bortit">常用语信息</h3>
 <input type="hidden" name="messageDaily" id="messageDaily" value="${messageDailyId}" />
- <% HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();
-    Integer typeId = Integer.parseInt(String.valueOf(request.getAttribute("typeId")));
-    String adds="";
-    String updates="";
-    String dels="";
-    if(typeId==1){
-    	adds="f_usesay_add";
-    	updates="f_usesay_update";
-    	dels="f_usesay_del";
-    }else{
-    	adds="f_persay_add";
-    	updates="f_persay_update";
-    	dels="f_persay_del";
-    }
-    boolean checkupdate=false;
-    if(CheckCodeUtil.isCheckFunc(userId,updates)){
-    	checkupdate=true;
-    }
-    boolean checkdel=false;
-    if(CheckCodeUtil.isCheckFunc(userId,dels)){
-    	checkdel=true;
-    }
- %>
+     <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
+            <% if(CheckCodeUtil.isCheckFunc(userId,"f_check_dialog")) {     
+                   Integer count =1;
+            }
+            %>
 <table class="table table-bordered m-table" id="messageDaily_table">
         <thead>
               <tr>

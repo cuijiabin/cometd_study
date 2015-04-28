@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +36,7 @@ public class SystemConfController {
 	 */
 	@RequestMapping(value = "visitRegister.action", method = RequestMethod.GET)
 	public String visitRegister(Model model) {
+		List<DictItem> list = DictMan.getDictList("d_dialog_android");
 		model.addAttribute("message", DictMan.getDictItem("d_sys_param",5));
 		model.addAttribute("dialog", DictMan.getDictItem("d_sys_param",6));
 		model.addAttribute("info", DictMan.getDictItem("d_sys_param",7));

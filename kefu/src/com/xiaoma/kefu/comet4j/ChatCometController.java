@@ -271,6 +271,11 @@ public class ChatCometController {
 			 JedisTalkDao.remCcnReceiveList(ccnId, endCcnId);
 		     JedisTalkDao.delCcnPassiveId(endCcnId);
 		     
+		     String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, endCcnId);
+		     DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,ccnId);
+		     dInfo.setCloseType(type);
+		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+		     
 		    //保存会话
 	        String key = JedisConstant.getDialogueListKey(ccnId,endCcnId);
 	        JedisTalkDao.lpushSaveDialogue(key);
@@ -278,6 +283,11 @@ public class ChatCometController {
 		}else if(JedisConstant.CUSTOMER_TYPE == type){
 			JedisTalkDao.remCcnReceiveList(endCcnId, ccnId);
 		    JedisTalkDao.delCcnPassiveId(ccnId);
+		    
+		    String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+		     DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,endCcnId);
+		     dInfo.setCloseType(type);
+		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 		    
 		    //保存会话
 	        String key = JedisConstant.getDialogueListKey(endCcnId,ccnId);
@@ -365,12 +375,13 @@ public class ChatCometController {
 		}
 		
 		//会话 key
-        String key = JedisConstant.getDialogueListKey(userCcnId,customerCcnId);
-        DialogueScore dialogue = new DialogueScore();
-        dialogue.setScoreType(scoreType);
-        dialogue.setRemark(remark);
+        String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
         
-        JedisTalkDao.setDialogueScore(key, dialogue);
+        DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,userCcnId);
+        dInfo.setScoreType(scoreType);
+        dInfo.setScoreRemark(remark);
+        
+        JedisTalkDao.setDialogueInfo(customerId, userCcnId, dInfo);
         
 	}
 	

@@ -1,6 +1,8 @@
 package com.xiaoma.kefu.thread;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import redis.clients.jedis.Jedis;
 
+import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
@@ -22,6 +25,7 @@ import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.TimeHelper;
 
 /**
  * 保存对话记录
@@ -64,6 +68,10 @@ public class SaveDialogueThread implements Runnable{
 				continue;
 			}
 			
+			String uccnId = JedisConstant.getUccnIdFromDialogueListKey(toSaveDialogueListKey);
+			if(uccnId == null){
+				continue;
+			}
 			
 			//获取双方的真实id
 			DialogueDetail one = (DialogueDetail) JsonUtil.getObjFromJson(dialogueList.get(0), DialogueDetail.class);
@@ -83,7 +91,14 @@ public class SaveDialogueThread implements Runnable{
 				list.add(dialogueDetail);
 			}
 			
-			Dialogue dialogue = genDialogueByList(list,user,customer);
+			//按时间升序排序
+			Collections.sort(list, new Comparator<DialogueDetail>(){
+				            public int compare(DialogueDetail d1, DialogueDetail d2) {
+				                return d1.getCreateDate().compareTo(d2.getCreateDate());
+				            }
+				        });
+			
+			Dialogue dialogue = genDialogueByList(list,uccnId,customer);
 			Long dialogueId = dialogueService.add(dialogue);
 			
 			for(DialogueDetail dialogueDetail : list){
@@ -108,37 +123,55 @@ public class SaveDialogueThread implements Runnable{
 	 * @param customer
 	 * @return
 	 */
-	private Dialogue genDialogueByList(List<DialogueDetail> list,User user,Customer customer){
-		Integer last = list.size()-1;
+	private Dialogue genDialogueByList(List<DialogueDetail> list,String uccnId,Customer customer){
 		
+		
+		Integer last = list.size()-1;
 		last = (last == -1) ? 0 : last;
+		
 		Date beginDate = list.get(0).getCreateDate();
 		Date endDate = list.get(last).getCreateDate();
 		
-		Long duration = endDate.getTime() - beginDate.getTime();
-		Integer durationTime = duration.intValue()/1000;
+		Integer durationTime = TimeHelper.diffSecond(endDate, beginDate);
 		
+		
+		Long customerId = customer.getId();
+		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId.toString(),uccnId);
 		Dialogue dialogue = new Dialogue();
 		
-		dialogue.setUserId(user.getId());
-		dialogue.setCardName(user.getCardName());
-		dialogue.setDeptId(user.getDeptId());
-		dialogue.setCustomerId(customer.getId());
+		dialogue.setUserId(dInfo.getUserId()); //客服ID
+		dialogue.setCardName(dInfo.getCardName()); //工号名片
+		dialogue.setDeptId(dInfo.getDeptId());// 部门ID
+		dialogue.setCustomerId(dInfo.getCustomerId());// 客户ID
 		
-		dialogue.setBeginDate(beginDate);
-		dialogue.setEndDate(endDate);
-		dialogue.setDurationTime(durationTime);
+		dialogue.setBeginDate(beginDate);// 对话开始时间
+		dialogue.setEndDate(endDate);// 对话结束时间
+		dialogue.setDurationTime(durationTime);// 对话时长（秒）
 		
-		dialogue.setMaxSpace(null);
-		dialogue.setIsWait(null);
-		dialogue.setWaitTime(null);
-		dialogue.setFirstTime(null);
-		dialogue.setIsTalk(null);
+		dialogue.setMaxSpace(null);// 最大回复时间间隔（秒）--统计
+		dialogue.setIsWait(dInfo.getIsWait());// 是否进入等待队列（0否 1 是 --收集
+		dialogue.setWaitTime(dInfo.getWaitTime());// 等待时长（秒）--收集
+		dialogue.setFirstTime(null);// 机器人与客服时间间隔（秒）--统计
+		dialogue.setIsTalk(null);// 是否有客户的说话记录（0，无 1，有）--统计
+		dialogue.setScoreType(dInfo.getScoreType());// 评分类型 --收集
 		
+		dialogue.setIp(dInfo.getIp());// ip地址
+		dialogue.setIpInfo(dInfo.getIpInfo());// ip分析（省市县运营商）
 		
-		dialogue.setIp(customer.getIp());
-		dialogue.setIpInfo(customer.getIpInfo());
+		dialogue.setKeywords(dInfo.getKeywords());// 网站关键词 ##隔开 --收集
+		dialogue.setDeviceType(dInfo.getDeviceType());// 设备类型（1 pc 2 移动） --收集
+		dialogue.setConsultPage(dInfo.getConsultPage());// 咨询页面 --收集
+		dialogue.setOpenType(dInfo.getOpenType());// 打开类型(图标,邀请框等) --收集
+		dialogue.setBtnCode(dInfo.getBtnCode());// 按钮id --收集
+		dialogue.setWaitListId(null);// 考试项目或需求编码id
+		dialogue.setCloseType(dInfo.getCloseType());// 关闭类型（1 客户关闭 2 系统关闭 3 客服关闭）
+		dialogue.setIsDel(0);// 回收站（0 正常 1 回收）
+		dialogue.setTotalNum(list.size());// 本次对话总条数  --统计
+		dialogue.setLandingPage(dInfo.getLandingPage());// 着陆页 --收集
+		dialogue.setStyleId(dInfo.getStyleId());// 风格id --收集
 		
+		//清理缓存对话信息
+		JedisTalkDao.delDialogueInfo(customerId.toString(), uccnId);
 		return dialogue;
 	}
 	

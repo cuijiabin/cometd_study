@@ -27,15 +27,14 @@
         <li><i>&gt;</i>样式设置</li>
     </ul>
 </div>
-<div style="margin:50px">
 <div class="g-cnt">
     <div class="m-query f-mar10">
         <div class="m-query-hd">
             邀请框效果预览图
-            <button type="button" class="btn btn-primary btn-small">刷新预览</button>
+            <button type="button" class="btn btn-primary btn-small" onclick="refreshDiv()">刷新预览</button>
         </div>
         <div class="u-hr"></div>
-        <div class="m-query-bd"><img src="http://oc2.xiaoma.com/img/upload/53lx/zdyivt/zdyivt_53kf_1420342163.png" alt="" /></div>
+        <div class="m-query-bd" id="divView">${strDiv }</div>
     </div>
     
     <!-- 查询条件 -->
@@ -69,7 +68,6 @@
             </tbody>
         </table>
     </div>
-</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.comet4j.DialogueQuene;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
@@ -192,6 +193,8 @@ public class DialogueController {
 		Long id = null;
 		Boolean isNew = true; //判断是否是新用户标识
 		Boolean isForbidden = false;
+		
+		String firstVisitSource = null;
 		if (StringUtils.isNotBlank(customerId)) {
 			try {
 				id = Long.parseLong(customerId);
@@ -224,7 +227,7 @@ public class DialogueController {
 			newCus.setStatus(0); //0-正常 1-删除
 			newCus.setFirstLandingPage(landingPage);
 			
-			String firstVisitSource = ParseURLKeywordUtil.getKeyword(refer); //搜索关键字
+		    firstVisitSource = ParseURLKeywordUtil.getKeyword(refer); //搜索关键字
 			newCus.setFirstVisitSource(firstVisitSource);
 			
 			id = customerService.insert(newCus);
@@ -236,6 +239,35 @@ public class DialogueController {
 		}
 		
 		Customer customer = customerService.getCustomerById(id);
+		
+		//添加临时对话信息
+		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(id.toString(),null);
+		dInfo.setBtnCode(btnCode);
+		dInfo.setConsultPage(consultPage);
+		dInfo.setIp(customer.getIp());
+		dInfo.setIpInfo(customer.getIpInfo());
+		dInfo.setKeywords(firstVisitSource);
+		dInfo.setStyleId(styleId);
+		dInfo.setLandingPage(landingPage);
+		if(StringUtils.isNotBlank(btnCode)){
+			char c = btnCode.charAt(btnCode.length()-1);
+			
+			if('2' == c || '4' == c){
+				dInfo.setOpenType(1);//图标
+			}
+			if('3' == c || '5' == c){
+				dInfo.setOpenType(2);//对话邀请框
+			}
+			if('4' == c || '5' == c){
+				dInfo.setDeviceType(2);//手机
+			}
+			if('1' == c || '2' == c || '3' == c){
+				dInfo.setDeviceType(1);//PC
+			}
+			
+		}
+		
+		JedisTalkDao.setDialogueInfo(id.toString(), "-1", dInfo);
 
 		// cookie操作
 		Cookie cookie = CookieUtil.genCookieByCustomerId(id.toString());

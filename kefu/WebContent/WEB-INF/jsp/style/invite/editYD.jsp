@@ -63,7 +63,7 @@
 	                </tr>
 	                <tr>
 	                    <td class="c-wd100">样式</td>
-	                    <td class="f-txtl"><img src="http://oc2.xiaoma.com//img/upload/53kf/zdytb/off_53kf1407116979.png" alt="" /></td>
+	                    <td class="f-txtl">${strDiv }</td>
 	                    <td class="c-wd100"><a href="#" onclick="editElement(${inviteIcon.id})">编辑</a></td>
 	                </tr>
 	            </tbody>

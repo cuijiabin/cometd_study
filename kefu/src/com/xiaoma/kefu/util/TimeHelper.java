@@ -66,6 +66,18 @@ public class TimeHelper {
   
     }  
 	
+	public static Integer diffSecond(Date d1, Date d2){
+		if(null == d1 || null == d2){
+			
+			return null;
+		}
+		
+		Long diff = d1.getTime() - d2.getTime();
+		diff = diff/1000;
+		
+		return diff.intValue();
+	}
+	
 	public static boolean isOverdue(Date date){
 		if(date.getTime()<=new Date().getTime())
 			return true;

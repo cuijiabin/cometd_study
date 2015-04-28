@@ -34,7 +34,7 @@
     	checkdel=true;
     }
  %>
-<table class="table table-bordered m-table" id="messageDaily_table">
+<table class="table table-bordered m-table">
         <thead>
               <tr>
                   <td class="c-wd50">编号</td>
@@ -52,24 +52,17 @@
             <td>${message.content}</td>
             <td><input type="checkbox" <c:if test="${message.status==1 }"> checked="checked" </c:if>></td>
             <td>
+               <% if(checkupdate) {%>
                <a class="f-mar5" href="javascript:toUpdate('${message.id}')" title="编辑"><i class="icon-edit"></i></a>
+               <%} %>
+               <% if(checkdel) {%>
                <a class="f-mar5" href="javascript:deleteMessageDaily('${message.id}')" title="删除"><i class="icon-trash"></i></a>
+                <%} %>
             </td>
         </tr>
         </c:forEach>
-        	
-	   
-	 
         <tr>
-              <c:if test="${pageBean.objList!=null && pageBean.objList.size()>0  }">
-              <td  colspan="5"> <jsp:include page="../page.jsp"></jsp:include></td>
-        	  </c:if>
-        	  <c:if test="${pageBean.objList==null || pageBean.objList!=null && pageBean.objList.size()==0 }">
-        	  <td  colspan="5">暂无数据可展示 ！ </td>
-        	  </c:if>
+        	<td  colspan="5"> <jsp:include page="../page.jsp"></jsp:include></td>
         </tr>
-       
-      
-        
         </tbody>
      </table>
