@@ -3,6 +3,7 @@ package com.xiaoma.kefu.dao.impl;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -99,6 +100,23 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 		query.setInteger("userId", userId);
 		query.setInteger("userType", userType);
 		return query.executeUpdate();
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> findUserIdsByStyleId(Integer styleId) {
+		if(null == styleId){
+			return null;
+		}
+		Session session = getSession();
+		String sql = "select userId From busi_group_detail b WHERE b.styleId = "+styleId;
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		
+		
+		
+		return ((List<Integer>)query.list());
 	}
 	
 

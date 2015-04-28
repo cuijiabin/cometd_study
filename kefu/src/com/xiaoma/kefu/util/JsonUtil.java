@@ -2,7 +2,9 @@ package com.xiaoma.kefu.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -99,6 +101,17 @@ public class JsonUtil {
 			result.add(Integer.valueOf(li));
 		}
 		return result;
+	}
+	
+	public static Set<Integer> convertString2IntegerSet(List<String> list) {
+		if (CollectionUtils.isEmpty(list)) {
+			return null;
+		}
+		List<Integer> result = new ArrayList<Integer>();
+		for (String li : list) {
+			result.add(Integer.valueOf(li));
+		}
+		return new HashSet<Integer>(result);
 	}
 	
 }

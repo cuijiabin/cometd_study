@@ -61,5 +61,10 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	 */
 	public int deleteByUserOrDept(Integer userId,Integer userType);
 	
-	
+	/**
+	 * 根据风格id获取userId列表
+	 * @param styleId
+	 * @return
+	 */
+	public List<Integer> findUserIdsByStyleId(Integer styleId);
 }
