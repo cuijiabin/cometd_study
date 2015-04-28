@@ -70,9 +70,13 @@ public class MessageController {
 					json.add(jObject);
 				}
 			}
+			PageBean<Message> pageBean = new PageBean<Message>();
+			
+           
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);
+			model.addAttribute("pageBean", pageBean);
 			
 			return "messagedaily/messageDaily";
 		} else {

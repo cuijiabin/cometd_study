@@ -41,8 +41,8 @@
              <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
             <button type="button" class="btn btn btn-danger btn-small f-fl" onclick="javascript:deleteMessageType();">删除</button>
             <%}%>
-            <input class="c-wd150" type="text" />
-            <button type="button" class="btn btn-primary btn-small">搜索</button>
+            <input class="c-wd150" type="text" id="searTitle" name="searTitle"/>
+            <button type="button" class="btn btn-primary btn-small" onclick="javascript:find();">搜索</button>
         </div>
     </div>
 	<div class="g-bd6 f-cb f-mar20">

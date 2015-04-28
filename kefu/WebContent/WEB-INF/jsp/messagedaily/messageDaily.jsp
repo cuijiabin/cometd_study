@@ -22,6 +22,7 @@
     </ul>
 </div>
 <div class="g-cnt">
+<input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
