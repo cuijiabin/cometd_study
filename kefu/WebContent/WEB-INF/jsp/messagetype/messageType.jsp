@@ -93,17 +93,21 @@ function find(){
 	});
 }
 
-
 	/**
 	 * 跳转新增前的页面
 	 */
   function addMessageType(){
+     //跳转到添加的页面前进行判断该节点下是否有常用语（有，不执行添加；没有，执行添加）	
+	 if(checkMessage_Daily()){
+		    alert("请先删除该节点下的常用语 ！");
+		   return false;
+	   }
+		
 	var treeId = id;
 	var tyd = $("#typeId").val();
  	var d = $.dialog({id:'addMessageType' ,title:"添加分类信息",content:'url:/messageType/new.action?treeId='+treeId+'&typeId='+tyd+' ',
  			lock:true, width:	600,height: 400});
-
-}
+  }
 	//以下参数设置的是默认值
   	var id =  1;   //设置树节点ID默认为1
 	var title = '公共常用语分类设置';
@@ -128,8 +132,14 @@ function find(){
 	 var data = {
 			 "treeId" :treeId
 	 };
+	 //检查是否有子节点
 	 if(checkChild()){
 		    alert("请先删除子节点信息！");
+		   return false;
+	   }
+	 //检查该节点下是否有常用语
+	 if(checkMessage_Daily()){
+		    alert("请先删除该节点下的常用语 ！");
 		   return false;
 	   }
 	 $.dialog.confirm('你确定要彻底删除吗？', function(){
@@ -184,6 +194,38 @@ function find(){
    		error : function(msg){
    			alert(flag);
    			alert("删除失败！");
+   			flag = true;
+   		}
+   	});
+   	return flag;
+   }
+   
+   /*
+    *添加常用语分类时检查他下面是否有常用语
+    */
+   function checkMessage_Daily(){
+   	var flag = false;
+    var treeId = id;
+   	var data = {
+   			"messageTypeId" : $("#messageTypeId").val()
+   	};
+   	$.ajax({
+   		type : "get",
+   	     url : "/messageDaily/check.action",
+   		data : data,
+   		contentType : "application/json; charset=utf-8",
+   		dataType : "json",
+   		async:false,
+   		success : function(data) {
+   			if(data.code==0){
+   				
+   			}else{
+   				flag = true;
+   			}
+   		},
+   		error : function(msg){
+   			alert(flag);
+   			alert("添加失败！");
    			flag = true;
    		}
    	});
@@ -247,7 +289,6 @@ function editCallback(){
 	$.dialog({id:'updateMessageType'}).close();
 	changeTree();
 	changeDetail();
-	
 }
 </script>
 </body>

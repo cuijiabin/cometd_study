@@ -73,6 +73,7 @@ public class MessageController {
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);
+			
 			return "messagedaily/messageDaily";
 		} else {
 			return "/error500";
@@ -101,6 +102,30 @@ public class MessageController {
 		}
 		
 	}
+	/**
+	 * 添加分类 前检查 该分类下是否有 常用语
+	 */
+	@RequestMapping(value = "check.action", method = RequestMethod.GET)
+	public String checkChild(Model model, Integer messageTypeId) {
+
+		try {
+			if (messageTypeId == null) {
+				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
+				return "resultjson";
+			}
+			Integer count = messageService.checkDaily(messageTypeId); // 查看是否有子节点
+			if (count != null && count == 0) {
+				model.addAttribute("result", Ajax.toJson(0, "可以添加！"));
+			} else {
+				model.addAttribute("result", Ajax.toJson(1, "请先删除该节点下的常用语！"));
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
+		}
+		return "resultjson";
+	}
+	
 	
 	/**
 	 * 保存前页面跳转

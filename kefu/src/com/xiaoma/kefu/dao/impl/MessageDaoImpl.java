@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
@@ -81,6 +82,19 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				return null;
 			}
 			return findById(Message.class,id);
+		}
+		
+		/**
+		 * 查询是否有常用语
+		 */
+		@Override
+		public Integer checkDaily(Integer messageTypeId ){
+			Session session = getSession();
+			StringBuffer hqlBuffer = new StringBuffer(
+					"select count(m.messageTypeId) from Message m  where  m.messageTypeId="+messageTypeId+"  " );
+		  Query query = session.createQuery(hqlBuffer.toString());
+		  Object obj = query.uniqueResult();
+			return Integer.parseInt(obj.toString());
 		}
 		
 		/**

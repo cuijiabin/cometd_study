@@ -11,7 +11,6 @@ import com.xiaoma.kefu.util.PageBean;
  *
  */
 public interface MessageDao extends BaseDao<Message> {
- 
 
     /**
      * 查询、条件查询
@@ -50,5 +49,11 @@ public interface MessageDao extends BaseDao<Message> {
 	 * @return
 	 */
 	public Integer deleteMessageById(Integer id);
+	/**
+	 * 查询是否有常用语
+	 * @param messageTypeId
+	 * @return
+	 */
+	public Integer checkDaily(Integer messageTypeId);
 
 }

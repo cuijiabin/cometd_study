@@ -46,6 +46,13 @@ public class MessageService {
 	   public Message getMessageById(Integer id){
 		   return messageDaoImpl.getMessageById(id);
 	   }
+	    /**
+	     * 查询是否有常用
+	     */
+	   public Integer checkDaily(Integer messageTypeId){
+		      Integer count =  messageDaoImpl.checkDaily(messageTypeId);
+		      return count;
+	   }
 		/**
 		 * 添加
 		 */

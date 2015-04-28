@@ -10,10 +10,10 @@
          	<td class="f-txtr tdbg">分类编号</td><td class="f-txtl">${messageType.typeId }</td>
         </tr>
         <tr>
-           	<td class="f-txtr tdbg">分类名称</td><td class="f-txtl"><input type="text" type="text" id="title" name="title" value="${messageType.title }" /></td>
+           	<td class="f-txtr tdbg">分类名称</td><td class="f-txtl">${messageType.title }</td>
        	</tr>
         <tr>
-            <td class="f-txtr tdbg">排序</td><td class="f-txtl"><input type="text" type="text" id="sortId" name="sortId" value="${messageType.sortId }" /></td>
+            <td class="f-txtr tdbg">排序</td><td class="f-txtl">${messageType.sortId }</td>
         </tr>
         <tr>
             <td class="f-txtr tdbg">展示</td>
