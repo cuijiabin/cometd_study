@@ -98,20 +98,46 @@ public class ServiceIconService {
             String fileName = file.getOriginalFilename();//名称
             String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
             
+            BufferedImage image = null;
             //路径+文件名
             String tempPath = savePath+"/"+saveName;
             if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
+            	image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
             	serviceIcon.setOnlinePic(tempPath+extensionName);//在线
+            	 //如果高或宽为空,则取图片的宽高
+                if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
+                	serviceIcon.setHeight(image.getHeight());
+            		serviceIcon.setWidth(image.getWidth());
+                }
             }else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
             	serviceIcon.setOfflinePic(tempPath+extensionName);//离线
+            	image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
+            	 //如果高或宽为空,则取图片的宽高
+                if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
+                	serviceIcon.setHeight(image.getHeight());
+            		serviceIcon.setWidth(image.getWidth());
+                }
             }
+            
+           
             
             //保存文件
             FileUtil.saveFile(savePath, saveName+extensionName, file);
             
+			//缩略图默认宽高
+			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+			Integer minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+			
+			if(minWidth > serviceIcon.getWidth()){
+				minWidth = serviceIcon.getWidth();
+			}
+			if(minHeight > serviceIcon.getHeight()){
+				minHeight = serviceIcon.getHeight();
+			}
+            
             //生成缩略图
             Thumbnails.of(tempPath+extensionName)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
             	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
         }
 		
@@ -496,9 +522,20 @@ public class ServiceIconService {
 			icon.setOnlinePic(targetPath);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
+			//缩略图默认宽高
+			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+			Integer minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+			
+			if(minWidth > icon.getWidth()){
+				minWidth = icon.getWidth();
+			}
+			if(minHeight > icon.getHeight()){
+				minHeight = icon.getHeight();
+			}
+			
             //生成缩略图
             Thumbnails.of(targetPath)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
             	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
 			
             
@@ -511,7 +548,7 @@ public class ServiceIconService {
 			
             //生成缩略图
             Thumbnails.of(targetPath)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
             	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
             
 		}else{
@@ -528,9 +565,20 @@ public class ServiceIconService {
 			icon.setOnlinePic(targetPath);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
+			//缩略图默认宽高
+			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+			Integer minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+			
+			if(minWidth > icon.getWidth()){
+				minWidth = icon.getWidth();
+			}
+			if(minHeight > icon.getHeight()){
+				minHeight = icon.getHeight();
+			}
+			
             //生成缩略图
             Thumbnails.of(targetPath)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
             	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
 			
             
@@ -543,7 +591,7 @@ public class ServiceIconService {
 			
             //生成缩略图
             Thumbnails.of(targetPath)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
             	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
 		}
 		

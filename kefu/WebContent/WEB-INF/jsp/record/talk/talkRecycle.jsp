@@ -209,7 +209,7 @@ function updateCusl(customerId,dialogueId){
 function editDisplay(){
 	$.dialog({content:'url:/chatRecordField/edit.action',
 		id: 'editDisplay',
-		width: 650,height: 400,
+		width: 800,height: 600,
 		lock:true, 
 		title:'配置显示字段'
 	});
