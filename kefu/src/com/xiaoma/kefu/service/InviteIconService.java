@@ -127,7 +127,8 @@ public class InviteIconService {
 		try{
 			initIconPic(ele,styleId,deviceType);//初始化邀请框图片
 		}catch(Exception e){
-			throw new Exception(e);
+			e.printStackTrace();
+			throw new RuntimeException("初始化邀请框图片失败!");
 		}
 		inviteElementService.update(ele);
 		
