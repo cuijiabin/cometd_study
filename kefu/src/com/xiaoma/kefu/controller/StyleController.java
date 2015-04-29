@@ -73,8 +73,7 @@ public class StyleController {
 			else
 				return "style/styleList";
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("StyleController.queryAll ERROR");
+			logger.error(e.getMessage(),e);
 			return "/error500";
 		}
 	}
@@ -101,6 +100,7 @@ public class StyleController {
 			model.addAttribute("style", style);
 			return "/style/editStyle";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -125,6 +125,7 @@ public class StyleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "名称已存在!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "失败!"));
 		}
 		return "resultjson";
@@ -157,6 +158,7 @@ public class StyleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 		}
 		return "resultjson";
@@ -177,10 +179,7 @@ public class StyleController {
 			Style style = styleService.get(styleId);
 			
 			//客服图片路径 写死. 暂时只有这一个图片,所有风格公用
-			String picUrl1 = DictMan.getDictItem("d_sys_param", 2).getItemName()
-					+ "/" + SysConst.STYLE_PATH //风格主目录
-					+ "/"+"serviceIocn_min.jpg";	//类别
-			
+			String picUrl1 = "/" + SysConst.TEMPLATE_PATH + "/" + SysConst.PIC_TEMPLATE_CLIENT;//类别
 			
 			InviteIcon icon = inviteIconService.getByStyleId(styleId, DeviceType.PC);
 			String picUrl3 = inviteIconService.getPvwDiv(icon,null,true,DeviceType.PC);
@@ -197,6 +196,7 @@ public class StyleController {
 			model.addAttribute("style", style);
 			return "/style/editCommon";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -229,6 +229,7 @@ public class StyleController {
 			model.addAttribute("code2", code2);
 			return "/style/styleCode";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -253,6 +254,7 @@ public class StyleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "请先创建业务分组!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "失败!"));
 		}
 		return "resultjson";
@@ -323,7 +325,7 @@ public class StyleController {
 	    	logger.info("邀请框div="+strDiv);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	    	logger.error(e.getMessage(),e);
 	    }
 	}
 	

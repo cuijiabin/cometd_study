@@ -85,6 +85,7 @@ public class AllotRuleController {
 				model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 		}
 		return "resultjson";
