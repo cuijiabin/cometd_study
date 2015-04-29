@@ -161,18 +161,16 @@ public class UserController {
 				if(b){
 					return "redirect:/dialogue/user.action";
 				}
-			}else{
-				Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-						typeId);
-				model.addAttribute("func", function);
-				return "index";
 			}
+			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
+					typeId == null?2:typeId);
+			model.addAttribute("func", function);
+			return "index";
 	}catch(Exception e){
 		model.addAttribute("message", "查询失败,请刷新重试!");
 		logger.error(e.getMessage());
 		return "/error";
 	}
-	return null;
 }
 
 	/**
