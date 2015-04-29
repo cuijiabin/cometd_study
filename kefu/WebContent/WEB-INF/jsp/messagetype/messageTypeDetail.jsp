@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>   
 <h3  class="u-tit c-bg c-bortit">分类信息</h3>
 <div style="margin:50px;">
-<input type="text" readonly="readonly" name="messageTypeId" id="messageTypeId" value="${messageType.id }" />
+<input type="hidden" readonly="readonly" name="messageTypeId" id="messageTypeId" value="${messageType.id }" />
 <table class="table table-bordered m-table">
         <tr>
          	<td class="f-txtr tdbg">分类编号</td><td class="f-txtl">${messageType.typeId }</td>

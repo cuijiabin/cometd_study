@@ -14,7 +14,7 @@
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  	  <input type="text" readonly="readonly" id="pId" name="pId" value="${treeId}"/>
+  	  <input type="hidden" readonly="readonly" id="pId" name="pId" value="${treeId}"/>
   	   <div style="margin:50px;">
   <table class="table table-bordered m-table">
           <tbody>

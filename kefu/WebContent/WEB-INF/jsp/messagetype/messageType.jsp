@@ -42,7 +42,7 @@
  %>
 <div style="margin:50px">
 <div class="g-cnt">
-	<input type="text" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
+	<input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
@@ -132,7 +132,7 @@ function find(){
    function addMessageType(){
        //跳转到添加的页面前进行判断该节点下是否有常用语（有，不执行添加；没有，执行添加）	
 	   if(checkMessage_Daily()){
-		    alert("请先删除该节点下的常用语 ！");
+		    alert("该分类下已存在常用语，不可继续添加分类 ！");
 		   return false;
 	   }
 	  //第一次添加的情况

@@ -87,7 +87,6 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(Model model, Integer treeId, Integer typeId) {
-	   
 		Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId);
 		if (sortId==null) {
 			sortId =0;
@@ -183,7 +182,6 @@ public class MessageTypeController {
 			toUpdateMessageType.setStatus(messageType.getStatus());
 			boolean isSuccess = messageTypeService
 					.updateMessageType(toUpdateMessageType);
-
 			if (isSuccess) {
 				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 			} else {
@@ -192,9 +190,7 @@ public class MessageTypeController {
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
-
 		return "resultjson";
-
 	}
 
 	/**
@@ -223,9 +219,7 @@ public class MessageTypeController {
 			logger.error(ex.getMessage());
 			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
 		}
-
 		return "resultjson";
-
 	}
 
 	/**
@@ -233,18 +227,13 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
 	public String delet(Model model, Integer treeId) {
-
 		boolean isSuccess = messageTypeService.deleteMessageTypeById(treeId);
-
 		if (isSuccess) {
 			model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
-
 		} else {
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
-
 		return "resultjson";
-
 	}
 
 	/**
@@ -255,7 +244,6 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
 	public String messageTypeDetail(Model model, Integer id) {
-
 		MessageType messageType = messageTypeService.getMessageTypeById(id);
 		model.addAttribute("messageType", messageType);
 		return "messagetype/messageTypeDetail";
@@ -263,7 +251,6 @@ public class MessageTypeController {
 	/**
 	 * 条件查询
 	 */
-	
 	@RequestMapping(value = "search.action",method = RequestMethod.GET)
 	public String search(Model model,String typeId,String title){
 		MessageType messageType = messageTypeService.getResultBySearch(typeId,title);
@@ -271,7 +258,6 @@ public class MessageTypeController {
 		return "messagetype/messageTypeDetail";
 	}
 	 
-
 	/***
 	 * 刷新树
 	 */
@@ -309,5 +295,4 @@ public class MessageTypeController {
 		}
 		return "messagetype/messageTree";
 	}
-
 }

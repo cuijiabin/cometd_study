@@ -40,8 +40,8 @@
     }
  %>
 <div class="g-cnt">
- typeId：<input type="text" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
- 初始树的id：<input type="text" readonly="readonly" name="messageDailyId" id="messageDailyId" value="${messageType.id}" />
+<input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
+<input type="hidden" readonly="readonly" name="messageDailyId" id="messageDailyId" value="${messageType.id}" />
     <!-- 查询条件 -->
    
     <div class="m-query f-mar10">

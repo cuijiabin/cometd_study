@@ -43,7 +43,13 @@ public class MessageController {
 	private MessageTypeService messageTypeService;
 	@Autowired
 	private MessageService messageService;
-	 
+	 /**
+	  * 初始化树
+	  * @param session
+	  * @param model
+	  * @param id
+	  * @return
+	  */
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String messageDaily(HttpSession session, Model model, Integer id) {
 		User user = (User) session.getAttribute(CacheName.USER);
@@ -107,7 +113,6 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "check.action", method = RequestMethod.GET)
 	public String checkChild(Model model, Integer messageTypeId) {
-        
 		try {
 			if (messageTypeId == null) {
 				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
@@ -187,10 +192,8 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "toUpdate.action",method=RequestMethod.GET)
     public String toUpdate(Model model,Integer messageDailyId) {
-	
     	Message message = messageService.getMessageById(messageDailyId); 
     	 model.addAttribute("message", message);
-	   
         return "messagedaily/editMessageDaily";
      }
 
@@ -238,17 +241,14 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "delete.action" , method = RequestMethod.GET)
     public String deleteMessageDaily(Model model,Integer id){
-    	
 		try {
 			Integer isSuccess = messageService.deleteMessageById(id);
-			
 			if (isSuccess!=null) {
 				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
 			} 
 			else {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
-			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("result",Ajax.JSONResult(1, "删除失败！"));
