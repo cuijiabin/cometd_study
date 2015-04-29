@@ -8,7 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import com.xiaoma.kefu.util.SerializeUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 /**
  * 
  * redis操作封装
@@ -98,10 +98,9 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 			
-			byte[] bKey = key.getBytes();
-			byte[] bObj = SerializeUtil.serialize(obj);
+			String value = JsonUtil.toJson(obj);
+			jedis.set(key, value);
 			
-			jedis.set(bKey, bObj);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -111,11 +110,10 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 			
-			byte[] bKey = key.getBytes();
-			byte[] bObj = SerializeUtil.serialize(obj);
+			String value = JsonUtil.toJson(obj);
 			
-			jedis.set(bKey, bObj);
-			jedis.expire(bKey, seconds);
+			jedis.set(key, value);
+			jedis.expire(key, seconds);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -134,13 +132,19 @@ public class JedisDao {
 		
 	}
 	
-	public static Object getObject(String key){
+	public static <T> Object getObject(String key,Class<T> clazz){
 		try {
 			jedis = getJedis();
 			
-			byte[] byteObj = jedis.get(key.getBytes());
+			String value = jedis.get(key);
+			if(StringUtils.isEmpty(value)){
+				return null;
+			}
 			
-			return SerializeUtil.unserialize(byteObj);
+			Object obj = JsonUtil.getObjFromJson(value, clazz);
+			
+			return obj;
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

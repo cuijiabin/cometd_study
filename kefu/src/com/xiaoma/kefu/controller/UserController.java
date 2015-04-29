@@ -93,11 +93,11 @@ public class UserController {
 								if (thread != null)
 									thread.start();
 							} else {
-								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "");
+								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
 								if (obj == null) {
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", 1, 6);
 								} else {
-									Integer num = Integer.parseInt(CacheMan.getObject(CacheName.LOGINCOUNT, "").toString());
+									Integer num = (Integer) CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
 									if (num == 4)
 										userService.updateUser("1", user);
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", num + 1,6);
@@ -151,8 +151,8 @@ public class UserController {
 		if (user == null)
 			return "login";
 		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
-				user.getId());
-		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "");
+				user.getId(),String.class);
+		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "",List.class);
 		List newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
 			// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
@@ -163,7 +163,7 @@ public class UserController {
 				}
 			}
 			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-					typeId == null?2:typeId);
+					typeId == null?2:typeId,Function.class);
 			model.addAttribute("func", function);
 			return "index";
 	}catch(Exception e){

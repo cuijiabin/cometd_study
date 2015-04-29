@@ -100,11 +100,6 @@ public class SaveDialogueThread implements Runnable{
 				            }
 				        });
 			
-			System.out.println("排序后时间：");
-			for(DialogueDetail d: list){
-				System.out.println(d.getCreateDate());
-			}
-			
 			Dialogue dialogue = genDialogueByList(list,uccnId,customer);
 			Long dialogueId = dialogueService.add(dialogue);
 			
@@ -118,8 +113,6 @@ public class SaveDialogueThread implements Runnable{
 			jedis.del(toSaveDialogueListKey);
 			
 		}
-		
-		
 		
 	}
 	
