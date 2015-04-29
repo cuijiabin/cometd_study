@@ -56,6 +56,7 @@
 <!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
                                         <li><img src="/img/icon_04.png" alt="" /></li>
                                         <li><img src="/img/icon_05.png" alt="" /></li>
+                                        <a class="f-fr" href="javascript:socreUserNotice()">客服评分</a>
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">

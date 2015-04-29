@@ -653,19 +653,21 @@ public class JedisTalkDao {
 	
 	public static DialogueInfo getDialogueScore(String customerId,String userCcnId){
 		
-		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		String key = JedisConstant.DIALOGUE_INFO+customerId;
 		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 		
 		Jedis jedis = JedisDao.getJedis();
+		
+		jedis.hexists(key, userCcnId);
 		String value = null ;
 		try{
-			 value = jedis.hget(keyStr, userCcnId);
+			 value = jedis.hget(key, userCcnId);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		
-		if(StringUtils.isEmpty(value)){
+		if(!jedis.hexists(key, userCcnId) || StringUtils.isEmpty(value)){
 			DialogueInfo dInfo = new DialogueInfo();
 			dInfo.setCustomerId(Long.valueOf(customerId));
 			dInfo.setUserCcnId(userCcnId);

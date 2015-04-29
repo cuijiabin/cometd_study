@@ -185,7 +185,7 @@
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script language="javascript" for="window" event="onload"> 
 	
-    setInterval('dialogueSize()',5000);
+    setInterval('dialogueSize()',30000);
 	// 引擎事件绑定
 	JS.Engine.on({
 		start : function(cId, aml, engine) {
