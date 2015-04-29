@@ -35,6 +35,31 @@ public class CacheMan {
 			return null;
 		}
 	}
+	// 获取缓存对象；param1:缓存前缀，param2:对应的id
+	public static <T> Object getList(String cacheName, Object value,Class<T> clazz) {
+		try {
+			String key = CacheUtil.getCacheName(cacheName, value);
+			Object obj = JedisDao.getKList(key,clazz);
+			if (obj == null) {
+				obj = CacheFactory.factory(cacheName, value);
+				if (obj != null)
+					JedisDao.setKList(key, (List)obj);
+			}
+			return obj;
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return null;
+		}
+	}
+	// 获取缓存对象；param1:缓存前缀，param2:对应的id
+	public static <T> void setList(String cacheName, Object value,List<T> list) {
+		try {
+			String key = CacheUtil.getCacheName(cacheName, value);
+			JedisDao.setKList(key, list);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+		}
+	}
 	
 	public static List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
 		try {

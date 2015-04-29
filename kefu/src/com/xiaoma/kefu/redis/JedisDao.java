@@ -113,6 +113,7 @@ public class JedisDao {
 	public static void setKList(String key, List list){
 		try {
 			jedis = getJedis();
+			jedis.del(key);
 			
 			for(Object obj : list){
 				String value = JsonUtil.toJson(obj);
