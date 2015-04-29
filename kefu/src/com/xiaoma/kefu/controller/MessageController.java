@@ -69,8 +69,7 @@ public class MessageController {
 					json.add(jObject);
 				}
 			}
-			PageBean<Message> pageBean = new PageBean<Message>();
-		    Integer  treeId=  mType.getId();
+		
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);   //树的默认选中项

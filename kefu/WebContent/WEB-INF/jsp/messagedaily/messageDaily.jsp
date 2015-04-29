@@ -40,7 +40,6 @@
     }
  %>
 <div class="g-cnt">
-
 <input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
    
