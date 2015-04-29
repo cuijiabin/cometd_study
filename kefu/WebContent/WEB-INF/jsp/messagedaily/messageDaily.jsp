@@ -112,11 +112,46 @@
 	 * 跳转新增前的页面
 	 */
   function addMessageDaily(){
-
+	  //检查是否有子节点
+		 if(checkChild()){
+			    alert("请在子节点下添加常用语 ！");
+			   return false;
+		   }
 	var treeId = id;
  	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+' ',
  			lock:true, width:	600,height: 400});
-}
+ }
+  /*
+   * 添加前前检查是否有子节点信息
+   */
+  function checkChild(){
+  	var flag = false;
+   var treeId = id;
+  	var data = {
+  			"treeId" : id
+  	};
+  	$.ajax({
+  		type : "get",
+  	     url : "/messageType/check.action",
+  		data : data,
+  		contentType : "application/json; charset=utf-8",
+  		dataType : "json",
+  		async:false,
+  		success : function(data) {
+  			if(data.code==0){
+  				
+  			}else{
+  				flag = true;
+  			}
+  		},
+  		error : function(msg){
+  			alert(flag);
+  			alert("添加失败！");
+  			flag = true;
+  		}
+  	});
+  	return flag;
+  }
 	//以下参数设置的是默认值
   	var id =  1;   //设置树节点ID默认为1
 	var title = '公共常用语分类设置';
