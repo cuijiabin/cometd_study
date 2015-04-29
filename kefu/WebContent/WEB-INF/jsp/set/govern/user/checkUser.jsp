@@ -55,7 +55,7 @@
         </tr>
         <tr>       
             <td class="f-txtr tdbg">工号名片</td>
-            <td class="f-txtl"><input type="text" id="cardName" name="cardName" value="${user.maxListen}" maxlength="10" readonly="readonly"/></td>
+            <td class="f-txtl"><input type="text" id="cardName" name="cardName" value="${user.cardName}" maxlength="10" readonly="readonly"/></td>
             <td class="f-txtr tdbg">入职日期</td>
             <td class="f-txtl"><input type="text" id="createDate" name="createDate" value="${user.createDate}"  readonly="readonly"/></td>
         </tr>

@@ -32,6 +32,7 @@ import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.thread.AddLoginLogThread;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.CheckCodeUtil;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
@@ -154,19 +155,25 @@ public class UserController {
 		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "");
 		List newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
-		// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
-		if (typeId == null)
-			typeId = 2;
-		Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-				typeId);
-		model.addAttribute("func", function);
-		return "index";
+			// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
+			if (typeId == null){
+				boolean b = CheckCodeUtil.isCheckFunc(user.getId(), "f_dialog_pt");
+				if(b){
+					return "redirect:/dialogue/user.action";
+				}
+			}else{
+				Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
+						typeId);
+				model.addAttribute("func", function);
+				return "index";
+			}
 	}catch(Exception e){
 		model.addAttribute("message", "查询失败,请刷新重试!");
 		logger.error(e.getMessage());
 		return "/error";
 	}
-	}
+	return null;
+}
 
 	/**
 	 * 进入demo处理页面

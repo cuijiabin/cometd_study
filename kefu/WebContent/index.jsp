@@ -56,7 +56,7 @@
 		    dataType: "json",
 		    success: function (data) {
 		    	if(data.result==0){
-		    		window.location="/dialogue/user.action";
+		    		window.location="/user/main.action";
 		    	}else{
 		    		$("#err").text(data.msg);
 		    	}
