@@ -67,9 +67,10 @@ public class JoinListener extends ConnectListener {
 			
 			//为客服分配客户
 			if(JedisTalkDao.sizeCustomerWaitSet() > 0){
-				Integer SurplusSize = 1;
+				Integer surplusSize = 1;//剩余可分配客户名额
 				List<DictItem> list = DictMan.getDictList("d_dialog_android");
-				while(SurplusSize > 0){
+				
+				while(surplusSize > 0 && JedisTalkDao.sizeCustomerWaitSet() > 0){
 					String customerCcnId = JedisTalkDao.popCustomerWaitSet();
 					Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
 					JedisTalkDao.delCustomerWaitSet(customerCcnId);
@@ -104,7 +105,7 @@ public class JoinListener extends ConnectListener {
 			        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
 			        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
 			        
-			        SurplusSize = JedisTalkDao.getMaxReceiveCount(user.getId().toString()) - JedisTalkDao.getReceiveCount(user.getId().toString());
+			        surplusSize = JedisTalkDao.getMaxReceiveCount(user.getId().toString()) - JedisTalkDao.getReceiveCount(user.getId().toString());
 			        
 			        if(CollectionUtils.isNotEmpty(list)){
 			        	for(DictItem dictItem : list){
