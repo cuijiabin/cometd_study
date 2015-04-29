@@ -1,5 +1,9 @@
 package com.xiaoma.kefu.redis;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,6 +108,42 @@ public class JedisDao {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	public static void setKList(String key, List list){
+		try {
+			jedis = getJedis();
+			jedis.del(key);
+			
+			for(Object obj : list){
+				String value = JsonUtil.toJson(obj);
+				jedis.rpush(key, value);
+			}
+			
+		} catch (Exception e) {
+		}
+	}
+	
+	public static <T> List<T> getKList(String key,Class<T> clazz){
+		try {
+			jedis = getJedis();
+			
+			List<String> results = jedis.lrange(key, 0, -1);
+			if(CollectionUtils.isEmpty(results)){
+				return null;
+			}
+			List<T> list = new ArrayList<T>();
+			for(String str : results){
+				T obj = (T) JsonUtil.getObjFromJson(str, clazz);
+				list.add(obj);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 	
 	public static void setKOT(String key, Object obj, int seconds){

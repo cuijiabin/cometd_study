@@ -19,7 +19,6 @@ public class CacheFactory {
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");
 				obj=functionService.findById((Integer)key);
-				
 			}else if(cacheName.equals(CacheName.USERFUNCTION)){
 				FunctionService functionService = (FunctionService) SpringContextUtil
 						.getBean("functionService");

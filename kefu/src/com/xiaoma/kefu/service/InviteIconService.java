@@ -97,11 +97,11 @@ public class InviteIconService {
 	 * 附带初始化邀请框元素
 	* @param styleId
 	* @param deviceType
-	 * @throws IOException 
-	* @Author: wangxingfei
+	 * @throws Exception 
+	 * @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
-	public void initInviteIcon(Integer styleId, DeviceType deviceType) throws IOException {
+	public void initInviteIcon(Integer styleId, DeviceType deviceType) throws Exception {
 		InviteIcon inviteIcon = new InviteIcon();
 		inviteIcon.setStyleId(styleId);
 		inviteIcon.setDeviceType(deviceType.getCode());
@@ -124,7 +124,11 @@ public class InviteIconService {
 		ele.setOperationType(2);//默认点击咨询
 		
 		inviteElementService.create(ele);
-		initIconPic(ele,styleId,deviceType);//初始化邀请框图片
+		try{
+			initIconPic(ele,styleId,deviceType);//初始化邀请框图片
+		}catch(Exception e){
+			throw new Exception(e);
+		}
 		inviteElementService.update(ele);
 		
 	}

@@ -40,6 +40,10 @@ public class DictMan {
 		table = table.toLowerCase();
 		CacheMan.add(cacheName, table, obj);
 	}
+	public static void addListCache(String cacheName,String table, List<DictItem> obj) {
+		table = table.toLowerCase();
+		CacheMan.setList(cacheName, table, obj);
+	}
 	/***
 	 * 获取字典表list
 	 * @param cacheName
@@ -61,7 +65,7 @@ public class DictMan {
 				addItemCache(CacheName.DICTITEM,table+d.getItemCode(), d);
 				list.add(d);
 			}
-			addItemCache(CacheName.DICTLIST,table, list);
+			addListCache(CacheName.DICTLIST,table, list);
 			return list;
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -73,7 +77,7 @@ public class DictMan {
 			return null;
 		table = table.toLowerCase();
 		try {
-			List<DictItem> list = (List<DictItem>)CacheMan.getObject(CacheName.DICTLIST, table,List.class);
+			List<DictItem> list = (List<DictItem>)CacheMan.getList(CacheName.DICTLIST, table,List.class);
 			if(list == null)
 				list = getDictList(CacheName.DICTLIST,table);
 			return list;
