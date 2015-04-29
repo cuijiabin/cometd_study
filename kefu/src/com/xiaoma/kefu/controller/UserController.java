@@ -162,7 +162,8 @@ public class UserController {
 					return "redirect:/dialogue/user.action";
 				}
 			}
-			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,typeId, Function.class);
+			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
+					typeId==null?2:typeId,Function.class);
 			model.addAttribute("func", function);
 			return "index";
 

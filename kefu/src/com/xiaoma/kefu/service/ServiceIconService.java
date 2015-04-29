@@ -494,7 +494,8 @@ public class ServiceIconService {
 		try{
 			initIconPic(serviceIcon,type);//初始化图标
 		}catch(Exception e){
-			throw new Exception(e);
+			e.printStackTrace();
+			throw new RuntimeException("初始化图标图片失败!");
 		}
 		create(serviceIcon);
 	}
