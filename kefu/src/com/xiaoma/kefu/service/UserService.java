@@ -120,7 +120,7 @@ public class UserService {
 	 * @throws ParseException
 	 */
 	public Integer createNewUser(User user) throws ParseException {
-		user.setOnLineStatus(1);
+		user.setOnLineStatus(2);
 		user.setStatus(1);
 		user.setIsLock(0);
 		Integer succ=(Integer) userDaoImpl.add(user);
