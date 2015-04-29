@@ -11,37 +11,40 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-<!-- 查询条件 -->
-<div style="margin:50px">
-<h3 class="u-tit c-bg">配置显示字段</h3>
-<table class="table table-bordered table-striped table-hover m-table">
-	<thead>
-		<tr>
-			<td style="width:30%; text-align: center;"><a href="#" onClick="toDef()">系统默认勾选</a> </td>
-			<td>提示：最多可以最多勾选9项</td>
-		</tr>
-	</thead>
-</table>
+<div class="g-cnt f-padd20">
+	<div class="m-field c-bor">
+    	<h3>配置显示字段</h3>
+        <p><a href="#" onClick="toDef()"><b>系统默认勾选</b></a><span class="help-inline c-clred f-fr">提示：最多可以最多勾选9项</span></p>
+        <div class="m-field-cnt">
+        	<table class="table m-table m-tag1">
+            	<tbody>
+            		<c:forEach var="crf" items="${list }" varStatus="status">
+						<c:if test="${status.index % 5 == 0 }"> <tr> </c:if>  
+						<td><span>
+							<label>
+								<input type="checkbox" name="items" value="${crf.isDefault} ">${crf.name }
+								<input type="hidden" name="codes" value="${crf.code }">
+								<input type="hidden" name="displays" value="${crf.isDisplay }">
+							</label>
+							</span>
+						</td>
+						<c:if test="${status.index % 5 == 0 }"> </tr> </c:if>
+					</c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+        <button type="reset" class="btn" id="btn_cancel">取消</button>
+</div>
 
-<div class="m-query f-mar10">
-	<c:forEach var="crf" items="${list }" varStatus="status">
-		<c:if test="${status.index % 5 == 0 }"> <br> </c:if>  
-		<label><input type="checkbox" name="items" value="${crf.isDefault} ">${crf.name }
-			<input type="hidden" name="codes" value="${crf.code }">
-			<input type="hidden" name="displays" value="${crf.isDisplay }">
-		</label>
-	</c:forEach>
-	<br>
-	<br>
-	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
-	<button type="reset" class="btn" id="btn_cancel">取消</button>
-</div>
-</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 var api = frameElement.api;//调用父页面数据  

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
@@ -41,6 +42,7 @@ import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.CheckCodeUtil;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
@@ -120,11 +122,9 @@ public class RecordsCenterController {
 				waitListName, deviceType);
 		
 		//判断用户角色
-		User user = (User) session.getAttribute("xx");
-		user = new User();//test
-		user.setRoleId(1);//test
-		user.setId(1);//test
-		
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null) return "login";
+			
 		//主管看所有部门,所有员工
 		//员工看自己部门,自己的记录
 		List<User> userList = new ArrayList<User>();
@@ -142,10 +142,16 @@ public class RecordsCenterController {
 		List<String> title = getDisplayTitle(recordFieldMap);//title
 		getTalkContentList(pageBean,condition,recordFieldMap,0);//content
 		
+		//是否能查看聊天明细
+		int showDetail = 0;
+		if(CheckCodeUtil.isCheckFunc(user.getId(), "f_check_dialog")){
+			showDetail = 1;
+		}
+		
 		model.addAttribute("userList", userList);
 		model.addAttribute("title", title);
 		model.addAttribute("pageBean", pageBean);
-		model.addAttribute("showDetail", 1);//是否能查看聊天明细
+		model.addAttribute("showDetail", showDetail);
 		model.addAttribute("beginDate", initDate(beginDate));
 		model.addAttribute("endDate", initDate(endDate));
 		model.addAttribute("recordFieldMap", recordFieldMap);
@@ -256,10 +262,8 @@ public class RecordsCenterController {
 		
 		StringBuilder condition = getTalkDelCondition(deptId, beginDate, endDate, userId,isTalk);
 		//判断用户角色
-		User user = (User) session.getAttribute("xx");
-		user = new User();//test
-		user.setRoleId(1);//test
-		user.setId(1);//test
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null) return "login";
 		
 		List<User> userList = new ArrayList<User>();
 		if(user.getRoleId().equals(RoleNameId.员工.getCode())){
@@ -274,10 +278,16 @@ public class RecordsCenterController {
 		List<String> title = getDisplayTitle(recordFieldMap);//title
 		getTalkContentList(pageBean,condition,recordFieldMap,1);//content
 		
+		//是否能查看聊天明细
+		int showDetail = 0;
+		if(CheckCodeUtil.isCheckFunc(user.getId(), "f_check_dialog")){
+			showDetail = 1;
+		}
+		
 		model.addAttribute("userList", userList);
 		model.addAttribute("title", title);
 		model.addAttribute("pageBean", pageBean);
-		model.addAttribute("showDetail", 1);//是否能查看聊天明细
+		model.addAttribute("showDetail", showDetail);//是否能查看聊天明细
 		model.addAttribute("recordFieldMap", recordFieldMap);
 		model.addAttribute("beginDate", initDate(beginDate));
 		model.addAttribute("endDate", initDate(endDate));
@@ -377,17 +387,27 @@ public class RecordsCenterController {
 	* @Date: 2015年4月8日
 	 */
 	@RequestMapping(value = "findMessage.action", method = RequestMethod.GET)
-	public String findMessage(Model model,String beginDate,String endDate,
+	public String findMessage(HttpSession session,Model model,String beginDate,String endDate,
 			Integer typeId,
 			@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean){
+		//判断用户角色
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null) return "login";
+		
 		StringBuilder condition = getMsgCondition(beginDate,endDate);
 		
 		List<Map<String,String>> list = getMsgList(pageBean,condition,0);//content
 		pageBean.setObjList(list);
 		
+		//是否有权查看明细
+		int showDetail = 0;
+		if(CheckCodeUtil.isCheckFunc(user.getId(), "f_check_dialog")){
+			showDetail = 1;
+		}
+		
 		model.addAttribute("beginDate", initDate(beginDate));
 		model.addAttribute("endDate", initDate(endDate));
-		model.addAttribute("showDetail", 1);//是否有权查看明细
+		model.addAttribute("showDetail", showDetail);
 		if(typeId==null){
 			return "/record/message/message";
 		}else{
@@ -408,17 +428,26 @@ public class RecordsCenterController {
 	* @Date: 2015年4月10日
 	 */
 	@RequestMapping(value = "findMessageDel.action", method = RequestMethod.GET)
-	public String findMessageDel(Model model,String beginDate,String endDate,
+	public String findMessageDel(HttpSession session,Model model,String beginDate,String endDate,
 			Integer typeId,
 			@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean){
+		//判断用户角色
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null) return "login";
 		StringBuilder condition = getMsgCondition(beginDate,endDate);
 		
 		List<Map<String,String>> list = getMsgList(pageBean,condition,1);//content
 		pageBean.setObjList(list);
 		
+		//是否有权查看明细
+		int showDetail = 0;
+		if(CheckCodeUtil.isCheckFunc(user.getId(), "f_check_dialog")){
+			showDetail = 1;
+		}
+		
 		model.addAttribute("beginDate", initDate(beginDate));
 		model.addAttribute("endDate", initDate(endDate));
-		model.addAttribute("showDetail", 1);//是否有权查看明细
+		model.addAttribute("showDetail", showDetail);//是否有权查看明细
 		if(typeId==null){
 			return "/record/message/msgRecycle";
 		}else{

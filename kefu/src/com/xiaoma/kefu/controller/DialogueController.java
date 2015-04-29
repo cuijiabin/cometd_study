@@ -294,6 +294,23 @@ public class DialogueController {
 
 		return "/dialogue/customerChat";
 	}
+	
+	/**
+	 * 获取在线访客列表情况
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "dialogueSize.action", method = RequestMethod.GET)
+	public String dialogueSize(HttpServletRequest request,HttpServletResponse response, Model model){
+		
+		model.addAttribute("waitSize", JedisTalkDao.sizeCustomerWaitSet());
+		model.addAttribute("onLineSize", JedisTalkDao.getCcnListSize(JedisConstant.CUSTOMER_TYPE));
+		
+		return "/dialogue/dialogueSize";
+	}
 
 	@RequestMapping(value = "user.action", method = RequestMethod.GET)
 	public String user(HttpSession session, Model model) {
