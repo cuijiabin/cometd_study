@@ -221,7 +221,7 @@ public class WaitListController {
 				styleId = 1;
 			if(id == null)
 				id = 0;
-			List<WaitList> list = (List<WaitList>) CacheMan.getObject(CacheName.STYLEWAITLIST, styleId+"_"+id,List.class);
+			List<WaitList> list = (List<WaitList>) CacheMan.getList(CacheName.STYLEWAITLIST, styleId+"_"+id,WaitList.class);
 			model.addAttribute("waitList",list);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

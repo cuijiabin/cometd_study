@@ -152,8 +152,8 @@ public class UserController {
 			return "login";
 		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
 				user.getId(),String.class);
-		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "",List.class);
-		List newList = funcService.checkFuncOne(list, codes);
+		List<Function> list = (List<Function>) CacheMan.getList(CacheName.SYSFUNCTIONONE, "",Function.class);
+		List<Function> newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
 			// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
 			if (typeId == null){
@@ -162,8 +162,7 @@ public class UserController {
 					return "redirect:/dialogue/user.action";
 				}
 			}
-			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-						typeId, Function.class);
+			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,typeId, Function.class);
 			model.addAttribute("func", function);
 			return "index";
 

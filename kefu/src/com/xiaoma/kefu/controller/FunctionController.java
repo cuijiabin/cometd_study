@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Department;
+import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Keyboard;
 import com.xiaoma.kefu.model.RemindType;
 import com.xiaoma.kefu.model.Role;
@@ -54,7 +55,7 @@ public class FunctionController {
 			if(user==null)
 				return"login";
 			if (id != null) {
-				List list = (List) CacheMan.getObject(CacheName.FUNCTIONTREEBYID, id,List.class);
+				List list = (List) CacheMan.getList(CacheName.FUNCTIONTREEBYID, id,Function.class);
 				String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId(),String.class);
 				List newList =funcService.checkFuncOne(list, codes);
 				JSONArray json = new JSONArray().fromObject(newList);

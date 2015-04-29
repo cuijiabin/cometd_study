@@ -77,7 +77,7 @@ public class DictMan {
 			return null;
 		table = table.toLowerCase();
 		try {
-			List<DictItem> list = (List<DictItem>)CacheMan.getList(CacheName.DICTLIST, table,List.class);
+			List<DictItem> list = (List<DictItem>)CacheMan.getList(CacheName.DICTLIST, table,DictItem.class);
 			if(list == null)
 				list = getDictList(CacheName.DICTLIST,table);
 			return list;
