@@ -15,7 +15,7 @@
 </head>
 <body>
   	<h3  class="u-tit c-bg c-bortit">常用语信息</h3>
-  	  <input type="hidden" id="messageTypeId" name="messageTypeId" value="${treeId}"/>
+  	  <input type="text" readonly="readonly" id="messageTypeId" name="messageTypeId" value="${treeId}"/>
   	   <div style="margin:50px;">
       <table class="table table-bordered m-table">
           <tbody>

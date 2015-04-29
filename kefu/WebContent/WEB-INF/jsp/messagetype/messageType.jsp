@@ -246,7 +246,6 @@ function find(){
    	var data = {
    			"treeId" : $("#messageTypeId").val()
    	};
-   	alert();
    	$.ajax({
    		type : "get",
    	     url : "/messageType/check.action",

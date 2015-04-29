@@ -40,7 +40,8 @@
     }
  %>
 <div class="g-cnt">
-<input type="hidden" name="typeId" id="typeId" value="${typeId}" />
+ typeId：<input type="text" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
+ 初始树的id：<input type="text" readonly="readonly" name="messageDailyId" id="messageDailyId" value="${messageType.id}" />
     <!-- 查询条件 -->
    
     <div class="m-query f-mar10">
@@ -119,12 +120,23 @@
 	 * 跳转新增前的页面
 	 */
   function addMessageDaily(){
-	  //检查是否有子节点
-		 if(checkChild()){
-			    alert("请在子节点下添加常用语 ！");
-			   return false;
-		   }
-	var treeId = id;
+	  //初始判断，有无节点	
+	  var messageDailyId=  $("#messageDailyId").val();
+      if(messageDailyId ==''){
+   	   alert("没有找到有效的节点 ！");
+   	   return false;
+      }
+     //检查是否有子节点
+	 if(checkChild()){
+		    alert("请在子节点下添加常用语 ！");
+		   return false;
+	  }
+     //获取树的id
+	 var nodes = zTree.getSelectedNodes();
+	 for (var i=0, l=nodes.length; i < l; i++) {
+	   var   tid=	  nodes[i].id;  //得到选中的树的id 
+	  }
+	var treeId = tid;
  	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+' ',
  			lock:true, width:	600,height: 400});
  }
@@ -132,12 +144,15 @@
    * 添加前前检查是否有子节点信息
    */
   function checkChild(){
-  	var flag = false;
-    var id = -1;
+  	   var flag = false;
+  	   //获取节点id
+ 	   var nodes = zTree.getSelectedNodes();
+	   for (var i=0, l=nodes.length; i < l; i++) {
+	   var   tid=	  nodes[i].id;  //得到选中的树的id 
+	   }
   	var data = {
-  			"treeId" : id
+  			"treeId" : tid
   	};
-  	alert(id);
   	$.ajax({
   		type : "get",
   	     url : "/messageType/check.action",
@@ -159,7 +174,7 @@
   		}
   	});
   	return flag;
-  }
+ }
 
 	/**
 	 * 跳转编辑前的页面
