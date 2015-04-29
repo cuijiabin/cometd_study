@@ -474,7 +474,7 @@ public class ServiceIconService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月27日
 	 */
-	public void initServiceIcon(Integer styleId, DeviceType type) throws IOException {
+	public void initServiceIcon(Integer styleId, DeviceType type) throws Exception {
 		ServiceIcon serviceIcon = new ServiceIcon();
 		serviceIcon.setStyleId(styleId);
 		serviceIcon.setDeviceType(type.getCode());
@@ -491,8 +491,11 @@ public class ServiceIconService {
 			Integer buttonId = Integer.valueOf(styleId+""+StyleIconType.手机端客服图标.getCode());
 			serviceIcon.setButtonId(buttonId);
 		}
-		initIconPic(serviceIcon,type);//初始化图标
-		
+		try{
+			initIconPic(serviceIcon,type);//初始化图标
+		}catch(Exception e){
+			throw new Exception(e);
+		}
 		create(serviceIcon);
 	}
 	
