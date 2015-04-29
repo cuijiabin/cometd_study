@@ -29,7 +29,8 @@
            </tr>
            <tr>
                 <td class="f-txtr tdbg">内容</td>
-                <td class="f-txtl"><input type="text" type="text"   id="content" name="content" value=""/></td>
+<!--                 <td class="f-txtl"><input type="text" type="text"   id="content" name="content" value=""/></td> -->
+                  <td class="f-txtl"><textarea id="content" sucmsg=" "></textarea></td>
             </tr>
             <tr>
               <td class="f-txtr tdbg">展示</td>

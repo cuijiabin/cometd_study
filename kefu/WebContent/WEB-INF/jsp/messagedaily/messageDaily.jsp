@@ -40,9 +40,10 @@
     }
  %>
 <div class="g-cnt">
+
 <input type="hidden" name="typeId" id="typeId" value="${typeId}" />
     <!-- 查询条件 -->
-    <input type="hidden" name="messageDaily" id="messageDaily" value="${messageDailyId}" />
+   
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
            <% if(CheckCodeUtil.isCheckFunc(userId,adds)) {%>
@@ -201,9 +202,8 @@
 function changeTabal(){
 	var url="/messageDaily/find.action";
 	var data = {
-			
 			"id": $("#messageDaily").val(),
-		
+			"typeId":$("#typeId").val()
 	};
 	$.ajax({
 	    type: "get",
