@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.apache.log4j.Logger;
 
+import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.LoginLog;
 import com.xiaoma.kefu.model.Role;
+import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.MapEntity;
@@ -32,6 +35,8 @@ public class RoleController {
 
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private DepartmentService deptService;
 
 	// /**
 	// * 角色查询
@@ -74,7 +79,13 @@ public class RoleController {
 	public String queryAll(MapEntity conditions, Model model,
 			@ModelAttribute("pageBean") PageBean<Role> pageBean) {
 		try {
+			List<Department> list = deptService.findDept();
+			Integer deptId=0;
+			if(!list.isEmpty()){
+				deptId=list.get(0).getId();
+			}
 			roleService.getResult(conditions.getMap(), pageBean);
+			model.addAttribute("deptId",deptId);
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null)
 				return "/set/govern/role/role";

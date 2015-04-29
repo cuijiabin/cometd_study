@@ -18,7 +18,7 @@
         <tr>
             <td>${role.name}</td>
             <td><a href="/function/permit.action?roleId=${role.id}&deptId=1">查看<a/>&nbsp;&nbsp;<a href="javascript:updateRole(${role.id})">编辑<a/>&nbsp;&nbsp;
-            <a href="javascript:deleteRole(${role.id});" >删除<a/>&nbsp;&nbsp;<a href="/function/permit.action?roleId=${role.id}&deptId=1&status=3">权限配置<a/></td>
+            <a href="javascript:deleteRole(${role.id});" >删除<a/>&nbsp;&nbsp;<a href="/function/permit.action?roleId=${role.id}&deptId=${deptId}&status=3">权限配置<a/></td>
         </tr>
         </c:forEach>
     </tbody>
