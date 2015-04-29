@@ -175,7 +175,7 @@ function changeDept(){
 }
 function callback(){
 	$.dialog({id:'user'}).close();
-	location.href="/user/find.action?map[status]=1"
+	location.href="/user/find.action?map[status]=1&map[id]=1";
 }
 
 function checkAll() {

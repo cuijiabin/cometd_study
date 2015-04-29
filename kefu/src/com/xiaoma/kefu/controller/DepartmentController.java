@@ -143,11 +143,17 @@ public class DepartmentController {
 	 */
 	@RequestMapping(value = "addDept.action", method = RequestMethod.GET)
 	public String addRole(Model model, Department dept) {
-		Integer num = deptService.getMaxNum();
-		System.out.println(num);
-		dept.setSortNum(num + 1);
-		model.addAttribute("dept", dept);
-		return "/set/govern/dept/addDept";
+		try{
+			Integer num = deptService.getMaxNum();
+			System.out.println(num);
+			dept.setSortNum(num + 1);
+			model.addAttribute("dept", dept);
+			return "/set/govern/dept/addDept";
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "/views/error500";
+		}
 	}
 
 	/**
