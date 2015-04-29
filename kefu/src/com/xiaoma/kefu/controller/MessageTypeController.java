@@ -88,7 +88,7 @@ public class MessageTypeController {
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(Model model, Integer treeId, Integer typeId) {
 	   
-		Integer sortId =  messageTypeService.getChildCount(treeId,typeId);
+		Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId);
 		if (sortId==null) {
 			sortId =0;
 		}

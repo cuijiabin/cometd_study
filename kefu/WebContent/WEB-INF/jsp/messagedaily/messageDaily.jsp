@@ -80,6 +80,13 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
+//以下参数设置的是默认值
+// var id =  1;   //设置树节点ID默认为1
+// var title = '公共常用语分类设置';
+// var sortId= 1;
+// var pId= 0;
+// var status=1;
+// var typeId=1;
 
 /*
  * 条件查询
@@ -126,10 +133,11 @@
    */
   function checkChild(){
   	var flag = false;
-   var treeId = id;
+    var id = -1;
   	var data = {
   			"treeId" : id
   	};
+  	alert(id);
   	$.ajax({
   		type : "get",
   	     url : "/messageType/check.action",
@@ -152,13 +160,7 @@
   	});
   	return flag;
   }
-	//以下参数设置的是默认值
-  	var id =  1;   //设置树节点ID默认为1
-	var title = '公共常用语分类设置';
-	var sortId= 1;
-	var pId= 0;
-	var status=1;
-	var typeId=1;
+
 	/**
 	 * 跳转编辑前的页面
 	 */
