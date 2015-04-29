@@ -27,7 +27,7 @@
             	<input type="text" id="name" name="name" value="${group.name}"/>
             </td>
             <td class="f-txtr tdbg">
-            	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+            	<button type="button" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
 			</td>
         </tr>
     </tbody>

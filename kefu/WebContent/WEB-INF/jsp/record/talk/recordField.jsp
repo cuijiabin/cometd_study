@@ -38,8 +38,8 @@
             </table>
         </div>
     </div>
-    	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
-        <button type="reset" class="btn" id="btn_cancel">取消</button>
+    	<button type="button" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+        <button type="button" class="btn" id="btn_cancel">取消</button>
 </div>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>

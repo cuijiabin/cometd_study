@@ -18,7 +18,7 @@
 <div class="g-cnt f-padd20">
 	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9; float: left">
         <div class="f-txtr">
-            <button type="submit" class="btn btn-primary" onclick="add();">添加</button>
+            <button type="button" class="btn btn-primary" onclick="add();">添加</button>
         </div>
         <table class="table table-bordered table-striped table-hover m-table c-wdat f-mar0 f-mtm">
             <thead>

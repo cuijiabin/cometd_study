@@ -48,8 +48,8 @@
         </tr>
     </tbody>
 </table>
-                    <button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
-                    <button type="reset" class="btn" id="btn_cancel">取消</button>
+                    <button type="button" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+                    <button type="button" class="btn" id="btn_cancel">取消</button>
 </form>
 
 </div>
@@ -62,15 +62,6 @@
 
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
-// //以下代码为弹出层页面添加按钮  
-// api.button({  
-//     id:'valueOk',  
-//     name:'确定'    
-// });  
-// api.button({  
-//     id:'cancel',  
-//     name:'关闭'  
-// }); 
 
 //取消
 $('#btn_cancel').on('click',function(){
@@ -78,21 +69,32 @@ $('#btn_cancel').on('click',function(){
 // 	 frameElement.lhgDG.cancel();
 });
 
+
 //保存
 $('#btn_save').on('click',function(){
+	var mob=$.trim($("#phone").val()); 
+	if($.trim($("#phone").val())==""){
+		W.$.dialog.alert("手机号码不能为空！");
+		  return false;
+	}else{
+		var reg = /^(13|15|17|18)\d{9}$/;
+		if(!reg.test($.trim($('#phone').val()))){
+			W.$.dialog.alert("手机号码格式不对！");
+			return false;
+		}
+	}
 	$.ajax({
 		type : 'post',
 		url :  "/customer/updateCus.action",
 		dataType : 'json',
 		data : $('#mainForm').serialize(),
-		async:false,
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		W.$.dialog.alert('操作成功!',function(){
 	    			W.editCallback();
 	    		});
 	    	}else{
-	    		$.dialog.alert(data.msg);
+	    		W.$.dialog.alert(data.msg);
 	    	}
 	    },
 	    error: function (msg) {

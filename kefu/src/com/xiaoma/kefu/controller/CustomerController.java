@@ -287,8 +287,10 @@ public class CustomerController {
 
 			Customer toUpdate = customerService.getCustomerById(customer
 					.getId());
-			toUpdate.setCustomerName(customer.getCustomerName());
-			toUpdate.setPhone(customer.getCustomerName());
+			if(StringUtils.isNotBlank(customer.getCustomerName())){
+				toUpdate.setCustomerName(customer.getCustomerName());
+			}
+			toUpdate.setPhone(customer.getPhone());
 			toUpdate.setEmail(customer.getEmail());
 			toUpdate.setRemark(customer.getRemark());
 			boolean isSuccess = customerService.updateCustomer(toUpdate);

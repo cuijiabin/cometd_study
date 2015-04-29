@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>	
 
  <div class="f-txtr">
-     <button type="submit" class="btn btn-primary" onclick="addTwo();">添加</button>
+     <button type="button" class="btn btn-primary" onclick="addTwo();">添加</button>
  </div>
  <table class="table table-bordered table-striped table-hover m-table c-wdat f-mar0 f-mtm">
      <thead>
@@ -32,7 +32,7 @@
      </tbody>
  </table>
  <div class="f-txtr f-mtw">
-     <button type="submit" class="btn" onclick="cancel();">关闭</button>
+     <button type="button" class="btn" onclick="cancel();">关闭</button>
  </div>
 
 <script type="text/javascript">
