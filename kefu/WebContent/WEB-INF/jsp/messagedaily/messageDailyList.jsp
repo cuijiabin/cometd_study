@@ -52,8 +52,12 @@
             <td>${message.content}</td>
             <td><input type="checkbox" <c:if test="${message.status==1 }"> checked="checked" </c:if>></td>
             <td>
+               <% if(checkupdate) {%>
                <a class="f-mar5" href="javascript:toUpdate('${message.id}')" title="编辑"><i class="icon-edit"></i></a>
+               <%} %>
+                  <% if(checkdel) {%>
                <a class="f-mar5" href="javascript:deleteMessageDaily('${message.id}')" title="删除"><i class="icon-trash"></i></a>
+               <%} %>
             </td>
         </tr>
         </c:forEach>

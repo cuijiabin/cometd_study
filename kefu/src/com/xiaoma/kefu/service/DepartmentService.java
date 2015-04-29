@@ -21,7 +21,6 @@ import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.RoleDept;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.PageBean;
-import com.xiaoma.kefu.util.SysConst.RoleNameId;
 
 /**
  * 
@@ -191,7 +190,7 @@ public class DepartmentService {
 	* @Author: wangxingfei
 	* @Date: 2015年4月21日
 	 */
-	public JSONArray getDeptUserTree(RoleNameId onlyRoleId){
+	public JSONArray getDeptUserTree(Integer roleId){
 		JSONArray json = new JSONArray();
 		List<Department> deptList = findDept();//所有部门
 		for(Department dept : deptList){
@@ -203,8 +202,8 @@ public class DepartmentService {
 			//查询部门下员工,只查在职状态
 			List<User> userList = userDaoImpl.getUsertByDeptId(dept.getId());
 			for(User user : userList){
-				if(onlyRoleId!=null){//如果需要过滤角色
-					if(user.getRoleId().equals(onlyRoleId.getCode())){
+				if(roleId!=null){//如果需要过滤角色
+					if(user.getRoleId().equals(roleId)){
 						JSONObject userJson = new JSONObject();
 						userJson.element("id", user.getId()).element("pId", dept.getId()).element("name", user.getCardName()).element("type", "1");
 						json.add(userJson);

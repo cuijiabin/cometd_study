@@ -39,7 +39,7 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
 			}
 		}
 		role.add(Restrictions.eq("isDel", 0));
-		orders.add(Order.desc("createDate"));
+		orders.add(Order.asc("createDate"));
 		find(Role.class, relation, role, null, orders, pageBean);
 	}
 

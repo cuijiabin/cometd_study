@@ -34,7 +34,7 @@
                 </div>
                 <div class="bd">
                     <div class="g-mn5c c-bor">
-                        <h3 class="u-tit c-bg f-txtl" id="dialogueTitle">等待咨询...</h3>
+                        <h3 class="u-tit c-bg f-txtl"><span id="dialogueTitle">等待咨询...</span>  <a class="f-fr c-colf00" href="javascript:endDialogue()"><b>X 结束对话</b></a></h3>
                         
                         <input type="hidden" id=isForbidden value="${isForbidden }"/>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
@@ -56,6 +56,7 @@
 <!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
                                         <li><img src="/img/icon_04.png" alt="" /></li>
                                         <li><img src="/img/icon_05.png" alt="" /></li>
+                                        <a class="f-fr" href="javascript:socreUserNotice()">客服评分</a>
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">

@@ -82,6 +82,9 @@ public class Dialogue implements Serializable {
 	private String landingPage;
 	@Column(name="styleId")
 	private Integer styleId;
+	@Column(name="scoreRemark")
+	private String scoreRemark;
+	
 	
 	@Transient
 	private String customerName;//虚拟列 客户名称 
@@ -262,5 +265,12 @@ public class Dialogue implements Serializable {
 	public void setDurationTimeFM(String durationTimeFM) {
 		this.durationTimeFM = durationTimeFM;
 	}
+	public String getScoreRemark() {
+		return scoreRemark;
+	}
+	public void setScoreRemark(String scoreRemark) {
+		this.scoreRemark = scoreRemark;
+	}
+	
 	
 }

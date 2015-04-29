@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.xiaoma.kefu.comet4j.DialogueInfo;
-import com.xiaoma.kefu.util.SerializeUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 
 import redis.clients.jedis.Jedis;
 
@@ -564,6 +564,9 @@ public class JedisTalkDao {
 	public static Integer sizeCustomerWaitSet(){
 		Jedis jedis = JedisDao.getJedis();
 		Long card = jedis.zcard(JedisConstant.CUSTOMER_WAIT_SET);
+		if(null == card){
+			return 0;
+		}
 		
 		return card.intValue();
 	}
@@ -622,24 +625,24 @@ public class JedisTalkDao {
 		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
 		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 		
-		byte[] key = keyStr.getBytes();
-		byte[] field = userCcnId.getBytes();
-		byte[] value = SerializeUtil.serialize(dInfo);
+		String value = JsonUtil.toJson(dInfo);
 		Jedis jedis = JedisDao.getJedis();
-		Long result = jedis.hset(key, field, value);
+		Long result = jedis.hset(keyStr, userCcnId, value);
+		
+		if(result == null){
+			return false;
+		}
 		
 		return (result >=0);
 	}
 	
 	public static Boolean delDialogueInfo(String customerId, String userCcnId){
 		
-		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		String key = JedisConstant.DIALOGUE_INFO+customerId;
 		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 		
-		byte[] key = keyStr.getBytes();
-		byte[] field = userCcnId.getBytes();
 		Jedis jedis = JedisDao.getJedis();
-		jedis.hdel(key, field);
+		jedis.hdel(key, userCcnId);
 		
 		Long size = jedis.hlen(key);
 		if(size <= 0){
@@ -650,16 +653,21 @@ public class JedisTalkDao {
 	
 	public static DialogueInfo getDialogueScore(String customerId,String userCcnId){
 		
-		String keyStr = JedisConstant.DIALOGUE_INFO+customerId;
+		String key = JedisConstant.DIALOGUE_INFO+customerId;
 		userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 		
-		byte[] key = keyStr.getBytes();
-		byte[] field = userCcnId.getBytes();
-		
 		Jedis jedis = JedisDao.getJedis();
-		byte[] value = jedis.hget(key, field);
 		
-		if(null == value){
+		jedis.hexists(key, userCcnId);
+		String value = null ;
+		try{
+			 value = jedis.hget(key, userCcnId);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
+		if(!jedis.hexists(key, userCcnId) || StringUtils.isEmpty(value)){
 			DialogueInfo dInfo = new DialogueInfo();
 			dInfo.setCustomerId(Long.valueOf(customerId));
 			dInfo.setUserCcnId(userCcnId);
@@ -667,9 +675,9 @@ public class JedisTalkDao {
 			return dInfo;
 		}
 		
-		Object obj = SerializeUtil.unserialize(value);
+		DialogueInfo dInfo = (DialogueInfo) JsonUtil.getObjFromJson(value, DialogueInfo.class);
 		
-		return (DialogueInfo) obj;
+		return dInfo;
 	}
 
 	// ######################补充服务

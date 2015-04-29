@@ -20,10 +20,10 @@ public class CacheMan {
 	private static Log log = LogFactory.getLog(CacheMan.class);
 
 	// 获取缓存对象；param1:缓存前缀，param2:对应的id
-	public static Object getObject(String cacheName, Object value) {
+	public static <T> Object getObject(String cacheName, Object value,Class<T> clazz) {
 		try {
 			String key = CacheUtil.getCacheName(cacheName, value);
-			Object obj = JedisDao.getObject(key);
+			Object obj = JedisDao.getObject(key,clazz);
 			if (obj == null) {
 				obj = CacheFactory.factory(cacheName, value);
 				if (obj != null)
@@ -39,7 +39,7 @@ public class CacheMan {
 	public static List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
 		try {
 			String key = CacheUtil.getCacheName(CacheName.ONLINE_USER_STYLEID, styleId);
-			Object obj = JedisDao.getObject(key);
+			Object obj = JedisDao.getObject(key,List.class);
 			if (obj == null) {
 				obj = CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
 				if (obj != null)

@@ -73,7 +73,7 @@ public class DictMan {
 			return null;
 		table = table.toLowerCase();
 		try {
-			List<DictItem> list = (List<DictItem>)CacheMan.getObject(CacheName.DICTLIST, table);
+			List<DictItem> list = (List<DictItem>)CacheMan.getObject(CacheName.DICTLIST, table,List.class);
 			if(list == null)
 				list = getDictList(CacheName.DICTLIST,table);
 			return list;
@@ -115,10 +115,10 @@ public class DictMan {
 		table = table.toLowerCase();
 		DictItem dt = null;
 		if (value != null) {
-			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value));
+			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value),DictItem.class);
 			if (dt == null) {
 				getDictList(table);
-				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value));
+				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value),DictItem.class);
 			}
 		}
 		if (dt == null)

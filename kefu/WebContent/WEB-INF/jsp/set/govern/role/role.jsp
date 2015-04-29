@@ -27,8 +27,8 @@
 <!-- 表格有边框 -->
 <div style="margin:50px">
 
-<div><button style="float:right;margin:5px;" onclick="javascript:addRole()" class="btn btn-primary btn-small" >添加角色</button></div>
-<div id="table_data" style="margin-top: 10px">
+<div style="width: 100%;height: 30px"><button style="float:right;margin:5px;" onclick="javascript:addRole()" class="btn btn-primary btn-small" >添加角色</button></div>
+<div id="table_data" style="margin-top: 3px">
 	<jsp:include page="roleList.jsp"></jsp:include>
 </div>
 </div>

@@ -32,6 +32,7 @@ import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.thread.AddLoginLogThread;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.CheckCodeUtil;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
@@ -92,11 +93,11 @@ public class UserController {
 								if (thread != null)
 									thread.start();
 							} else {
-								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "");
+								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
 								if (obj == null) {
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", 1, 6);
 								} else {
-									Integer num = Integer.parseInt(CacheMan.getObject(CacheName.LOGINCOUNT, "").toString());
+									Integer num = (Integer) CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
 									if (num == 4)
 										userService.updateUser("1", user);
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", num + 1,6);
@@ -150,23 +151,27 @@ public class UserController {
 		if (user == null)
 			return "login";
 		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
-				user.getId());
-		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "");
+				user.getId(),String.class);
+		List list = (List) CacheMan.getObject(CacheName.SYSFUNCTIONONE, "",List.class);
 		List newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
-		// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
-		if (typeId == null)
-			typeId = 2;
-		Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-				typeId);
-		model.addAttribute("func", function);
-		return "index";
+			// 根据typeId判断初始加载哪个页面。哪个顶部标签选中。
+			if (typeId == null){
+				boolean b = CheckCodeUtil.isCheckFunc(user.getId(), "f_dialog_pt");
+				if(b){
+					return "redirect:/dialogue/user.action";
+				}
+			}
+			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
+					typeId == null?2:typeId,Function.class);
+			model.addAttribute("func", function);
+			return "index";
 	}catch(Exception e){
 		model.addAttribute("message", "查询失败,请刷新重试!");
 		logger.error(e.getMessage());
 		return "/error";
 	}
-	}
+}
 
 	/**
 	 * 进入demo处理页面

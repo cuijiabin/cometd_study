@@ -37,7 +37,7 @@
     </div>
     <div class="u-subsec">
      <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
-       <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_del")) {%>
+       <% if(CheckCodeUtil.isCheckFunc(userId,"f_checklog_del")) {%>
        <button type="button" class="btn btn-primary btn-small" onclick="del();">删除</button>
        <%} %>
        <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_recycel")) {%>

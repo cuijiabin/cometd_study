@@ -233,7 +233,7 @@ public class WaitListService {
 		q.offer("4");
 		q.offer("5");
 		CacheMan.add("asdasd",1, q);
-		Queue<String> qq = (Queue<String>)CacheMan.getObject("asdasd", 1);
+		Queue<String> qq = (Queue<String>)CacheMan.getObject("asdasd", 1,Queue.class);
 		for (String string : qq){  
             System.out.println(string);  
         } 
@@ -244,7 +244,7 @@ public class WaitListService {
 			System.out.println(string);  
 		} 
 		CacheMan.update("asdasd",1, qq);
-		qq = (Queue<String>)CacheMan.getObject("asdasd", 1);
+		qq = (Queue<String>)CacheMan.getObject("asdasd", 1,Queue.class);
 		System.out.println("==========又删除一个==========");
 		q.poll();
 		for (String string : qq){  

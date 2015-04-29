@@ -47,7 +47,6 @@ import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.CompareEnum;
-import com.xiaoma.kefu.util.SysConst.RoleNameId;
 import com.xiaoma.kefu.util.TimeHelper;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
@@ -128,7 +127,7 @@ public class RecordsCenterController {
 		//主管看所有部门,所有员工
 		//员工看自己部门,自己的记录
 		List<User> userList = new ArrayList<User>();
-		if(user.getRoleId().equals(RoleNameId.员工.getCode())){
+		if(user.getRoleId().equals(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()))){
 			condition.append(" and t1.userId = " + userId );//员工只能查自己
 			userList.add(user);
 		}else{
@@ -266,7 +265,7 @@ public class RecordsCenterController {
 		if (user == null) return "login";
 		
 		List<User> userList = new ArrayList<User>();
-		if(user.getRoleId().equals(RoleNameId.员工.getCode())){
+		if(user.getRoleId().equals(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()))){
 			condition.append(" and t1.userId = " + userId );//员工只能查自己
 			userList.add(user);
 		}else{

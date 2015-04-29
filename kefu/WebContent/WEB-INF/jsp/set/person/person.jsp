@@ -35,7 +35,7 @@
       <td class="f-txtr tdbg" width="150px">身份：</td><td class="f-txtl">${user.roleName}</td>
       </tr>
       <tr>
-      <td class="f-txtr tdbg" width="150px">部门：</td><td class="f-txtl">${user.deptId}</td>
+      <td class="f-txtr tdbg" width="150px">部门：</td><td class="f-txtl">${user.deptName}</td>
       </tr>
       
 </table>

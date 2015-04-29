@@ -85,24 +85,24 @@ public class SysConst {
 	public static final String PIC_TEMPLATE_CLIENT = "client.png";
 	
 	
-	/**
-	 * 角色的ID
-	 * *********************************
-	* @Description: TODO
-	* @author: wangxingfei
-	* @createdAt: 2015年4月9日上午10:10:16
-	**********************************
-	 */
-	public enum RoleNameId{
-		员工(4);
-		private Integer value;
-		RoleNameId(Integer value){
-			this.value = value;
-		}
-		public Integer getCode(){
-			return this.value;
-		}
-	}
+//	/**
+//	 * 角色的ID
+//	 * *********************************
+//	* @Description: TODO
+//	* @author: wangxingfei
+//	* @createdAt: 2015年4月9日上午10:10:16
+//	**********************************
+//	 */
+//	public enum RoleNameId{
+//		员工(4);
+//		private Integer value;
+//		RoleNameId(Integer value){
+//			this.value = value;
+//		}
+//		public Integer getCode(){
+//			return this.value;
+//		}
+//	}
 	
 	/**
 	 * 运算符	

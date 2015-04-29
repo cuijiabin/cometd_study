@@ -8,7 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import com.xiaoma.kefu.util.SerializeUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 /**
  * 
  * redis操作封装
@@ -40,7 +40,18 @@ public class JedisDao {
 				
 				password = (StringUtils.isBlank(password)) ? null : password;
 				
-				pool = new JedisPool(new JedisPoolConfig(), host, port, timeout, password);
+				JedisPoolConfig config = new JedisPoolConfig();
+			      // 控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
+			      // 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+			      config.setMaxActive(500);
+			      // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
+			      config.setMaxIdle(5);
+			      // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
+			      config.setMaxWait(1000 * 100);
+			      // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
+			      config.setTestOnBorrow(true);
+				
+				pool = new JedisPool(config, host, port, timeout, password);
 				jedis = pool.getResource();
 			} else
 				return jedis;
@@ -87,10 +98,9 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 			
-			byte[] bKey = key.getBytes();
-			byte[] bObj = SerializeUtil.serialize(obj);
+			String value = JsonUtil.toJson(obj);
+			jedis.set(key, value);
 			
-			jedis.set(bKey, bObj);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -100,11 +110,10 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 			
-			byte[] bKey = key.getBytes();
-			byte[] bObj = SerializeUtil.serialize(obj);
+			String value = JsonUtil.toJson(obj);
 			
-			jedis.set(bKey, bObj);
-			jedis.expire(bKey, seconds);
+			jedis.set(key, value);
+			jedis.expire(key, seconds);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -123,13 +132,19 @@ public class JedisDao {
 		
 	}
 	
-	public static Object getObject(String key){
+	public static <T> Object getObject(String key,Class<T> clazz){
 		try {
 			jedis = getJedis();
 			
-			byte[] byteObj = jedis.get(key.getBytes());
+			String value = jedis.get(key);
+			if(StringUtils.isEmpty(value)){
+				return null;
+			}
 			
-			return SerializeUtil.unserialize(byteObj);
+			Object obj = JsonUtil.getObjFromJson(value, clazz);
+			
+			return obj;
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

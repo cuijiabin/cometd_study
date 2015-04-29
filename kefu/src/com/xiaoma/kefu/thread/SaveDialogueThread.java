@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
@@ -112,8 +114,6 @@ public class SaveDialogueThread implements Runnable{
 			
 		}
 		
-		
-		
 	}
 	
 	/**
@@ -131,9 +131,12 @@ public class SaveDialogueThread implements Runnable{
 		
 		Date beginDate = list.get(0).getCreateDate();
 		Date endDate = list.get(last).getCreateDate();
-		
 		Integer durationTime = TimeHelper.diffSecond(endDate, beginDate);
 		
+		Map<String,Integer> resultMap = getMaxSpace(list);
+		Integer maxSpace = resultMap.get("maxSpace");
+		Integer isTalk = resultMap.get("isTalk");
+		Integer firstTime = resultMap.get("firstTime");
 		
 		Long customerId = customer.getId();
 		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId.toString(),uccnId);
@@ -148,12 +151,13 @@ public class SaveDialogueThread implements Runnable{
 		dialogue.setEndDate(endDate);// 对话结束时间
 		dialogue.setDurationTime(durationTime);// 对话时长（秒）
 		
-		dialogue.setMaxSpace(null);// 最大回复时间间隔（秒）--统计
+		dialogue.setMaxSpace(maxSpace);// 最大回复时间间隔（秒）--统计
 		dialogue.setIsWait(dInfo.getIsWait());// 是否进入等待队列（0否 1 是 --收集
 		dialogue.setWaitTime(dInfo.getWaitTime());// 等待时长（秒）--收集
-		dialogue.setFirstTime(null);// 机器人与客服时间间隔（秒）--统计
-		dialogue.setIsTalk(null);// 是否有客户的说话记录（0，无 1，有）--统计
+		dialogue.setFirstTime(firstTime);// 机器人与客服时间间隔（秒）--统计
+		dialogue.setIsTalk(isTalk);// 是否有客户的说话记录（0，无 1，有）--统计
 		dialogue.setScoreType(dInfo.getScoreType());// 评分类型 --收集
+		dialogue.setScoreRemark(dInfo.getScoreRemark());// 评分备注 --收集
 		
 		dialogue.setIp(dInfo.getIp());// ip地址
 		dialogue.setIpInfo(dInfo.getIpInfo());// ip分析（省市县运营商）
@@ -179,6 +183,59 @@ public class SaveDialogueThread implements Runnable{
 		Thread saveDialogueThread = new Thread(new SaveDialogueThread(), "SaveDialogueThread");
 		saveDialogueThread.setDaemon(true);
 		saveDialogueThread.start();
+	}
+	
+	/**
+	 * 获取最大回复间隔
+	 * @param list
+	 * @return
+	 */
+	private Map<String,Integer> getMaxSpace(List<DialogueDetail> list){
+		
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		
+		Date askDate = null;
+		Date replyDate = null;
+		Boolean askType = false;
+		Integer maxSpace = null;
+		for(DialogueDetail dialogueDetail : list){
+			Integer dialogueType = dialogueDetail.getDialogueType();
+			if(1 == dialogueType){
+				askDate = dialogueDetail.getCreateDate();
+				askType = true;
+			}
+			if(2 == dialogueType && askType){
+				replyDate = dialogueDetail.getCreateDate();
+				Integer duration = TimeHelper.diffSecond(replyDate, askDate);
+				if(maxSpace == null || duration > maxSpace){
+					maxSpace = duration;
+				}
+				askType = false;
+			}
+		}
+		map.put("maxSpace", maxSpace);//最大等待时间
+		
+		Integer firstTime = null;
+		Integer isTalk = 0;
+		askType = false;
+		for(DialogueDetail dialogueDetail : list){
+			Integer dialogueType = dialogueDetail.getDialogueType();
+			if(3 == dialogueType){
+				askDate = dialogueDetail.getCreateDate();
+				askType = true;
+			}
+			if(2 == dialogueType && askType){
+				replyDate = dialogueDetail.getCreateDate();
+				firstTime = TimeHelper.diffSecond(replyDate, askDate);
+				isTalk = 1;
+				break;
+			}
+		}
+		map.put("firstTime", firstTime);
+		map.put("isTalk", isTalk);
+		
+		return map;
+		
 	}
 
 }

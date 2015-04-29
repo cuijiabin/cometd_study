@@ -27,14 +27,13 @@
             	<input type="text" id="name" name="name" value="${group.name}"/>
             </td>
             <td class="f-txtr tdbg">
-            	<button type="submit" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
+            	<button type="button" class="btn btn-primary" id="btn_save">保存<i class="icon-ok icon-white"></i></button>
 			</td>
         </tr>
     </tbody>
 </table>
- </div>                  
 </form>
-
+ </div>      
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -54,31 +53,33 @@ var W = api.opener;//获取父页面对象
 //先检验,后保存
 $('#btn_save').on('click',function(){
 	if($.trim($("#name").val()) == ''){
-		$.dialog.alert('名称不能为空!');
+		W.$.dialog.alert('名称不能为空!!');
 		return false;
+	}else{
+		var data = {
+				"id":$("#id").val(),
+				"name":$("#name").val(),
+				"styleId":$("#styleId").val()
+		};
+		$.ajax({
+		    type: "get",
+		    url: "/busiGroup/validate.action",
+		    dataType: "json",
+		    data : data,
+		    async:false,
+		    success: function (data) {
+		    	if(data.result==0){
+		    		save();
+		    	}else{
+		    		W.$.dialog.alert(data.msg);
+		    	}
+		    },
+		    error: function (msg) {
+		    	W.$.dialog.alert(msg);
+		    }
+		});
 	}
-	var data = {
-			"id":$("#id").val(),
-			"name":$("#name").val(),
-			"styleId":$("#styleId").val()
-	};
-	$.ajax({
-	    type: "get",
-	    url: "/busiGroup/validate.action",
-	    dataType: "json",
-	    data : data,
-	    async:false,
-	    success: function (data) {
-	    	if(data.result==0){
-	    		save();
-	    	}else{
-	    		$.dialog.alert(data.msg);
-	    	}
-	    },
-	    error: function (msg) {
-	    	$.dialog.alert(msg);
-	    }
-	});
+	return false;
 });
 
 //保存
@@ -95,11 +96,11 @@ function save(){
 	    			W.addCallback();
 	    		});
 	    	}else{
-	    		$.dialog.alert(data.msg);
+	    		W.$.dialog.alert(data.msg);
 	    	}
 	    },
 	    error: function (msg) {
-	    	$.dialog.alert(msg);
+	    	W.$.dialog.alert(msg);
 	    }
 	});
 }

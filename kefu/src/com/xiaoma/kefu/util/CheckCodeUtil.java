@@ -20,7 +20,7 @@ public class CheckCodeUtil extends HttpServlet{
 	public static boolean isCheckFunc(Integer id ,String code) {
 		try{
 			
-		    String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id);
+		    String codes = (String)CacheMan.getObject(CacheName.USERFUNCTION, id,String.class);
 			int count = codes.indexOf(","+code+",");
 			if(count>=0){
 				return true;

@@ -130,7 +130,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@Override
 	public List<User> getUsertByDeptId(Integer deptId) {
 		Session session = getSession();
-		String hql = "from User u where u.status<>2 and u.deptId =" + deptId
+		String hql = "from User u where u.status<>2 and u.id<>1 and u.deptId =" + deptId
 				+ " order by u.id asc";
 		Query query = session.createQuery(hql);
 		return (List<User>) query.list();
@@ -168,7 +168,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@Override
 	public List<User> getUsertByRoleId(Integer roleId) {
 		Session session = getSession();
-		String hql = "from User u where u.status<>2 and u.roleId =" + roleId
+		String hql = "from User u where u.status<>2 and u.id <>1 and u.roleId =" + roleId
 				+ " order by u.id asc";
 		Query query = session.createQuery(hql);
 		return (List<User>) query.list();
@@ -181,7 +181,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@Override
 	public List<User> findUserAllBydeptId(Integer deptId) {
 		Session session = getSession();
-		String hql = "from User u where u.deptId =" + deptId
+		String hql = "from User u where u.id<>1 and u.deptId =" + deptId
 				+ " order by u.id asc";
 		Query query = session.createQuery(hql);
 		return (List<User>) query.list();

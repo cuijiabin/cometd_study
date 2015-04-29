@@ -34,7 +34,7 @@
     </div>
     
 	<div class="f-txtr f-mtw">
-		<button type="submit" class="btn" onclick="cancel();">关闭</button>
+		<button type="button" class="btn" onclick="cancel();">关闭</button>
 	</div>
 </div>
 

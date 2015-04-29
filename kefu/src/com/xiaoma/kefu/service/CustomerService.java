@@ -96,6 +96,7 @@ public class CustomerService {
 	 */
 	public boolean updateCustomer(Customer customer) {
 		JedisDao.remove(JedisConstant.CUSTOMER_INFO+customer.getId());
+		customer.setUpdateDate(new Date());
 		return customerDaoImpl.updateCustomer(customer);
 	}
 
@@ -116,7 +117,7 @@ public class CustomerService {
 	 * 查询一条
 	 */
 	public Customer getCustomerById(long id) {
-		Customer customer = (Customer) JedisDao.getObject(JedisConstant.CUSTOMER_INFO+id);
+		Customer customer = (Customer) JedisDao.getObject(JedisConstant.CUSTOMER_INFO+id,Customer.class);
 		   if(customer == null){
 			   customer = customerDaoImpl.getCustomerById(id);
 			   JedisDao.setKO(JedisConstant.CUSTOMER_INFO+id, customer);

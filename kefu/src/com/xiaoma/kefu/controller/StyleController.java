@@ -283,15 +283,15 @@ public class StyleController {
 	    	String strDiv = null;
 	    	if(isPC!=null && isPC.equals("false")){
 	    		if(isOnline){
-	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDON,styleId);
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDON,styleId,String.class);
 	    		}else{
-	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDOFF,styleId);
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONYDOFF,styleId,String.class);
 	    		}
 	    	}else{
 	    		if(isOnline){
-	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId);
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCON,styleId,String.class);
 	    		}else{
-	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId);
+	    			strDiv = (String) CacheMan.getObject(CacheName.DIVICONPCOFF,styleId,String.class);
 	    		}
 	    	}
 	    	logger.info("图标div="+strDiv);
@@ -318,9 +318,9 @@ public class StyleController {
 	    try {
 	    	String strDiv = null;
 	    	if(isPC!=null && isPC.equals("false")){
-	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEYD,styleId);
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEYD,styleId,String.class);
 	    	}else{
-	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEPC,styleId);
+	    		strDiv = (String) CacheMan.getObject(CacheName.DIVINVITEPC,styleId,String.class);
 	    	}
 	    	logger.info("邀请框div="+strDiv);
 	        res.getWriter().write(callbackFunName + "([ { name:\""+strDiv+"\"}])"); //返回jsonp数据
