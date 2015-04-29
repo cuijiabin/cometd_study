@@ -77,7 +77,7 @@ $('#btn_save').on('click',function(){
 		W.$.dialog.alert("手机号码不能为空！");
 		  return false;
 	}else{
-		var reg = /^(13|15|17|18)\d{9}$/;
+		var reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
 		if(!reg.test($.trim($('#phone').val()))){
 			W.$.dialog.alert("手机号码格式不对！");
 			return false;

@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.BusiGroupDetail;
 import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.BusiGroupService;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.util.Ajax;
-import com.xiaoma.kefu.util.SysConst.RoleNameId;
 
 /**
  * 业务分组	controller
@@ -60,8 +60,9 @@ public class BusiGroupController {
 				model.addAttribute("currentGroupId", groupList.get(0).getId());
 				detailList = busiGroupDetailService.findByGroupId(groupList.get(0).getId());
 			}
+			
 			//树
-			JSONArray jsonTree = deptService.getDeptUserTree(RoleNameId.员工);
+			JSONArray jsonTree = deptService.getDeptUserTree(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()));
 			
 			model.addAttribute("jsonTree", jsonTree.toString());
 			model.addAttribute("groupList", groupList);
