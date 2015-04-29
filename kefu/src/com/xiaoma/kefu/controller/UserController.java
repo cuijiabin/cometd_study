@@ -163,7 +163,7 @@ public class UserController {
 				}
 			}
 			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-						typeId);
+						typeId, Function.class);
 			model.addAttribute("func", function);
 			return "index";
 
