@@ -372,6 +372,7 @@ public class RecordsCenterController {
 			}
 			return "/record/talk/talkDetailCommonList"; 
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			return "/error500";
 		}
 		
@@ -564,7 +565,7 @@ public class RecordsCenterController {
 				throw new Exception("file does not exist!");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		} 
 	}
 	

@@ -79,6 +79,11 @@ public class SysConst {
 	 */
 	public static final String PIC_TEMPLATE_YD_INVITE = "ydInviteIcon.png";
 	
+	/**
+	 * 对话框	缩略图
+	 */
+	public static final String PIC_TEMPLATE_CLIENT = "client.png";
+	
 	
 	/**
 	 * 角色的ID

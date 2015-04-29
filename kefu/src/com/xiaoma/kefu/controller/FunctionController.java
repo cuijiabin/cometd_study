@@ -234,4 +234,43 @@ public class FunctionController {
 			return "error";
 		}
 	}
+	/**
+	 * 文件上传
+	 * @param model
+	 * @param remindType
+	 * @param session
+	 * @param lsound
+	 * @param jsound
+	 * @param resound
+	 * @return
+	 */
+	@RequestMapping(value = "saveFile.action", method = RequestMethod.POST)
+	public String savefile(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
+			MultipartFile lsound,MultipartFile jsound,MultipartFile resound) {
+		try {
+		        User user = (User) session.getAttribute("user");
+		        if(user==null)
+		    	return "login";
+		    	if(!lsound.isEmpty()){
+		    		String name="lsound";
+		    		String url=funcService.saveFile(lsound,user,name);
+		    		remindType.setLineEffectUrl(url);
+		    	}
+		    	if(!jsound.isEmpty()){
+		    		String name="jsound";
+		    		String url=funcService.saveFile(jsound,user,name);
+		    		remindType.setCreateUrl(url);
+		    	}
+		    	if(!resound.isEmpty()){
+		    		String name="resound";
+		    		String url=funcService.saveFile(resound,user,name);
+		    		remindType.setReceiveUrl(url);
+		    	}	
+			return "";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", "出错了,请刷新页面重试！");
+			return "error";
+		}
+	}
 }

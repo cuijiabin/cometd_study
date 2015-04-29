@@ -95,7 +95,7 @@ public class ServiceIconController {
 		try {
 			serviceIconService.saveAndUpdateDiv4PC(fileOn,fileOff,serviceIcon);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return "redirect:/serviceIcon/edit.action?styleId="+serviceIcon.getStyleId()
 				+"&deviceTypeId="+serviceIcon.getDeviceType(); 
@@ -118,7 +118,7 @@ public class ServiceIconController {
 		try {
 			serviceIconService.saveAndUpdateDiv4YD(fileOn,fileOff,serviceIcon);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return "redirect:/serviceIcon/edit.action?styleId="+serviceIcon.getStyleId()
 				+"&deviceTypeId="+serviceIcon.getDeviceType(); 

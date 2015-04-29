@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>    
+<%@ taglib prefix="c"  uri="http://java.sun.com/jstl/core_rt" %>
+<%
+	    String path = request.getContextPath();
+	    String basePath = request.getScheme() + "://"
+	            + request.getServerName() + ":" + request.getServerPort()
+	            + path + "/";
+	%> 
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -12,6 +18,7 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 <link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+<link href="/jsplugin/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -76,6 +83,7 @@
                     <label><input  type ="radio" id="receiveEffect" name="receiveEffect" value="2" <c:if test='${remind.receiveEffect==2}'>checked</c:if>/>自定义</label>
                 </p>
                 <p class="u-upload f-fl">
+                
                     <button class="btn" type="button">上传文件</button>
                     <input type="file" id="resound" name="resound">
                 </p>
@@ -101,6 +109,7 @@
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/jsplugin/uploadify/jquery.uploadify.min.js"></script>
 <script type="text/javascript">
 // 自定义滚动条--左右布局右侧
 (function($){
@@ -144,6 +153,7 @@ function removecheck(){
     $(":checkbox[checked='checked']").attr("checked",false);
     $(":radio[checked='checked']").attr("checked",false);
 }
+
 </script>
 
 </body>

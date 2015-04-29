@@ -70,6 +70,7 @@ public class WaitListController {
 			model.addAttribute("styleId", styleId);
 			return "/style/wait/editTwo";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -92,6 +93,7 @@ public class WaitListController {
 			model.addAttribute("pId", 0);
 			return "/style/wait/add";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -166,6 +168,7 @@ public class WaitListController {
 			model.addAttribute("styleId", styleId);
 			return "/style/wait/addTwo";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -199,6 +202,7 @@ public class WaitListController {
 				model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "操作失败!"));
 		}
 		return "resultjson";
@@ -209,6 +213,7 @@ public class WaitListController {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "findById.action", method = RequestMethod.GET)
 	public String findById(Model model,Integer styleId,Integer id) {
 		try {

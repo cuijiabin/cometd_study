@@ -105,7 +105,11 @@ public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements
 		Session session = getSession();
 		String hql = "select max(a.sortNum) from Department a where a.isDel<>1 and id <>1";
 		Query query = session.createQuery(hql);
-		return ((Number) query.uniqueResult()).intValue();
+		Object result = query.uniqueResult();
+		if(result==""||result==null){
+			return 0;
+		}
+		return	((Number) query.uniqueResult()).intValue();
 
 	}
 
