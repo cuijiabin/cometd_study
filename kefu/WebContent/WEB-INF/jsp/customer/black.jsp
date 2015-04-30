@@ -88,7 +88,7 @@
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert(msg);
 	    }
 	});
   }
@@ -100,7 +100,7 @@
  	  var customerId = $("#customerId").val();
  		var chinesePatrn = /[\u4E00-\u9FA5]/g;
  		if(chinesePatrn.test(customerId)){
- 			alert("客户编号不得是汉字！");
+ 			$.dialog.alert("客户编号不得是汉字！");
  			return false;
  		}
  		//只能为整数
@@ -109,7 +109,7 @@
  		if(!customer.replace(/^ +| +$/g,'')==''){
  			
  			if (!customerIdParam.test(customer)) {
- 				alert("请输入有效的客户编号");
+ 				$.dialog.alert("请输入有效的客户编号");
  				return false;
  			}
  			return true;
@@ -130,7 +130,7 @@
     */
     function toUpdate(blacklistId){
     	var c= $.dialog({content:'url:/blacklist/editBlack.action?blacklistId='+blacklistId,title:"修改黑名单",
-    			width: 400,height: 200,id:'editBlackList'});
+    			width: 600,height: 300,id:'editBlackList'});
  }
   //全选/全不选
     function checkedAll(){

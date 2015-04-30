@@ -49,6 +49,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 var api = frameElement.api;//调用父页面数据  
 var W = api.opener;//获取父页面对象  
@@ -99,26 +100,26 @@ $('#btn_save').on('click',function(){
 function updateParam(userData) {
 	var customerId = userData.customerId;
 	if (customerId.replace("^[ ]+$", "").length == 0) {
-		 alert("客户编号不得为空！");
+		 $.dialog.alert("客户编号不得为空！");
 		return false;
 	}
 	
 	var ip = userData.ip;
 	if (ip.replace("^[ ]+$", "").length == 0) {
-		 alert("IP地址不得为空！");
+		 $.dialog.alert("IP地址不得为空！");
 		return false;
 	}
 
 	var enddate = userData.enddate;
 	if (enddate.replace("^[ ]+$", "").length == 0) {
-		 alert("失效时间不得为空！");
+		 $.dialog.alert("失效时间不得为空！");
 		return false;
 	}
       
 	
 	var description	 = userData.description;
 	if (description.replace(/^ +| +$/g,'')=='') {
-		 alert("阻止原因不得为空！");
+		 $.dialog.alert("阻止原因不得为空！");
 		return false;
 	}
   

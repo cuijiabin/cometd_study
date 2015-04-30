@@ -121,7 +121,7 @@ function find(){
 	       zTree.selectNode(node);
 	    },
 	    error: function (msg) {
-	        alert("没找到相应的分类 ！");
+	        $.dialog.alert("没找到相应的分类 ！");
 	    }
 	});
 }
@@ -132,7 +132,7 @@ function find(){
    function addMessageType(){
        //跳转到添加的页面前进行判断该节点下是否有常用语（有，不执行添加；没有，执行添加）	
 	   if(checkMessage_Daily()){
-		    alert("该分类下已存在常用语，不可继续添加分类 ！");
+		    $.dialog.alert("该分类下已存在常用语，不可继续添加分类 ！");
 		   return false;
 	   }
 	  //第一次添加的情况
@@ -176,8 +176,8 @@ function find(){
    			}
    		},
    		error : function(msg){
-   			alert(flag);
-   			alert("添加失败！");
+   			$.dialog.alert(flag);
+   			$.dialog.alert("添加失败！");
    			flag = true;
    		}
    	});
@@ -203,12 +203,12 @@ function find(){
 	 };
 	 //检查是否有子节点
 	 if(checkChild()){
-		    alert("请先删除子节点信息！");
+		    $.dialog.alert("请先删除子节点信息！");
 		   return false;
 	   }
 	 //检查该节点下是否有常用语
 	 if(checkMessage_Daily()){
-		    alert("请先删除该节点下的常用语 ！");
+		    $.dialog.alert("请先删除该节点下的常用语 ！");
 		   return false;
 	   }
 	 $.dialog.confirm('你确定要彻底删除吗？', function(){
@@ -219,7 +219,7 @@ function find(){
 		 contentType : "application/json; charset=utf-8",
 	     dataType : "json",
 	     success: function (data) {
-	    	alert("删除成功 ！");
+	    	$.dialog.alert("删除成功 ！");
 	    	var node;
 	    	   var nodes = zTree.getSelectedNodes();
 	    	   if (nodes.length > 0) {
@@ -232,7 +232,7 @@ function find(){
 		  	   changeDetail(node.id);
 		    },
 		    error: function (msg) {
-		    alert("删除失败！");
+		    $.dialog.alert("删除失败！");
 		    }
 	    });
 	 })
@@ -261,8 +261,8 @@ function find(){
    			}
    		},
    		error : function(msg){
-   			alert(flag);
-   			alert("删除失败！");
+   			$.dialog.alert(flag);
+   			$.dialog.alert("删除失败！");
    			flag = true;
    		}
    	});
@@ -289,7 +289,7 @@ function changeTree(){
 	       $("#tree_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert(msg);
 	    }
 	});
 }
@@ -312,7 +312,7 @@ function changeDetail(id){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert(msg);
 	    }
 	});
 }

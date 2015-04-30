@@ -48,6 +48,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 
@@ -96,7 +97,7 @@ function verificationParam(userData) {
 
 	var title = userData.title;
 	if (title.replace(/^ +| +$/g,'')=='') {
-		 alert("标题不得为空 ！");
+		 $.dialog.alert("标题不得为空 ！");
 		return false;
 	}
 

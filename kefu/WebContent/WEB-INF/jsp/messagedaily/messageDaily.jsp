@@ -39,21 +39,20 @@
     	dels="f_persay_del";
     }
  %>
+ <div style="margin:50px">
 <div class="g-cnt">
 <input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
 <input type="hidden" readonly="readonly" name="messageDailyId" id="messageDailyId" value="${messageType.id}" />
     <!-- 查询条件 -->
-   
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
            <% if(CheckCodeUtil.isCheckFunc(userId,adds)) {%>
             <button type="button" class="btn btn-primary btn-small f-fl" onclick="javascript:addMessageDaily();">添加</button>
             <%} %>
-            <input class="c-wd150" type="text" id="serchTitle" />
+            <input class="c-wd150" type="text" id="serchTitle" name="serchTitle"/>
             <button type="button" class="btn btn-primary btn-small" onclick="javascript:find(1);">搜索</button>
         </div>
     </div>
-    
 	<div class="g-bd6 f-cb f-mar20">
 		<div class="g-sd6 c-bor" >
 		    <h3 class="u-tit c-bg">常用语分类设置</h3>
@@ -66,7 +65,7 @@
 	     </div>
 	</div>
 </div>
-
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -88,7 +87,7 @@
 // var pId= 0;
 // var status=1;
 // var typeId=1;
-
+var api = frameElement.api,W=api.opener;
 /*
  * 条件查询
  */
@@ -97,10 +96,10 @@
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
+			"typeId" : $("#typeId").val(),
 			"map[title]":$("#serchTitle").val(),
 			"map[typeId]":1
 	};
-	
 	$.ajax({
 	    type: "get",
 	    url: url,
@@ -111,7 +110,7 @@
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert("出现异常！");
 	    }
 	});
   }
@@ -123,18 +122,18 @@
 	  //初始判断，有无节点	
 	  var messageDailyId=  $("#messageDailyId").val();
       if(messageDailyId ==''){
-   	   alert("没有找到有效的节点 ！");
+    	$.dialog.alert("没有找到有效的节点 ！");
    	   return false;
       }
      //检查是否有子节点
 	 if(checkChild()){
-		    alert("请在子节点下添加常用语 ！");
+		    $.dialog.alert("请在子节点下添加常用语 ！");
 		   return false;
 	  }
      //获取树的id
 	 var nodes = zTree.getSelectedNodes();
 	 for (var i=0, l=nodes.length; i < l; i++) {
-	   var   tid=	  nodes[i].id;  //得到选中的树的id 
+	   var tid = nodes[i].id;  //得到选中的树的id 
 	  }
 	var treeId = tid;
  	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+' ',
@@ -168,8 +167,8 @@
   			}
   		},
   		error : function(msg){
-  			alert(flag);
-  			alert("添加失败！");
+  			$.dialog.alert(flag);
+  			$.dialog.alert("添加失败！");
   			flag = true;
   		}
   	});
@@ -202,12 +201,12 @@
 		 contentType : "application/json; charset=utf-8",
 	     dataType : "json",
 	     success: function (data) {
-	    	alert("删除成功 ！");
+	    	$.dialog.alert("删除成功 ！");
 	    	changeTabal();
 	    
 		    },
 		    error: function (msg) {
-		    alert("删除失败！");
+		    $.dialog.alert("删除失败！");
 		    }
 	    });
 	 })
@@ -231,7 +230,7 @@ function changeTabal(){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert(msg);
 	    }
 	});
 }

@@ -44,7 +44,8 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		      role.add(Restrictions.eq("messageTypeId",id ));
 			}
 			if (conditions != null) {
-				if (StringHelper.isNotEmpty(conditions.get("title"))) {
+				String title = conditions.get("title").trim();
+				if (StringHelper.isNotEmpty(title)) {
 					role.add(Restrictions.like("title",
 							"%" + conditions.get("title").trim() + "%"));
 				}

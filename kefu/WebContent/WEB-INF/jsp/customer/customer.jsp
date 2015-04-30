@@ -102,7 +102,7 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	        $.dialog.alert(msg);
 	    }
 	});
 }
@@ -119,7 +119,7 @@ function find(currentPage){
 	  beginDate = beginDate.replace("-","/").replace("-","/");
 	  endDate = endDate.replace("-","/").replace("-","/");
 	  if(Date.parse(endDate) < Date.parse(beginDate))   {                           
-           alert('结束日期不能小于开始日期',this);
+           $.dialog.alert('结束日期不能小于开始日期',this);
 	  	   return false;
 	  }else{
 		  return true;
@@ -132,7 +132,7 @@ function find(currentPage){
 	  var customerId = $("#customerId").val();
 		var chinesePatrn = /[\u4E00-\u9FA5]/g;
 		if(chinesePatrn.test(customerId)){
-			alert("客户编号不得是汉字！");
+			$.dialog.alert("客户编号不得是汉字！");
 			return false;
 		}
 		//只能为整数
@@ -142,7 +142,7 @@ function find(currentPage){
 		if(!customer.replace(/^ +| +$/g,'')==''){
 			
 			if (!customerIdParam.test(customer)) {
-				alert("请输入有效的客户编号");
+				$.dialog.alert("请输入有效的客户编号");
 				return false;
 			}
 			return true;
@@ -159,7 +159,7 @@ function find(currentPage){
 	  var rowNum = $("#customerTable tbody tr").length;
 	  console.log("总行数试试"+rowNum);
 	  if(rowNum <=0){
-		  alert("该范围内没有数据可供导出 ！");
+		  $.dialog.alert("该范围内没有数据可供导出 ！");
 		  return;
 	  }
 
@@ -167,7 +167,7 @@ function find(currentPage){
 	    var customerId = $("#customerId").val();
         var chinesePatrn = /[\u4E00-\u9FA5]/g;
 		if(chinesePatrn.test(customerId)){
-			alert("客户编号不得是汉字！");
+			$.dialog.alert("客户编号不得是汉字！");
 			return false;
 		}
 	     //校验日期
@@ -176,7 +176,7 @@ function find(currentPage){
 		  beginDate = beginDate.replace("-","/").replace("-","/");
 		  endDate = endDate.replace("-","/").replace("-","/");
 		  if(Date.parse(endDate) < Date.parse(beginDate))   {                           
-	           alert('结束日期不能小于开始日期',this);
+	           $.dialog.alert('结束日期不能小于开始日期',this);
 		  	   return false;
 		  }else{
 			  console.log(beginDate);

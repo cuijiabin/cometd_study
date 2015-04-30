@@ -47,6 +47,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
 var api = frameElement.api,W=api.opener;
 function addBlacklist(id){
@@ -102,12 +103,12 @@ function addBlacklist(id){
 function verificationParam(userData) {
 	var customerId = userData.customerId;
 	if (customerId.replace(/^ +| +$/g,'')=='') {
-		 alert("客户编号不得为空！");
+		 $.dialog.alert("客户编号不得为空！");
 		return false;
 	}
 	var chinesePatrn = /[\u4E00-\u9FA5]/g;
 	if(chinesePatrn.test(customerId)){
-		alert("客户编号不得是汉字！");
+		$.dialog.alert("客户编号不得是汉字！");
 		return false;
 	}
 	
@@ -115,42 +116,42 @@ function verificationParam(userData) {
 	var   customerIdParam =/^(-|\+)?\d+$/; 
 	if(!customerId.replace(/^ +| +$/g,'')==''){
 		if (!customerIdParam.test(customerId)) {
-			alert("请输入有效的客户编号！");
+			$.dialog.alert("请输入有效的客户编号！");
 			return false;
 		}
 		
 	}
 	//检查该访客信息是否存在
 	if(checkBlacklist_cusId()){
-	    alert("请输入有效的客户编号！");
+	    $.dialog.alert("请输入有效的客户编号！");
 	   return false;
    }
 
 	var ip = userData.ip;
 	if (ip.replace("^[ ]+$", "").length == 0) {
-		 alert("IP地址不得为空！");
+		 $.dialog.alert("IP地址不得为空！");
 		return false;
 	}
  	  var ipParam =/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
 		if (!ipParam.test(ip)) {
-			alert("ip地址格式不正确");
+			$.dialog.alert("ip地址格式不正确");
 			return false;
 		}
 	
 	if(checkBlacklist()){
-	    alert("此IP地址已存在！");
+	    $.dialog.alert("此IP地址已存在！");
 	   return false;
    }
 
 	var enddate = userData.enddate;
 	if (enddate.replace("^[ ]+$", "").length == 0) {
-		 alert("失效时间不得为空！");
+		 $.dialog.alert("失效时间不得为空！");
 		return false;
 	}
 
 	var description	 = userData.description;
 	if (description.replace(/^ +| +$/g,'')=='') {
-		 alert("阻止原因不得为空！");
+		 $.dialog.alert("阻止原因不得为空！");
 		return false;
 	}
 	
@@ -186,7 +187,7 @@ function checkBlacklist(){
 			}
 		},
 		error : function(msg){
-			alert("查询失败!");
+			$.dialog.alert("查询失败!");
 		}
 	});
 	return flag;
@@ -217,7 +218,7 @@ function checkBlacklist_cusId(){
 			}
 		},
 		error : function(msg){
-			alert("添加失败!");
+			$.dialog.alert("添加失败!");
 		}
 	});
 	return flag;
