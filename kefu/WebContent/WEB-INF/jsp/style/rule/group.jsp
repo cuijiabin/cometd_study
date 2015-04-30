@@ -31,9 +31,9 @@
         <div class="g-sd71">
             <h3 class="u-tit c-bg">已有分组</h3>
             <div class="m-group-menu f-txtc">
-                <ul class="e_tit">
+                <ul id="myul" class="e_tit">
                 	<c:forEach var="group" items="${groupList }">
-        				<li><a class="f-txtc" href="#" onClick="showDetail(${group.id})">${group.name }</a> 
+        				<li id="li${group.id }"><a class="f-txtc" href="#" onClick="showDetail(${group.id})">${group.name }</a> 
         					<span class="u-close f-fr" onClick="delGroup(${group.id})">&times;</span>
         				</li>
 					</c:forEach>
@@ -79,7 +79,20 @@
 	$(window).load(function(){
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
+	switchClass('${currentGroupId }');
 })(jQuery);
+
+//切换选中效果
+function switchClass(id){
+	var liobj=$("#myul li");
+    liobj.each(function(){
+    	if($(this).attr("id")==('li'+id)){
+    		$(this).addClass("on");
+    	}else{
+    		$(this).removeClass("on");
+    	}
+    });
+}
 
 var zTree;
 var demoIframe;
@@ -224,6 +237,7 @@ function addCallback(){
 
 //查看分组明细,切换中间明细
 function showDetail(groupId){
+	switchClass(groupId);
 	$("#currentGroupId").val(groupId);
 	var url="/busiGroupDetail/viewDetail.action";
 	var data = {

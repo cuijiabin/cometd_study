@@ -150,7 +150,7 @@ function editWait(styleId){
 //  	return;
 	$.dialog({content:'url:/waitList/edit.action?styleId='+styleId,
 		id: 'wait',
-		width: 700,height: 400,
+		width: 900,height: 500,
 		title:'等待列表配置',
 		lock:true
 	});

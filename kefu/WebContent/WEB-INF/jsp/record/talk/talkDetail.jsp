@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -28,9 +29,10 @@
     <div class="g-sd6 c-bor">
         <h3 class="u-tit c-bg">聊天记录时间线</h3>
         <input type="hidden" id="isShowTel" value="${isShowTel }" />        	
-        <ul class="m-recordtime">
+<!--         <ul class="m-recordtime"> -->
+        <ul id="myul" class="e_tit c-bor">
         	<c:forEach var="timeDia" items="${timeList }">
-        		<li><a href="#" onClick="showDetail(${timeDia.id})"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timeDia.beginDate}"/></a></li>
+        		<li id="li${timeDia.id }" ><a href="#" onClick="showDetail(${timeDia.id})"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timeDia.beginDate}"/></a></li>
 			</c:forEach>
         </ul>
     </div>
@@ -49,9 +51,25 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript">
 
+$(function(){
+	switchClass('${dialogue.id }');
+});
+
+//切换选中效果
+function switchClass(id){
+	var liobj=$("#myul li");
+    liobj.each(function(){
+    	if($(this).attr("id")==('li'+id)){
+    		$(this).addClass("on");
+    	}else{
+    		$(this).removeClass("on");
+    	}
+    });
+}
 
 //查看明细,切换右侧明细
 function showDetail(dialogueId){
+	switchClass(dialogueId);
 	var isShowTel = $("#isShowTel").val() ;
 	var url="/recordsCenter/queryTalkDetail.action";
 	var data = {

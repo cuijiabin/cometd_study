@@ -1,9 +1,7 @@
 package com.xiaoma.kefu.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -13,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.cache.CacheMan;
-import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.controller.AllotRuleController;
 import com.xiaoma.kefu.dao.WaitListDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
@@ -221,6 +217,7 @@ public class WaitListService {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String [] args){
 		List<DictItem> list = DictMan.getDictList("d_dialog_android");
 		for (DictItem dictItem : list){  

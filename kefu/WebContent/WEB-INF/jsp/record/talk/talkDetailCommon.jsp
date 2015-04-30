@@ -7,7 +7,6 @@
 <link rel="stylesheet" type="text/css"
 	href="/jsplugin/kkpager/src/kkpager.css" />
 <!-- 表格有边框 -->
-<div style="margin:50px">
 <table class="table table-bordered m-table c-bgfff f-mbn">
                 <tbody>
                     <tr>
@@ -34,5 +33,4 @@
             
 <div class="m-dialog c-bor c-bgfff" id="table_detail_data">
 	<jsp:include page="talkDetailCommonList.jsp"></jsp:include>
-</div>
 </div>

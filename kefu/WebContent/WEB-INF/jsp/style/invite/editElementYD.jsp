@@ -44,9 +44,9 @@
             <tbody>
                 <tr>
                     <td class="c-wd150 f-vat">
-                    	<ul class="e_tit c-bor">
+                    	<ul id="myul" class="e_tit c-bor">
                     		<c:forEach var="ele" items="${elementList }">
-								<li class="on">
+								<li id="li${ele.id }" >
 	                            	<a href="#" onclick="editDetail(${ele.id},${ele.sortId })">
 	                            		<b class="c-colf00">（${ele.sortId }）</b> 
 	                            		<span id="listName${ele.id }">${ele.name }</span>
@@ -80,10 +80,24 @@
 	$(window).load(function(){
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
+	switchClass('${inviteElement.id }');
 })(jQuery);
+
+//切换选中效果
+function switchClass(id){
+	var liobj=$("#myul li");
+    liobj.each(function(){
+    	if($(this).attr("id")==('li'+id)){
+    		$(this).addClass("on");
+    	}else{
+    		$(this).removeClass("on");
+    	}
+    });
+}
 
 //编辑元素
 function editDetail(id,sortId){
+	switchClass(id);
 	var url = '/inviteElement/editDetailYD.action';
 	$.ajax({
 	    type: "get",

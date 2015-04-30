@@ -14,7 +14,6 @@
 </head>
 
 <body>
-<div style="margin:50px">
 <div class="g-cnt f-padd20">
 	<div class="f-padd20 f-fl" style="border-right:1px dashed #d9d9d9; float: left">
         <div class="f-txtr">
@@ -46,7 +45,6 @@
 			<jsp:include page="editTwo.jsp"></jsp:include>
 		</div>
     </div>
-</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

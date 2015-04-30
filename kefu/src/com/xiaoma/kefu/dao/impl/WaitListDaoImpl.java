@@ -66,7 +66,7 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 	}
 	
 	/**
-	 * 校验名称是否存在
+	 * 校验名称是否存在(一级菜单)
 	 * @param waitList
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 		if(waitList==null) return result;
 		if(waitList.getId()!=null){
 			//更新校验
-			String hql = " from WaitList t where t.id != :id and t.styleId = :styleId and t.name = :name ";
+			String hql = " from WaitList t where t.id != :id and t.styleId = :styleId and t.name = :name and t.pId = 0 ";
 			Query query = session.createQuery(hql);
 			query.setInteger("id", waitList.getId());
 			query.setInteger("styleId", waitList.getStyleId());
@@ -84,7 +84,7 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 			result = query.list().size();
 		}else{
 			//新增
-			String hql = " from WaitList t where t.styleId = :styleId and t.name = :name ";
+			String hql = " from WaitList t where t.styleId = :styleId and t.name = :name and t.pId = 0 ";
 			Query query = session.createQuery(hql);
 			query.setInteger("styleId", waitList.getStyleId());
 			query.setString("name", waitList.getName());
@@ -144,6 +144,7 @@ public class WaitListDaoImpl extends BaseDaoImpl<WaitList> implements WaitListDa
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<WaitList> findListById(Integer styleId,Integer id){
 		Session session = getSession();
 		String hql = "from WaitList a where a.styleId=:styleId and a.pId = :id ";
