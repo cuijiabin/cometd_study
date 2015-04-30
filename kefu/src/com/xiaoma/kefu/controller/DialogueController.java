@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -240,8 +241,17 @@ public class DialogueController {
 		
 		Customer customer = customerService.getCustomerById(id);
 		
+		logger.info("url : customerChat.action customerId: "+id +" ,isNew : "+isNew);
 		//添加临时对话信息
 		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(id.toString(),null);
+		Log.info("get dInfo: "+ dInfo);
+		
+		if(dInfo == null){
+		    dInfo = new DialogueInfo();
+			dInfo.setCustomerId(Long.valueOf(customerId));
+			dInfo.setUserCcnId("-1");
+		}
+		
 		dInfo.setBtnCode(btnCode);
 		dInfo.setConsultPage(consultPage);
 		dInfo.setIp(customer.getIp());

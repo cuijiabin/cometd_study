@@ -125,7 +125,7 @@ public class CacheMan {
 		try {
 			Jedis jedis = JedisDao.getJedis();
 			Set<String> keys = jedis.keys(cacheName + "*");
-			if(keys == null || keys.size() < 1){
+			if(CollectionUtils.isEmpty(keys)|| keys.size() < 1){
 				return ;
 			}
 			String[] delKeys = new String[keys.size()];

@@ -143,6 +143,10 @@ public class FunctionController {
 			if(user==null)
 				return "login";
 			Keyboard key = funcService.findkeyById(user.getId());
+			if(key==null){
+				funcService.savekey(null, user);
+			   key = funcService.findkeyById(user.getId());
+			}
 			model.addAttribute("key",key);
 	        return "/set/person/key";
 		} catch (Exception e) {

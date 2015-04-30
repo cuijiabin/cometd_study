@@ -664,6 +664,8 @@ public class JedisTalkDao {
 			 value = jedis.hget(key, userCcnId);
 		}catch(Exception e){
 			e.printStackTrace();
+			logger.info("getDialogueScore error param: key:"+key +" ,field: "+ userCcnId);
+			value = "";
 		}
 		
 		

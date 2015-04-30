@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import net.coobird.thumbnailator.Thumbnails;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,8 @@ import com.xiaoma.kefu.util.SysConst.StylePicName;
  */
 @Service
 public class ServiceIconService {
+	private Logger logger = Logger.getLogger(ServiceIconService.class);
+	
 	
 	@Autowired
 	private ServiceIconDao serviceIconDaoImpl;
@@ -520,6 +523,7 @@ public class ServiceIconService {
 					+ "/" + StylePicName.客服图标PC在线.getCode();
 			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
 			
+			logger.info("initIconPic.sourcePath1="+sourcePath);
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
 			icon.setHeight(image.getHeight());
 			icon.setWidth(image.getWidth());
@@ -562,7 +566,7 @@ public class ServiceIconService {
 			String temp = FileUtil.getStyleRootPath(icon.getStyleId())
 					+ "/" + StylePicName.客服图标移动在线.getCode();
 			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
-			
+			logger.info("initIconPic.sourcePath2="+sourcePath);
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
 			icon.setHeight(image.getHeight());
 			icon.setWidth(image.getWidth());

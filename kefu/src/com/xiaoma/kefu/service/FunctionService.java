@@ -81,7 +81,7 @@ public class FunctionService {
 	public Integer saveFunc(Integer roleId, Integer deptId, String ids) {
 		RoleDept roleDept = roleDeptDao.findRoleDeptBy(roleId, deptId);
 		Integer success = roleDeptDao.deleteRD(roleDept.getId());
-		if(ids=="")
+		if (ids == "")
 			return 1;
 		if (success == 1) {
 			if (roleDept != null) {
@@ -98,12 +98,14 @@ public class FunctionService {
 		}
 		return 0;
 	}
-    /**
-     * 查询出所拥有的权限串
-     * @param roleId
-     * @param deptId
-     * @return
-     */
+
+	/**
+	 * 查询出所拥有的权限串
+	 * 
+	 * @param roleId
+	 * @param deptId
+	 * @return
+	 */
 	public String checkedFunc(Integer roleId, Integer deptId) {
 		RoleDept roleDept = roleDeptDao.findRoleDeptBy(roleId, deptId);
 		if (roleDept != null) {
@@ -121,104 +123,124 @@ public class FunctionService {
 		}
 		return 0 + ",";
 	}
+
 	/**
 	 * 将所有用的权限拼接成一个字符串
+	 * 
 	 * @param id
 	 * @return
 	 */
-    @SuppressWarnings("unchecked")
-	public Object userFuncs(Integer id){
-    	User user = userDao.findById(User.class, id);
-    	RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(), user.getDeptId());
-		List<Function> list= funcDao.getUserFuc(roleDept.getId());
-		String userFunc="";
+	@SuppressWarnings("unchecked")
+	public Object userFuncs(Integer id) {
+		User user = userDao.findById(User.class, id);
+		RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(),
+				user.getDeptId());
+		List<Function> list = funcDao.getUserFuc(roleDept.getId());
+		String userFunc = "";
 		for (Function func : list) {
-			userFunc+=","+func.getCode()+",";
+			userFunc += "," + func.getCode() + ",";
 		}
 		return userFunc;
-    }
-    
-    /**
-     * 查询头部信息权限对比返回
-     * @param list
-     * @param codes
-     * @return
-     */
+	}
+
+	/**
+	 * 查询头部信息权限对比返回
+	 * 
+	 * @param list
+	 * @param codes
+	 * @return
+	 */
 	public List<Function> checkFuncOne(List<Function> list, String codes) {
 		List<Function> listFunc = new ArrayList<Function>();
-		if(list == null){
+		if (list == null) {
 			return listFunc;
 		}
 		for (Function func : list) {
-			int count = codes.indexOf(","+func.getCode()+",");
-			if(count>=0){
+			int count = codes.indexOf("," + func.getCode() + ",");
+			if (count >= 0) {
 				listFunc.add(func);
 			}
 		}
 		return listFunc;
 	}
-    
-    /**
-     * 保存快捷键
-     * @param keyboard
-     * @param user
-     * @return
-     */
+
+	/**
+	 * 保存快捷键
+	 * 
+	 * @param keyboard
+	 * @param user
+	 * @return
+	 */
 	public Integer savekey(Keyboard keyboard, User user) {
-		List<Keyboard> list = keyDao.findByUesrId(user.getId());
-		if(!list.isEmpty())
-        keyDao.deleteByUserId(user.getId());
-		keyboard.setUserId(user.getId());
-		Integer value = (Integer) keyDao.add(keyboard);
-		return value;
+		if (keyboard == null) {
+			Keyboard k = new Keyboard();
+			k.setUserId(user.getId());
+			k.setPicKey("A");
+			k.setShowKey("Z");
+			k.setLastKey("2");
+			k.setNextKey("3");
+			k.setSendKey(1);
+			Integer value = (Integer) keyDao.add(k);
+			return value;
+		} else {
+			List<Keyboard> list = keyDao.findByUesrId(user.getId());
+			if (!list.isEmpty())
+				keyDao.deleteByUserId(user.getId());
+			keyboard.setUserId(user.getId());
+			Integer value = (Integer) keyDao.add(keyboard);
+			return value;
+		}
 	}
 
 	public Integer saveRemind(RemindType remindType, User user) {
 		List<RemindType> list = remindDao.findRemindByUesrId(user.getId());
-		if(!list.isEmpty())
-		remindDao.deleteRemindByUserId(user.getId());
+		if (!list.isEmpty())
+			remindDao.deleteRemindByUserId(user.getId());
 		remindType.setUserId(user.getId());
-		if(remindType.getLsoundEffect()==null)
+		if (remindType.getLsoundEffect() == null)
 			remindType.setLsoundEffect(0);
-		if(remindType.getBubble()==null)
+		if (remindType.getBubble() == null)
 			remindType.setBubble(0);
-		if(remindType.getJsoundEffect()==null)
+		if (remindType.getJsoundEffect() == null)
 			remindType.setJsoundEffect(0);
-		if(remindType.getReSoundEffect()==null)
+		if (remindType.getReSoundEffect() == null)
 			remindType.setReSoundEffect(0);
-		if(remindType.getUpHint()==null)
+		if (remindType.getUpHint() == null)
 			remindType.setUpHint(0);
 		remindType.setCreateDate(new Date());
 		Integer value = (Integer) remindDao.add(remindType);
 		return value;
 	}
 
-	public String saveFile(MultipartFile file,User user,String name) throws IOException {
-	
-		//获取需要保存的路径
-        String savePath = DictMan.getDictItem("d_sys_param", 14).getItemName()+"/"+"remindSound"+"/"+user.getLoginName();
-        String saveName = name;
-        String fileName = file.getOriginalFilename();//名称
-        String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx 
-        //路径+文件名
-        String tempPath = savePath+"/"+saveName+extensionName;
-        //保存文件
-        FileUtil.saveFile(savePath, saveName+extensionName, file);
+	public String saveFile(MultipartFile file, User user, String name)
+			throws IOException {
+
+		// 获取需要保存的路径
+		String savePath = DictMan.getDictItem("d_sys_param", 14).getItemName()
+				+ "/" + "remindSound" + "/" + user.getLoginName();
+		String saveName = name;
+		String fileName = file.getOriginalFilename();// 名称
+		String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀
+																				// .xxx
+		// 路径+文件名
+		String tempPath = savePath + "/" + saveName + extensionName;
+		// 保存文件
+		FileUtil.saveFile(savePath, saveName + extensionName, file);
 		return tempPath;
 	}
 
 	public Keyboard findkeyById(Integer id) {
 		List<Keyboard> list = keyDao.findByUesrId(id);
-		if(list.isEmpty())
-		return null;
+		if (list.isEmpty())
+			return null;
 		return list.get(0);
-				
+
 	}
 
 	public RemindType findRemindByUserId(Integer id) {
 		List<RemindType> list = remindDao.findRemindByUesrId(id);
-		if(list.isEmpty())
-		return null;
+		if (list.isEmpty())
+			return null;
 		return list.get(0);
 	}
 
