@@ -65,8 +65,8 @@ public class MessageTypeService {
 	/**
 	 * 条件查询
 	 */
-	public MessageType getResultBySearch(String typeId, String title){
-		return  messageTypeDaoImpl.getResultBySearch(typeId,title);
+	public MessageType getResultBySearch(Integer typeId, String title,Integer userId){
+		return  messageTypeDaoImpl.getResultBySearch(typeId,title,userId);
 		
 	}
 	 /**

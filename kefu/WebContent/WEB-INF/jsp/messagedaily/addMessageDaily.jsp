@@ -15,6 +15,7 @@
 </head>
 <body>
   	<h3  class="u-tit c-bg c-bortit">常用语信息</h3>
+  	  <input type="hidden" readonly="readonly" id="typeId" name="typeId" value="${typeId}"/>
   	  <input type="hidden" readonly="readonly" id="messageTypeId" name="messageTypeId" value="${treeId}"/>
   	   <div style="margin:50px;">
       <table class="table table-bordered m-table">
@@ -62,7 +63,8 @@ function addMessageDaily(){
 	    "messageTypeId"   : $("#messageTypeId").val(),  
 	  	"title" : $("#title").val(),
 	  	"content" : $("#content").val(),
-	  	"status" : status
+	  	"status" : status,
+	  	"typeId" : $("#typeId").val()
 	   };
 	  
 	//新增时验证参数

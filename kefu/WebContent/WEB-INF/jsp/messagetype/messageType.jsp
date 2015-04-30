@@ -43,6 +43,7 @@
 <div style="margin:50px">
 <div class="g-cnt">
 	<input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
+	<input type="hidden" readonly="readonly" name="userId" id="userId" value="${userId }"/>
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
         <div class="m-query-hd f-txtr">
@@ -105,7 +106,8 @@ function find(){
 	var url="/messageType/search.action";
 	var data = {
 			"title" : $("#searTitle").val().trim(),
-			"typeId" : $("#typeId").val().trim()
+			"typeId" : $("#typeId").val().trim(),
+			"userId" : $("#userId").val().trim()
 	};
 	$.ajax({
 	    type: "get",

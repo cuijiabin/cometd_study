@@ -252,8 +252,8 @@ public class MessageTypeController {
 	 * 条件查询
 	 */
 	@RequestMapping(value = "search.action",method = RequestMethod.GET)
-	public String search(Model model,String typeId,String title){
-		MessageType messageType = messageTypeService.getResultBySearch(typeId,title);
+	public String search(Model model,Integer typeId,String title,Integer userId){
+		MessageType messageType = messageTypeService.getResultBySearch(typeId,title,userId);
 		model.addAttribute("messageType", messageType);
 		return "messagetype/messageTypeDetail";
 	}

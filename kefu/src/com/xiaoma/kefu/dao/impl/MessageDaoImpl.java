@@ -47,7 +47,19 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				String title = conditions.get("title").trim();
 				if (StringHelper.isNotEmpty(title)) {
 					role.add(Restrictions.like("title",
-							"%" + conditions.get("title").trim() + "%"));
+							"%" + title + "%"));
+				}
+				if (StringHelper.isNotEmpty(conditions.get("type"))) { //获得常用语的类型
+					 String type = conditions.get("type").trim();
+					 int tpe=Integer.parseInt(type);
+					 if (tpe==1) {
+						role.add(Restrictions.eq("typeId", tpe));
+					}else {
+						role.add(Restrictions.eq("typeId", tpe));
+						String userId = conditions.get("userId").trim();
+						int user = Integer.parseInt(userId);
+						role.add(Restrictions.eq("userId", user));
+					}
 				}
 			}
 			orders.add(Order.desc("createDate"));

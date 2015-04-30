@@ -59,7 +59,7 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     * @param title
     * @return
     */
-    public  MessageType getResultBySearch(String typeId,String title);
+    public  MessageType getResultBySearch(Integer typeId,String title,Integer userId);
 
 
 }

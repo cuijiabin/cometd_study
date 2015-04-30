@@ -48,10 +48,16 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 	 * 条件查询
 	 */
 	@Override
-	public MessageType getResultBySearch(String typeId ,String title){
+	public MessageType getResultBySearch(Integer typeId ,String title,Integer userId){
 		Session session = getSession();
 		String hql = "select a.* from message_type a where 1=1 ";
-		 hql += "and a.typeId="+typeId+" "; 
+		if(typeId==1){
+			 hql += "and a.typeId="+typeId+" "; 
+		}else {
+			 hql += " and a.userId="+userId+"  ";
+			 hql += "and a.typeId="+typeId+" "; 
+		}
+		
 		 if (StringHelper.isNotEmpty(title)) {
 			 hql +=" and a.title like '"+"%"+title+"%" +"'";
 		}

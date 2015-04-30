@@ -78,7 +78,7 @@ public class MessageController {
 			model.addAttribute("json", json.toString());
 			model.addAttribute("typeId", id);  //参数id为 类型(1,公用；2，个人)
 			model.addAttribute("messageType", mType);   //树的默认选中项
-		   
+		    model.addAttribute("userId", userId);
 			return "messagedaily/messageDaily";
 		} else {
 			return "/error500";
@@ -137,13 +137,14 @@ public class MessageController {
 	 * @return 返回值
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
-	public String toSave(Model model, Integer treeId) {
+	public String toSave(Model model, Integer treeId,Integer typeId) {
 		Integer numId =  messageService.maxId();
 		if (numId==null) {
 			numId =0;
 		}
 		model.addAttribute("numId", numId+1);
 		model.addAttribute("treeId", treeId);
+		model.addAttribute("typeId", typeId);
 		return "messagedaily/addMessageDaily";
 	}
 	

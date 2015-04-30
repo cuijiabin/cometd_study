@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.MessageDao;
-import com.xiaoma.kefu.dao.impl.MessageDaoImpl;
 import com.xiaoma.kefu.model.Message;
 import com.xiaoma.kefu.util.PageBean;
 

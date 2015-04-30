@@ -41,6 +41,7 @@
  %>
  <div style="margin:50px">
 <div class="g-cnt">
+<input type="hidden" readonly="readonly" name="userId" id="userId" value="${userId}" />
 <input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
 <input type="hidden" readonly="readonly" name="messageDailyId" id="messageDailyId" value="${messageType.id}" />
     <!-- 查询条件 -->
@@ -96,8 +97,10 @@ var api = frameElement.api,W=api.opener;
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
-			"typeId" : $("#typeId").val(),
+			"map[type]" : $("#typeId").val(),
+			"typeId" : $("#typeId").val(), //仅供做权限时使用
 			"map[title]":$("#serchTitle").val(),
+			"map[userId]" : $("#userId").val(),
 			"map[typeId]":1
 	};
 	$.ajax({
@@ -136,7 +139,8 @@ var api = frameElement.api,W=api.opener;
 	   var tid = nodes[i].id;  //得到选中的树的id 
 	  }
 	var treeId = tid;
- 	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+' ',
+	var typeId = $("#typeId").val();
+ 	var d = $.dialog({id:'addMessageDaily' ,title:"添加常用语信息",content:'url:/messageDaily/new.action?treeId='+treeId+'&typeId='+typeId+' ',
  			lock:true, width:	600,height: 400});
  }
   /*
