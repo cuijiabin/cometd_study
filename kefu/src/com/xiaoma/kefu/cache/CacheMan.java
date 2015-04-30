@@ -64,13 +64,12 @@ public class CacheMan {
 	public static List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
 		try {
 			String key = CacheUtil.getCacheName(CacheName.ONLINE_USER_STYLEID, styleId);
-			Object obj = JedisDao.getObject(key,List.class);
-			if (obj == null) {
-				obj = CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
-				if (obj != null)
-					JedisDao.setKO(key, obj);
+			List<Integer> list = JedisDao.getKList(key,Integer.class);
+			if (CollectionUtils.isEmpty(list)) {
+				list = (List<Integer>) CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
+				if (CollectionUtils.isNotEmpty(list))
+					JedisDao.setKList(key, list);
 			}
-			List<Integer> list = (List<Integer>) obj;
 			Set<Integer> userIds = new HashSet<Integer>(list);
 			List<String> ids = JedisTalkDao.getSwitchList();
 			Set<Integer> onUserIds = JsonUtil.convertString2IntegerSet(ids);

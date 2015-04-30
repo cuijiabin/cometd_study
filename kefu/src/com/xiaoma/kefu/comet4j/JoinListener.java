@@ -75,6 +75,8 @@ public class JoinListener extends ConnectListener {
 					Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
 					JedisTalkDao.delCustomerWaitSet(customerCcnId);
 					
+					logger.info("客服："+userId+" ,接待通信点id： "+customerCcnId);
+					
 					JedisTalkDao.addCcnReceiveList(ccnId, customerCcnId);
 					
 					//设置被谁接待
@@ -132,6 +134,8 @@ public class JoinListener extends ConnectListener {
 				JedisTalkDao.addUserCcnList(customerId, ccnId);
 				JedisTalkDao.addCcnList(JedisConstant.CUSTOMER_TYPE, ccnId);
 
+				logger.info("客户："+customerId+" ,进入对话系统;");
+				
 				CometConnection myCcn = engine.getConnection(ccnId);
 
 				// 分配客服
@@ -142,7 +146,7 @@ public class JoinListener extends ConnectListener {
 					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
-					
+					logger.info("客户："+customerId+" ,进入等待队列！");
 					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
 					
 					return true;
@@ -155,7 +159,7 @@ public class JoinListener extends ConnectListener {
 				
 				//设置被谁接待
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
-				logger.info("前端用户："+customerId+" ,进入对话系统; 通信点id： "+ccnId+"被通知客服通信点id："+allocateCnnId);
+				logger.info("客户："+customerId+" 通信点id： "+ccnId+"被接待，客服通信点id："+allocateCnnId);
 				
 				//通知客更新后台列表
 		        CometConnection ccn = engine.getConnection(allocateCnnId);

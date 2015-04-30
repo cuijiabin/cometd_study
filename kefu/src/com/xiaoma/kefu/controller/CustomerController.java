@@ -60,6 +60,9 @@ public class CustomerController {
 	public String getCustomerInfo(Model model, Long customerId) {
 		
 		try {
+			if(customerId == null){
+				
+			}
 			Customer customer = customerService.getCustomerById(customerId);
 			
 			model.addAttribute("result",JsonUtil.toJson(customer));
