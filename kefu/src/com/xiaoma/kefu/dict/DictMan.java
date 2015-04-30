@@ -119,14 +119,12 @@ public class DictMan {
 		table = table.toLowerCase();
 		DictItem dt = null;
 		if (value != null) {
-			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value),DictItem.class);
+			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value,DictItem.class);
 			if (dt == null) {
-				getDictList(table);
-				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+String.valueOf(value),DictItem.class);
+				getDictList(CacheName.DICTLIST,table);
+				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value,DictItem.class);
 			}
 		}
-		if (dt == null)
-			dt = new DictItem();
 		return dt;
 	}
 	public static void main(String[] args) {

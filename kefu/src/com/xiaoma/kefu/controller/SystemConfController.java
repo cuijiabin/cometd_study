@@ -2,12 +2,15 @@ package com.xiaoma.kefu.controller;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.service.DictitemService;
@@ -26,7 +29,7 @@ import com.xiaoma.kefu.util.StringHelper;
 @Controller
 @RequestMapping(value = "sys")
 public class SystemConfController {
-
+	private static Log log = LogFactory.getLog(SystemConfController.class);
 	@Autowired
 	private DictitemService dictItemService;
 
@@ -36,7 +39,6 @@ public class SystemConfController {
 	 */
 	@RequestMapping(value = "visitRegister.action", method = RequestMethod.GET)
 	public String visitRegister(Model model) {
-		List<DictItem> list = DictMan.getDictList("d_dialog_android");
 		model.addAttribute("message", DictMan.getDictItem("d_sys_param",5));
 		model.addAttribute("dialog", DictMan.getDictItem("d_sys_param",6));
 		model.addAttribute("info", DictMan.getDictItem("d_sys_param",7));
