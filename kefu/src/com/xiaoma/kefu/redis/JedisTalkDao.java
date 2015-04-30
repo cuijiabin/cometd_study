@@ -102,18 +102,8 @@ public class JedisTalkDao {
 	 */
 	public static Boolean remUserCcnList(String userId, String ccnId) {
 
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genUserCcnListKey(userId);
-			Long replay = jedis.zrem(key, ccnId);
-			logger.info("redis zrem key:" + key + " value: " + ccnId);
-			return (replay > 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::remUserCcnList:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.genUserCcnListKey(userId);
+		return JedisDao.zrem(key, ccnId);
 	}
 
 	//##########当前通信点列表#########################
@@ -132,17 +122,8 @@ public class JedisTalkDao {
 
 	public static Integer getCcnListSize(Integer type) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genCcnListKey(type);
-			Long size = jedis.zcard(key);
-			return size.intValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.genCcnListKey(type);
+		return JedisDao.zcard(key);
 	}
 
 	/**
@@ -167,18 +148,8 @@ public class JedisTalkDao {
 	 */
 	public static Boolean remCcnList(Integer type, String ccnId) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genCcnListKey(type);
-			Long replay = jedis.zrem(key, ccnId);
-			logger.info("redis zrem key:" + key + " value: " + ccnId);
-			return (replay > 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.genCcnListKey(type);
+		return JedisDao.zrem(key, ccnId);
 	}
 
 	//##########用户最大接待数量#########################
@@ -199,53 +170,14 @@ public class JedisTalkDao {
 		return true;
 	}
 
-	public static Boolean incrMaxReceiveCount(String userId) {
-		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genMaxReceiveCountKey(userId);
-			Long replay = jedis.incr(key);
-			logger.info("redis incr key:" + key);
-			return (replay > 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
-	}
-
-	public static Boolean decrMaxReceiveCount(String userId) {
-		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genMaxReceiveCountKey(userId);
-			Long replay = jedis.decr(key);
-			logger.info("redis decr key:" + key);
-			return (replay > 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
-	}
 
 	//##########用户当前接待数量#########################
 
 	public static Integer getCurrentReceiveCount(String ccnId) {
+
+		String key = JedisConstant.genCcnReceiveListKey(ccnId);
+		return JedisDao.zcard(key);
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genCcnReceiveListKey(ccnId);
-			Long size = jedis.zcard(key);
-			return size.intValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
 	}
 
 	//##########用户当前接待列表#########################
@@ -259,20 +191,8 @@ public class JedisTalkDao {
 
 	public static Long getCcnReceiveScore(String ccnId, String member) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genCcnReceiveListKey(ccnId);
-			Double socre = jedis.zscore(key, member);
-			if (socre == null) {
-				return null;
-			}
-			return socre.longValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.genCcnReceiveListKey(ccnId);
+		return JedisDao.zscore(key, member);
 	}
 
 	/**
@@ -289,19 +209,9 @@ public class JedisTalkDao {
 	}
 
 	public static Boolean remCcnReceiveList(String ccnId, String opeCcnId) {
-		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.genCcnReceiveListKey(ccnId);
-			Long replay = jedis.zrem(key, opeCcnId);
-			logger.info("redis zrem key:" + key + " value: " + opeCcnId);
-			return (replay > 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+
+		String key = JedisConstant.genCcnReceiveListKey(ccnId);
+		return JedisDao.zrem(key, opeCcnId);
 	}
 
 	//##########客户被动接待#########################
@@ -333,35 +243,6 @@ public class JedisTalkDao {
 		return true;
 	}
 
-	//##########对话关系#########################
-	
-	/**
-	 * 获取对话关系ccnId
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static String getTalkerCcnId(Integer type, String ccnId) {
-		
-		String key = JedisConstant.genTalkerRelationKey(type, ccnId);
-		String value = JedisDao.getValue(key);
-		return value;
-	}
-
-	public static Boolean setTalkerCcnId(Integer type, String ccnId,String opeCcnId) {
-		
-		String key = JedisConstant.genTalkerRelationKey(type, ccnId);
-		JedisDao.setKV(key, opeCcnId);
-		return true;
-	}
-
-	public static Boolean delTalkerCcnId(Integer type, String ccnId) {
-		
-		String key = JedisConstant.genTalkerRelationKey(type, ccnId);
-		JedisDao.remove(key);
-		return true;
-	}
-
 	//##########对话内容#########################
 	/**
 	 * 对话内容列表操作 get
@@ -371,34 +252,16 @@ public class JedisTalkDao {
 	 */
 	public static List<String> getDialogueList(String uccnId, String cccnId) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.getDialogueListKey(uccnId, cccnId);
-			List<String> list = jedis.lrange(key, 0, -1);
-			return list;
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.getDialogueListKey(uccnId, cccnId);
+		List<String> list = JedisDao.lrangeAll(key);
+		return list;
 	}
 
 	public static Boolean addDialogueList(String uccnId, String cccnId,
 			String message) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			String key = JedisConstant.getDialogueListKey(uccnId, cccnId);
-			Long id = jedis.rpush(key, message);
-			logger.info("redis rpush key:" + key + " value: " + message);
-			return (id >= 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		String key = JedisConstant.getDialogueListKey(uccnId, cccnId);
+		return JedisDao.rpush(key, message);
 	}
 
 	public static Boolean delDialogueList(String uccnId, String cccnId) {
@@ -447,16 +310,7 @@ public class JedisTalkDao {
 	//##########离线客户列表#########################
 	public static Set<String> getOffLineUserSet() {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Set<String> set = jedis.zrange(JedisConstant.OFF_LINE_USER_SET, 0,-1);
-			return set;
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return JedisDao.zrangeAll(JedisConstant.OFF_LINE_USER_SET);
 	}
 
 	public static Boolean addOffLineUserSet(String userId) {
@@ -466,32 +320,13 @@ public class JedisTalkDao {
 
 	public static Boolean remOffLineUserSet(String userId) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Long id = jedis.zrem(JedisConstant.OFF_LINE_USER_SET, userId);
-			logger.info("redis zrem key:" + JedisConstant.OFF_LINE_USER_SET
-					+ " value: " + userId);
-			return (id >= 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return JedisDao.zrem(JedisConstant.OFF_LINE_USER_SET, userId);
 	}
 
 	public static Boolean isInOffLineUserSet(String userId) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Double score = jedis.zscore(JedisConstant.OFF_LINE_USER_SET, userId);
-			return (score != null);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		Long score = JedisDao.zscore(JedisConstant.OFF_LINE_USER_SET, userId);
+		return (score != null);
 	}
 
 	//##########客户等待列表#########################
@@ -502,16 +337,7 @@ public class JedisTalkDao {
 	 */
 	public static Set<String> getCustomerWaitSet() {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Set<String> set = jedis.zrange(JedisConstant.CUSTOMER_WAIT_SET, 0,-1);
-			return set;
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return JedisDao.zrangeAll(JedisConstant.CUSTOMER_WAIT_SET);
 	}
 
 	/**
@@ -527,35 +353,12 @@ public class JedisTalkDao {
 
 	public static Boolean remCustomerWaitSet(String ccnId) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Long id = jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, ccnId);
-			logger.info("redis zrem key:" + JedisConstant.CUSTOMER_WAIT_SET
-					+ " value: " + ccnId);
-			return (id >= 0);
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return  JedisDao.zrem(JedisConstant.CUSTOMER_WAIT_SET, ccnId);
 	}
 
 	public static Integer sizeCustomerWaitSet() {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Long card = jedis.zcard(JedisConstant.CUSTOMER_WAIT_SET);
-			if (null == card) {
-				return 0;
-			}
-			return card.intValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return JedisDao.zcard(JedisConstant.CUSTOMER_WAIT_SET);
 	}
 
 	public static String popCustomerWaitSet() {
@@ -585,7 +388,7 @@ public class JedisTalkDao {
 		
 		Jedis jedis = JedisDao.getJedis();
 		try {
-			jedis.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
+			JedisDao.zrem(JedisConstant.CUSTOMER_WAIT_SET, member);
 		} catch (Exception e) {
 			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
 		} finally {
@@ -595,38 +398,17 @@ public class JedisTalkDao {
 
 	public static Long getCustomerWaitScore(String member) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Double socre = jedis.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
-			if (socre == null) {
-				return null;
-			}
-			return socre.longValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
+		return JedisDao.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
 	}
 
 	public static Integer getCustomerWaitTime(String member) {
 		
-		Jedis jedis = JedisDao.getJedis();
-		try {
-			Double socre = jedis.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
-			if (socre == null) {
+			Long diff = JedisDao.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
+			if (diff == null) {
 				return null;
 			}
-			Long diff = System.currentTimeMillis() - socre.longValue();
 			diff = diff / 1000;
 			return diff.intValue();
-		} catch (Exception e) {
-			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
-		} finally {
-			pool.returnResource(jedis);
-		}
-		return null;
 	}
 
 	//##########对话信息#########################

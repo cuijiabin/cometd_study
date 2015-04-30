@@ -288,6 +288,75 @@ public class JedisDao {
 		}
 		return true;
 	}
+	
+	public static Boolean zrem(String key,String member){
+		try {
+			jedis = getJedis();
+			Long id = jedis.zrem(key, member);
+			return (id >= 0);
+		} catch (Exception e) {
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return true;
+	}
+	
+	public static Integer zcard(String key){
+		try {
+			jedis = getJedis();
+			Long size = jedis.zcard(key);
+			return size.intValue();
+		} catch (Exception e) {
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return null;
+	}
+	
+	
+	public static Long zscore(String key, String member){
+		try {
+			jedis = getJedis();
+			Double socre = jedis.zscore(key, member);
+			if (socre == null) {
+				return null;
+			}
+			return socre.longValue();
+		} catch (Exception e) {
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return null;
+	}
+	
+	public static List<String> lrangeAll(String key){
+		try {
+			jedis = getJedis();
+			return jedis.lrange(key, 0, -1);
+		} catch (Exception e) {
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return null;
+	}
+	
+	public static Boolean rpush(String key,String member){
+		try {
+			jedis = getJedis();
+			Long id = jedis.rpush(key, member);
+			return (id >= 0);
+		} catch (Exception e) {
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return true;
+	}
+	
 
 	public static void main(String[] args) {
 		setKV("test", "test");
