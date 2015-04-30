@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.xiaoma.kefu.model.Message;
@@ -55,5 +56,12 @@ public interface MessageDao extends BaseDao<Message> {
 	 * @return
 	 */
 	public Integer checkDaily(Integer messageTypeId);
+	/***
+	 * 根据typeId查询所有的分类
+	 * @param typeId
+	 * @param userId
+	 * @return
+	 */
+	public List<Message> findAllByParam(Integer typeId,Integer userId);
 
 }

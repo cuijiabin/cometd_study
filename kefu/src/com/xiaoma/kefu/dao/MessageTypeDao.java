@@ -61,5 +61,11 @@ public interface MessageTypeDao extends BaseDao<MessageType> {
     */
     public  MessageType getResultBySearch(Integer typeId,String title,Integer userId);
 
-
+    /***
+	 * 根据typeId查询所有的分类
+	 * @param typeId
+	 * @param userId
+	 * @return
+	 */
+	public List<MessageType> findAllByParam(Integer typeId,Integer userId);
 }

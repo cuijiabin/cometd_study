@@ -2,6 +2,7 @@ package com.xiaoma.kefu.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -18,7 +19,7 @@ import com.xiaoma.kefu.util.StringHelper;
  */
 @Repository("messageTypeDaoImpl")
 public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements MessageTypeDao {
-  
+	 private static Logger logger   = Logger.getLogger(MessageTypeDaoImpl.class);
 	@Override
 	public List<MessageType> findTree(int typeId,int userId) {
 		Session session = getSession();
@@ -142,5 +143,26 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 		return count;
 
 	}
-
+	/***
+	 * 根据typeId查询所有的分类
+	 * @param typeId
+	 * @param userId
+	 * @return
+	 */
+	public List<MessageType> findAllByParam(Integer typeId,Integer userId){
+		try {
+			Session session = getSession();
+			String sql = "from MessageType a where a.typeId="+typeId;
+			if(typeId == 2){
+				sql += " and a.userId="+userId;
+			}
+			Query query = session.createQuery(sql);
+			List<MessageType> list = (List<MessageType>)query.list();
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
 }

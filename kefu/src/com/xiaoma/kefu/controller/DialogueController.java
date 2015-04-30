@@ -36,6 +36,7 @@ import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
+import com.xiaoma.kefu.service.MessageService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.AddressUtil;
@@ -64,6 +65,9 @@ public class DialogueController {
 	
 	@Autowired
 	private StyleService styleService;
+	
+	@Autowired
+	private MessageService messageService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 	
@@ -327,7 +331,9 @@ public class DialogueController {
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null)
 			return "login";
+		String json = messageService.findAllUserMessage(user.getId());
 		model.addAttribute(CacheName.USER, user);
+		model.addAttribute("json", json);
 		return "/dialogue/userChat";
 	}
 

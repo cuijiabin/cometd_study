@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="/jsplugin/exp/css/style.css" />
+<link rel="stylesheet" href="/jsplugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
 </head>
 
 <body scroll="no" class="g-body">
@@ -131,7 +132,9 @@
 	                	<a class="f-fr" href="#">添加</a>
 	                    <a class="f-fl" href="#">常用语管理</a>
 	                </h3>
-	                <div class="m-sidemenu-cnt">1</div>
+	                <div class="m-sidemenu-cnt">
+						<jsp:include page="message.jsp" />
+					</div>
 	            </div>
 	        	<div class="c-bor">
 	                <h3 class="u-tit c-bg">
@@ -180,9 +183,11 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
+
 <script language="javascript" for="window" event="onload"> 
 	
     setInterval('dialogueSize()',30000);

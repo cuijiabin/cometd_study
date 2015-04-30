@@ -159,4 +159,26 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			return id;
 		
 		}
+		/***
+		 * 根据typeId查询所有的分类
+		 * @param typeId
+		 * @param userId
+		 * @return
+		 */
+		public List<Message> findAllByParam(Integer typeId,Integer userId){
+			try {
+				Session session = getSession();
+				String sql = "from Message a where a.typeId="+typeId;
+				if(typeId == 2){
+					sql += " and a.userId="+userId;
+				}
+				Query query = session.createQuery(sql);
+				List<Message> list = (List<Message>)query.list();
+				return list;
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			}
+			return null;
+		}
 }
