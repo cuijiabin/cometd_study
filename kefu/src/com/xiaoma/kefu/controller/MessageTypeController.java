@@ -86,8 +86,12 @@ public class MessageTypeController {
 	 * @return 返回值
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
-	public String toSave(Model model, Integer treeId, Integer typeId) {
-		Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId);
+	public String toSave(HttpSession session,Model model, Integer treeId, Integer typeId) {
+		User user = (User) session.getAttribute(CacheName.USER);
+		if (user == null)
+			return "login";
+		 Integer userId = user.getId();
+		Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId,userId);
 		if (sortId==null) {
 			sortId =0;
 		}

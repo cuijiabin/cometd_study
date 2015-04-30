@@ -72,8 +72,8 @@ public class MessageTypeService {
 	 /**
      * 查询是否有子节点
      */
-   public Integer getChildCount(Integer id,Integer typeId){
-	   Integer num =  messageTypeDaoImpl.checkChildMax(id,typeId);  // num 最大的排序号
+   public Integer getChildCount(Integer id,Integer typeId,Integer userId){
+	   Integer num =  messageTypeDaoImpl.checkChildMax(id,typeId,userId);  // num 最大的排序号
 	      return num;
    }
 	

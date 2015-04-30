@@ -133,10 +133,13 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 	 * 查询子节点排序值为最大的 序号
 	 */
 	@Override
-	public Integer checkChildMax(Integer id,Integer typeId ){
+	public Integer checkChildMax(Integer id,Integer typeId,Integer userId ){
 		Session session = getSession();
 
 		String hql="SELECT MAX(m.sortId)  FROM message_type m  WHERE 1=1 AND m.pId = "+id+" AND m.typeId ="+typeId;
+		if (typeId==2) {
+			hql +=" and m.userId = "+userId+" ";  //注意保留空格
+		}
 		SQLQuery sqlQuery = session.createSQLQuery(hql);
 
 		Integer count = (Integer)sqlQuery.uniqueResult();
