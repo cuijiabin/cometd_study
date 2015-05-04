@@ -130,7 +130,7 @@
 	        	<div class="c-bor">
 	                <h3 class="u-tit c-bg">
 	                	<a class="f-fr" href="#">添加</a>
-	                    <a class="f-fl" href="#">常用语管理</a>
+	                    <a class="f-fl" target="_blank" href="/user/main.action?typeId=4">常用语管理</a>
 	                </h3>
 	                <div class="m-sidemenu-cnt">
 						<jsp:include page="message.jsp" />
@@ -671,7 +671,10 @@
 		temp = null;
 		return output;
 	};
-	
+	function addContent(content){
+		$("#inputbox").val($("#inputbox").val()+content);
+		inputbox.focus();
+	}
 	
 	/***
 	 *加载表情
@@ -708,7 +711,7 @@
 			alert(s);
 			//console.log(s);
 			$('#J_resulte').val(s);
-		})
+		});
 		
 		/*
 		 * ajax远程获取表情,注意同源策略
@@ -716,7 +719,7 @@
 		 */
 		//$.expBlock.getRemoteExp(url);
 		
-	})
+	});
 	// 客服端访客对话框架-手风琴菜单
 jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
 </script>

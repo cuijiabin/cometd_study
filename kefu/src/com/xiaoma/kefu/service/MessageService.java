@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.MessageDao;
 import com.xiaoma.kefu.dao.MessageTypeDao;
-import com.xiaoma.kefu.dao.impl.MessageDaoImpl;
 import com.xiaoma.kefu.model.Message;
 import com.xiaoma.kefu.model.MessageType;
 import com.xiaoma.kefu.util.PageBean;
+import com.xiaoma.kefu.util.StringHelper;
 
 /**
  * @author frongji
@@ -118,8 +118,9 @@ public class MessageService {
 							.element("pId", mt.getpId())
 							.element("name", mt.getTitle())
 							.element("typeId", mt.getTypeId())
-							.element("sortId", mt.getSortId())
-							.element("status", mt.getStatus());
+							.element("status", mt.getStatus())
+							.element("sId", 1)
+							.element("title", mt.getTitle());
 					json.add(jObject);
 				}
 			}
@@ -131,8 +132,9 @@ public class MessageService {
 					.element("pId", mt.getpId())
 					.element("name", mt.getTitle())
 					.element("typeId", mt.getTypeId())
-					.element("sortId", mt.getSortId())
-					.element("status", mt.getStatus());
+					.element("status", mt.getStatus())
+					.element("sId", 1)
+					.element("title", mt.getTitle());
 					json.add(jObject);
 				}
 			}
@@ -144,7 +146,8 @@ public class MessageService {
 							.element("pId", mt.getMessageTypeId())
 							.element("name", mt.getTitle())
 							.element("typeId", mt.getTypeId())
-							.element("status", mt.getStatus());
+							.element("sId", 2)
+							.element("title", mt.getContent());
 					json.add(jObject);
 				}
 			}
@@ -154,9 +157,10 @@ public class MessageService {
 					JSONObject jObject = new JSONObject();
 					jObject.element("id", mt.getId())
 					.element("pId", mt.getMessageTypeId())
-					.element("name", mt.getTitle())
+					.element("name", StringHelper.subTextString(mt.getTitle(),12))
 					.element("typeId", mt.getTypeId())
-					.element("status", mt.getStatus());
+					.element("sId", 2)
+					.element("title", mt.getContent());
 					json.add(jObject);
 				}
 			}

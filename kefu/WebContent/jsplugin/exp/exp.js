@@ -191,7 +191,6 @@
 								expList += '<li action-data="['+EXP_DATA[i].icons[j].title+']"><img title="'+EXP_DATA[i].icons[j].title+'" alt="'+EXP_DATA[i].icons[j].title+'" src="'+EXP_DATA[i].icons[j].url+'"></li>';
 							}
 							listDOM = $(expList);
-							//alert(listDOM.length);
 							listDOM.each(function(){
 								$(this).click(function(){
 									var me = $(this), actData = me.attr('action-data'),taVal = ta.val();
@@ -200,6 +199,7 @@
 									me.unbind('mouseout');
 									$(win).unbind('resize');
 									exp.remove();
+									ta.focus();
 								});
 							});
 							expUl.children().remove();
