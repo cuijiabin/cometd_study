@@ -6,6 +6,7 @@
 <div style="margin:50px;">
 <input type="hidden" readonly="readonly" name="messageTypeId" id="messageTypeId" value="${messageType.id }" />
 <table class="table table-bordered m-table">
+   <c:if test="${messageType.id !=null}">
         <tr>
          	<td class="f-txtr tdbg">分类编号</td><td class="f-txtl">${messageType.typeId }</td>
         </tr>
@@ -21,7 +22,12 @@
                <input type="checkbox"  <c:if test="${messageType.status==1 }"> checked="checked" </c:if> />
             </td>
          </tr>
-   
+   </c:if>
+    <c:if test="${messageType.id ==null}"> 
+         <tr>
+            <td colspan="2"> 没有找到相应的分类 ！</td>
+         </tr>
+    </c:if>
      </table>
 </div>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>

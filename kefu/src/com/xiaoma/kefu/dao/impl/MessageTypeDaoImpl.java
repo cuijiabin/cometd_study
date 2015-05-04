@@ -64,8 +64,11 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 		}
 		 Query query = session.createSQLQuery(hql).addEntity("a",MessageType.class);
 		 List list = query.list();
-		 MessageType messageType =(MessageType) list.get(0);
-		return messageType;
+		 if (list != null && list.size()>0) {
+			 return (MessageType) list.get(0);
+		}
+		return null;
+		
 	}
 	
 	/**

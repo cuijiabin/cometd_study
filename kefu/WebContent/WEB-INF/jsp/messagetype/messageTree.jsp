@@ -7,6 +7,8 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
  <SCRIPT >
 
 var zTree;
@@ -32,7 +34,14 @@ var zTree;
 			}
 		},
 		callback: {
-		    onClick:zTreeOnClick
+		    onClick:zTreeOnClick,
+			beforeClick: function(treeId, treeNode) {
+				var zTree = $.fn.zTree.getZTreeObj("tree");
+				if (treeNode.isParent) {
+					zTree.expandNode(treeNode);
+					return false;
+				} 
+			}
 		}
 	};
 

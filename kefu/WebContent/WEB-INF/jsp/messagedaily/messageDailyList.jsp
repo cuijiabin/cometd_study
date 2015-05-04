@@ -6,7 +6,6 @@
 <%@ page import="com.xiaoma.kefu.model.User"  %> 
 <%@ page import="com.xiaoma.kefu.util.CheckCodeUtil"  %>  
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
-<script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <h3  class="u-tit c-bg c-bortit">常用语信息</h3>
