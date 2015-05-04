@@ -68,7 +68,7 @@ function addDialogueDiv(){
 	$.ajax({
 	     type: "get",
 	     async: true,
-	     url: "http://localhost:9090/style/getDialogueDiv.action",
+	     url: "${siteAdd}/style/getDialogueDiv.action",
 	     dataType: "jsonp",
 	     data: {"styleId":styleId,"isPC":isPc},
 	     timeout:30000,
@@ -93,7 +93,7 @@ function addIconDiv(){
 	$.ajax({
 	     type: "get",
 	     async: true,
-	     url: "http://localhost:9090/style/getIconDiv.action",
+	     url: "${siteAdd}/style/getIconDiv.action",
 	     data: {"styleId":styleId,"isPC":isPc},
 	     dataType: "jsonp",
 	     timeout:30000,
@@ -113,7 +113,7 @@ function addIconDiv(){
 
 //跳转到客服窗口
 function gotoKF(buttonId){
-	var url = "http://localhost:9090/dialogue/customerChat.action";
+	var url = "${siteAdd}/dialogue/customerChat.action";
 	var refer = getCookie('KF_refer');
 	var landingPage = getCookie('KF_landingPage');
 	var consultPage = window.location.href;

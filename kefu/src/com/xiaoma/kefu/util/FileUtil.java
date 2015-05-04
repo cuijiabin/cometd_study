@@ -157,8 +157,12 @@ public class FileUtil {
 			
 			ps = new PrintStream(new File(targePath));
 			ps.println("var styleId = "+ styleId +";");//第一行写入styleId
+			String siteAdd = DictMan.getDictItem("d_sys_param", 15).getItemName();
 			String line = null;
 			while ((line = br.readLine()) != null) {
+				if(StringUtils.isNotBlank(line) && line.indexOf("${siteAdd}") >0 ){
+					line = line.replace("${siteAdd}", siteAdd);
+				}
 				ps.println(line);
 			}
 		}catch(Exception e){
