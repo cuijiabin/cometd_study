@@ -58,10 +58,6 @@ public class JedisConstant {
 	 */
 	public static final String CCN_PASSIVE = "ccn_passive:";
 
-	/**
-	 * 对话关系 (ccnId +type <--> ccnId)
-	 */
-	public static final String TALKER_TYPE = "talker_type:";
 
 	/**
 	 * 对话列表( 客服ccnId+客户ccnId --> list)
@@ -164,16 +160,6 @@ public class JedisConstant {
 		return CCN_PASSIVE + ccnId;
 	}
 
-	/**
-	 * 生成对话关系的key
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static String genTalkerRelationKey(Integer type, String ccnId) {
-
-		return TALKER_TYPE + type + CCN_ID + ccnId;
-	}
 
 	/**
 	 * 生成对话列表的key
