@@ -137,6 +137,20 @@ public class JoinListener extends ConnectListener {
 				logger.info("客户："+customerId+" ,进入对话系统;");
 				
 				CometConnection myCcn = engine.getConnection(ccnId);
+				
+				//获取在线客服列表
+				List<String> onLineUserIds = JedisTalkDao.getOnlineUserIds();
+				if(CollectionUtils.isEmpty(onLineUserIds)){
+					//对不起，客服不在线，请留言
+					JedisTalkDao.addCustomerWaitSet(ccnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+					dInfo.setIsWait(1);
+					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
+					logger.info("客户："+customerId+" ,进入等待队列！");
+					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
+					
+					return true;
+				}
 
 				// 分配客服
 				String allocateCnnId = JedisTalkDao.allocateCcnId();
@@ -147,7 +161,7 @@ public class JoinListener extends ConnectListener {
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
-					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
+					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.USER_BUSY, null)); 
 					
 					return true;
 				}
@@ -240,7 +254,7 @@ public class JoinListener extends ConnectListener {
 		String messageTime = TimeHelper.convertMillisecondToStr(sendTime, TimeHelper.Time_PATTERN);
 		
 		//包装消息并发送
-		Message umessage = new Message(userCId,"我",message,messageTime,"1");
+		Message umessage = new Message(cusCId,"我",message,messageTime,"1");
 		NoticeData und = new NoticeData(Constant.ON_MESSAGE, umessage);
 		
 		Message cmessage = new Message(cusCId, user.getCardName(), message, messageTime,"2");

@@ -28,6 +28,7 @@ import com.xiaoma.kefu.comet4j.DialogueQuene;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
@@ -37,6 +38,7 @@ import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageService;
+import com.xiaoma.kefu.service.RoleService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.AddressUtil;
@@ -68,6 +70,9 @@ public class DialogueController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private RoleService roleService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 	
@@ -83,10 +88,14 @@ public class DialogueController {
 
 		User user = (User) session.getAttribute(CacheName.USER);
 		List<String> strIds = JedisTalkDao.getSwitchList();
-		List<Integer> userIds = JsonUtil.convertString2Integer(strIds);
-		if(CollectionUtils.isNotEmpty(userIds) && user!= null){
-			userIds.remove(user.getId());
+		List<Integer> userIds = new ArrayList<Integer>();
+		for(String strId : strIds){
+			if(JedisTalkDao.judgeFull(strId) || strId.equals(user.getId().toString())){
+				continue;
+			}
+			userIds.add(Integer.valueOf(strId));
 		}
+		
 		List<User> users = userService.getUsersByIds(userIds);
 		
 		model.addAttribute("list", users);
@@ -332,7 +341,9 @@ public class DialogueController {
 		if (user == null)
 			return "login";
 		String json = messageService.findAllUserMessage(user.getId());
+		Role role = roleService.getRoleById(user.getId());
 		model.addAttribute(CacheName.USER, user);
+		model.addAttribute("role", role);
 		model.addAttribute("json", json);
 		return "/dialogue/userChat";
 	}

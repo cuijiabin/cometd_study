@@ -398,9 +398,9 @@ public class ChatCometController {
 		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCcnId);
 		Boolean isOnline = JedisTalkDao.isInOffLineUserSet(userId);
 		if(isOnline){
-			JedisTalkDao.addOffLineUserSet(userId);
-		}else{
 			JedisTalkDao.remOffLineUserSet(userId);
+		}else{
+			JedisTalkDao.addOffLineUserSet(userId);
 		}
 		
 	}

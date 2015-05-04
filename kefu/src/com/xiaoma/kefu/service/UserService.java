@@ -20,6 +20,7 @@ import com.xiaoma.kefu.dao.UserDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
@@ -189,6 +190,10 @@ public class UserService {
 		toUpdateUser.setCreateDate(user.getCreateDate());
 		Integer succ = userDaoImpl.update(toUpdateUser);
 		CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+		
+		if(user.getMaxListen() != null){
+			JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
+		}
 		return succ;
 		
 	}

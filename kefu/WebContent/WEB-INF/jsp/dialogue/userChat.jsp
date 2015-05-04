@@ -133,7 +133,6 @@
 	                    <a class="f-fl" target="_blank" href="/user/main.action?typeId=4">常用语管理</a>
 	                </h3>
 	                <div class="m-sidemenu-cnt">
-						<jsp:include page="message.jsp" />
 					</div>
 	            </div>
 	        	<div class="c-bor">
@@ -172,7 +171,7 @@
 	            <div class="g-mn3c">
 	                <ul class="f-cb">
 	                    <li><span>工号：${user.cardName}</span></li>
-	                    <li><i>|</i><span>身份：一般员工</span></li>
+	                    <li><i>|</i><span>身份：${role.name}</span></li>
 	                </ul>
 	            </div>
 	        </div>
@@ -372,9 +371,9 @@
 		var who = data.who;
 		var str = "";
 		if(who == "1"){
-			str = [ '<p class="r-manager">',name,'&nbsp;', t,'</p><p class="r-manager-txt">',$.expBlock.textFormat(text),'</p>' ];
+			str = [ '<p class="r-manager">',name,'&nbsp;', t,'</p><p class="r-manager-txt">',text,'</p>' ];
 		}else if(who == "2"){
-			str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',$.expBlock.textFormat(text),'</p>' ];
+			str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',text,'</p>' ];
 		}
 		console.log(str);
 		$("#D"+id).append(str.join(''));
@@ -419,6 +418,9 @@
 		                  +'</tr>'
 		                  +'<tr>'
 		                  +'<td>姓名：<input id="updateName" type="text" value="'+customerName+'" /></td>'
+		                  +'<td>手机：<input type="text" value="" /></td>'
+		                  +'<td>邮箱：<input type="text" value="" /></td>'
+		                  +'<td>备注：<input type="text" value="" /></td>'
 		                  +'</tr>'
 		                  +'</table>';
 		
@@ -529,8 +531,11 @@
 		if (!JS.Engine.running)
 			return;
 		remark = remark.trim();
-		if (!remark)
+		if (!remark){
+			alert("转接备注不得为空！");
 			return;
+		}
+			
 		var ccnId = JS.Engine.getId();
 		var customerId = $("#currentCustomerId").val();
 		var customerCcnId = $("#currentCcnId").val();

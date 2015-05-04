@@ -515,6 +515,19 @@ public class JedisTalkDao {
 		return null;
 
 	}
+	
+	/**
+	 * 判断用户接待数量是否已满
+	 * @param userId
+	 * @return
+	 */
+	public static Boolean judgeFull(String userId){
+		
+		Integer result = getMaxReceiveCount(userId)- getReceiveCount(userId);
+		
+		return (result == null || result <=0 );
+		
+	}
 
 	/**
 	 * 获取所有在线用户（对话框未关闭,去重）
