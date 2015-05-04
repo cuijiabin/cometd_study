@@ -88,7 +88,7 @@
 // var pId= 0;
 // var status=1;
 // var typeId=1;
-var api = frameElement.api,W=api.opener;
+
 /*
  * 条件查询
  */

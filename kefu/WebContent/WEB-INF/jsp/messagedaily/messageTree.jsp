@@ -32,7 +32,8 @@ var zTree;
 			}
 		},
 		callback: {
-		    onClick:zTreeOnClick
+		
+		 onClick:zTreeOnClick
 		}
 	};
 

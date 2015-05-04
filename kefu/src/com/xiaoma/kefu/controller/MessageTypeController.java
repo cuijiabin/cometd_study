@@ -257,6 +257,7 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "search.action",method = RequestMethod.GET)
 	public String search(Model model,Integer typeId,String title,Integer userId){
+	
 		MessageType messageType = messageTypeService.getResultBySearch(typeId,title,userId);
 		model.addAttribute("messageType", messageType);
 		return "messagetype/messageTypeDetail";
