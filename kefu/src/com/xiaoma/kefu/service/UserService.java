@@ -17,11 +17,13 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.DepartmentDao;
 import com.xiaoma.kefu.dao.UserDao;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
+import com.xiaoma.kefu.util.SysConst.RoleName;
 
 /**
  * User DAO service class
@@ -338,6 +340,25 @@ public class UserService {
 		
 		return userDaoImpl.findAll(User.class);
 		
+	}
+	
+	/**
+	 * 判断用户是否 有 roleName 这个角色
+	* @param user	用户
+	* @param roleName	角色名称
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月4日
+	 */
+	public boolean hasThisRole(User user,RoleName roleName){
+		boolean falg = false;
+		if(user!=null && user.getRoleId()!=null){
+			String zhuguanId = DictMan.getDictItem("d_role_id", roleName.toString()).getItemName();
+			if(user.getRoleId().equals(Integer.valueOf(zhuguanId))){
+				falg = true;
+			}
+		}
+		return falg;
 	}
 
 }

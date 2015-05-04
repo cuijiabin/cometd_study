@@ -6,9 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
-
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * 
@@ -114,4 +115,12 @@ public class JsonUtil {
 		return new HashSet<Integer>(result);
 	}
 	
+	/**
+	 * java object to JsonArray Object
+	 * @param javaObject
+	 * @return
+	 */
+	public static JSONArray javaObject2JsonArray(Object javaObject) {
+		return JSONArray.fromObject(javaObject);
+	}
 }

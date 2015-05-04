@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.Style;
@@ -36,6 +37,7 @@ import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.service.StyleService;
@@ -44,9 +46,11 @@ import com.xiaoma.kefu.service.WaitListService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.CheckCodeUtil;
 import com.xiaoma.kefu.util.FileUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
 import com.xiaoma.kefu.util.SysConst.CompareEnum;
+import com.xiaoma.kefu.util.SysConst.RoleName;
 import com.xiaoma.kefu.util.TimeHelper;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
@@ -76,6 +80,8 @@ public class RecordsCenterController {
 	private CustomerService customerService;//客户信息
 	@Autowired
 	private UserService userService;//用户
+	@Autowired
+	private DepartmentService deptService;//部门
 	@Autowired
 	private MessageRecordsService messageRecordsService;//留言记录
 	
@@ -114,26 +120,20 @@ public class RecordsCenterController {
 				Integer typeId,
 				@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean
 			){
-		//封装条件
-		StringBuilder condition = getTalkCondition(deptId, beginDate, endDate, userId,
-				isTalk, customerId, ipInfo, consultPage,talkContent, keywords, totalNum,
-				numCondition, styleName, openType, closeType, isWait,
-				waitListName, deviceType);
 		
 		//判断用户角色
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null) return "login";
-			
-		//主管看所有部门,所有员工
-		//员工看自己部门,自己的记录
-		List<User> userList = new ArrayList<User>();
-		if(user.getRoleId().equals(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()))){
-			condition.append(" and t1.userId = " + userId );//员工只能查自己
-			userList.add(user);
-		}else{
-//			userList.addAll(userService.findAll()); //等提供
-			userList.add(user);//test
-		}
+		
+		//封装条件
+		StringBuilder condition = getTalkCondition(deptId, beginDate, endDate, userId,
+				isTalk, customerId, ipInfo, consultPage,talkContent, keywords, totalNum,
+				numCondition, styleName, openType, closeType, isWait,
+				waitListName, deviceType,user);
+		
+		//部门,用户列表
+		List<Department> deptList = getDeptListByUser(user); //部门列表
+		List<User> userList = getUserListByUser(user);//员工列表
 		
 		//需要使用缓存
 		//获取需要展示的字段
@@ -148,6 +148,7 @@ public class RecordsCenterController {
 		}
 		
 		model.addAttribute("userList", userList);
+		model.addAttribute("deptList", deptList);
 		model.addAttribute("title", title);
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("showDetail", showDetail);
@@ -161,6 +162,83 @@ public class RecordsCenterController {
 		}
 	}
 	
+	/**
+	 * 根据用户,获取用户列表	
+	 * 主管or超级管理员	所有用户(空)
+	 * 组长or与昂工		自己
+	* @param user
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月4日
+	 */
+	private List<User> getUserListByUser(User user) {
+		List<User> list = new ArrayList<User>();
+		if(user.getRoleId()==1 || userService.hasThisRole(user, RoleName.zhuguan)){
+			User tempAll = new User();
+			tempAll.setId(0);
+			tempAll.setCardName("全部员工");
+			list.add(tempAll);
+		}else{//其余的,只看自己
+			list.add(user);
+		}
+		return list;
+	}
+
+	/**
+	 * 根据用户,获取 部门列表
+	 * 主管or超级管理员	所有部门
+	 * 组长or员工	所在部门
+	* @param user
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月4日
+	 */
+	private List<Department> getDeptListByUser(User user) {
+		List<Department> list = null;
+		//如果是主管或者admin
+		if(user.getRoleId()==1 || userService.hasThisRole(user, RoleName.zhuguan)){
+			list = deptService.findDept();
+			Department tempAll = new Department();
+			tempAll.setId(0);
+			tempAll.setName("全部部门");
+			list.add(0, tempAll);
+		}else{//其余的,只看自己部门
+			Department dept = deptService.getDeptById(user.getDeptId());
+			list = new ArrayList<Department>();
+			list.add(dept);
+		}
+		return list;
+	}
+	
+	/**
+	 * 逻辑删除对话信息
+	* @Description: TODO
+	* @param model
+	* @param ids	1,2,3
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年4月9日
+	 */
+	@RequestMapping(value = "getUserByDeptId.action", method = RequestMethod.GET)
+	public String getUserByDeptId(Model model,Integer deptId){
+		try {
+			List<User> list = new ArrayList<User>();
+			if(deptId!=0){
+				list = deptService.deptUserAll(deptId);
+			}
+			//不管是所有部门,还是单个部门,都需要全部员工, 否则没法查询单个部门的信息
+			User tempAll = new User();
+			tempAll.setId(0);
+			tempAll.setCardName("全部员工");
+			list.add(0,tempAll);
+			model.addAttribute("result", Ajax.JSONResult(0, JsonUtil.javaObject2JsonArray(list).toString()));
+		} catch (Exception e) {
+			logger.error(e);
+			model.addAttribute("result", Ajax.JSONResult(0, "获取人员错误"));
+		}
+		return "resultjson";
+	}
+
 	/**
 	 * 逻辑删除对话信息
 	* @Description: TODO
@@ -258,20 +336,16 @@ public class RecordsCenterController {
 				Integer userId,Integer isTalk,Integer typeId,
 				@ModelAttribute("pageBean") PageBean<Map<String,String>> pageBean
 			){
-		
-		StringBuilder condition = getTalkDelCondition(deptId, beginDate, endDate, userId,isTalk);
 		//判断用户角色
 		User user = (User) session.getAttribute(CacheName.USER);
 		if (user == null) return "login";
 		
-		List<User> userList = new ArrayList<User>();
-		if(user.getRoleId().equals(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()))){
-			condition.append(" and t1.userId = " + userId );//员工只能查自己
-			userList.add(user);
-		}else{
-//			userList.addAll(userService.findAll()); //等提供
-			userList.add(user);//test
-		}
+		StringBuilder condition = getTalkDelCondition(deptId, beginDate, endDate, userId,isTalk,user);
+		
+
+		//部门,用户列表
+		List<Department> deptList = getDeptListByUser(user); //部门列表
+		List<User> userList = getUserListByUser(user);//员工列表
 		
 		Map<String,String> recordFieldMap = getRecordFieldMap(user);
 		List<String> title = getDisplayTitle(recordFieldMap);//title
@@ -283,6 +357,7 @@ public class RecordsCenterController {
 			showDetail = 1;
 		}
 		
+		model.addAttribute("deptList", deptList);
 		model.addAttribute("userList", userList);
 		model.addAttribute("title", title);
 		model.addAttribute("pageBean", pageBean);
@@ -627,12 +702,13 @@ public class RecordsCenterController {
 	* @param endDate
 	* @param userId
 	* @param isTalk
+	 * @param user 
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月9日
 	 */
 	private StringBuilder getTalkDelCondition(Integer deptId, String beginDate,
-			String endDate, Integer userId, Integer isTalk) {
+			String endDate, Integer userId, Integer isTalk, User user) {
 		StringBuilder condition = new StringBuilder();
 		if(deptId!=null && deptId>0){
 			condition.append(" and t1.deptId = " + deptId );
@@ -652,6 +728,9 @@ public class RecordsCenterController {
 		}
 		if(isTalk!=null && isTalk==1){
 			condition.append(" and t1.isTalk = " + 1 );
+		}
+		if(userService.hasThisRole(user, RoleName.yuangong)){
+			condition.append(" and t1.userId = " + userId );//员工只能查自己
 		}
 		return condition;
 	}
@@ -677,6 +756,7 @@ public class RecordsCenterController {
 	* @param isWait
 	* @param waitListName
 	* @param deviceType
+	 * @param user 
 	* @return
 	* @Author: wangxingfei
 	* @Date: 2015年4月9日
@@ -686,7 +766,7 @@ public class RecordsCenterController {
 			String ipInfo, String consultPage, String talkContent, String keywords,
 			Integer totalNum, String numCondition, String styleName,
 			Integer openType, Integer closeType, Integer isWait,
-			String waitListName, Integer deviceType) {
+			String waitListName, Integer deviceType, User user) {
 		StringBuilder condition = new StringBuilder();
 		if(deptId!=null && deptId>0){
 			condition.append(" and t1.deptId = " + deptId );
@@ -754,6 +834,9 @@ public class RecordsCenterController {
 				condition.append(" and dd.createDate <= '" + endDate + " 23:59:59'");
 			}
 			condition.append(" ) ");
+		}
+		if(userService.hasThisRole(user, RoleName.yuangong)){
+			condition.append(" and t1.userId = " + userId );//员工只能查自己
 		}
 		return condition;
 	}

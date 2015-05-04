@@ -32,21 +32,23 @@
 	<div class="m-query-bd">
 	    <div class="f-mbm">
             <label>部门：</label>
-            	<select class="c-wd80" name="deptId" id="deptId">
-	                <option selected="selected" value="">全部部门</option>
-	                <option value="1">客服部</option>
-	                <option value="2">留学部</option>
-	                <option value="3">随时学</option>
-	                <option value="4">好顾问</option>
+            	<select class="c-wd80" name="deptId" id="deptId" onchange="refreshUserList(this)">
+            		<c:forEach var="dept" items="${deptList}">
+						<option value="${dept.id }">${dept.name }</option>
+					</c:forEach>
+<!-- 	                <option selected="selected" value="">全部部门</option> -->
+<!-- 	                <option value="1">客服部</option> -->
+<!-- 	                <option value="2">留学部</option> -->
+<!-- 	                <option value="3">随时学</option> -->
+<!-- 	                <option value="4">好顾问</option> -->
             	</select>
             <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
             				<input class="c-wd80 Wdate" type="text" id="endDate" value="${endDate }" onClick="WdatePicker()" />
             <label>工号：</label>
             	<select class="c-wd80" name="userId" id="userId">
-	                <option selected="selected" value="">全部工号</option>
-	                <option value="1">李老师</option>
-	                <option value="2">王老师</option>
-	                <option value="3">张老师</option>
+            	    <c:forEach var="user" items="${userList}">
+						<option value="${user.id }">${user.cardName }</option>
+					</c:forEach>
             	</select>
             <div class="u-subsec">
            		<label><input type="checkbox" id="isTalk" name="isTalk">仅显示客户有说话记录</label>
@@ -266,6 +268,11 @@ function updateCusl(customerId,dialogueId){
 
 //配置显示字段
 function editDisplay(){
+// 	var url="/chatRecordField/edit.action";
+// // 	url+="?dialogueId="+dialogueId+"&isShowTel="+isShowTel;
+// 	window.location.href = url;
+// 	return;
+	
 	$.dialog({content:'url:/chatRecordField/edit.action',
 		id: 'editDisplay',
 		width: 800,height: 600,
@@ -279,6 +286,38 @@ function editCallback(){
 	$.dialog({id:'editCus'}).close();
 	var pageNo = '${pageBean.currentPage}';
 	find(pageNo);
+}
+
+//人员列表联动
+function refreshUserList(obj){
+    var deptId = obj.value;  
+    var conKind = document.getElementById('userId');
+    $.ajax({
+	    type: "GET",
+	    url: '/recordsCenter/getUserByDeptId.action',
+	    data: {"deptId":deptId},
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+	    success: function (data) {
+	    	//清空原来的列表
+	    	for (m = conKind.options.length - 1; m > 0; m--){
+				conKind.options[m] = null;
+	    	}
+	    	
+	    	//设置新的列表
+	    	var list = data.msg;
+	    	if (list.length>0) {
+				for (i = 0; i < list.length; i++) {
+					conKind.options[i] = new Option(list[i].cardName, list[i].id);
+				}
+			}else{
+				conKind.options[0] = new Option('', 0);
+			}
+	    },
+	    error: function (msg) {
+	    	alert(msg);
+	    }
+	});
 }
 
 

@@ -19,6 +19,7 @@ import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.BusiGroupService;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.SysConst.RoleName;
 
 /**
  * 业务分组	controller
@@ -62,7 +63,7 @@ public class BusiGroupController {
 			}
 			
 			//树
-			JSONArray jsonTree = deptService.getDeptUserTree(Integer.valueOf(DictMan.getDictItem("d_role_id", "staff").getItemName()));
+			JSONArray jsonTree = deptService.getDeptUserTree(Integer.valueOf(DictMan.getDictItem("d_role_id", RoleName.yuangong.toString()).getItemName()));
 			
 			model.addAttribute("jsonTree", jsonTree.toString());
 			model.addAttribute("groupList", groupList);

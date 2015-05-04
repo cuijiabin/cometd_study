@@ -30,7 +30,7 @@
         <h3 class="u-tit c-bg">聊天记录时间线</h3>
         <input type="hidden" id="isShowTel" value="${isShowTel }" />        	
 <!--         <ul class="m-recordtime"> -->
-        <ul id="myul" class="e_tit c-bor">
+        <ul id="myul" class="m-recordtime e_tit c-bor">
         	<c:forEach var="timeDia" items="${timeList }">
         		<li id="li${timeDia.id }" ><a href="#" onClick="showDetail(${timeDia.id})"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timeDia.beginDate}"/></a></li>
 			</c:forEach>
