@@ -189,11 +189,12 @@ public class UserService {
 		toUpdateUser.setMaxListen(user.getMaxListen());
 		toUpdateUser.setCreateDate(user.getCreateDate());
 		Integer succ = userDaoImpl.update(toUpdateUser);
-		CacheMan.remove(CacheName.USERFUNCTION, user.getId());
 		
 		if(user.getMaxListen() != null){
 			JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
 		}
+	   CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+	   CacheMan.remove(CacheName.SUSER, user.getId());
 		return succ;
 		
 	}
@@ -211,6 +212,8 @@ public class UserService {
 				User user = new User();
 				user.setId(Integer.parseInt(str));
 				val = userDaoImpl.delete(user);
+				CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+				CacheMan.remove(CacheName.SUSER, user.getId());
 			}
 			if (val == 1) {
 				return 1;
@@ -220,6 +223,8 @@ public class UserService {
 		} else {
 			User user = new User();
 			user.setId(Integer.parseInt(ids));
+			CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+			CacheMan.remove(CacheName.SUSER, user.getId());
 			return userDaoImpl.delete(user);
 		}
 	}
@@ -248,6 +253,8 @@ public class UserService {
 				}
 				deptDao.update(dept);
 			  val = userDaoImpl.update(leup);
+				CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
+				CacheMan.remove(CacheName.SUSER, leup.getId());
 			}
 			if (val == 1) {
 				return 1;
@@ -268,6 +275,8 @@ public class UserService {
 			}
 			deptDao.update(dept);
 			Integer succ = userDaoImpl.update(leup);
+			CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
+			CacheMan.remove(CacheName.SUSER, leup.getId());
 			if (succ == 1) {
 				return 1;
 			} else {
@@ -296,6 +305,8 @@ public class UserService {
 				leup.setDeptId(deptId);
 				leup.setDeptName(dept.getName());
 			    succ = userDaoImpl.update(leup);
+				CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
+				CacheMan.remove(CacheName.SUSER, leup.getId());
 			}
 			if(succ==1){
 				return succ;
@@ -313,6 +324,8 @@ public class UserService {
 			deptDao.update(dept);
 			leup.setDeptId(deptId);
 			leup.setDeptName(dept.getName());
+			CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
+			CacheMan.remove(CacheName.SUSER, leup.getId());
 			return userDaoImpl.update(leup);
 		}
 	}

@@ -102,6 +102,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 		pageBean.setObjList(criteria.list());
 	}
+	
 	/**
 	 * 查询所有
 	 * @param clazz
