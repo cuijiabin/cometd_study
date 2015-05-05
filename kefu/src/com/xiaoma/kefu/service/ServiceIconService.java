@@ -106,27 +106,45 @@ public class ServiceIconService {
             //路径+文件名
             String tempPath = savePath+"/"+saveName;
             if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
-            	image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
             	serviceIcon.setOnlinePic(tempPath+extensionName);//在线
+            	logger.info("serviceIcon.getOfflinePic()="+serviceIcon.getOnlinePic());
+            	 //保存文件
+                FileUtil.saveFile(savePath, saveName+extensionName, file);
+                
             	 //如果高或宽为空,则取图片的宽高
                 if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
-                	serviceIcon.setHeight(image.getHeight());
-            		serviceIcon.setWidth(image.getWidth());
+                	try{
+                		image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
+                    	serviceIcon.setHeight(image.getHeight());
+                		serviceIcon.setWidth(image.getWidth());
+                	}catch(IOException e){
+                		logger.error("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic(),e);
+                		throw e;
+                	}
                 }
             }else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
             	serviceIcon.setOfflinePic(tempPath+extensionName);//离线
-            	image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
+            	logger.info("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic());
+            	
+                //保存文件
+                FileUtil.saveFile(savePath, saveName+extensionName, file);
+                
             	 //如果高或宽为空,则取图片的宽高
                 if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
-                	serviceIcon.setHeight(image.getHeight());
-            		serviceIcon.setWidth(image.getWidth());
+                	try{
+                		image = ImageIO.read(new File(serviceIcon.getOfflinePic())); 
+                		serviceIcon.setHeight(image.getHeight());
+                		serviceIcon.setWidth(image.getWidth());
+                	}catch(IOException e){
+                		logger.error("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic(),e);
+                		throw e;
+                	}
                 }
             }
             
            
             
-            //保存文件
-            FileUtil.saveFile(savePath, saveName+extensionName, file);
+
             
 			//缩略图默认宽高
 			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());

@@ -3,8 +3,6 @@ package com.xiaoma.kefu.service;
 import java.io.IOException;
 import java.util.Date;
 
-import net.coobird.thumbnailator.Thumbnails;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -109,9 +107,9 @@ public class ClientStyleService {
             FileUtil.saveFile(savePath, saveName+extensionName, file);
             
             //生成缩略图
-            Thumbnails.of(tempPath+extensionName)//原始路径
-            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
-            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+extensionName);//压缩后的路径
+//            Thumbnails.of(tempPath+extensionName)//原始路径
+//            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+//            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
         }
 		
 	}

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +38,7 @@ import com.xiaoma.kefu.util.SysConst.StylePicName;
  */
 @Service
 public class InviteElementService {
+	private Logger logger = Logger.getLogger(InviteElementService.class);
 	
 	@Autowired
 	private InviteElementDao inviteElementDaoImpl;
@@ -114,12 +116,17 @@ public class InviteElementService {
             
             //如果高或宽为空,则取图片的宽高
             if(inviteElement.getHeight()==null || inviteElement.getWidth()==null){
-            	BufferedImage image = ImageIO.read(new File(inviteElement.getPicUrl()));  
-            	inviteElement.setHeight(image.getHeight());
-            	if(deviceType.equals(DeviceType.移动)){
-            		inviteElement.setWidth(30);//手机默认宽度30%
-            	}else{
-            		inviteElement.setWidth(image.getWidth());
+            	logger.info("inviteElement.getPicUrl()="+inviteElement.getPicUrl());
+            	try{
+            		BufferedImage image = ImageIO.read(new File(inviteElement.getPicUrl())); 
+            		inviteElement.setHeight(image.getHeight());
+                	if(deviceType.equals(DeviceType.移动)){
+                		inviteElement.setWidth(30);//手机默认宽度30%
+                	}else{
+                		inviteElement.setWidth(image.getWidth());
+                	}
+            	}catch(IOException e){
+            		logger.error("inviteElement.getPicUrl()="+inviteElement.getPicUrl(),e);
             	}
             }
 
