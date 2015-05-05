@@ -2,7 +2,6 @@ package com.xiaoma.kefu.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.service.ClientStyleService;
-import com.xiaoma.kefu.util.SysConst;
+import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.SysConst.StylePicName;
 
 /**
@@ -35,6 +33,8 @@ public class ClientStyleController {
 
 	@Autowired
 	private ClientStyleService clientStyleService;
+	@Autowired
+	private StyleService styleService;//风格
 	
 	
 	/**
@@ -50,8 +50,8 @@ public class ClientStyleController {
 	public String edit(Model model,@RequestParam Integer styleId) {
 		try {
 			ClientStyle clientStyle = clientStyleService.getByStyleId(styleId);
-			String ysUrl = getViewPath(clientStyle, StylePicName.访问端右上);
-			String yxUrl = getViewPath(clientStyle, StylePicName.访问端右下);
+			String ysUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右上);
+			String yxUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右下);
 			model.addAttribute("clientStyle", clientStyle);
 			model.addAttribute("ysUrl", ysUrl);
 			model.addAttribute("yxUrl", yxUrl);
@@ -84,37 +84,5 @@ public class ClientStyleController {
 		}
 		return "redirect:/clientStyle/edit.action?styleId="+clientStyle.getStyleId(); 
 	}
-	
-	/**
-	 * 缩略图展示的路径
-	* @Description: TODO
-	* @param clientStyle
-	* @param type
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年4月15日
-	 */
-	private String getViewPath(ClientStyle clientStyle,StylePicName type) {
-		String extensionName = "";
-		if(type.equals(StylePicName.访问端右上)){
-			String fileName = clientStyle.getYsAd();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}else if(type.equals(StylePicName.访问端右下)){
-			String fileName = clientStyle.getYxAd();
-			if(StringUtils.isBlank(fileName)) return extensionName;
-			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
-		}
-		return 
-//				SystemConfiguration.getInstance().getPicPrefix() //前缀
-				DictMan.getDictItem("d_sys_param", 2).getItemName()
-				+ "/" + SysConst.STYLE_PATH //风格主目录
-				+ "/"+clientStyle.getStyleId()	//风格id
-				+ "/"+type.getCode()	//类别
-				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀
-				+ extensionName	//后缀
-				;
-	}  
-	
 	
 }

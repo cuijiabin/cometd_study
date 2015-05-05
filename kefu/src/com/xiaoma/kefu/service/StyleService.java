@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.StyleDao;
-import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Style;
@@ -147,9 +146,7 @@ public class StyleService {
 	 */
 	public String getMinPicPath(Integer styleId,StylePicName type){
 		return 
-				DictMan.getDictItem("d_sys_param", 2).getItemName()
-				+ "/" + SysConst.STYLE_PATH //风格主目录
-				+ "/"+styleId	//风格id
+				FileUtil.getStyleSavePath(styleId)
 				+ "/"+type.getCode()	//类别
 				+ SysConst.MIN_PIC_SUFFIX //缩略图后缀
 				+ SysConst.MIN_EXTENSION	//后缀
