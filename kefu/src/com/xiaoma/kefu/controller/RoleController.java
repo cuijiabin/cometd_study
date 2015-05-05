@@ -116,7 +116,7 @@ public class RoleController {
 	 */
 
 	@RequestMapping(value = "save.action", method = RequestMethod.GET)
-	public String addUser(Model model, Role role) {
+	public String save(Model model, Role role) {
 		try {
 			Integer isSuccess = roleService.createNewUser(role);
 			if (isSuccess != 0) {
