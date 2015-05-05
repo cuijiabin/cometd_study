@@ -34,7 +34,7 @@
                 </div>
                 <div class="bd">
                     <div class="g-mn5c c-bor">
-                        <h3 class="u-tit c-bg f-txtl"><span id="dialogueTitle">等待咨询...</span>  <a class="f-fr c-colf00" href="javascript:endDialogue()"><b>X 结束对话</b></a></h3>
+                        <h3 class="u-tit c-bg f-txtl"><span id="dialogueTitle">等待咨询...</span>  <a class="f-fr c-colf00" href="javascript:endDialogue()" id="guanbiduihua"><b>X 结束对话</b></a></h3>
                         
                         <input type="hidden" id=isForbidden value="${isForbidden }"/>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
@@ -180,6 +180,8 @@
 					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
 					findWaitList(0);//获取等待列表
+					$("#guanbiduihua").hide();
+					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -263,6 +265,8 @@
 			logbox.innerHTML += str;
 			moveScroll();
 			//弹出评分对话框
+			$("#guanbiduihua").hide();
+			socreUserNotice();
 			
 		}
 		
@@ -270,6 +274,14 @@
 			var str = '<div class="r-offline"><span class="alert alert-block">对不起，客服不在线，请留言</span></div>';
 			logbox.innerHTML += str;
 			$("#leaveMessage").click();
+			$("#guanbiduihua").hide();
+		}
+		
+		function userBusy(data){
+			var str = '<div class="r-offline"><span class="alert alert-info">客服正忙，请您耐心等待</span></div>';
+			logbox.innerHTML += str;
+			//$("#leaveMessage").click();
+			$("#guanbiduihua").hide();
 		}
 		
 		//通过按钮结束对话(**)
@@ -293,6 +305,8 @@
 			}
 			logbox.innerHTML += str;
 			moveScroll();
+			
+			$("#guanbiduihua").hide();
 			
 		    //弹出评分对话框
 		}

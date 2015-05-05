@@ -301,6 +301,7 @@
 		    success: function (data) {
 		    	var customerName = (data.customerName == null || data.customerName.length == 0) ? "--" : data.customerName;
 		    	$("#showDid").html(customerId);
+		    	$("#showDpage").html(data.firstVisitSource);
 		    	$("#showname").html(customerName);
 				$("#showDipInfo").html(data.ipInfo);
 				$("#showipInfo").html(data.ipInfo);
@@ -394,6 +395,17 @@
 			$("#logbox").after("<div id='D"+ccnId+"' style='display: none;'></div>");
 		}
 	}
+	function createHiddenDivH(ccnId){
+		if ($("#H"+ccnId).length > 0){ 
+			return;
+		}else{
+			$("#logbox").after("<div id='H"+ccnId+"' style='display: none;'></div>");
+		}
+	}
+	
+	function judgeClick(ccnId){
+		return ($("#H"+ccnId).length > 0);
+	}
 
 	//结束对话(**)
 	function endDialogue(customerCnnId){
@@ -402,8 +414,10 @@
 		var ccnId = JS.Engine.getId();
 		var param = "ccnId="+ccnId+'&type='+2+'&endCcnId='+customerCnnId;
 		JS.AJAX.post('/chat/endDialogue.action', param, function() {
+			logbox.innerHTML = '';
 			$("#"+customerCnnId).remove();
 			setDefaultInfo();
+			
 		});
 		
 	}
@@ -595,6 +609,9 @@
 	// 查看客户对话记录(**) 重复点击的话会变得重复！
 	function showDialugueHistory(){
 		var customerCcnId = $("#currentCcnId").val();
+		if(judgeClick(customerCcnId)){
+			return ;
+		}
 		var data= {"customerId":$("#currentCustomerId").val()};
 		$.ajax({
 		    type: "get",
@@ -604,6 +621,7 @@
 		    dataType: "html",
 		    success: function (content) {
 		    	createHiddenDiv(customerCcnId);
+		    	createHiddenDivH(customerCcnId);
 		    	content = content + $("#D"+customerCcnId).html();
 		    	$("#D"+customerCcnId).html(content);
 		    	switchDialogueBox(customerCcnId);
