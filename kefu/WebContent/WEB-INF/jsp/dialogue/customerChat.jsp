@@ -109,7 +109,7 @@
                                     </div>
                                     <c:forEach varStatus="status" items="${infoList}" var="d">
                                     <div class="f-mbm">
-                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.itemName.indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
+                                    	<label class="c-wd80 f-txtr">${d.itemName }：</label><input class="c-wd150" name="cust${d.description }" id="cust${d.description }" type="text" /><c:if test="${checkInfo.getItemName().indexOf(d.itemCode)>=0 }"><span class="help-inline c-clred">* 必填</span></c:if> 
                                     </div>
                                     </c:forEach>
                                     <div class="f-mbm">
@@ -177,9 +177,9 @@
 					logbox.innerHTML += str.join('');
 				},
 				stop : function(cause, url, cId, engine) {
-					//var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
-					//logbox.innerHTML += str.join('');
-					//findWaitList(0);//获取等待列表
+					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
+					logbox.innerHTML += str.join('');
+					findWaitList(0);//获取等待列表
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -200,9 +200,6 @@
 						break;
 					case 'no_user': 
 						noUser(data);// 客服不在
-						break;
-					case 'user_busy': 
-						userBusy(data);// 客服正忙
 						break;
 					default:
 					}
@@ -266,7 +263,6 @@
 			logbox.innerHTML += str;
 			moveScroll();
 			//弹出评分对话框
-			socreUserNotice();
 			
 		}
 		
@@ -274,12 +270,6 @@
 			var str = '<div class="r-offline"><span class="alert alert-block">对不起，客服不在线，请留言</span></div>';
 			logbox.innerHTML += str;
 			$("#leaveMessage").click();
-		}
-		
-		function userBusy(data){
-			var str = '<div class="r-offline"><span class="alert alert-info">客服正忙，请您耐心等待</span></div>';
-			logbox.innerHTML += str;
-			//$("#leaveMessage").click();
 		}
 		
 		//通过按钮结束对话(**)
@@ -303,10 +293,8 @@
 			}
 			logbox.innerHTML += str;
 			moveScroll();
-			JS.Engine.stop();
 			
 		    //弹出评分对话框
-		    socreUserNotice();
 		}
 		
 		// 客服评分弹出窗
@@ -459,19 +447,20 @@
 		function checkMessage(){
 			//姓名
 			var custName = $("#custname").val();
-			if(!custName || custName.length>20){
+			if(<c:if test="${checkInfo.getItemName().indexOf('1')>=0}">!custName || </c:if><c:if test="${checkInfo.getItemName().indexOf('1')<0}">custName &&</c:if> custName.length>20){
 				$.dialog.alert("姓名不能为空或超过20个字符!");
 				return true;
 			}
 			//邮箱
 			var email = $("#custemail").val();
 			var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-			if(email && (email.length>20 || !pattern.test(email))){
+			if(<c:if test="${checkInfo.getItemName().indexOf('2')>=0}">!email || (email.length>20 || !pattern.test(email))</c:if><c:if test="${checkInfo.getItemName().indexOf('2')<0}">email && (email.length>20 || !pattern.test(email))</c:if>){
 				$.dialog.alert("请输入正确的邮箱!");
 				return true;
 			}
 			//电话
 			var custPhone = $("#custphone").val();
+			<c:if test="${checkInfo.getItemName().indexOf('3')>=0}">
 			if (custPhone.replace("^[ ]+$", "").length != 0) {
 				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
 				if (!pattenPhone.test(custPhone)) {
@@ -482,31 +471,63 @@
 				$.dialog.alert("手机号码为空或者格式不正确!");
 				return true;
 			}
+			</c:if>
+			<c:if test="${checkInfo.getItemName().indexOf('3')<0}">
+			var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
+			if (custPhone && !pattenPhone.test(custPhone)) {
+				$.dialog.alert("手机号码格式不正确!");
+				return true;
+			}
+			</c:if>
 			//QQ
 			var qq = $("#custqq").val();
 			var pattenQQ = /^[d]{20}$/;
-			if(qq && !pattenQQ.test(qq)){
+			if(<c:if test="${checkInfo.getItemName().indexOf('4')>=0}">!qq || </c:if><c:if test="${checkInfo.getItemName().indexOf('4')<0}">qq &&</c:if>!pattenQQ.test(qq)){
 				$.dialog.alert("QQ号码格式不正确!");
 				return true;
 			}
 			//MSN
 			var msn = $("#custmsn").val();
-			if(msn && msn.length>40){
-				$.dialog.alert("MSN超长!");
+			<c:if test="${checkInfo.getItemName().indexOf('5')>=0}">
+			if(!msn || msn.length>40){
+				$.dialog.alert("MSN为空或超长!");
 				return true;
 			}
+			</c:if>
+			<c:if test="${checkInfo.getItemName().indexOf('5')<0}">
+			if(msn && msn.length>40){
+				$.dialog.alert("MSN为空或超长!");
+				return true;
+			}
+			</c:if>
 			//单位
 			var company = $("#custcompany").val();
+			<c:if test="${checkInfo.getItemName().indexOf('6')>=0}">
+			if(!company || company.length>100){
+				$.dialog.alert("单位超长!");
+				return true;
+			}
+			</c:if>
+			<c:if test="${checkInfo.getItemName().indexOf('6')<0}">
 			if(company && company.length>100){
 				$.dialog.alert("单位超长!");
 				return true;
 			}
+			</c:if>
 			//地址
 			var address = $("#custaddress").val();
+			<c:if test="${checkInfo.getItemName().indexOf('7')>=0}">
+			if(!address || address.length>100){
+				$.dialog.alert("地址为空或超长!");
+				return true;
+			}
+			</c:if>
+			<c:if test="${checkInfo.getItemName().indexOf('7')<0}">
 			if(address && address.length>100){
 				$.dialog.alert("地址超长!");
 				return true;
 			}
+			</c:if>
 			//留言内容
 			var custContent = $("#custContent").val();
 			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
@@ -536,7 +557,7 @@
 			  });
 			var data = {
 					   "customerId":$("#currentCustomerId").val(),
-						"userId" : $("#teacher").val(),
+						"userId" : $("#teacher").val()?$("#teacher").val():"0",
 						"replyWay" : replyWay,
 						"replyType" :replyType,
 						"name": $("#custname").val()?$("#custname").val():"",
