@@ -119,10 +119,10 @@ public class DictMan {
 		table = table.toLowerCase();
 		DictItem dt = null;
 		if (value != null) {
-			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value,DictItem.class);
+			dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value);
 			if (dt == null) {
 				getDictList(CacheName.DICTLIST,table);
-				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value,DictItem.class);
+				dt = (DictItem) CacheMan.getObject(CacheName.DICTITEM , table+value);
 			}
 		}
 		return dt;

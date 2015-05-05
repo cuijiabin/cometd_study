@@ -93,11 +93,11 @@ public class UserController {
 								if (thread != null)
 									thread.start();
 							} else {
-								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
+								Object obj = CacheMan.getObject(CacheName.LOGINCOUNT, "");
 								if (obj == null) {
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", 1, 6);
 								} else {
-									Integer num = (Integer) CacheMan.getObject(CacheName.LOGINCOUNT, "",Integer.class);
+									Integer num = (Integer) CacheMan.getObject(CacheName.LOGINCOUNT, "");
 									if (num == 4)
 										userService.updateUser("1", user);
 									CacheMan.addObjectTimer(CacheName.LOGINCOUNT, "", num + 1,6);
@@ -151,7 +151,7 @@ public class UserController {
 		if (user == null)
 			return "login";
 		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
-				user.getId(),String.class);
+				user.getId());
 		List<Function> list = (List<Function>) CacheMan.getList(CacheName.SYSFUNCTIONONE, "",Function.class);
 		List<Function> newList = funcService.checkFuncOne(list, codes);
 		model.addAttribute("topList", newList);
@@ -163,7 +163,7 @@ public class UserController {
 				}
 			}
 			Function function = (Function) CacheMan.getObject(CacheName.FUNCTION,
-					typeId==null?2:typeId,Function.class);
+					typeId==null?2:typeId);
 			model.addAttribute("func", function);
 			return "index";
 

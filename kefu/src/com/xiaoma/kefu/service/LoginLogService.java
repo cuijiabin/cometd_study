@@ -51,7 +51,7 @@ public class LoginLogService {
 		try {
 			if (userId == null || StringHelper.isEmpty(ip))
 				return 0;
-			User user = (User) CacheMan.getObject(CacheName.SUSER, userId,User.class);
+			User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
 			if (user == null)
 				return 0;
 			LoginLog log = new LoginLog();

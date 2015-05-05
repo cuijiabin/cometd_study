@@ -14,6 +14,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import com.xiaoma.kefu.util.JsonUtil;
+import com.xiaoma.kefu.util.SerializeUtil;
 
 /**
  * 
@@ -122,8 +123,10 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 
-			String value = JsonUtil.toJson(obj);
-			jedis.set(key, value);
+			byte[] bKey = key.getBytes();
+			byte[] bObj = SerializeUtil.serialize(obj);
+			
+			jedis.set(bKey, bObj);
 
 		} catch (Exception e) {
 			log.error("JedisDao::setKO:" + e.getMessage());
@@ -137,6 +140,7 @@ public class JedisDao {
 		try {
 			jedis = getJedis();
 			jedis.del(key);
+
 
 			for (Object obj : list) {
 				String value = JsonUtil.toJson(obj);
@@ -179,10 +183,8 @@ public class JedisDao {
 	public static void setKOT(String key, Object obj, int seconds) {
 		try {
 			jedis = getJedis();
-
-			String value = JsonUtil.toJson(obj);
-
-			jedis.set(key, value);
+			
+			jedis.set(key, String.valueOf(SerializeUtil.serialize(obj)));
 			jedis.expire(key, seconds);
 
 		} catch (Exception e) {
@@ -207,17 +209,12 @@ public class JedisDao {
 
 	}
 
-	public static <T> Object getObject(String key, Class<T> clazz) {
+	public static <T> Object getObject(String key) {
 		try {
 			jedis = getJedis();
 
-			String value = jedis.get(key);
-
-			if (StringUtils.isEmpty(value)) {
-				return null;
-			}
-
-			Object obj = JsonUtil.getObjFromJson(value, clazz);
+			byte[] byteObj = jedis.get(key.getBytes());
+			Object obj = SerializeUtil.unserialize(byteObj);
 
 			return obj;
 

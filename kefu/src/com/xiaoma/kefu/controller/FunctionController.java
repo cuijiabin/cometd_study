@@ -56,7 +56,7 @@ public class FunctionController {
 				return"login";
 			if (id != null) {
 				List<Function> list = (List<Function>) CacheMan.getList(CacheName.FUNCTIONTREEBYID, id,Function.class);
-				String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId(),String.class);
+				String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
 				List<Function> newList =funcService.checkFuncOne(list, codes);
 				JSONArray json = new JSONArray().fromObject(newList);
 				System.out.println(json);

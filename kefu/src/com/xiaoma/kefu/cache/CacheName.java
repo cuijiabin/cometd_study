@@ -15,16 +15,14 @@ package com.xiaoma.kefu.cache;
 public class CacheName {
 	//系统session
 	public static final String USER="user";
-	//短信
-	public static final String SHORTMESSAGE="SHORTMESSAGE";
 	//字典表list
-	public static final String DICTLIST="DICTLIST";
+	public static final String DICTLIST="dictList";
 	//单条字典信息
-	public static final String DICTITEM="DICTITEM";
+	public static final String DICTITEM="dictItem";
 	//单条功能
-	public static final String FUNCTION="FUNCTION";
+	public static final String FUNCTION="function";
 	//系统用户
-	public static final String SUSER="SUSER";
+	public static final String SUSER="sUser";
 	//系统人员的所有的功能串
 	public static final String USERFUNCTION="userFunction";
 	//头部的功能树的列表
@@ -37,11 +35,11 @@ public class CacheName {
 	
 	
 	//回复方式(生成留言框)
-	public static final String REPLYWAY="REPLYWAY";
+	public static final String REPLYWAY="replyWay";
 	//留言对象(生成留言框)
-	public static final String MESSAGETO="MESSAGETO";
+	public static final String MESSAGETO="messageTo";
 	//风格下面的等待列表
-	public static final String STYLEWAITLIST="STYLEWAITLIST";
+	public static final String STYLEWAITLIST="styleWaitList";
 	
 	//客服图标的div格式 电脑版 在线
 	public static final String DIVICONPCON="divIconPCOn";

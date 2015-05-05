@@ -20,10 +20,10 @@ public class CacheMan {
 	private static Log log = LogFactory.getLog(CacheMan.class);
 
 	// 获取缓存对象；param1:缓存前缀，param2:对应的id
-	public static <T> Object getObject(String cacheName, Object value,Class<T> clazz) {
+	public static <T> Object getObject(String cacheName, Object value) {
 		try {
 			String key = CacheUtil.getCacheName(cacheName, value);
-			Object obj = JedisDao.getObject(key,clazz);
+			Object obj = JedisDao.getObject(key);
 			if (obj == null) {
 				obj = CacheFactory.factory(cacheName, value);
 				if (obj != null)

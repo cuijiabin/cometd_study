@@ -129,13 +129,13 @@
 	        <div class="m-sidemenu">
 	        	<div class="c-bor">
 	                <h3 class="u-tit c-bg">
-	                	<a class="f-fr" href="#">添加</a>
 	                    <a class="f-fl" target="_blank" href="/user/main.action?typeId=4">常用语管理</a>
 	                </h3>
 	                <div class="m-sidemenu-cnt">
+	                <jsp:include page="message.jsp" />
 					</div>
 	            </div>
-	        	<div class="c-bor">
+	        	<!-- <div class="c-bor">
 	                <h3 class="u-tit c-bg">
 	                	<a class="f-fr" href="#">添加</a>
 	                    <a class="f-fl" href="#">知识库</a>
@@ -149,6 +149,7 @@
 	                </h3>
 	                <div class="m-sidemenu-cnt">3</div>
 	            </div>
+	             -->
 			</div>
 			
 	    </div>
