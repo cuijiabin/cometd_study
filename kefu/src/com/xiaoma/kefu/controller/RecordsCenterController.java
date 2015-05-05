@@ -730,7 +730,7 @@ public class RecordsCenterController {
 			condition.append(" and t1.isTalk = " + 1 );
 		}
 		if(userService.hasThisRole(user, RoleName.yuangong)){
-			condition.append(" and t1.userId = " + userId );//员工只能查自己
+			condition.append(" and t1.userId = " + user.getId() );//员工只能查自己
 		}
 		return condition;
 	}
@@ -836,7 +836,7 @@ public class RecordsCenterController {
 			condition.append(" ) ");
 		}
 		if(userService.hasThisRole(user, RoleName.yuangong)){
-			condition.append(" and t1.userId = " + userId );//员工只能查自己
+			condition.append(" and t1.userId = " + user.getId() );//员工只能查自己
 		}
 		return condition;
 	}

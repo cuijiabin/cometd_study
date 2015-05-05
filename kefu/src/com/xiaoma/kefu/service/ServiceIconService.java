@@ -80,6 +80,7 @@ public class ServiceIconService {
 	* @Date: 2015年4月14日
 	 */
 	public Integer update(ServiceIcon serviceIcon) {
+		serviceIcon.setUpdateDate(new Date());
 		return serviceIconDaoImpl.update(serviceIcon);
 	}
 	
@@ -162,21 +163,21 @@ public class ServiceIconService {
 	* @param fileOn
 	* @param fileOff
 	* @param serviceIcon
+	 * @param oldModel 数据库旧的对象
 	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
 	public void saveAndUpdateDiv4PC(MultipartFile fileOn, MultipartFile fileOff,
-			ServiceIcon serviceIcon) throws IOException {
+			ServiceIcon serviceIcon, ServiceIcon oldModel) throws IOException {
 		//保存文件 ys
 		saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标PC在线);
 		saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标PC离线);
 		
 //		//拿出旧的创建时间,类型,按钮id, 别的全用新的
-		ServiceIcon oldModel = get(serviceIcon.getId());
+//		ServiceIcon oldModel = get(serviceIcon.getId());
 		serviceIcon.setCreateDate(oldModel.getCreateDate());
 		serviceIcon.setButtonId(oldModel.getButtonId());
-		serviceIcon.setUpdateDate(new Date());
 		if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址
 			serviceIcon.setOnlinePic(oldModel.getOnlinePic());;
 		}
@@ -413,21 +414,21 @@ public class ServiceIconService {
 	* @param fileOn
 	* @param fileOff
 	* @param serviceIcon
+	 * @param oldModel	旧的对象 
 	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月27日
 	 */
 	public void saveAndUpdateDiv4YD(MultipartFile fileOn,
-			MultipartFile fileOff, ServiceIcon serviceIcon) throws IOException {
+			MultipartFile fileOff, ServiceIcon serviceIcon, ServiceIcon oldModel) throws IOException {
 		//保存文件 ys
 		saveUplaodFile(fileOn,serviceIcon,StylePicName.客服图标移动在线);
 		saveUplaodFile(fileOff,serviceIcon,StylePicName.客服图标移动离线);
 		
 //		//拿出旧的创建时间,类型,按钮id, 别的全用新的
-		ServiceIcon oldModel = get(serviceIcon.getId());
+//		ServiceIcon oldModel = get(serviceIcon.getId());
 		serviceIcon.setCreateDate(oldModel.getCreateDate());
 		serviceIcon.setButtonId(oldModel.getButtonId());
-		serviceIcon.setUpdateDate(new Date());
 		if(serviceIcon.getOnlinePic()==null){//如果这次没上传图片,则取上次的地址
 			serviceIcon.setOnlinePic(oldModel.getOnlinePic());;
 		}

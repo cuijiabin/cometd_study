@@ -65,6 +65,7 @@ public class InviteElementService {
 	* @Date: 2015年4月14日
 	 */
 	public Integer update(InviteElement inviteElement) {
+		inviteElement.setUpdateDate(new Date());
 		return inviteElementDaoImpl.update(inviteElement);
 	}
 	
@@ -170,16 +171,17 @@ public class InviteElementService {
 	/**
 	 * PC端保存. 保存到数据库,并且更新 整个div
 	* @param groupFile
-	* @param inviteElement
+	* @param inviteElement	新对象
+	 * @param oldModel	旧对象 
 	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月24日
 	 */
 	public void saveAndUpdateDiv4PC(MultipartFile groupFile,
-			InviteElement inviteElement) throws IOException {
+			InviteElement inviteElement, InviteElement oldModel) throws IOException {
 		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图,DeviceType.PC);
 //		//补充字段
-		InviteElement oldModel = get(inviteElement.getId());
+//		InviteElement oldModel = get(inviteElement.getId());
 		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
 			inviteElement.setPicUrl(oldModel.getPicUrl());
 		}
@@ -191,7 +193,6 @@ public class InviteElementService {
 		}
 		inviteElement.setName(oldModel.getName());
 		inviteElement.setCreateDate(oldModel.getCreateDate());
-		inviteElement.setUpdateDate(new Date());
 		update(inviteElement);
 		
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
@@ -444,16 +445,17 @@ public class InviteElementService {
 	/**
 	 * 移动端保存. 保存到数据库,并且更新 整个div
 	* @param groupFile
-	* @param inviteElement
+	* @param inviteElement	新对象
+	 * @param oldModel 旧对象
 	 * @throws IOException 
 	* @Author: wangxingfei
 	* @Date: 2015年4月27日
 	 */
 	public void saveAndUpdateDiv4YD(MultipartFile groupFile,
-			InviteElement inviteElement) throws IOException {
+			InviteElement inviteElement, InviteElement oldModel) throws IOException {
 		saveUplaodFile(groupFile,inviteElement,StylePicName.元素背景图,DeviceType.移动);
 //		//补充字段
-		InviteElement oldModel = get(inviteElement.getId());
+//		InviteElement oldModel = get(inviteElement.getId());
 		if(inviteElement.getPicUrl()==null){//如果这次没上传图片,则取上次的地址
 			inviteElement.setIsUpPic(false);
 			inviteElement.setPicUrl(oldModel.getPicUrl());;
@@ -466,7 +468,6 @@ public class InviteElementService {
 		}
 		inviteElement.setName(oldModel.getName());
 		inviteElement.setCreateDate(oldModel.getCreateDate());
-		inviteElement.setUpdateDate(new Date());
 		update(inviteElement);
 		
 		InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());

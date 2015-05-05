@@ -42,10 +42,11 @@ public class JoinListener extends ConnectListener {
 		CometConnection conn = anEvent.getConn();
 		HttpServletRequest request = conn.getRequest();
 		
+		//根据referer 判断是否为客户
 		String referer = request.getHeader("referer");
-		
 		logger.info("JoinListener referer: "+referer);
-
+		boolean isCustomer = StringUtils.isBlank(referer) ? false : referer.contains("customerChat.action");
+		
 		HttpSession session = request.getSession();
 
 		User user = (User) session.getAttribute("user");
@@ -57,7 +58,7 @@ public class JoinListener extends ConnectListener {
 		CometEngine engine = (CometEngine) anEvent.getTarget();
 
 		// 优先使用userId
-		if (user != null) {
+		if (user != null && !isCustomer) {
 			String userId = user.getId().toString();
 			// 添加至当前用户通信点
 			JedisTalkDao.setCnnUserId(JedisConstant.USER_TYPE, ccnId, userId);

@@ -75,6 +75,7 @@ public class ClientStyleService {
 	* @Date: 2015年4月14日
 	 */
 	public Integer update(ClientStyle clientStyle) {
+		clientStyle.setUpdateDate(new Date());
 		return clientStyleDaoImpl.update(clientStyle);
 	}
 	
@@ -130,6 +131,33 @@ public class ClientStyleService {
 				DictMan.getDictItem("d_sys_param", 1).getItemName()
 				+"/" + SysConst.STYLE_PATH
 				+"/" + styleId;
+	}
+	
+	/**
+	 * 保存文件,更新对象
+	* @param fileYs
+	* @param fileYx
+	* @param clientStyle	新的对象
+	* @param oldModel	旧的对象
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年5月5日
+	 */
+	public void updateAndSaveFile(MultipartFile fileYs, MultipartFile fileYx,
+			ClientStyle clientStyle, ClientStyle oldModel) throws IOException {
+		//保存文件 ys
+		saveUplaodFile(fileYs,clientStyle,StylePicName.访问端右上);
+		saveUplaodFile(fileYx,clientStyle,StylePicName.访问端右下);
+//		
+//		//拿出旧的创建时间, 别的全用新的
+		clientStyle.setCreateDate(oldModel.getCreateDate());
+		if(clientStyle.getYsAd()==null){//如果这次没上传图片,则取上次的地址
+			clientStyle.setYsAd(oldModel.getYsAd());;
+		}
+		if(clientStyle.getYxAd()==null){//如果这次没上传图片,则取上次的地址
+			clientStyle.setYxAd(oldModel.getYxAd());
+		}
+		update(clientStyle);
 	}
 
 

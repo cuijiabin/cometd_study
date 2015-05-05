@@ -26,7 +26,7 @@
 	        </li>
 	        <li><a target="_blank" href="/user/main.action?typeId=2"><i class="icon-logout"></i>客服系统</a></li>
 	        <li><a target="_blank" href="/user/main.action?typeId=6"><i class="icon-logout"></i>设置</a></li>
-	        <li><a href="/user/logout.action"><i class="icon-logout"></i>退出</a></li>
+	        <li><a href="/user/exit.action"><i class="icon-logout"></i>退出</a></li>
 	    </ul>
 	</div>
 	

@@ -102,6 +102,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 		pageBean.setObjList(criteria.list());
 	}
+	
 	/**
 	 * 查询所有
 	 * @param clazz
@@ -198,6 +199,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			Session session = getSession();
 			return session.save(obj);
 		}catch(Exception ex){
+			ex.printStackTrace();
 			return 0;
 		}
 	}
@@ -212,6 +214,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			session.update(obj);
 			return 1;
 		}catch(Exception ex){
+			ex.printStackTrace();
 			return 0;
 		}
 	}
@@ -226,6 +229,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			session.delete(obj);
 			return 1;
 		}catch(Exception ex){
+			ex.printStackTrace();
 			return 0;
 		}
 	}

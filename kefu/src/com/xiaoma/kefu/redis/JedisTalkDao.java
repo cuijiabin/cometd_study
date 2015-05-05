@@ -590,6 +590,7 @@ public class JedisTalkDao {
 		return null;
 	}
 
+	//测试使用
 	public static void main(String[] args) {
 		
 	}

@@ -93,7 +93,8 @@ public class ServiceIconController {
 			MultipartFile fileOff,
 			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
 		try {
-			serviceIconService.saveAndUpdateDiv4PC(fileOn,fileOff,serviceIcon);
+			ServiceIcon oldModel = serviceIconService.get(serviceIcon.getId());
+			serviceIconService.saveAndUpdateDiv4PC(fileOn,fileOff,serviceIcon,oldModel);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -116,7 +117,8 @@ public class ServiceIconController {
 			MultipartFile fileOff,
 			@ModelAttribute("serviceIcon") ServiceIcon serviceIcon) {
 		try {
-			serviceIconService.saveAndUpdateDiv4YD(fileOn,fileOff,serviceIcon);
+			ServiceIcon oldModel = serviceIconService.get(serviceIcon.getId());
+			serviceIconService.saveAndUpdateDiv4YD(fileOn,fileOff,serviceIcon,oldModel);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

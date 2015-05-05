@@ -186,7 +186,8 @@ public class InviteElementController {
 	public String savePC(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
-			inviteElementService.saveAndUpdateDiv4PC(groupFile,inviteElement);
+			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
+			inviteElementService.saveAndUpdateDiv4PC(groupFile,inviteElement,oldModel);
 		} catch (Exception e) {
 			logger.error("savePC"+inviteElement.getId(), e);
 			return "error500";
@@ -208,7 +209,8 @@ public class InviteElementController {
 	public String saveYD(Model model,MultipartFile groupFile,
 			@ModelAttribute("inviteElement") InviteElement inviteElement) {
 		try {
-			inviteElementService.saveAndUpdateDiv4YD(groupFile,inviteElement);
+			InviteElement oldModel = inviteElementService.get(inviteElement.getId());
+			inviteElementService.saveAndUpdateDiv4YD(groupFile,inviteElement,oldModel);
 		} catch (Exception e) {
 			logger.error("saveYD"+inviteElement.getId(), e);
 			return "error500";

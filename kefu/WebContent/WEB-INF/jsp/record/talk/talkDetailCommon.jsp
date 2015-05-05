@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fmt" uri="/WEB-INF/fmt.tld"%>
+<%@ taglib uri="/WEB-INF/xiaoma.tld" prefix="xiaoma" %>
 <script type="text/javascript"
 	src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <link rel="stylesheet" type="text/css"
@@ -24,9 +25,9 @@
                         <td colspan="2">对话时长：${dialogue.durationTimeFM }</td>
                     </tr>
                     <tr>
-                        <td colspan="2">开始方式：${dialogue.openType }</td>
-                        <td colspan="2">结束方式：${dialogue.closeType }</td>
-                        <td colspan="2">工号评分：${dialogue.scoreType }</td>
+                        <td colspan="2">开始方式：<xiaoma:dictValue name="d_open_type"  value="${dialogue.openType }" /></td>
+                        <td colspan="2">结束方式：<xiaoma:dictValue name="d_close_type"  value="${dialogue.closeType }" /></td>
+                        <td colspan="2">工号评分：<xiaoma:dictValue name="d_service_grade"  value="${dialogue.scoreType }" /></td>
                     </tr>
                 </tbody>
             </table>

@@ -136,9 +136,9 @@ public class FunctionService {
 		RoleDept roleDept = roleDeptDao.findRoleDeptBy(user.getRoleId(),
 				user.getDeptId());
 		List<Function> list = funcDao.getUserFuc(roleDept.getId());
-		String userFunc = "";
+		String userFunc = ",";
 		for (Function func : list) {
-			userFunc += "," + func.getCode() + ",";
+			userFunc += func.getCode() + ",";
 		}
 		return userFunc;
 	}

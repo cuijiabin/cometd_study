@@ -101,6 +101,10 @@ public class InviteIconController {
 	public String savePC(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
+			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
+			inviteIcon.setCreateDate(oldModel.getCreateDate());
+			inviteIcon.setTruePic(oldModel.getTruePic());
+			inviteIcon.setButtonId(oldModel.getButtonId());
 			inviteIconService.saveAndUpdateDiv4PC(inviteIcon);
 		} catch (Exception e) {
 			logger.error("savePC"+inviteIcon.getId(), e);
@@ -123,6 +127,10 @@ public class InviteIconController {
 	public String saveYD(Model model,
 			@ModelAttribute("inviteIcon") InviteIcon inviteIcon) {
 		try {
+			InviteIcon oldModel = inviteIconService.get(inviteIcon.getId());
+			inviteIcon.setCreateDate(oldModel.getCreateDate());
+			inviteIcon.setTruePic(oldModel.getTruePic());
+			inviteIcon.setButtonId(oldModel.getButtonId());
 			inviteIconService.saveAndUpdateDiv4YD(inviteIcon);
 		} catch (Exception e) {
 			logger.error("saveYD"+inviteIcon.getId(), e);
