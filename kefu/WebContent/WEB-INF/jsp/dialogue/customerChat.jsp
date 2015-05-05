@@ -182,6 +182,7 @@
 					findWaitList(0);//获取等待列表
 					$("#guanbiduihua").hide();
 					$("#guanbiduihua").hide();
+					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {

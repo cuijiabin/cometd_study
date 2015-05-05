@@ -83,12 +83,15 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value = "upName.action", method = RequestMethod.GET)
-	public String updateCustomerName(Model model, Long customerId, String customerName) {
+	public String updateCustomerName(Model model, Long customerId, String customerName, String phone, String email,String remark) {
 		
 		try {
 			Customer customer = customerService.getCustomerById(customerId);
 			
 			customer.setCustomerName(customerName);
+			customer.setPhone(phone);
+			customer.setEmail(email);
+			customer.setRemark(remark);
 			
 			boolean isSuccess = customerService.updateCustomer(customer);
 			if (isSuccess) {
