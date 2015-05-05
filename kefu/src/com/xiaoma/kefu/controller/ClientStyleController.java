@@ -1,7 +1,5 @@
 package com.xiaoma.kefu.controller;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -79,21 +77,8 @@ public class ClientStyleController {
 			MultipartFile fileYx,
 			@ModelAttribute("clientStyle") ClientStyle clientStyle) {
 		try {
-			//保存文件 ys
-			clientStyleService.saveUplaodFile(fileYs,clientStyle,StylePicName.访问端右上);
-			clientStyleService.saveUplaodFile(fileYx,clientStyle,StylePicName.访问端右下);
-//			
-//			//拿出旧的创建时间, 别的全用新的
 			ClientStyle oldModel = clientStyleService.get(clientStyle.getId());
-			clientStyle.setCreateDate(oldModel.getCreateDate());
-			clientStyle.setUpdateDate(new Date());
-			if(clientStyle.getYsAd()==null){//如果这次没上传图片,则取上次的地址
-				clientStyle.setYsAd(oldModel.getYsAd());;
-			}
-			if(clientStyle.getYxAd()==null){//如果这次没上传图片,则取上次的地址
-				clientStyle.setYxAd(oldModel.getYxAd());
-			}
-			clientStyleService.update(clientStyle);
+			clientStyleService.updateAndSaveFile(fileYs,fileYx,clientStyle,oldModel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

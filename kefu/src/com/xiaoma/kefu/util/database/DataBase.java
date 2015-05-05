@@ -267,6 +267,7 @@ public class DataBase implements Serializable{
 	public static <T> DataSet Query(String sql, PageBean<T> pageBean) {
 		String total = getSingleResult("select count(1) from ( " + sql + ") as total_aabbcc");
 		pageBean.setTotalRows(Integer.valueOf(total));
+		log.info("DataBase.querySQL="+sql);
 		return Query(sql,pageBean.getCurrentPage(),pageBean.getPageRecorders());
 	}
 

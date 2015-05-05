@@ -76,6 +76,7 @@ public class InviteIconService {
 	* @Date: 2015年4月14日
 	 */
 	public Integer update(InviteIcon inviteIcon) {
+		inviteIcon.setUpdateDate(new Date());
 		return inviteIconDaoImpl.update(inviteIcon);
 	}
 	
@@ -248,12 +249,6 @@ public class InviteIconService {
 	* @Date: 2015年4月24日
 	 */
 	public void saveAndUpdateDiv4PC(InviteIcon inviteIcon) {
-//		//补充字段
-		InviteIcon oldModel = get(inviteIcon.getId());
-		inviteIcon.setCreateDate(oldModel.getCreateDate());
-		inviteIcon.setTruePic(oldModel.getTruePic());
-		inviteIcon.setButtonId(oldModel.getButtonId());
-		inviteIcon.setUpdateDate(new Date());
 		update(inviteIcon);
 		
 		//更新div
@@ -269,12 +264,6 @@ public class InviteIconService {
 	* @Date: 2015年4月24日
 	 */
 	public void saveAndUpdateDiv4YD(InviteIcon inviteIcon) {
-		//补充字段
-		InviteIcon oldModel = get(inviteIcon.getId());
-		inviteIcon.setCreateDate(oldModel.getCreateDate());
-		inviteIcon.setTruePic(oldModel.getTruePic());
-		inviteIcon.setButtonId(oldModel.getButtonId());
-		inviteIcon.setUpdateDate(new Date());
 		update(inviteIcon);
 		
 		//更新div
