@@ -165,17 +165,17 @@ public class SendShortMessage {
 		boolean flag = new SendShortMessage().sendShortMessage(new String[] { code, "1" });
 		System.out.println(flag);
 		System.out.println("4d9d08fed1f04ca484509e8ffe5886f6".length());
-		CacheMan.add(CacheName.SHORTMESSAGE,"18511372116","111111");
+//		CacheMan.add(CacheName.SHORTMESSAGE,"18511372116","111111");
 //		System.out.println(CacheMan.getObject(CacheName.SHORTMESSAGE,"18511372116"));
-		Thread smThread = new ShortMessageThread(CacheName.SHORTMESSAGE+"18511372116");
-		if(smThread != null){
-			try {
-				Thread.sleep(60000);
-				smThread.start();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		Thread smThread = new ShortMessageThread(CacheName.SHORTMESSAGE+"18511372116");
+//		if(smThread != null){
+//			try {
+//				Thread.sleep(60000);
+//				smThread.start();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 			
 	}
 
