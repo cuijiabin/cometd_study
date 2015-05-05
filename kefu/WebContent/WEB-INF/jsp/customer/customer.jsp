@@ -162,14 +162,13 @@ function find(currentPage){
 		  $.dialog.alert("该范围内没有数据可供导出 ！");
 		  return;
 	  }
-
 	    //校验搜索框中的参数
 	    var customerId = $("#customerId").val();
         var chinesePatrn = /[\u4E00-\u9FA5]/g;
 		if(chinesePatrn.test(customerId)){
 			$.dialog.alert("客户编号不得是汉字！");
 			return false;
-		}
+	  }
 	     //校验日期
 	     var beginDate =$("#beginDate").val();
 		 var endDate=$("#endDate").val();
@@ -178,10 +177,10 @@ function find(currentPage){
 		  if(Date.parse(endDate) < Date.parse(beginDate))   {                           
 	           $.dialog.alert('结束日期不能小于开始日期',this);
 		  	   return false;
-		  }else{
+	   }else{
 			  console.log(beginDate);
 			  console.log(endDate);
-		  }
+	   }
 		  
  	 window.open("/customer/exportExcel.action?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()
  			       +"&customerName="+$("#customerName").val()

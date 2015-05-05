@@ -17,7 +17,7 @@
 </head>
 <body>
 <!--  面包屑  -->
-<div class="m-crumb">
+<div class="m-crumb" >
     <ul class="f-cb">
         <li><b>位置：</b></li>
         <li><a href="#">首页</a></li>
@@ -40,7 +40,7 @@
     	dels="f_perclass_del";
     }
  %>
-<div style="margin:50px">
+<div style="margin:50px " >
 <div class="g-cnt">
 	<input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
 	<input type="hidden" readonly="readonly" name="userId" id="userId" value="${userId }"/>
