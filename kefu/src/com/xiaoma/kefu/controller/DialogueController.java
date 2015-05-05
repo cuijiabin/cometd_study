@@ -26,6 +26,7 @@ import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.comet4j.DialogueQuene;
 import com.xiaoma.kefu.dict.DictMan;
+import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.Role;
@@ -34,6 +35,7 @@ import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.BlacklistService;
+import com.xiaoma.kefu.service.ClientStyleService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueDetailService;
 import com.xiaoma.kefu.service.DialogueService;
@@ -73,6 +75,9 @@ public class DialogueController {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private ClientStyleService clientStyleService;
 
 	private Logger logger = Logger.getLogger(DialogueController.class);
 	
@@ -310,6 +315,9 @@ public class DialogueController {
 		model.addAttribute("replyType",dialogueService.findMessageObject());
 		model.addAttribute("infoList",dialogueService.findInfoList());
 		model.addAttribute("checkInfo",DictMan.getDictItem("d_sys_param", 8));
+		
+		//广告显示
+		//model.addAttribute("clientStyle",clientStyleService.getByStyleId(styleId));
 		
 		//获取客服部人员列表
 		model.addAttribute("userList",userService.getResultDept(1));

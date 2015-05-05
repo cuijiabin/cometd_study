@@ -132,7 +132,8 @@
                     <ul><li class="u-borl">公司简介</li><li>客服信息</li></ul>
                 </div>
                 <div class="bd">
-                	<div class="tabBox"></div>
+                	<div class="tabBox">
+                	</div>
                 	<div class="tabBox"></div>
                 </div>
             </div>
@@ -180,7 +181,6 @@
 					var str = ['<div class="r-offline"><span class="alert alert-error">对不起，连接失败</span></div>'];
 					logbox.innerHTML += str.join('');
 					findWaitList(0);//获取等待列表
-					$("#guanbiduihua").hide();
 					$("#guanbiduihua").hide();
 					$("#guanbiduihua").hide();
 				},
@@ -462,19 +462,30 @@
 		function checkMessage(){
 			//姓名
 			var custName = $("#custname").val();
+			custName = custName?custName.replace("^[ ]+$", ""):"";
 			if(<c:if test="${checkInfo.getItemName().indexOf('1')>=0}">!custName || </c:if><c:if test="${checkInfo.getItemName().indexOf('1')<0}">custName &&</c:if> custName.length>20){
 				$.dialog.alert("姓名不能为空或超过20个字符!");
 				return true;
 			}
 			//邮箱
 			var email = $("#custemail").val();
+			email = email?email.replace("^[ ]+$", ""):"";
 			var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-			if(<c:if test="${checkInfo.getItemName().indexOf('2')>=0}">!email || (email.length>20 || !pattern.test(email))</c:if><c:if test="${checkInfo.getItemName().indexOf('2')<0}">email && (email.length>20 || !pattern.test(email))</c:if>){
-				$.dialog.alert("请输入正确的邮箱!");
+			<c:if test="${checkInfo.getItemName().indexOf('2')>=0}">
+			if(!email || (email.length>50 || !pattern.test(email))){
+				$.dialog.alert("邮箱不能为空或格式不正确!");
 				return true;
 			}
+			</c:if>
+			<c:if test="${checkInfo.getItemName().indexOf('2')<0}">
+			if(email && (email.length>50 || !pattern.test(email))){
+				$.dialog.alert("邮箱格式不正确或超长!");
+				return true;
+			}
+			</c:if>
 			//电话
 			var custPhone = $("#custphone").val();
+			custPhone = custPhone?custPhone.replace("^[ ]+$", ""):"";
 			<c:if test="${checkInfo.getItemName().indexOf('3')>=0}">
 			if (custPhone.replace("^[ ]+$", "").length != 0) {
 				var pattenPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57])[0-9]{8}$/;
@@ -496,16 +507,23 @@
 			</c:if>
 			//QQ
 			var qq = $("#custqq").val();
-			var pattenQQ = /^[d]{20}$/;
+			qq = qq?qq.replace("^[ ]+$", ""):"";
+			var pattenQQ = /^\d{1,20}$/;
 			if(<c:if test="${checkInfo.getItemName().indexOf('4')>=0}">!qq || </c:if><c:if test="${checkInfo.getItemName().indexOf('4')<0}">qq &&</c:if>!pattenQQ.test(qq)){
 				$.dialog.alert("QQ号码格式不正确!");
 				return true;
 			}
 			//MSN
-			var msn = $("#custmsn").val();
+			var msn = $("#custMSN").val();
+			msn = msn?msn.replace("^[ ]+$", ""):"";
+			var patternMsn = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
 			<c:if test="${checkInfo.getItemName().indexOf('5')>=0}">
-			if(!msn || msn.length>40){
+			if(!msn || msn.length>50){
 				$.dialog.alert("MSN为空或超长!");
+				return true;
+			}
+			if (!patternMsn.test(msn)) {
+				$.dialog.alert("MSN格式不正确!");
 				return true;
 			}
 			</c:if>
@@ -513,13 +531,17 @@
 			if(msn && msn.length>40){
 				$.dialog.alert("MSN为空或超长!");
 				return true;
+			}else if(msn && !patternMsn.test(msn)){
+				$.dialog.alert("MSN格式不正确!");
+				return true;
 			}
 			</c:if>
 			//单位
 			var company = $("#custcompany").val();
+			company = company?company.replace("^[ ]+$", ""):"";
 			<c:if test="${checkInfo.getItemName().indexOf('6')>=0}">
 			if(!company || company.length>100){
-				$.dialog.alert("单位超长!");
+				$.dialog.alert("单位为空或超长!");
 				return true;
 			}
 			</c:if>
@@ -531,6 +553,7 @@
 			</c:if>
 			//地址
 			var address = $("#custaddress").val();
+			address = address?address.replace("^[ ]+$", ""):"";
 			<c:if test="${checkInfo.getItemName().indexOf('7')>=0}">
 			if(!address || address.length>100){
 				$.dialog.alert("地址为空或超长!");
@@ -544,8 +567,8 @@
 			}
 			</c:if>
 			//留言内容
-			var custContent = $("#custContent").val();
-			if (custContent.replace("^[ ]+$", "").length <= 10 ||custContent.replace("^[ ]+$", "").length>200) {
+			var custContent = $("#custContent").val().replace("^[ ]+$", "");
+			if (custContent.length <= 10 || custContent.length > 200) {
 				$.dialog.alert("留言内容应在10-200个字符之间!");
 				return true;
 			}
@@ -575,13 +598,13 @@
 						"userId" : $("#teacher").val()?$("#teacher").val():"0",
 						"replyWay" : replyWay,
 						"replyType" :replyType,
-						"name": $("#custname").val()?$("#custname").val():"",
-						"email": $("#custemail").val()?$("#custemail").val():"",
-						"phone": $("#custphone").val()?$("#custphone").val():"",
-						"qq": $("#custqq").val()?$("#custqq").val():"",
-						"msn": $("#custmsn").val()?$("#custmsn").val():"",
-						"company": $("#custcompany").val()?$("#custcompany").val():"",
-						"address": $("#custaddress").val()?$("#custaddress").val():"",
+						"name": $("#custname").val()?$("#custname").val().replace("^[ ]+$", ""):"",
+						"email": $("#custemail").val()?$("#custemail").val().replace("^[ ]+$", ""):"",
+						"phone": $("#custphone").val()?$("#custphone").val().replace("^[ ]+$", ""):"",
+						"qq": $("#custqq").val()?$("#custqq").val().replace("^[ ]+$", ""):"",
+						"msn": $("#custmsn").val()?$("#custmsn").val().replace("^[ ]+$", ""):"",
+						"company": $("#custcompany")?$("#custcompany").val().replace("^[ ]+$", ""):"",
+						"address": $("#custaddress").val()?$("#custaddress").val().replace("^[ ]+$", ""):"",
 						"messageContent": $("#custContent").val().replace("^[ ]+$", "")
 					};
 			 $.ajax({
@@ -593,6 +616,7 @@
 		    		success : function(data) {
 		    			if (data.result == 0) {
 		    				$.dialog.alert('留言成功!');
+		    				$("#custContent").val('');
 		    			} else {
 		    				$.dialog.alert(data.msg);
 		    			}
@@ -628,7 +652,6 @@
 		    	});
 			
 		}
-	
 		// 客户端访客对话框架
 		jQuery(".slideTab").slide({trigger:"click"});
 		jQuery(".slideTab2").slide({trigger:"click"});
