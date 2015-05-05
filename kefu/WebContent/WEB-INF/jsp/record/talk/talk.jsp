@@ -15,6 +15,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
-<div style="margin:50px">
+<div class="g-cnt">
 <div class="m-query f-mar10">
 	<div class="m-query-bd">
 	    <div class="f-mbm">
@@ -36,11 +37,6 @@
             		<c:forEach var="dept" items="${deptList}">
 						<option value="${dept.id }">${dept.name }</option>
 					</c:forEach>
-<!-- 	                <option selected="selected" value="">全部部门</option> -->
-<!-- 	                <option value="1">客服部</option> -->
-<!-- 	                <option value="2">留学部</option> -->
-<!-- 	                <option value="3">随时学</option> -->
-<!-- 	                <option value="4">好顾问</option> -->
             	</select>
             <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
             				<input class="c-wd80 Wdate" type="text" id="endDate" value="${endDate }" onClick="WdatePicker()" />
@@ -126,10 +122,18 @@
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
+
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
 
 function find(currentPage){
 	
