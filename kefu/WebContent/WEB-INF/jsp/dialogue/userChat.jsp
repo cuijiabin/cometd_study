@@ -425,49 +425,65 @@
 	
 	//添加访客信息 (**) 不是很全
 	function addCustomerInfo(){
-		var customerId = $("#currentCustomerId").val();
-		var customerName = $("#showname").html();
-		var content ='<table>'
-		                  +'<tr>'
-		                  +' <td>客服编号：'+customerId+'</td>'
-		                  +'</tr>'
-		                  +'<tr>'
-		                  +'<td>姓名：<input id="updateName" type="text" value="'+customerName+'" /></td>'
-		                  +'<td>手机：<input type="text" value="" /></td>'
-		                  +'<td>邮箱：<input type="text" value="" /></td>'
-		                  +'<td>备注：<input type="text" value="" /></td>'
-		                  +'</tr>'
-		                  +'</table>';
 		
-		var d = $.dialog({
-		    id: 'addCustomerInfo',
-		    title:"修改客户姓名",
-		    content:content,
-		    button: [
-		        {
-		            name: '确定',
-		            callback: function () {
-		            	name = $("#updateName").val();
-		            	console.log("param: "+customerId+" ,name: "+name);
-		            	updateName(customerId, name);
-		            },
-		            focus: true
-		        },
-		        {
-		            name: '取消',
-		            callback: function () {
-		            }
-		        }
-		    ]
+		var customerId = $("#currentCustomerId").val();
+		$.ajax({
+		    type: "get",
+		    url: "/customer/info.action",
+		    data: {"customerId":customerId},
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function (data) {
+		    	var content ='<table>'
+		    		  +'<tr><td>风格：'+data.styleId+'</td></tr>'
+		    		  +'<tr><td>网站关键词：'+data.id+'</td></tr>'
+		    		  +'<tr><td>咨询页面：'+data.firstVisitSource+'</td></tr>'
+	                  +'<tr><td>客服编号：'+data.id+'</td></tr>'
+	                  +'<tr><td>姓名：<input type="text" name="customerName" value="'+data.customerName+'" /></td></tr>'
+	                  +'<tr><td>手机：<input type="text" name="phone" value="'+data.phone+'" /></td></tr>'
+	                  +'<tr><td>邮箱：<input type="text" name="email" value="'+data.email+'" /></td></tr>'
+	                  +'<tr><td>备注：<input type="textarea" name="remark" rows="3" cols="20" value="'+data.remark+'" /></td></tr>'
+	                  +'<tr><td><input type="hidden" name="customerId" value="'+data.id+'" /></td></tr>'
+	                  +'</table>';
+	
+				var d = $.dialog({
+				    id: 'addCustomerInfo',
+				    title:"修改客户姓名",
+				    content:content,
+				    button: [
+				        {
+				            name: '确定',
+				            callback: function () {
+				            	updateCustomer();
+				            },
+				            focus: true
+				        },
+				        {
+				            name: '取消',
+				            callback: function () {
+				            }
+				        }
+				    ]
+				});
+		    },
+		    error: function (msg) {
+		        alert("获取用户信息出错！");
+		    }
 		});
+		
+		
 	}
 	
-	function updateName(customerId,name){
+	function updateCustomer(){
 		
 		var url="/customer/upName.action";
+		var customerId = $("table input[name ='customerId']").val();
 		var data = {
 				"customerId":customerId,
-				"customerName":name
+				"customerName":$("table input[name ='customerName']").val(),
+				"phone":$("table input[name ='phone']").val(),
+				"email":$("table input[name ='email']").val(),
+				"remark":$("table input[name ='remark']").val(),
 		};
 		$.ajax({
 		    type: "get",
