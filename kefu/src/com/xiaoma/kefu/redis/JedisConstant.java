@@ -41,6 +41,7 @@ public class JedisConstant {
 	 */
 	public static final String CURRENT_CCN_LIST = "current_ccn_list:";
 
+	
 	// #######################与接待有关系
 
 	/**
@@ -58,7 +59,6 @@ public class JedisConstant {
 	 */
 	public static final String CCN_PASSIVE = "ccn_passive:";
 
-
 	/**
 	 * 对话列表( 客服ccnId+客户ccnId --> list)
 	 */
@@ -68,7 +68,7 @@ public class JedisConstant {
 	 * 待保存对话队列
 	 */
 	public static final String SAVE_DIALOGUE_LIST = "save_dialogue_list";
-	
+
 	/**
 	 * 对话信息
 	 */
@@ -88,7 +88,7 @@ public class JedisConstant {
 	 * 离线用户列表
 	 */
 	public static final String OFF_LINE_USER_SET = "off_line_user_set";
-	
+
 	/**
 	 * 客户等待列表
 	 */
@@ -160,7 +160,6 @@ public class JedisConstant {
 		return CCN_PASSIVE + ccnId;
 	}
 
-
 	/**
 	 * 生成对话列表的key
 	 * 
@@ -171,23 +170,23 @@ public class JedisConstant {
 
 		return DIALOGUE_LIST + uccnId + CCN_ID + cccnId;
 	}
-	
-	public static String getUccnIdFromDialogueListKey(String dialogueListKey){
-		
+
+	public static String getUccnIdFromDialogueListKey(String dialogueListKey) {
+
 		int start = dialogueListKey.indexOf(DIALOGUE_LIST) + DIALOGUE_LIST.length();
 		if (start < 0) {
 			return null;
 		}
 
 		int end = dialogueListKey.indexOf(CCN_ID);
-		
+
 		return dialogueListKey.substring(start, end);
 	}
-	
-	public static String getCccnIdFromDialogueListKey(String dialogueListKey){
+
+	public static String getCccnIdFromDialogueListKey(String dialogueListKey) {
 
 		int end = dialogueListKey.indexOf(CCN_ID);
-		
+
 		return dialogueListKey.substring(end);
 	}
 
@@ -217,8 +216,8 @@ public class JedisConstant {
 	}
 
 	public static String getUccnIdFromKey(String dialogueListKey) {
-		int start = dialogueListKey.indexOf(DIALOGUE_LIST)
-				+ DIALOGUE_LIST.length();
+		
+		int start = dialogueListKey.indexOf(DIALOGUE_LIST) + DIALOGUE_LIST.length();
 		int end = dialogueListKey.indexOf(CCN_ID);
 
 		return dialogueListKey.substring(start, end);
@@ -231,6 +230,7 @@ public class JedisConstant {
 		return dialogueListKey.substring(start);
 	}
 
+	// 测试使用
 	public static void main(String[] args) {
 	}
 

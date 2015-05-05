@@ -132,6 +132,7 @@ public class JedisDao {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static void setKList(String key, List list) {
 		try {
 			jedis = getJedis();
@@ -149,6 +150,7 @@ public class JedisDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> List<T> getKList(String key, Class<T> clazz) {
 		try {
 			jedis = getJedis();
