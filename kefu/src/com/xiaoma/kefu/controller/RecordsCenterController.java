@@ -860,12 +860,14 @@ public class RecordsCenterController {
 				+ " , IFNULL(t1.styleId,0) styleId, t1.openType, t1.closeType, IFNULL(t1.waitListId,0) waitListId "
 				+ " , t1.deviceType, t1.cardName, t1.maxSpace, t1.scoreType "
 				+ " , t1.landingPage, t1.durationTime, t1.btnCode "
-				+ " , t1.waitTime, t1.firstTime, t1.beginDate, t1.totalNum  "
+				+ " , t1.waitTime, t1.firstTime, t1.totalNum  "
+				+ " ,DATE_FORMAT(t1.beginDate,'%Y-%m-%d %H:%i:%s') beginDate "
 				+ " , t2.firstLandingPage, t2.firstVisitSource, t2.updateDate "
 				+ " FROM dialogue t1 "
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
 				+ " WHERE t1.isDel = " + isDel 
-				+ condition.toString();
+				+ condition.toString()
+				+ " order by t1.beginDate desc " ;
 		DataSet ds = DataBase.Query(sql,pageBean);
 //		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);
 		List<Map<String,String>> contentList = new ArrayList<Map<String,String>>((int) ds.RowCount);
@@ -1127,7 +1129,8 @@ public class RecordsCenterController {
 				+ " from message_records t1 "
 				+ " inner join customer t2 on t1.customerId = t2.id "
 				+ " where t1.isDel =  " + isDel
-				+ condition.toString();
+				+ condition.toString()
+				+ " order by t1.createDate desc " ;
 		DataSet ds = DataBase.Query(sql,pageBean);
 		List<Map<String,String>> list = new ArrayList<Map<String,String>>((int) ds.RowCount);
 		for(int i=0;i<ds.RowCount;i++){
