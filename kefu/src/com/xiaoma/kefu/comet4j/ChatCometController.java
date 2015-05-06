@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
@@ -196,6 +198,8 @@ public class ChatCometController {
 			return ;
 		}
 		
+		User user = (User) CacheMan.getObject(CacheName.SUSER, toUserId);
+		
 		//保存转接记录到数据库
 		DialogueSwitch dialogueSwitch = new DialogueSwitch();
 		dialogueSwitch.setFromUserId(userId);
@@ -233,7 +237,7 @@ public class ChatCometController {
 		
 		NoticeData uud = new NoticeData(Constant.ON_SWITCH_FROM, null);
 		NoticeData ttd = new NoticeData(Constant.ON_SWITCH_TO, null);
-		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, null);
+		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, user);
 		
 		engine.sendTo(Constant.CHANNEL, ucn, uud);
 		engine.sendTo(Constant.CHANNEL, tcn, ttd);

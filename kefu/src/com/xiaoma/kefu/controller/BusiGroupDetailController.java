@@ -157,8 +157,7 @@ public class BusiGroupDetailController {
 			busiGroupDetailService.saveDetail(data);
 			model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 		} catch (Exception e) {
-			logger.error("saveRecord失败!"+data);
-			e.printStackTrace();
+			logger.error("saveRecord失败!"+data,e);
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";

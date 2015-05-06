@@ -21,16 +21,16 @@
 <table class="table table-bordered m-table">
     <tbody>
         <tr>
-            <td class="f-txtr tdbg">风格：${dialogue.styleId }</td>
+            <td class="f-txtl tdbg">风格：${styleName }</td>
         </tr>
         <tr>
-            <td class="f-txtr tdbg">网站关键词：${dialogue.keywords }</td>
+            <td class="f-txtl tdbg">网站关键词：${dialogue.keywords }</td>
         </tr>
         <tr>
-            <td class="f-txtr tdbg">咨询页面：${dialogue.consultPage }</td>
+            <td class="f-txtl tdbg">咨询页面：${dialogue.consultPage }</td>
         </tr>
         <tr>
-            <td class="f-txtr tdbg">客户编号：${customer.id }</td>
+            <td class="f-txtl tdbg">客户编号：${customer.id }</td>
         </tr>
         <tr>
             <td class="f-txtr tdbg">客户名称：<input type="text" id="customerName" name="customerName" value="${customer.customerName}"/>
@@ -44,7 +44,7 @@
             <td class="f-txtr tdbg">邮箱：<input type="text" id="email" name="email" value="${customer.email}"/> </td>
         </tr>
         <tr>
-            <td class="f-txtr tdbg">备注：<input type="text" id="remark" name="remark" value="${customer.remark}"/> </td>
+            <td class="f-txtr tdbg">备注：<textarea id="remark" name="remark">${customer.remark}</textarea></td>
         </tr>
     </tbody>
 </table>

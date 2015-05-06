@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.BusiGroup;
 import com.xiaoma.kefu.model.InviteIcon;
 import com.xiaoma.kefu.model.Style;
@@ -25,6 +24,7 @@ import com.xiaoma.kefu.service.InviteIconService;
 import com.xiaoma.kefu.service.ServiceIconService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
+import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.SysConst;
@@ -217,11 +217,11 @@ public class StyleController {
 			Style style = styleService.get(styleId);
 			
 			String code = "<script type='text/javascript' src='"+ 
-					DictMan.getDictItem("d_sys_param", 15).getItemName()
+					FileUtil.getSiteUrl()
 					+"/" + SysConst.JS_DIV_PATH
 					+"/" + SysConst.JS_NAME + styleId + ".js"
 					+"'></script>";
-			String code2 = " [url= " + DictMan.getDictItem("d_sys_param", 15).getItemName() + "/dialogue/customerChat.action?styleId="+styleId
+			String code2 = " [url= " + FileUtil.getSiteUrl() + "/dialogue/customerChat.action?styleId="+styleId
 					+ "][img]" + "http://oc1.xiaoma.com/kfimg.php?arg=53kf&style=1" +" [/img]超酷签名，点击这里和我直接沟通[/url]";
 			
 			model.addAttribute("style", style);

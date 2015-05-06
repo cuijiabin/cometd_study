@@ -184,7 +184,6 @@
 					logbox.innerHTML += str.join('');
 					findWaitList(0);//获取等待列表
 					$("#guanbiduihua").hide();
-					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -205,6 +204,9 @@
 						break;
 					case 'no_user': 
 						noUser(data);// 客服不在
+						break;
+					case 'user_busy': 
+						userBusy(data);// 客服正忙
 						break;
 					default:
 					}
@@ -245,6 +247,7 @@
 				logbox.innerHTML += str.join('');
 				moveScroll();
 				$("#advisory").click();
+				$("#guanbiduihua").show();
 			}
 			
 		// 用户上线通知(**)
@@ -254,14 +257,19 @@
 			name = name.HTMLEncode();
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			$("#currentUserCcnId").val(message.who);
+			$("#currentUserCcnId").val(message.id);
 			
+			$("#guanbiduihua").show();
 			$("#advisory").click();
 			
 		}
 		
 		function switchCustomer(data){
-			//alert("后台用户切换！");
+			
+			var user = data.obj;
+			var html='与'+user.cardName+'对话中...';
+			console.log(html);
+			$("#dialogueTitle").html(html);
 		}
 		
 		// 用户下线通知(**)
@@ -286,7 +294,6 @@
 		function userBusy(data){
 			var str = '<div class="r-offline"><span class="alert alert-info">客服正忙，请您耐心等待</span></div>';
 			logbox.innerHTML += str;
-			//$("#leaveMessage").click();
 			$("#guanbiduihua").hide();
 		}
 		
