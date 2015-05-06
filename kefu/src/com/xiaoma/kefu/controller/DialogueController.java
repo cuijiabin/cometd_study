@@ -215,6 +215,7 @@ public class DialogueController {
 		Long id = null;
 		Boolean isNew = true; //判断是否是新用户标识
 		Boolean isForbidden = false;
+		Boolean isPhone = false;
 		
 		String firstVisitSource = null;
 		if (StringUtils.isNotBlank(customerId)) {
@@ -292,6 +293,7 @@ public class DialogueController {
 			}
 			if('4' == c || '5' == c){
 				dInfo.setDeviceType(2);//手机
+				isPhone = true;
 			}
 			if('1' == c || '2' == c || '3' == c){
 				dInfo.setDeviceType(1);//PC
@@ -328,9 +330,9 @@ public class DialogueController {
 		// 留言框生成规则 ---------------结束
 		
 		//判断是pc还是手机
-//		if(dInfo != null && dInfo.getDeviceType() == 2){
-//			return "/dialogue/customerPhoneChat";
-//		}
+		if(isPhone){
+			return "/dialogue/customerPhoneChat";
+		}
 
 		return "/dialogue/customerChat";
 		
