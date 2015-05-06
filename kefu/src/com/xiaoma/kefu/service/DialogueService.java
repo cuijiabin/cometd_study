@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -22,10 +23,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.dao.DialogueDao;
 import com.xiaoma.kefu.dict.DictMan;
+import com.xiaoma.kefu.model.AllotRule;
+import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DictItem;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
@@ -46,6 +51,8 @@ public class DialogueService {
 	private DialogueDao dialogueDaoImpl;
 	@Autowired
 	private ChatRecordFieldService chatRecordFieldService;//结果展示字段
+	@Autowired
+	private AllotRuleService allotRuleService;//结果展示字段
 	
 	/**
 	 * 逻辑删除 对话信息
@@ -290,7 +297,10 @@ public class DialogueService {
 		return (Long) dialogueDaoImpl.add(dialogue);
 	}
 	
-	
+	/***
+	 * 回复方式
+	 * @return
+	 */
 	public List<DictItem> findReplyWayList(){
 		try {
 			List<DictItem> list = DictMan.getDictList("d_cus_reply_way");
@@ -308,6 +318,22 @@ public class DialogueService {
 		}
 		return null;
 	}
+	/***
+	 * 回复方式
+	 * @return
+	 */
+	public List<Dialogue> findDialogByCustomerId(Long customerId){
+		try {
+			return dialogueDaoImpl.findDialogByCustomerId(customerId);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+	/***
+	 * 留言信息
+	 * @return
+	 */
 	public List<DictItem> findMessageObject(){
 		try {
 			List<DictItem> list = DictMan.getDictList("d_cus_reply_obj");
@@ -324,6 +350,10 @@ public class DialogueService {
 		}
 		return null;
 	}
+	/***
+	 * 留言信息
+	 * @return
+	 */
 	public List<DictItem> findInfoList(){
 		try {
 			List<DictItem> list = DictMan.getDictList("d_cus_info");
@@ -353,6 +383,65 @@ public class DialogueService {
 		Integer id = dialogueDaoImpl.update(dialogue);
 		
 		return (id >= 0);
+	}
+
+	
+	/**
+	 * 根据客户,分配对应的客服
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	public String allocateCcnIdByCustomer(Customer customer){
+		
+		try {
+			//如果当前风格下没有客服，直接返回。
+			List<Integer> userIds = CacheMan.getOnlineUserIdsByStyleId(customer.getStyleId());
+			if (CollectionUtils.isEmpty(userIds)) {
+				return null;
+			}
+			//如果所有客服都满员，需要直接进入等待队列。返回空。
+			
+			
+			//如果有客服，获取风格规则
+			AllotRule allotRule = allotRuleService.getByStyleId(customer.getStyleId());
+			//如果没规则，分配当前可接通数最大的一个
+			if(allotRule == null){
+				Integer max = 0;
+				String allocateUserId = null;
+				for (Integer id : userIds) {
+					String userId = id.toString();
+					Integer result = JedisTalkDao.getMaxReceiveCount(userId)
+							- JedisTalkDao.getReceiveCount(userId);
+					
+					if (result > max) {
+						max = result;
+						allocateUserId = userId;
+					}
+				}
+				return JedisTalkDao.getUserCcnList(allocateUserId).get(0);
+			}
+			//如果有规则,先判断第一个规则
+			if(allotRule.getFirstRule() != null && allotRule.getFirstRule()==1){
+				//获取客户的对话记录，如果有，则获取对应的客服，判断客服是否在当前等待中。如果该客服需等待，则不返回。
+				List<Dialogue> list = findDialogByCustomerId(customer.getId());
+				if(list != null && list.size()>0){
+					Dialogue d = list.get(0);
+					if (userIds.contains(d.getUserId())) {
+						return String.valueOf(d.getUserId());
+					}
+				}
+			}
+			//如果第一个不满足,判断第二个
+			if(allotRule.getSecondRule() != null && allotRule.getSecondRule()==1){
+				//
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} 
+		return null;
+		
 	}
 
 }

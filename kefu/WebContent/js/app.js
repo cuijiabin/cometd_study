@@ -55,6 +55,7 @@ function wSize(){
 	$(".m-dialog2  .u-txtarea").width($(".g-mn2c-cnt").width()-114);
 	$(".m-sidemenu .m-sidemenu-cnt").height(heights2-229);
 	$(".m-group-menu,.m-group-member,.m-group-tree").height(heights2-8);
+	$(".m-group-menu,.m-group-member,.m-group-tree").css("min-height",300+"px");
 	// 客户端访客对话框架
 	$(".m-dialog").height(heights3-28);
 	$(".m-message").height(heights3-28);

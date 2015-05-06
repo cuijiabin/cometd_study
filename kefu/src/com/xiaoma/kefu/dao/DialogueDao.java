@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.dao;
 
+import java.util.List;
+
 import com.xiaoma.kefu.model.Dialogue;
 
 
@@ -32,6 +34,13 @@ public interface DialogueDao extends BaseDao<Dialogue> {
 	* @Date: 2015年4月3日
 	 */
 	public int update2Restore(Dialogue dialogue);
+	/**
+	 * 根据客户Id获取所有客户对话
+	 * @param customerId
+	 * @return 
+	 * @Author: hanyu
+	 */
+	public List<Dialogue> findDialogByCustomerId(Long customerId);
 	
 	public Dialogue getLastBycustomerIdAndUserId(Long customerId,Integer userId);
 	

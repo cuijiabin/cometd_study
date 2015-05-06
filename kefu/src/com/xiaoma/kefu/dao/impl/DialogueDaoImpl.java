@@ -1,11 +1,15 @@
 package com.xiaoma.kefu.dao.impl;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoma.kefu.dao.DialogueDao;
 import com.xiaoma.kefu.model.Dialogue;
+import com.xiaoma.kefu.service.DialogueService;
 
 /**
  * *********************************
@@ -16,7 +20,7 @@ import com.xiaoma.kefu.model.Dialogue;
  */
 @Repository("dialogueDaoImpl")
 public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDao {
-	
+	private Logger logger = Logger.getLogger(DialogueDaoImpl.class);
 	/**
 	 * 更新为删除状态, 用于逻辑删除
 	* @Description: TODO
@@ -46,7 +50,17 @@ public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDa
 	    query.setLong("id", dialogue.getId());
 	    return query.executeUpdate();  
 	}
-
+	public List<Dialogue> findDialogByCustomerId(Long customerId){
+		try {
+			Session session = getSession();
+		    Query query = session.createQuery("from Dialogue a where a.customerId = :customerId  order by a.beginDate desc"); 
+		    query.setLong("customerId", customerId);
+		    return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
 	@Override
 	public Dialogue getLastBycustomerIdAndUserId(Long customerId, Integer userId) {
 		Session session = getSession();

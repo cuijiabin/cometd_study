@@ -326,7 +326,7 @@ public class DialogueController {
 		//model.addAttribute("clientStyle",clientStyleService.getByStyleId(styleId));
 		
 		//获取客服部人员列表
-		model.addAttribute("userList",userService.getResultDept(1));
+		model.addAttribute("userList",userService.getResultDept(Integer.parseInt(DictMan.getDictItem("d_sys_param", 17).getItemName())));
 		// 留言框生成规则 ---------------结束
 		
 		//判断是pc还是手机
