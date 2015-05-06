@@ -27,7 +27,6 @@
         <li><i>&gt;</i>对话邀请框设置</li>
     </ul>
 </div>
-<div style="margin:50px">
 <div class="g-cnt">
     
     <div class="f-padd10">
@@ -76,7 +75,6 @@
         	<button type="button" class="btn btn-primary btn-small" id="btn_save">保存</button>
         </div>
     </div>
-</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
