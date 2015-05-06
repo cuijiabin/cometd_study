@@ -22,11 +22,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.comet4j.DialogueQuene;
 import com.xiaoma.kefu.dict.DictMan;
-import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.Role;
@@ -45,7 +45,6 @@ import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.AddressUtil;
 import com.xiaoma.kefu.util.CookieUtil;
-import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.ParseURLKeywordUtil;
 import com.xiaoma.kefu.util.StudyMapUtil;
 
@@ -92,13 +91,16 @@ public class DialogueController {
 	public String switchList(HttpServletRequest request, HttpServletResponse response,HttpSession session, Model model, Long customerId) {
 
 		User user = (User) session.getAttribute(CacheName.USER);
-		List<String> strIds = JedisTalkDao.getSwitchList();
+		
+		Customer customer = customerService.getCustomerById(customerId);
+		Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
+		List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
 		List<Integer> userIds = new ArrayList<Integer>();
-		for(String strId : strIds){
-			if(JedisTalkDao.judgeFull(strId) || strId.equals(user.getId().toString())){
+		for(Integer strId : onlineUserIds){
+			if(JedisTalkDao.judgeFull(strId.toString()) || strId==user.getId()){
 				continue;
 			}
-			userIds.add(Integer.valueOf(strId));
+			userIds.add(strId);
 		}
 		
 		List<User> users = userService.getUsersByIds(userIds);
@@ -207,6 +209,7 @@ public class DialogueController {
 	public String customerChat(HttpServletRequest request,HttpServletResponse response, Model model, String refer,Integer styleId, 
 			String btnCode, String landingPage,String consultPage)throws Exception {
 
+		logger.info("customerChat.action param refer："+refer+" ,styleId: "+styleId+" ,btnCode: "+btnCode+" ,landingPage: "+landingPage+" ,consultPage: "+consultPage);
 		String customerId = CookieUtil.getCustomerIdFromCookie(request);
 
 		Long id = null;
@@ -238,10 +241,11 @@ public class DialogueController {
 			newCus.setIpInfo(ipInfo);
 			newCus.setStyleId(styleId);
 			
-			if(styleId != null){
-				Style style = styleService.get(styleId);
-				if(style != null) newCus.setStyleName(style.getName());
-			}
+			//风格id设置默认值
+			styleId = (styleId == null) ? 1 : styleId;
+			Style style = styleService.get(styleId);
+			if(style != null) newCus.setStyleName(style.getName());
+			
 			newCus.setCustomerType(1);
 			newCus.setStatus(0); //0-正常 1-删除
 			newCus.setFirstLandingPage(landingPage);

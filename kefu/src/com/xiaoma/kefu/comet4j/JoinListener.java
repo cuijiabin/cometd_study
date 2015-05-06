@@ -15,13 +15,16 @@ import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.dict.DictMan;
+import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
@@ -35,6 +38,8 @@ public class JoinListener extends ConnectListener {
 
 
 	private UserService userService = (UserService) SpringContextUtil.getBean("userService");
+	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
+	
 	private Logger logger = Logger.getLogger(JoinListener.class);
 
 	public boolean handleEvent(ConnectEvent anEvent) {
@@ -153,10 +158,26 @@ public class JoinListener extends ConnectListener {
 					return true;
 				}
 
-				// 分配客服
-				String allocateCnnId = JedisTalkDao.allocateCcnId();
-				if(StringUtils.isBlank(allocateCnnId)){
+				Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+				if(customer == null){
+					return true;
+				}
+				Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
+				List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
+				if(CollectionUtils.isEmpty(onlineUserIds)){
 					//对不起，客服不在线，请留言
+					JedisTalkDao.addCustomerWaitSet(ccnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+					dInfo.setIsWait(1);
+					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
+					logger.info("客户："+customerId+" ,进入等待队列！");
+					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
+					return true;
+				}
+				// 分配客服
+				String allocateCnnId = JedisTalkDao.allocateCcnIdByStyleId(onlineUserIds,styleId);
+				if(StringUtils.isBlank(allocateCnnId)){
+					//对不起，客服正忙，请留言
 					JedisTalkDao.addCustomerWaitSet(ccnId);
 					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
 					dInfo.setIsWait(1);

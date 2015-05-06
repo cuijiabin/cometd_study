@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.util.JsonUtil;
 
@@ -498,6 +499,77 @@ public class JedisTalkDao {
 			Integer max = 0;
 			String allocateUserId = null;
 			for (String userId : userIds) {
+				Integer result = getMaxReceiveCount(userId)
+						- getReceiveCount(userId);
+
+				if (result > max) {
+					max = result;
+					allocateUserId = userId;
+				}
+			}
+			return getUserCcnList(allocateUserId).get(0);
+		} catch (Exception e) {
+			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return null;
+
+	}
+	
+	/**
+	 * 分配任务
+	 * 
+	 * @param userIds
+	 * @return
+	 */
+	public static String allocateCcnIdByStyleId(Integer styleId){
+		
+		Jedis jedis = JedisDao.getJedis();
+		try {
+			List<Integer> userIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
+			if (CollectionUtils.isEmpty(userIds)) {
+				return null;
+			}
+			Integer max = 0;
+			String allocateUserId = null;
+			for (Integer id : userIds) {
+				String userId = id.toString();
+				Integer result = getMaxReceiveCount(userId)
+						- getReceiveCount(userId);
+
+				if (result > max) {
+					max = result;
+					allocateUserId = userId;
+				}
+			}
+			return getUserCcnList(allocateUserId).get(0);
+		} catch (Exception e) {
+			logger.error("JedisTalkDao::getCnnUserId:" + e.getMessage());
+		} finally {
+			pool.returnResource(jedis);
+		}
+		return null;
+
+	}
+	
+	/**
+	 * 分配任务
+	 * 
+	 * @param userIds
+	 * @return
+	 */
+	public static String allocateCcnIdByStyleId(List<Integer> userIds,Integer styleId){
+		
+		Jedis jedis = JedisDao.getJedis();
+		try {
+			if (CollectionUtils.isEmpty(userIds)) {
+				return null;
+			}
+			Integer max = 0;
+			String allocateUserId = null;
+			for (Integer id : userIds) {
+				String userId = id.toString();
 				Integer result = getMaxReceiveCount(userId)
 						- getReceiveCount(userId);
 
