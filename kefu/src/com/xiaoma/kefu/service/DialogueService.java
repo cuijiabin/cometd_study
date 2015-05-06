@@ -235,7 +235,8 @@ public class DialogueService {
 				+ " INNER JOIN customer t2 ON t1.customerId = t2.id " 
 				+ " INNER JOIN style t3 on t1.styleId = t3.id "//风格(站点来源)
 				+ " WHERE t1.isDel = 0 " 
-				+ " AND DATE(t1.beginDate) = DATE_SUB(CURDATE(),INTERVAL 1 DAY) ";
+				+ " AND DATE(t1.beginDate) = DATE_SUB(CURDATE(),INTERVAL 1 DAY) "
+				+ " order by t1.beginDate ";
 		
 		DataSet ds = DataBase.Query(sql);
 		List<List<String>> contentList = new ArrayList<List<String>>((int) ds.RowCount);

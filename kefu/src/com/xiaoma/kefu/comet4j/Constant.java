@@ -1,8 +1,9 @@
 package com.xiaoma.kefu.comet4j;
 
 /**
- * @description Constant
+ * 长连接对话参数
  * @author cuijiabin
+ *
  */
 public class Constant {
 	public static final String CHANNEL = "dialogue";

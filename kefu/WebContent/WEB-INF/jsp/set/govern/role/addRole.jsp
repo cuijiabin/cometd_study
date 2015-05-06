@@ -73,7 +73,7 @@ function addRole(id){
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
-					alert(data.msg);
+				W.$.dialog.alert(data.msg);
 					W.callback();
 			},
 			error : function(msg) {
@@ -88,13 +88,13 @@ function verificationParam(roleData) {
 	var roleName = roleData.name;
 	if (roleName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		
-		alert("角色名不得为空！");
+		W.$.dialog.alert("角色名不得为空！");
 
 		return false;
 	}
 	if(checkRole()){
 		
-		   alert("角色名已存在！");
+		W.$.dialog.alert("角色名已存在！");
 		   return false;
 	 }
 	return true;
@@ -104,13 +104,13 @@ function verificationParam1(roleData) {
 	var roleName = roleData.name;
 	if (roleName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
 		
-		alert("角色名不得为空！");
+		W.$.dialog.alert("角色名不得为空！");
 
 		return false;
 	}
 	if(checkRole()){
 		
-		   alert("角色名已存在！");
+		W.$.dialog.alert("角色名已存在！");
 		   return false;
 	 }
 	return true;
@@ -141,7 +141,7 @@ if($("#name").val()==''){
 		}
 	},
 	error : function(msg){
-		alert("出现错误,请重试!");
+		W.$.dialog.alert("出现错误,请重试!");
 	}
    });
   return flag;

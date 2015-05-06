@@ -43,8 +43,16 @@
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
 	                            <c:forEach var="dialogue" items="${dialogueList}">
-	                              <p class="r-visitor">${dialogue.customerId}&nbsp;${dialogue.createDate}</p>
-	                              <p class="r-visitor-txt">${dialogue.content}</p>
+	                             <c:choose>
+							         <c:when test="${dialogue.dialogueType == 1}">
+							           <p class="r-manager">我<fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
+							           <p class="r-manager-txt">${dialogue.content }</p>
+							        </c:when>
+							         <c:otherwise>
+							            <p class="r-visitor">${dialogue.cardName } <fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
+							            <p class="r-visitor-txt">${dialogue.content }</p>
+							        </c:otherwise>
+							     </c:choose>
 	                            </c:forEach>
 	                            <div class="r-history"><h3>历史记录</h3></div>
 	                        </c:if>
@@ -166,8 +174,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
-<!-- <script language="javascript" for="window" event="onload">  -->
-<script type="text/javascript">
+<script language="javascript" for="window" event="onload"> 
+
 			console.log("init");
 			// 引擎事件绑定
 			JS.Engine.on({
@@ -322,7 +330,7 @@
 			
 			var content ='<table>'
                 +'<tr>'
-                +'<td class="f-txtr tdbg">评分：<input type="radio" name="scoreType" value="1"/>非常好'
+                +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
                 +'<input type="radio" name="scoreType" value="2"/>好'
                 +'<input type="radio" name="scoreType" value="3"/>一般'
                 +'<input type="radio" name="scoreType" value="4"/>差'
@@ -371,6 +379,7 @@
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
+
 // 			console.log("回车发送！");
 // 			if (event.keyCode == 13) {
 // 				var message = inputbox.value;
@@ -403,7 +412,13 @@
 			   var message = inputbox.value;
 			   sendMessage(message);
 			   return false;
-		}
+
+			console.log("回车发送！");
+			if (event.keyCode == 13) {
+				var message = inputbox.value;
+				sendMessage(message);
+				return false;
+
 		if (obj[1].checked && event.keyCode ==10 )  {  
 		    alert("发送");  
 		    var message = inputbox.value;

@@ -17,8 +17,8 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
-<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 <link href="/jsplugin/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
         <li><i>&gt;</i>提醒方式</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 <div class="g-cnt" style="width: 1000px"> 
     <div class="f-padd10">
     <form action="/function/saveRemind.action" enctype="multipart/form-data" method="post" id="fform">
@@ -48,7 +48,7 @@
                 </p>
                 <p class="u-upload f-fl">
                     <button class="btn" type="button">上传文件</button>
-                    <input type="file" id="lsound" name="lsound" onChange="showsize(this.value)"/>
+                    <input type="file" id="lsound" name="lsound"/>
                 </p>
                 <span class="help-inline c-clred">请上传小于200KB，格式为mp3,wav的音效文件</span>
             </div>
@@ -110,30 +110,42 @@
 <script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/jsplugin/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-// 自定义滚动条--左右布局右侧
+//自定义滚动条--左右布局右侧
 (function($){
 	$(window).load(function(){
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-
+var api = frameElement.api,W=api.opener;
 function saveRemind(){
 	var lsound=$("#lsound").val();
 	if(lsound!=''){
 		extStart=lsound.lastIndexOf(".");
 	    ext=lsound.substring(extStart,lsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	alert("请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("上线提醒请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
+	   var obj_file = document.getElementById("lsound");
+	    if(obj_file.files[0].size>204800){
+	    	W.$.dialog.alert("上线提醒的文件过大，请按要求操作");
+	    	return;
+	    }
+	    
 	}
 	var jsound=$("#jsound").val();
 	if(jsound!=''){
 		extStart=jsound.lastIndexOf(".");
 	    ext=jsound.substring(extStart,jsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	$.dialog.alert("请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("建立对话请选格式为mp3,wav的音效文件");
+	    	return;
+	    }
+	    var obj_file = document.getElementById("jsound");
+	    if(obj_file.files[0].size>204800){
+	    	W.$.dialog.alert("建立对话的文件过大，请按要求操作");
 	    	return;
 	    }
 	}
@@ -142,7 +154,12 @@ function saveRemind(){
 		extStart=resound.lastIndexOf(".");
 	    ext=resound.substring(extStart,resound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	$.dialog.alert("请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("收到信息请选格式为mp3,wav的音效文件");
+	    	return;
+	    }
+	    var obj_file = document.getElementById("resound");
+	    if(obj_file.files[0].size>204800){
+	    	W.$.dialog.alert("收到信息的文件过大，请按要求操作");
 	    	return;
 	    }
 	}
@@ -156,27 +173,6 @@ function removecheck(){
     $(":radio[checked='checked']").attr("checked",false);
 }
 
-</script>
-<script type="text/javascript">
-function showsize(strfilename){
-    try
-    {
-     var maxsize = 200;     //定义允许文件的大小，单位kb，请根据需要自行修改！
-     var objstream = new activexobject("adodb.stream");
-     objstream.type = 1;
-     objstream.open();
-     objstream.loadfromfile(strfilename);
-     if(math.round(objstream.size/1024)>maxsize)
-         {alert ("抱歉！您选择的文件为 "+math.round(objstream.size/1024,2)+" kb　n超过了程序"+maxsize+" kb 的限制！");
-         return false;
-     }
-     else
-        alert("可以上传");
-    }catch(e)
-    {
-        alert("不支持");
-    }
-}
 </script>
 </body>
 </html>

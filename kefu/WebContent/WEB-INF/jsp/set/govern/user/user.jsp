@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <!-- 面包屑 -->
@@ -24,7 +25,7 @@
 </div>
 
 <!-- 表格有边框 -->
-<div style="margin:40px">
+<div class="g-cnt">
 <a href="/user/find.action?map[status]=1&map[id]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2&map[id]=1"style="font-size:18px">离职员工</a>
 <button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
 
@@ -48,10 +49,16 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
-//$('.btn-group .btn').click(function(){
-//	$(this).addClass("active").siblings().removeClass("active");
-//})
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
+var api = frameElement.api,W=api.opener;
 function find(currentPage){
 	var url="/user/find.action?map[status]=1";
 	var data = {
@@ -67,10 +74,10 @@ function find(currentPage){
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "html",
 	    success: function (data) {
-	       $("#table_data").html(data);
+	       W.$("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	    	W.$.dialog.alert(msg);
 	    }
 	});
 }
@@ -105,7 +112,7 @@ function userLeave(status){
 		return $(this).val();
 	}).get();
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		W.$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -114,11 +121,11 @@ function userLeave(status){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 	
@@ -129,7 +136,7 @@ function deleteAll(){
 		return $(this).val();
 	}).get();
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -138,11 +145,11 @@ function deleteAll(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }
@@ -152,11 +159,11 @@ function changeDept(){
 	}).get();
 	var deptId=$("#dept option:selected").val()
 	if(deptId==0){
-		alert("请选择转移部门");
+		W.$.dialog.alert("请选择转移部门");
 		return;
 	}
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		W.$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -165,11 +172,11 @@ function changeDept(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			find();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }

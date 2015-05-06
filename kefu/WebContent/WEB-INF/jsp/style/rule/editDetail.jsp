@@ -25,7 +25,6 @@
         <li><i>&gt;</i>业务分流</li>
     </ul>
 </div>
-<div style="margin:50px">
 <div class="g-cnt">
    	<form id="mainForm" method="post" >
 	    <div class="f-padd10">
@@ -68,7 +67,6 @@
     </div>
     
 </div>
-</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -88,12 +86,12 @@ function checkedAll(groupId){
 	var groupName = 'group'+groupId;
 	var detaidName = 'detail'+groupId;
 	if(($("#"+groupName+"").is(":checked"))){
-		$("input[name='"+detaidName+"']").each(function() {  
-            $(this).attr("checked", true); 
+		$("input[name='"+detaidName+"']").each(function() { 
+            $(this).prop("checked", true); 
         }); 
 	}else{
 		$("input[name='"+detaidName+"']").each(function() {  
-       		 $(this).attr("checked", false); 
+       		 $(this).prop("checked", false); 
    		 }); 
 	}
 }

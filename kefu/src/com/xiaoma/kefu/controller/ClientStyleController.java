@@ -1,5 +1,7 @@
 package com.xiaoma.kefu.controller;
 
+import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -50,8 +52,8 @@ public class ClientStyleController {
 	public String edit(Model model,@RequestParam Integer styleId) {
 		try {
 			ClientStyle clientStyle = clientStyleService.getByStyleId(styleId);
-			String ysUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右上);
-			String yxUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右下);
+			String ysUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右上)+"?"+new Random().nextInt();
+			String yxUrl = styleService.getMinPicPath(styleId, StylePicName.访问端右下)+"?"+new Random().nextInt();
 			model.addAttribute("clientStyle", clientStyle);
 			model.addAttribute("ysUrl", ysUrl);
 			model.addAttribute("yxUrl", yxUrl);
@@ -80,7 +82,7 @@ public class ClientStyleController {
 			ClientStyle oldModel = clientStyleService.get(clientStyle.getId());
 			clientStyleService.updateAndSaveFile(fileYs,fileYx,clientStyle,oldModel);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("save",e);
 		}
 		return "redirect:/clientStyle/edit.action?styleId="+clientStyle.getStyleId(); 
 	}

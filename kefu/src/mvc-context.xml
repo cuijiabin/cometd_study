@@ -34,5 +34,12 @@
 	<!--	upload	 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
 		<property name="maxUploadSize" value="2097152"></property>  
-	</bean> 
+	</bean>
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error</prop>
+			</props>
+		</property> 
+	</bean>
 </beans>

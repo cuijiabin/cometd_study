@@ -362,6 +362,10 @@ public class JedisTalkDao {
 		return JedisDao.zcard(JedisConstant.CUSTOMER_WAIT_SET);
 	}
 
+	/**
+	 * 获取等待列表中的最后一个（但是不会删除掉）
+	 * @return
+	 */
 	public static String popCustomerWaitSet() {
 		
 		Jedis jedis = JedisDao.getJedis();
@@ -402,6 +406,11 @@ public class JedisTalkDao {
 		return JedisDao.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
 	}
 
+	/**
+	 * 获取客户等待时间（单位：秒）
+	 * @param member
+	 * @return
+	 */
 	public static Integer getCustomerWaitTime(String member) {
 		
 			Long diff = JedisDao.zscore(JedisConstant.CUSTOMER_WAIT_SET, member);
@@ -455,8 +464,7 @@ public class JedisTalkDao {
 		return null;
 	}
 
-	public static DialogueInfo getDialogueScore(String customerId,
-			String userCcnId) {
+	public static DialogueInfo getDialogueScore(String customerId,String userCcnId) {
 		
 		Jedis jedis = JedisDao.getJedis();
 		try {
@@ -468,6 +476,8 @@ public class JedisTalkDao {
 				DialogueInfo dInfo = new DialogueInfo();
 				dInfo.setCustomerId(Long.valueOf(customerId));
 				dInfo.setUserCcnId(userCcnId);
+				
+				jedis.hset(key, userCcnId, JsonUtil.toJson(dInfo));
 				return dInfo;
 			}
 			DialogueInfo dInfo = (DialogueInfo) JsonUtil.getObjFromJson(value,DialogueInfo.class);
@@ -598,6 +608,21 @@ public class JedisTalkDao {
 		Integer result = getMaxReceiveCount(userId)- getReceiveCount(userId);
 		
 		return (result == null || result <=0 );
+		
+	}
+	
+	/**
+	 * 根据用户id获取剩余接待数量
+	 * @param userId
+	 * @return
+	 */
+	public static Integer getLastReceiveCount(String userId){
+		
+		Integer result = getMaxReceiveCount(userId)- getReceiveCount(userId);
+		
+		result = (result == null) ? 0 : result;
+		
+		return result;
 		
 	}
 

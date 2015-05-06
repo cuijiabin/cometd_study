@@ -106,13 +106,8 @@ public class DepartmentService {
 
 	public Integer updateDept(Department dept) {
 		Department dep=deptDaoImpl.findById(Department.class, dept.getId());
-		Department newDept = new Department();
-		  newDept.setId(dept.getId());
-		  newDept.setName(dept.getName());
-		  newDept.setUserCount(dep.getUserCount());
-		  newDept.setSortNum(dep.getSortNum());
-		  newDept.setIsDel(dep.getIsDel());
-	    return deptDaoImpl.update(newDept); 
+        dep.setName(dept.getName());
+	    return deptDaoImpl.update(dep); 
 	}
 	/**
 	 * 假删除

@@ -32,24 +32,36 @@ public class JedisDao {
 	// redisConf
 	private static String host = SystemConfiguration.getInstance().getHost();
 	private static Integer port = SystemConfiguration.getInstance().getPort();
-	private static Integer timeout = SystemConfiguration.getInstance()
-			.getTimeout();
-	private static String password = SystemConfiguration.getInstance()
-			.getPassword();
+	private static Integer timeout = SystemConfiguration.getInstance().getTimeout();
+	private static String password = SystemConfiguration.getInstance().getPassword();
 
 	public static JedisPool getJedisPool() {
 		if (pool == null) {
 			password = (StringUtils.isBlank(password)) ? null : password;
 
+			/**
+			 * 控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
+			 */
 			JedisPoolConfig config = new JedisPoolConfig();
-			// 控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
-			// 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+			
+			/**
+			 * 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+			 */
 			config.setMaxActive(500);
-			// 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
+			
+			/**
+			 * 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
+			 */
 			config.setMaxIdle(5);
-			// 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
+			
+			/**
+			 * 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
+			 */
 			config.setMaxWait(1000 * 100);
-			// 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
+			
+			/**
+			 * 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
+			 */
 			config.setTestOnBorrow(true);
 
 			pool = new JedisPool(config, host, port, timeout, password);
@@ -274,6 +286,12 @@ public class JedisDao {
 		return null;
 	}
 	
+	/**
+	 * 向zset中添加数据 score为当前毫秒数
+	 * @param key
+	 * @param member
+	 * @return
+	 */
 	public static Boolean zaddTimestamp(String key,String member){
 		
 		try {
@@ -294,20 +312,25 @@ public class JedisDao {
 			Long id = jedis.zrem(key, member);
 			return (id >= 0);
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::zrem:" + e.getMessage());
 		} finally {
 			pool.returnResource(jedis);
 		}
 		return true;
 	}
 	
+	/**
+	 * 获取zset的大小
+	 * @param key
+	 * @return
+	 */
 	public static Integer zcard(String key){
 		try {
 			jedis = getJedis();
 			Long size = jedis.zcard(key);
 			return size.intValue();
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::zcard:" + e.getMessage());
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -324,19 +347,24 @@ public class JedisDao {
 			}
 			return socre.longValue();
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::zscore:" + e.getMessage());
 		} finally {
 			pool.returnResource(jedis);
 		}
 		return null;
 	}
 	
+	/**
+	 * 获取list全部数据
+	 * @param key
+	 * @return
+	 */
 	public static List<String> lrangeAll(String key){
 		try {
 			jedis = getJedis();
 			return jedis.lrange(key, 0, -1);
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::lrangeAll:" + e.getMessage());
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -349,7 +377,7 @@ public class JedisDao {
 			Long id = jedis.rpush(key, member);
 			return (id >= 0);
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::rpush:" + e.getMessage());
 		} finally {
 			pool.returnResource(jedis);
 		}

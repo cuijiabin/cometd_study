@@ -68,7 +68,7 @@ public class ChatCometController {
 		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
 		//参数检查
 		if(StringUtils.isBlank(userCId) || StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
-			
+			logger.warn("向客户发送消息参数有误，请检查！");
 			return ;
 		}
 		
@@ -89,7 +89,7 @@ public class ChatCometController {
 		dialogueDetail.setUserId(uId);
 		dialogueDetail.setCustomerId(cId);
 		
-		User user = userService.getUserById(uId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
 		
 		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
@@ -104,10 +104,10 @@ public class ChatCometController {
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
-		CometConnection cusCcn = engine.getConnection(cusCId);
+		CometConnection customerCcn = engine.getConnection(cusCId);
 
 		engine.sendTo(Constant.CHANNEL, userCcn, und);
-		engine.sendTo(Constant.CHANNEL, cusCcn, cnd);
+		engine.sendTo(Constant.CHANNEL, customerCcn, cnd);
 
 		return;
 
@@ -127,6 +127,7 @@ public class ChatCometController {
         
 		//参数检查
 		if(StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
+			logger.warn("向客服发送消息参数有误，请检查！");
 			return ;
 		}
 		Long sendTime = System.currentTimeMillis();
@@ -136,7 +137,10 @@ public class ChatCometController {
 		logger.info("send message to user info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
 		
 		//如果userCId是空的话，告诉当前用户对话已结束
-		//TODO
+		if(StringUtils.isBlank(userCId)){
+			logger.warn("向客服发送消息参数有误，客户连接id不在接待列表中");
+			return ;
+		}
 		
 		//获取用户id
 		String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCId);
@@ -168,10 +172,10 @@ public class ChatCometController {
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
-		CometConnection cusCcn = engine.getConnection(cusCId);
+		CometConnection custommerCcn = engine.getConnection(cusCId);
 
 		engine.sendTo(Constant.CHANNEL, userCcn, und);
-		engine.sendTo(Constant.CHANNEL, cusCcn, cnd);
+		engine.sendTo(Constant.CHANNEL, custommerCcn, cnd);
 
 		return;
 
@@ -195,10 +199,11 @@ public class ChatCometController {
 		
 		//参数检查
 		if(userId == null || toUserId == null || customerId == null){
+			logger.warn("客服转接参数有误，请检查！");
 			return ;
 		}
 		
-		User user = (User) CacheMan.getObject(CacheName.SUSER, toUserId);
+		User toUser = (User) CacheMan.getObject(CacheName.SUSER, toUserId);
 		
 		//保存转接记录到数据库
 		DialogueSwitch dialogueSwitch = new DialogueSwitch();
@@ -217,8 +222,6 @@ public class ChatCometController {
         String key = JedisConstant.getDialogueListKey(ccnId,customerCcnId);
         JedisTalkDao.lpushSaveDialogue(key);
 		
-        //添加到离线客户列表
-//        JedisTalkDao.addOffLineUserSet(uId);
         
         //修改接待列表
         JedisTalkDao.remCcnReceiveList(ccnId, customerCcnId);
@@ -231,17 +234,17 @@ public class ChatCometController {
 		CometEngine engine = context.getEngine();
 		
 		//获取通道
-		CometConnection ucn = engine.getConnection(ccnId);
-		CometConnection tcn = engine.getConnection(toCcnId);
-		CometConnection cun = engine.getConnection(customerCcnId);
+		CometConnection userCcn = engine.getConnection(ccnId);
+		CometConnection toUserCcn = engine.getConnection(toCcnId);
+		CometConnection customerCcn = engine.getConnection(customerCcnId);
 		
 		NoticeData uud = new NoticeData(Constant.ON_SWITCH_FROM, null);
-		NoticeData ttd = new NoticeData(Constant.ON_SWITCH_TO, null);
-		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, user);
+		NoticeData tud = new NoticeData(Constant.ON_SWITCH_TO, null);
+		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, toUser);
 		
-		engine.sendTo(Constant.CHANNEL, ucn, uud);
-		engine.sendTo(Constant.CHANNEL, tcn, ttd);
-		engine.sendTo(Constant.CHANNEL, cun, cud);
+		engine.sendTo(Constant.CHANNEL, userCcn, uud);
+		engine.sendTo(Constant.CHANNEL, toUserCcn, tud);
+		engine.sendTo(Constant.CHANNEL, customerCcn, cud);
 	}
 	
 	/**
@@ -324,7 +327,7 @@ public class ChatCometController {
 		Integer userId = Integer.valueOf(uId);
 		
 		Customer customer  = customerService.getCustomerById(customerId);
-		User user = userService.getUserById(userId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, uId);
 		
 		Date startDate = new Date(System.currentTimeMillis());
 		Date endDate = TimeHelper.addHour(startDate, 8);
@@ -357,6 +360,9 @@ public class ChatCometController {
 		CometConnection ccn = engine.getConnection(customerCcnId);
 		NoticeData nd = new NoticeData(Constant.END_DIALOGUE, null);
 		engine.sendTo(Constant.CHANNEL, ccn, nd);
+		
+		//给自己发送通知
+		//TODO
 	}
 	
 	/**
@@ -381,6 +387,8 @@ public class ChatCometController {
 		//会话 key
         String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
         
+        //如果对话结束的话需要保存到数据库中！
+        //TODO
         DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,userCcnId);
         dInfo.setScoreType(scoreType);
         dInfo.setScoreRemark(remark);
@@ -403,6 +411,9 @@ public class ChatCometController {
 		Boolean isOnline = JedisTalkDao.isInOffLineUserSet(userId);
 		if(isOnline){
 			JedisTalkDao.remOffLineUserSet(userId);
+			
+			//撮合对话
+			//TODO
 		}else{
 			JedisTalkDao.addOffLineUserSet(userId);
 		}

@@ -375,7 +375,7 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .e_tit li .u-close{display:block;width:13px;height:13px;margin:9px 9px 9px 0;text-align:center;line-height:16px;background:#f60;color:#fff;font-size:13px;cursor:pointer;font-family:\5b8b\4f53;}
 
 /* 业务分组 */
-.g-bd7{margin:0 0 10px;}
+.g-bd7{margin:0 0 50px;}
 .g-sd71,.g-sd72{position:relative;float:left;width:150px;margin:0 -150px 0 0;}
 .g-sd72{float:right;width:250px;margin:0 0 0 -250px;}
 .g-mn7{float:left;width:100%;}

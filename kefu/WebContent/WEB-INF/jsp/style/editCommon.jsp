@@ -26,7 +26,6 @@
         <li><i>&gt;</i>界面样式设置</li>
     </ul>
 </div>
-<div style="margin:50px">
 <div class="g-cnt">
     <!-- 查询条件 -->
     <div class="m-query f-mar10">
@@ -65,7 +64,6 @@
             </tbody>
         </table>
     </div>
-</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

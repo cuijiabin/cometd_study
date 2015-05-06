@@ -25,7 +25,6 @@
         <li><i>&gt;</i>业务分组</li>
     </ul>
 </div>
-<div  style="margin:50px">
 <div class="g-cnt f-padd20">
     <div class="g-bd7 f-cb c-bor">
         <div class="g-sd71">
@@ -64,7 +63,6 @@
     </div>
     
     
-</div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>

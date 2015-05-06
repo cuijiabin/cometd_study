@@ -14,6 +14,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -26,7 +27,7 @@
     </ul>
 </div>
 <!-- 查询条件 -->
-<div style="margin:50px">
+<div class="g-cnt">
 <div class="m-query f-mar10">
 	<div class="m-query-hd">
         <label>对话时间：</label><input class="c-wd80 Wdate" type="text" id="beginDate" value="${beginDate }" onClick="WdatePicker()" /> - 
@@ -55,7 +56,15 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
 
 function find(currentPage){
 	var url="/recordsCenter/findMessage.action";

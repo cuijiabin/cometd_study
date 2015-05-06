@@ -16,7 +16,7 @@
                         <td colspan="2">IP地址：${dialogue.ipInfo }</td>
                     </tr>
                     <tr>
-                        <td colspan="3">资讯页面：${dialogue.consultPage }</td>
+                        <td colspan="3">咨询页面：${dialogue.consultPage }</td>
                         <td colspan="3">访问来源：${dialogue.keywords }</td>
                     </tr>
                     <tr>
