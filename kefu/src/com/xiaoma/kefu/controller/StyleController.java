@@ -329,4 +329,24 @@ public class StyleController {
 	    }
 	}
 	
+	/**
+	 * 重新生成 风格的 js文件,用于 模板变更后,重新生成js文件
+	* @param model
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月6日
+	 */
+	@RequestMapping(value = "afreshStyleJs.action", method = RequestMethod.GET)
+	public String afreshStyleJs(Model model,Integer styleId){
+		try {
+			//创建js文件
+			FileUtil.createStyleJsFile(styleId);
+			model.addAttribute("result", Ajax.JSONResult(0, "成功!"));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			model.addAttribute("result", Ajax.JSONResult(1, "失败!"));
+		}
+		return "resultjson";
+	}
 }
