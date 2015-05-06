@@ -67,6 +67,7 @@
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.excheck-3.5.js"></script>
 <script type="text/javascript">
+var api = frameElement.api,W=api.opener;
 var zTree;
 var demoIframe;
 var setting = {
@@ -155,10 +156,10 @@ function saveFunc(){
 		data:data,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 	

@@ -39,6 +39,7 @@
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
+var api = frameElement.api,W=api.opener;
 function find(currentPage){
 	var url="/dept/list.action";
 	var data = {
@@ -57,7 +58,7 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert("出现错误,请重试!");
+	    	W.$.dialog.alert("出现错误,请重试!");
 	    }
 	});
 }
@@ -88,11 +89,11 @@ function deleteDept(id){
 		data : {"id":id},
 		dataType : "json",
 		success : function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(msg) {
-			alert("出现错误,请重试!");
+			W.$.dialog.alert("出现错误,请重试!");
 		}
 	});
 	}

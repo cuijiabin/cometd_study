@@ -55,45 +55,45 @@ function repass(){
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
-					alert(data.msg);
+				W.$.dialog.alert(data.msg);
 					W.callback();
 			},
 			error : function(msg) {
-				alert("出现错误,请重试!");
+				W.$.dialog.alert("出现错误,请重试!");
 			}
 		});
 	}
 function verificationParam(userData) {
        var oldpass = userData.oldpass;
 	   if(oldpass.replace(/(^\s*)|(\s*$)/g, "").length ==0){
-			alert("旧密码不能为空");
+		   W.$.dialog.alert("旧密码不能为空");
 			return false;
 		}
 	   if(checkPass()){
-		    alert("旧密码输入错误！");
+		   W.$.dialog.alert("旧密码输入错误！");
 		   return false;
 	   }
 		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 		if (!patrn.test(oldpass)) {
-			alert("旧密码格式不正确");
+			W.$.dialog.alert("旧密码格式不正确");
 			return false;
 		}
 		
        var password = userData.password;
 	   if(password.replace(/(^\s*)|(\s*$)/g, "").length ==0){
-			alert("新密码不能为空");
+		   W.$.dialog.alert("新密码不能为空");
 			return false;
 		}
 		
 		var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 		if (!patrn.test(password)) {
-			alert("新密码格式不正确");
+			W.$.dialog.alert("新密码格式不正确");
 			return false;
 		}
 		
 		var password1 = userData.password1;
 		if (password !=password1) {
-			alert("两次输入密码不一致！");
+			W.$.dialog.alert("两次输入密码不一致！");
 			return false;
 		}
 		return true;
@@ -116,7 +116,7 @@ function checkPass(){
 			}
 		},
 		error : function(msg){
-			alert("出现错误,请重试!");
+			W.$.dialog.alert("出现错误,请重试!");
 		}
 	});
 	return flag;

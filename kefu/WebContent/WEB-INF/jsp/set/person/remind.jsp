@@ -110,7 +110,9 @@
 <script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/jsplugin/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+var api = frameElement.api,W=api.opener;
 // 自定义滚动条--左右布局右侧
 (function($){
 	$(window).load(function(){
@@ -124,12 +126,12 @@ function saveRemind(){
 		extStart=lsound.lastIndexOf(".");
 	    ext=lsound.substring(extStart,lsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	alert("上线提醒请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("上线提醒请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	   var obj_file = document.getElementById("lsound");
 	    if(obj_file.files[0].size>204800){
-	    	alert("上线提醒的文件过大，请按要求操作");
+	    	W.$.dialog.alert("上线提醒的文件过大，请按要求操作");
 	    	return;
 	    }
 	    
@@ -139,12 +141,12 @@ function saveRemind(){
 		extStart=jsound.lastIndexOf(".");
 	    ext=jsound.substring(extStart,jsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	$.dialog.alert("建立对话请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("建立对话请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	    var obj_file = document.getElementById("jsound");
 	    if(obj_file.files[0].size>204800){
-	    	alert("建立对话的文件过大，请按要求操作");
+	    	W.$.dialog.alert("建立对话的文件过大，请按要求操作");
 	    	return;
 	    }
 	}
@@ -153,12 +155,12 @@ function saveRemind(){
 		extStart=resound.lastIndexOf(".");
 	    ext=resound.substring(extStart,resound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	$.dialog.alert("收到信息请选格式为mp3,wav的音效文件");
+	    	W.$.dialog.alert("收到信息请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	    var obj_file = document.getElementById("resound");
 	    if(obj_file.files[0].size>204800){
-	    	alert("收到信息的文件过大，请按要求操作");
+	    	W.$.dialog.alert("收到信息的文件过大，请按要求操作");
 	    	return;
 	    }
 	}

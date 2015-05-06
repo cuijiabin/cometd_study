@@ -38,6 +38,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+var api = frameElement.api,W=api.opener;
 function find(currentPage){
 	var url="/role/list.action";
 	var data = {
@@ -57,7 +58,7 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	    	alert("出现错误,请重试!");
+	    	W.$.dialog.alert("出现错误,请重试!");
 	    }
 	});
 }
@@ -82,11 +83,11 @@ function deleteRole(id){
 		data : {"id":id},
 		dataType : "json",
 		success : function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(msg) {
-			alert("出现错误,请重试!");
+			W.$.dialog.alert("出现错误,请重试!");
 		}
 	});
 	}

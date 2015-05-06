@@ -111,12 +111,12 @@ function saveUser(id){
 		data : data,
 		dataType : "json",
 		success : function(data) {
-				alert(data.msg);
+			W.$.dialog.alert(data.msg);
 				W.callback();
 		},
 		error : function(msg) {
 
-			alert("出现错误,请重试!");
+			W.$.dialog.alert("出现错误,请重试!");
 		}
 	});
 }
@@ -126,58 +126,58 @@ function saveUser(id){
 function verificationParam(userData) {
 	var loginName = userData.loginName;
 	if (loginName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("工号不得为空！");
+		W.$.dialog.alert("工号不得为空！");
 		return false;
 	}
 	var chinesePatrn = /^[\da-zA-Z]{6,15}$/;
 	if(!chinesePatrn.test(loginName)){
-		 alert("工号输入规则不对");
+		W.$.dialog.alert("工号输入规则不对");
 		return false;
 	}
 	
 	 if(checkUser()){
-		    alert("工号已存在！");
+		 W.$.dialog.alert("工号已存在！");
 		   return false;
 	   }
 	
 	var userName = userData.userName;
 	if (userName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("姓名不得为空！");
+		W.$.dialog.alert("姓名不得为空！");
 		return false;
 	}
 	
 	var password = userData.password;
 	var patrn = /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,22}$/;
 	if (!patrn.test(password)) {
-		 alert("密码格式不正确");
+		W.$.dialog.alert("密码格式不正确");
 		return false;
 	}
 	
 	var password1 = userData.password1;
 	if (password !=password1) {
-		 alert("两次输入密码不一致！");
+		W.$.dialog.alert("两次输入密码不一致！");
 		return false;
 	}
 	
 	var maxListen = userData.maxListen;
 	if (maxListen.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写最大接听数！");
+		W.$.dialog.alert("请填写最大接听数！");
 		return false;
 	}
 	var checkListen = /^\d+$/;
 	if(!checkListen.test(maxListen)||maxListen==0){
-		alert("请输入大于0的正整数！");
+		W.$.dialog.alert("请输入大于0的正整数！");
 		return false;
 	}
 	var cardName = userData.cardName;
 	if (cardName.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写名片！");
+		W.$.dialog.alert("请填写名片！");
 		return false;
 	}
 	
 	var createDate = userData.createDate;
 	if (createDate.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
-		 alert("请填写入职时间！");
+		W.$.dialog.alert("请填写入职时间！");
 		return false;
 	}
 	
@@ -187,7 +187,7 @@ function verificationParam(userData) {
 function checkUser(){
 	var flag = false;
 	if($("#1oginName").val()==''){
-		$("#info").html("登录名不能为空!");
+		W.$("#info").html("登录名不能为空!");
 		return true;
 	}
 	$.ajax({
@@ -206,7 +206,7 @@ function checkUser(){
 			}
 		},
 		error : function(msg){
-			alert("出现错误,请重试!");
+			W.$.dialog.alert("出现错误,请重试!");
 		}
 	});
 	return flag;

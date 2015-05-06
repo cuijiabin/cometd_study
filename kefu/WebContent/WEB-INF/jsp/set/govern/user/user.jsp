@@ -52,6 +52,7 @@
 //$('.btn-group .btn').click(function(){
 //	$(this).addClass("active").siblings().removeClass("active");
 //})
+var api = frameElement.api,W=api.opener;
 function find(currentPage){
 	var url="/user/find.action?map[status]=1";
 	var data = {
@@ -67,10 +68,10 @@ function find(currentPage){
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "html",
 	    success: function (data) {
-	       $("#table_data").html(data);
+	       W.$("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	        alert(msg);
+	    	W.$.dialog.alert(msg);
 	    }
 	});
 }
@@ -105,7 +106,7 @@ function userLeave(status){
 		return $(this).val();
 	}).get();
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		W.$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -114,11 +115,11 @@ function userLeave(status){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 	
@@ -129,7 +130,7 @@ function deleteAll(){
 		return $(this).val();
 	}).get();
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -138,11 +139,11 @@ function deleteAll(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			location.reload();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }
@@ -152,11 +153,11 @@ function changeDept(){
 	}).get();
 	var deptId=$("#dept option:selected").val()
 	if(deptId==0){
-		alert("请选择转移部门");
+		W.$.dialog.alert("请选择转移部门");
 		return;
 	}
 	if(ids==""||ids==null||ids==0){
-		alert("请选择人员!");
+		W.$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -165,11 +166,11 @@ function changeDept(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			W.$.dialog.alert(data.msg);
 			find();
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			W.$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }

@@ -51,6 +51,7 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
+var api = frameElement.api,W=api.opener;
 function saveKey(){
 	   url="/function/saveKeyboard.action";
 	   data = {
@@ -66,10 +67,10 @@ function saveKey(){
 			data : data,
 			dataType : "json",
 			success : function(data) {
-					alert(data.msg);
+				W.$.dialog.alert(data.msg);
 			},
 			error : function(msg) {
-				alert("出现错误,请重试!");
+				W.$.dialog.alert("出现错误,请重试!");
 			}
 		});
 }
