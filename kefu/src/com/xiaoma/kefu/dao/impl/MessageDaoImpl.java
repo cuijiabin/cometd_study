@@ -168,7 +168,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		public List<Message> findAllByParam(Integer typeId,Integer userId){
 			try {
 				Session session = getSession();
-				String sql = "from Message a where a.typeId="+typeId;
+				String sql = "from Message a where a.status=1 and a.typeId="+typeId;
 				if(typeId == 2){
 					sql += " and a.userId="+userId;
 				}
