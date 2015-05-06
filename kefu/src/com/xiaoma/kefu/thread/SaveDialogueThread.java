@@ -157,7 +157,7 @@ public class SaveDialogueThread implements Runnable{
 		dialogue.setFirstTime(firstTime);// 机器人与客服时间间隔（秒）--统计
 		dialogue.setIsTalk(isTalk);// 是否有客户的说话记录（0，无 1，有）--统计
 		
-		if(dInfo.getScoreType() == null){
+		if(dInfo.getScoreType() == null || dInfo.getScoreType() == 0){
 			JedisTalkDao.setDialogueLasts(customerId.toString(), uccnId);
 		}else{
 			dialogue.setScoreType(dInfo.getScoreType());// 评分类型 --收集

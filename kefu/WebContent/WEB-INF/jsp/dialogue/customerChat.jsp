@@ -268,7 +268,10 @@
 		}
 		
 		function switchCustomer(data){
-			//alert("后台用户切换！");
+			var user = data.obj;
+			var html='与'+user.cardName+'对话中...';
+			console.log(html);
+			$("#dialogueTitle").html(html);
 		}
 		
 		// 用户下线通知(**)
