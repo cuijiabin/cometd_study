@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.InviteIconDao;
-import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.FieldMapping;
 import com.xiaoma.kefu.model.InviteElement;
 import com.xiaoma.kefu.model.InviteIcon;
@@ -147,25 +146,27 @@ public class InviteIconService {
 	private void initIconPic(InviteElement ele, Integer styleId, DeviceType type) throws IOException {
 		String sourcePath = null;
 		if(type.equals(DeviceType.PC)){
-			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+			sourcePath = FileUtil.getWebContentPath() 
 					+ "/" + SysConst.TEMPLATE_PATH
 					+ "/" + SysConst.PIC_TEMPLATE_PC_INVITE;
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
         	ele.setHeight(image.getHeight());
         	ele.setWidth(image.getWidth());
 		}else{
-			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+			sourcePath = FileUtil.getWebContentPath() 
 					+ "/" + SysConst.TEMPLATE_PATH
 					+ "/" + SysConst.PIC_TEMPLATE_YD_INVITE;
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
         	ele.setHeight(image.getHeight());
         	ele.setWidth(30);//手机默认宽度30%
 		}
-		
+		//绝对路径
 		String targetPath = FileUtil.getStyleRootPath(styleId) + "/" + ele.getId()
 				+ "/" + StylePicName.元素背景图.getCode()
 				+ SysConst.MIN_EXTENSION;//目前都使用 png
-		ele.setPicUrl(targetPath);
+		//相对路径
+		ele.setPicUrl(FileUtil.getStyleSavePath(styleId) + "/" + ele.getId() 
+				+ "/" + StylePicName.元素背景图.getCode()+ SysConst.MIN_EXTENSION);
 		FileUtil.copyFile(sourcePath, targetPath);
 		
 	}

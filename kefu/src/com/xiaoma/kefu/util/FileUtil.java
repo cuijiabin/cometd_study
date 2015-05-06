@@ -66,7 +66,7 @@ public class FileUtil {
 	public static String getStyleRootPath(Integer styleId) {
 		if(styleId==null) styleId=0;
 		return 
-				DictMan.getDictItem("d_sys_param", 1).getItemName()
+				getWebContentPath()
 				+ DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH
 				+ "/" + styleId;
@@ -88,6 +88,25 @@ public class FileUtil {
 				+"/" + styleId;
 	}
 	
+	/**
+	 * 获取项目跟路径	WebContent 所在路径
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月6日
+	 */
+	public static String getWebContentPath(){
+		return DictMan.getDictItem("d_sys_param", 1).getItemName();
+	}
+	
+	/**
+	 * 获取站点的url地址  
+	* @return http://xx.xx.xx.xx:xxxx
+	* @Author: wangxingfei
+	* @Date: 2015年5月6日
+	 */
+	public static String getSiteUrl(){
+		return DictMan.getDictItem("d_sys_param", 15).getItemName();
+	}
 	
 	/**
 	 * 删除文件, 如果是文件夹,则删除文件夹及下面所有文件
@@ -131,8 +150,7 @@ public class FileUtil {
 	* @Date: 2015年4月23日
 	 */
 	public static String getExpTalkRootPath(String strDate) {
-		String basePath = DictMan.getDictItem("d_sys_param", 1).getItemName()
-				+"/" + SysConst.EXP_TALK_PATH;
+		String basePath = getWebContentPath() +"/" + SysConst.EXP_TALK_PATH;
 		if(StringUtils.isNotBlank(strDate)){
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -160,21 +178,23 @@ public class FileUtil {
 		PrintStream ps = null;
 		try{
 			String sourcePath = 
-					DictMan.getDictItem("d_sys_param", 16).getItemName()
+					getWebContentPath() 
+//					DictMan.getDictItem("d_sys_param", 16).getItemName()
 //					"E:/space/.metadata/.plugins/org.eclipse.wst.server.core/tmp3/wtpwebapps/kefu"
 					+ "/" + SysConst.TEMPLATE_PATH
 					+ "/" + SysConst.JS_DIV_TEMPLATE ;
 			br = new BufferedReader(new FileReader(new File(sourcePath)));
 			
 			String targePath =  
-					DictMan.getDictItem("d_sys_param", 16).getItemName()
+					getWebContentPath() 
+//					DictMan.getDictItem("d_sys_param", 16).getItemName()
 //					"E:/space/.metadata/.plugins/org.eclipse.wst.server.core/tmp3/wtpwebapps/kefu"
 					+ "/" + SysConst.JS_DIV_PATH
 					+ "/" + SysConst.JS_NAME + styleId + ".js" ;
 			
 			ps = new PrintStream(new File(targePath));
 			ps.println("var styleId = "+ styleId +";");//第一行写入styleId
-			String siteAdd = DictMan.getDictItem("d_sys_param", 15).getItemName();
+			String siteAdd = getSiteUrl();
 			String line = null;
 			while ((line = br.readLine()) != null) {
 				if(StringUtils.isNotBlank(line) && line.indexOf("${siteAdd}") >0 ){

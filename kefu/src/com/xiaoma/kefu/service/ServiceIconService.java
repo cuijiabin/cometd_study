@@ -417,7 +417,7 @@ public class ServiceIconService {
 			extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
 		}
 		return 
-				DictMan.getDictItem("d_sys_param", 15).getItemName()
+				FileUtil.getSiteUrl()
 				+ "/" + DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+ "/" + SysConst.STYLE_PATH //风格主目录
 				+ "/"+serviceIcon.getStyleId()	//风格id
@@ -534,7 +534,7 @@ public class ServiceIconService {
 		String sourcePath = null;
 		String targetPath = null;
 		if(type.equals(DeviceType.PC)){
-			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+			sourcePath = FileUtil.getWebContentPath() 
 					+ "/" + SysConst.TEMPLATE_PATH
 					+ "/" + SysConst.PIC_TEMPLATE_PC_SERVICE;
 			String temp = FileUtil.getStyleRootPath(icon.getStyleId())
@@ -545,7 +545,9 @@ public class ServiceIconService {
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
 			icon.setHeight(image.getHeight());
 			icon.setWidth(image.getWidth());
-			icon.setOnlinePic(targetPath);
+			//相对路径
+			icon.setOnlinePic(FileUtil.getStyleSavePath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标PC在线.getCode()+ SysConst.MIN_EXTENSION);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
 			//缩略图默认宽高
@@ -569,7 +571,8 @@ public class ServiceIconService {
 					+ "/" + StylePicName.客服图标PC离线.getCode();
 			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
 			
-			icon.setOfflinePic(targetPath);
+			icon.setOfflinePic(FileUtil.getStyleSavePath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标PC离线.getCode()+ SysConst.MIN_EXTENSION);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
             //生成缩略图
@@ -578,17 +581,20 @@ public class ServiceIconService {
             	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
             
 		}else{
-			sourcePath = DictMan.getDictItem("d_sys_param", 16).getItemName() 
+			sourcePath = FileUtil.getWebContentPath()
 					+ "/" + SysConst.TEMPLATE_PATH
 					+ "/" + SysConst.PIC_TEMPLATE_YD_SERVICE;
 			String temp = FileUtil.getStyleRootPath(icon.getStyleId())
 					+ "/" + StylePicName.客服图标移动在线.getCode();
 			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+			
 			logger.info("initIconPic.sourcePath2="+sourcePath);
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
 			icon.setHeight(image.getHeight());
 			icon.setWidth(image.getWidth());
-			icon.setOnlinePic(targetPath);
+			//相对路径
+			icon.setOnlinePic(FileUtil.getStyleSavePath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标移动在线.getCode()+ SysConst.MIN_EXTENSION);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
 			//缩略图默认宽高
@@ -612,7 +618,9 @@ public class ServiceIconService {
 					+ "/" + StylePicName.客服图标移动离线.getCode();
 			targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
 			
-			icon.setOfflinePic(targetPath);
+			//相对路径
+			icon.setOfflinePic(FileUtil.getStyleSavePath(icon.getStyleId())
+					+ "/" + StylePicName.客服图标移动离线.getCode()+ SysConst.MIN_EXTENSION);
 			FileUtil.copyFile(sourcePath, targetPath);
 			
             //生成缩略图
