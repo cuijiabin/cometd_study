@@ -182,7 +182,6 @@
 					findWaitList(0);//获取等待列表
 					$("#guanbiduihua").hide();
 					$("#guanbiduihua").hide();
-					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -324,7 +323,7 @@
                 +'<input type="radio" name="scoreType" value="5"/>非常差</td>'
                 +'</tr>'
                 +'<tr>'
-                +'<td class="f-txtl">备注：<textarea id="scoreRemark"/></td>'
+                +'<td>备注：<textarea id="scoreRemark"/></td>'
                 +'</tr>'
                 +'</table>';
                 
