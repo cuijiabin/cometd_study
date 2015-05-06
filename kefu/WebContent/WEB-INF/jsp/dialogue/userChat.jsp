@@ -102,8 +102,8 @@
 	                                    </button>
 	                                    
 	                                    <ul class="dropdown-menu f-txtl">
-	                                        <li><a><label><input type="radio" name="send" checked value="1">Enter 发送</label></a></li>
-	                                        <li><a><label><input type="radio" name="send" value="2">Ctrl + Enter 发送</label></a></li>
+	                                        <li><a><label><input type="radio" name="radio_name" checked value="1">Enter 发送</label></a></li>
+	                                        <li><a><label><input type="radio" name="radio_name" value="2">Ctrl + Enter 发送</label></a></li>
 	                                    </ul>
 	                                </div>
 	                            </div>
@@ -331,23 +331,14 @@
 	}
 	// 回车事件 ctrl键暂时不太管用(**)
 	function onSendBoxEnter(event) {
-		var sendType="";
-		$('input[name="send"]').each(function(){ if(this.checked){sendType=this.value;} });
-		
-		console.log("发送快捷方式："+sendType);
-		if(sendType == '1'){
-			if (event.keyCode == 13) {
-				var message = inputbox.value;
-				sendMessage(message);
-				return false;
-			}
-		}else{
-			if (event.ctrlKey && event.keyCode == 13) {
-				var message = inputbox.value;
-				sendMessage(message);
-				return false;
-			}
-		}
+		var obj = document.getElementsByName("radio_name");
+        if(event.keyCode == 13 || event.keyCode == 10){
+       	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
+       		   var message = inputbox.value;
+             	   sendMessage(message);
+             	   return false;
+       	   }
+        }
 	}
 	
 	// 用户聊天通知(**)
