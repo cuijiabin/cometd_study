@@ -18,7 +18,7 @@
     <ul class="u-admin f-fr">
 
         <li><a href="#"><i class="icon-user"></i>欢迎 ${sessionScope.user.loginName}</a></li>
-        <li><a href="javascript:window.location='/user/main.action';"><i class="icon-home"></i>首页</a></li>
+        <li><a href="javascript:window.location='/user/main.action?typeId=2';"><i class="icon-home"></i>首页</a></li>
        <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
        <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_pt")) {%>
         <li><a target="_blank" href="/dialogue/user.action"><i class="icon-logout"></i>访客对话</a></li>

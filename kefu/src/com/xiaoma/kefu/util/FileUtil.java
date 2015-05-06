@@ -56,10 +56,10 @@ public class FileUtil {
 	}
 	
 	/**
-	 * 获取风格上传图片的	根路径
+	 * 获取风格上传图片的	绝对路径
 	 * @param styleId 	风格id
 	* @Description: TODO
-	* @return	rootpath/style/styleId
+	* @return	rootpath/upload/style/styleId
 	* @Author: wangxingfei
 	* @Date: 2015年4月14日
 	 */
@@ -67,6 +67,23 @@ public class FileUtil {
 		if(styleId==null) styleId=0;
 		return 
 				DictMan.getDictItem("d_sys_param", 1).getItemName()
+				+ DictMan.getDictItem("d_sys_param", 2).getItemName()
+				+ "/" + SysConst.STYLE_PATH
+				+ "/" + styleId;
+	}
+	
+	/**
+	 * 获取风格上传图片的	相对路径
+	 * @param styleId 	风格id
+	* @Description: TODO
+	* @return	upload/style/styleId
+	* @Author: wangxingfei
+	* @Date: 2015年4月14日
+	 */
+	public static String getStyleSavePath(Integer styleId) {
+		if(styleId==null) styleId=0;
+		return 
+				DictMan.getDictItem("d_sys_param", 2).getItemName()
 				+"/" + SysConst.STYLE_PATH
 				+"/" + styleId;
 	}

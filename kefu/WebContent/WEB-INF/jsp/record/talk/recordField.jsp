@@ -23,7 +23,7 @@
         	<table class="table m-table m-tag1">
             	<tbody>
             		<c:forEach var="crf" items="${list }" varStatus="status">
-						<c:if test="${status.index % 5 == 0 }"> <tr> </c:if>  
+						<c:if test="${(status.index) % 5 == 0 }"> <tr> </c:if>  
 						<td><span>
 							<label>
 								<input type="checkbox" name="items" value="${crf.isDefault} ">${crf.name }
@@ -32,7 +32,7 @@
 							</label>
 							</span>
 						</td>
-						<c:if test="${status.index % 5 == 0 }"> </tr> </c:if>
+						<c:if test="${(status.index) % 5 == 4 || status.last  }"> </tr> </c:if>
 					</c:forEach>
                 </tbody>
             </table>

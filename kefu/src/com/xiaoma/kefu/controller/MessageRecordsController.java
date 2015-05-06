@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.MessageRecords;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.util.Ajax;
@@ -97,6 +99,11 @@ public class MessageRecordsController {
 			mr.setIpInfo(customer.getIpInfo());
 			mr.setFirstLandingPage(customer.getFirstLandingPage());
 			mr.setIsDel(0);
+			DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customer.getId().toString(),null);
+			if(dInfo != null){
+				mr.setKeywords(dInfo.getKeywords());
+				mr.setConsultPage(dInfo.getConsultPage());
+			}
 			messageRecordsService.add(mr);
 //			model.addAttribute("msg", msg);
 			model.addAttribute("result", Ajax.JSONResult(0, "操作完成!"));

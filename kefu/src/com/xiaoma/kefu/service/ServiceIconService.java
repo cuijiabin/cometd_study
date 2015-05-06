@@ -97,54 +97,53 @@ public class ServiceIconService {
 	public void saveUplaodFile(MultipartFile file, ServiceIcon serviceIcon,
 			StylePicName type) throws IOException {
         if (file != null && !file.isEmpty()) {
-        	String savePath = FileUtil.getStyleRootPath(serviceIcon.getStyleId());//获取需要保存的路径
-            String saveName = type.getCode();
-            String fileName = file.getOriginalFilename();//名称
+        	String jdPath = FileUtil.getStyleRootPath(serviceIcon.getStyleId());//获取绝对路径
+        	String xdPath = FileUtil.getStyleSavePath(serviceIcon.getStyleId());//获取相对路径
+        	
+        	String saveName = type.getCode();//最后保存的文件名
+        	String fileName = file.getOriginalFilename();//名称
             String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
+        	
+        	String jdPathAll = jdPath + "/" + saveName + extensionName;//完整绝对路径,带文件名
+        	String xdPathAll = xdPath + "/" + saveName + extensionName;//完整相对路径,带文件名
             
             BufferedImage image = null;
-            //路径+文件名
-            String tempPath = savePath+"/"+saveName;
             if(type.equals(StylePicName.客服图标PC在线) || type.equals(StylePicName.客服图标移动在线)){
-            	serviceIcon.setOnlinePic(tempPath+extensionName);//在线
+            	serviceIcon.setOnlinePic(xdPathAll);//在线
             	logger.info("serviceIcon.getOfflinePic()="+serviceIcon.getOnlinePic());
             	 //保存文件
-                FileUtil.saveFile(savePath, saveName+extensionName, file);
+                FileUtil.saveFile(jdPath, saveName+extensionName, file);
                 
             	 //如果高或宽为空,则取图片的宽高
                 if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
                 	try{
-                		image = ImageIO.read(new File(serviceIcon.getOnlinePic())); 
+                		image = ImageIO.read(new File(jdPathAll)); 
                     	serviceIcon.setHeight(image.getHeight());
                 		serviceIcon.setWidth(image.getWidth());
                 	}catch(IOException e){
-                		logger.error("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic(),e);
+                		logger.error("serviceIcon.jdPathAll="+jdPathAll,e);
                 		throw e;
                 	}
                 }
             }else if(type.equals(StylePicName.客服图标PC离线) || type.equals(StylePicName.客服图标移动离线)){
-            	serviceIcon.setOfflinePic(tempPath+extensionName);//离线
+            	serviceIcon.setOfflinePic(xdPathAll);//离线
             	logger.info("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic());
             	
                 //保存文件
-                FileUtil.saveFile(savePath, saveName+extensionName, file);
+                FileUtil.saveFile(jdPath, saveName+extensionName, file);
                 
             	 //如果高或宽为空,则取图片的宽高
                 if(serviceIcon.getHeight()==null || serviceIcon.getWidth()==null){
                 	try{
-                		image = ImageIO.read(new File(serviceIcon.getOfflinePic())); 
+                		image = ImageIO.read(new File(jdPathAll)); 
                 		serviceIcon.setHeight(image.getHeight());
                 		serviceIcon.setWidth(image.getWidth());
                 	}catch(IOException e){
-                		logger.error("serviceIcon.getOfflinePic()="+serviceIcon.getOfflinePic(),e);
+                		logger.error("serviceIcon.jdPathAll="+jdPathAll,e);
                 		throw e;
                 	}
                 }
             }
-            
-           
-            
-
             
 			//缩略图默认宽高
 			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
@@ -158,9 +157,9 @@ public class ServiceIconService {
 			}
             
             //生成缩略图
-            Thumbnails.of(tempPath+extensionName)//原始路径
+            Thumbnails.of(jdPathAll)//原始路径
             	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
-            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+            	.toFile(jdPath+"/"+saveName+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
         }
 		
 	}

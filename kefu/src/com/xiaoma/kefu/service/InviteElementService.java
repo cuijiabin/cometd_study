@@ -99,26 +99,28 @@ public class InviteElementService {
 		 if (file != null && !file.isEmpty()) {
 			
 			InviteIcon inviteIcon = inviteIconService.get(inviteElement.getInviteId());
-			 
-			//获取需要保存的路径 = 跟路径+元素id
-        	String savePath = FileUtil.getStyleRootPath(inviteIcon.getStyleId()) + "/" + inviteElement.getId() ;
-        	String saveName = type.getCode();
+			
+        	String jdPath = FileUtil.getStyleRootPath(inviteIcon.getStyleId()) + "/" + inviteElement.getId() ;//绝对路径
+        	String xdPath = FileUtil.getStyleSavePath(inviteIcon.getStyleId()) + "/" + inviteElement.getId() ;//相对路径
+        	
+            String saveName = type.getCode();
             String fileName = file.getOriginalFilename();//名称
             String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
             
-            //路径+文件名
-            String tempPath = savePath+"/"+saveName;
-            inviteElement.setPicUrl(tempPath+extensionName);
+        	String jdPathAll = jdPath + "/" + saveName + extensionName;//完整绝对路径,带文件名
+        	String xdPathAll = xdPath + "/" + saveName + extensionName;//完整相对路径,带文件名
+			 
+            inviteElement.setPicUrl(xdPathAll);
             inviteElement.setIsUpPic(true);
             
             //保存文件
-            FileUtil.saveFile(savePath, saveName+extensionName, file);
+            FileUtil.saveFile(jdPath, saveName+extensionName, file);
             
             //如果高或宽为空,则取图片的宽高
             if(inviteElement.getHeight()==null || inviteElement.getWidth()==null){
             	logger.info("inviteElement.getPicUrl()="+inviteElement.getPicUrl());
             	try{
-            		BufferedImage image = ImageIO.read(new File(inviteElement.getPicUrl())); 
+            		BufferedImage image = ImageIO.read(new File(jdPathAll)); 
             		inviteElement.setHeight(image.getHeight());
                 	if(deviceType.equals(DeviceType.移动)){
                 		inviteElement.setWidth(30);//手机默认宽度30%
@@ -127,6 +129,7 @@ public class InviteElementService {
                 	}
             	}catch(IOException e){
             		logger.error("inviteElement.getPicUrl()="+inviteElement.getPicUrl(),e);
+            		throw e;
             	}
             }
 

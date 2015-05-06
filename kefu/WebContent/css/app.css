@@ -391,11 +391,11 @@ a.u-upload,a.u-upload:hover{text-decoration:none;}
 .m-tag li .u-close{display:block;position:absolute;right:3px;top:4px;width:12px;height:13px;text-align:center;line-height:16px;font-size:17px;font-weight:700;color:#444;outline:none;cursor:pointer;}
 .m-tag1{display:inline-block;margin-bottom:0;}
 .m-tag1 td{max-width:145px;text-align:left;white-space:normal;}
-.m-tag1 span{padding:0 5px;}
+.m-tag1 span{padding:0 5px;background:none;}
 .m-tag1 span label{margin:0;font-size:12px;}
 .m-tag1 td{border:0;}
 /* 设置字段 */
-.m-field{width:600px;}
+.m-field{width:650px;}
 .m-field h3{margin:0 auto;padding:0;text-align:center;font-size:14px;overflow:hidden;}
 .m-field p{padding:0 10px;margin-bottom:0;line-height:30px;border:solid #d9d9d9;border-width:1px 0;}
 

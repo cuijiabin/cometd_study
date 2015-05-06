@@ -48,7 +48,7 @@
                 </p>
                 <p class="u-upload f-fl">
                     <button class="btn" type="button">上传文件</button>
-                    <input type="file" id="lsound" name="lsound" />
+                    <input type="file" id="lsound" name="lsound" onChange="showsize(this.value)"/>
                 </p>
                 <span class="help-inline c-clred">请上传小于200KB，格式为mp3,wav的音效文件</span>
             </div>
@@ -146,8 +146,10 @@ function saveRemind(){
 	    	return;
 	    }
 	}
+
    $("#fform").submit();
 }
+
 
 function removecheck(){
     $(":checkbox[checked='checked']").attr("checked",false);
@@ -155,7 +157,27 @@ function removecheck(){
 }
 
 </script>
-
+<script type="text/javascript">
+function showsize(strfilename){
+    try
+    {
+     var maxsize = 200;     //定义允许文件的大小，单位kb，请根据需要自行修改！
+     var objstream = new activexobject("adodb.stream");
+     objstream.type = 1;
+     objstream.open();
+     objstream.loadfromfile(strfilename);
+     if(math.round(objstream.size/1024)>maxsize)
+         {alert ("抱歉！您选择的文件为 "+math.round(objstream.size/1024,2)+" kb　n超过了程序"+maxsize+" kb 的限制！");
+         return false;
+     }
+     else
+        alert("可以上传");
+    }catch(e)
+    {
+        alert("不支持");
+    }
+}
+</script>
 </body>
 </html>
 

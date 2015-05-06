@@ -1,8 +1,15 @@
 package com.xiaoma.kefu.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +31,7 @@ import com.xiaoma.kefu.util.SysConst.StylePicName;
  */
 @Service
 public class ClientStyleService {
+	private Logger logger = Logger.getLogger(ClientStyleService.class);
 	
 	@Autowired
 	private ClientStyleDao clientStyleDaoImpl;
@@ -90,46 +98,53 @@ public class ClientStyleService {
 	public void saveUplaodFile(MultipartFile file, ClientStyle clientStyle,
 			StylePicName type) throws IOException {
         if (file != null && !file.isEmpty()) {
-        	String savePath = getStyleRootPath(clientStyle.getStyleId());//获取需要保存的路径
+        	String jdPath = FileUtil.getStyleRootPath(clientStyle.getStyleId());//获取绝对路径
+        	String xdPath = FileUtil.getStyleSavePath(clientStyle.getStyleId());//相对路径
+        	
             String saveName = type.getCode();
             String fileName = file.getOriginalFilename();//名称
             String extensionName = fileName.substring(fileName.lastIndexOf(".")); // 后缀 .xxx
             
-            //路径+文件名
-            String tempPath = savePath+"/"+saveName;
+        	String jdPathAll = jdPath + "/" + saveName + extensionName;//完整绝对路径,带文件名
+        	String xdPathAll = xdPath + "/" + saveName + extensionName;//完整相对路径,带文件名
+            
+        	
             if(type.equals(StylePicName.访问端右上)){
-            	clientStyle.setYsAd(tempPath+extensionName);//设置路径
+            	clientStyle.setYsAd(xdPathAll);//设置路径
             }else if(type.equals(StylePicName.访问端右下)){
-            	clientStyle.setYxAd(tempPath+extensionName);//设置路径
+            	clientStyle.setYxAd(xdPathAll);//设置路径
             }
             
             //保存文件
-            FileUtil.saveFile(savePath, saveName+extensionName, file);
+            FileUtil.saveFile(jdPath, saveName+extensionName, file);
+            
+            BufferedImage image = null;
+            try{
+        		image = ImageIO.read(new File(jdPathAll)); 
+        	}catch(IOException e){
+        		logger.error("clientStyle.jdPathAll="+jdPathAll,e);
+        		throw e;
+        	}
+            
+			//缩略图默认宽高
+			Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+			Integer minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+			
+			if(minWidth > image.getWidth()){
+				minWidth = image.getWidth();
+			}
+			if(minHeight > image.getHeight()){
+				minHeight = image.getHeight();
+			}
             
             //生成缩略图
-//            Thumbnails.of(tempPath+extensionName)//原始路径
-//            	.size(200, 300)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
-//            	.toFile(tempPath+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+            Thumbnails.of(jdPathAll)//原始路径
+            	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+            	.toFile(jdPath+"/"+saveName+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
         }
 		
 	}
 	
-	/**
-	 * 风格上传图片的	根路径
-	 * @param styleId 	风格id
-	* @Description: TODO
-	* @return	root/style/styleId
-	* @Author: wangxingfei
-	* @Date: 2015年4月14日
-	 */
-	private String getStyleRootPath(Integer styleId) {
-		if(styleId==null) styleId=0;
-		return 
-//				SystemConfiguration.getInstance().getFileUrl()
-				DictMan.getDictItem("d_sys_param", 1).getItemName()
-				+"/" + SysConst.STYLE_PATH
-				+"/" + styleId;
-	}
 	
 	/**
 	 * 保存文件,更新对象
