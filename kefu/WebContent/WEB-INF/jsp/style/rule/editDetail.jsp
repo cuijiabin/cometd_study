@@ -88,12 +88,12 @@ function checkedAll(groupId){
 	var groupName = 'group'+groupId;
 	var detaidName = 'detail'+groupId;
 	if(($("#"+groupName+"").is(":checked"))){
-		$("input[name='"+detaidName+"']").each(function() {  
-            $(this).attr("checked", true); 
+		$("input[name='"+detaidName+"']").each(function() { 
+            $(this).prop("checked", true); 
         }); 
 	}else{
 		$("input[name='"+detaidName+"']").each(function() {  
-       		 $(this).attr("checked", false); 
+       		 $(this).prop("checked", false); 
    		 }); 
 	}
 }
