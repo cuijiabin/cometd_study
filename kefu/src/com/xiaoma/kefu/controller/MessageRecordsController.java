@@ -99,7 +99,7 @@ public class MessageRecordsController {
 			mr.setIpInfo(customer.getIpInfo());
 			mr.setFirstLandingPage(customer.getFirstLandingPage());
 			mr.setIsDel(0);
-			DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customer.getId().toString(),null);
+			DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customer.getId().toString(),null);
 			if(dInfo != null){
 				mr.setKeywords(dInfo.getKeywords());
 				mr.setConsultPage(dInfo.getConsultPage());

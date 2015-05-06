@@ -463,8 +463,26 @@ public class JedisTalkDao {
 		}
 		return null;
 	}
+	
+	public static void setDialogueLasts(String customerId,String userCcnId){
+		
+		String key = JedisConstant.getLastsKey(customerId, userCcnId);
+		JedisDao.setKVT(key, "1", 12*60*60);
+	}
+	
+	public static String getDialogueLasts(String customerId,String userCcnId){
+		
+		String key = JedisConstant.getLastsKey(customerId, userCcnId);
+		return JedisDao.getValue(key);
+	}
 
-	public static DialogueInfo getDialogueScore(String customerId,String userCcnId) {
+	/**
+	 * 获取对话信息
+	 * @param customerId
+	 * @param userCcnId
+	 * @return
+	 */
+	public static DialogueInfo getDialogueInfo(String customerId,String userCcnId) {
 		
 		Jedis jedis = JedisDao.getJedis();
 		try {

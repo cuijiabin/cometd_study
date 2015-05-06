@@ -340,5 +340,19 @@ public class DialogueService {
 		}
 		return null;
 	}
+	
+	public Dialogue getLastBycustomerIdAndUserId(Long customerId,Integer userId){
+		if(customerId == null || userId == null){
+			return null;
+		}
+		
+		return dialogueDaoImpl.getLastBycustomerIdAndUserId(customerId, userId);
+	}
+	
+	public Boolean update(Dialogue dialogue){
+		Integer id = dialogueDaoImpl.update(dialogue);
+		
+		return (id >= 0);
+	}
 
 }

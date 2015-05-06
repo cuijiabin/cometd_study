@@ -33,4 +33,6 @@ public interface DialogueDao extends BaseDao<Dialogue> {
 	 */
 	public int update2Restore(Dialogue dialogue);
 	
+	public Dialogue getLastBycustomerIdAndUserId(Long customerId,Integer userId);
+	
 }

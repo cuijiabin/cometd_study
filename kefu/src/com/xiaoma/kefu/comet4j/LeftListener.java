@@ -48,7 +48,7 @@ public class LeftListener extends DropListener {
 				JedisTalkDao.remCcnReceiveList(toUserCcnId, ccnId);
 
 				// 保存关闭方式
-				DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,
+				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,
 						toUserCcnId);
 				if (dInfo.getCloseType() == null) {
 					dInfo.setCloseType(1);
@@ -87,7 +87,7 @@ public class LeftListener extends DropListener {
 				for (String rCnnId : receiveCnnIds) {
 
 					customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, rCnnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, ccnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, ccnId);
 					if (dInfo != null && dInfo.getCloseType() == null) {
 						dInfo.setCloseType(2);
 						JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);

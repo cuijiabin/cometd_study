@@ -2,10 +2,12 @@ package com.xiaoma.kefu.comet4j;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.comet4j.core.CometConnection;
@@ -18,15 +20,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
+import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
 import com.xiaoma.kefu.model.DialogueSwitch;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.BlacklistService;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.DialogueSwitchService;
 import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.JsonUtil;
@@ -47,6 +53,9 @@ public class ChatCometController {
 	
 	@Autowired
 	private BlacklistService blacklistService;
+	
+	@Autowired
+	private DialogueService dialogueService;
 	
 	private Logger logger = Logger.getLogger(ChatCometController.class);
 
@@ -279,7 +288,7 @@ public class ChatCometController {
 		     JedisTalkDao.delCcnPassiveId(endCcnId);
 		     
 		     String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, endCcnId);
-		     DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,ccnId);
+		     DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,ccnId);
 		     dInfo.setCloseType(type);
 		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 		     
@@ -292,7 +301,7 @@ public class ChatCometController {
 		    JedisTalkDao.delCcnPassiveId(ccnId);
 		    
 		    String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
-		     DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,endCcnId);
+		     DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,endCcnId);
 		     dInfo.setCloseType(type);
 		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 		    
@@ -362,7 +371,7 @@ public class ChatCometController {
 		engine.sendTo(Constant.CHANNEL, ccn, nd);
 		
 		//给自己发送通知
-		//TODO
+		//TODO-不必写，前端自动调整了！
 	}
 	
 	/**
@@ -386,14 +395,24 @@ public class ChatCometController {
 		
 		//会话 key
         String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+        String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, userCcnId);
         
         //如果对话结束的话需要保存到数据库中！
-        //TODO
-        DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,userCcnId);
-        dInfo.setScoreType(scoreType);
-        dInfo.setScoreRemark(remark);
-        
-        JedisTalkDao.setDialogueInfo(customerId, userCcnId, dInfo);
+        String last = JedisTalkDao.getDialogueLasts(customerId,userCcnId);
+        Boolean isSave = StringUtils.isNotBlank(last);
+        if(isSave){
+        	Dialogue dialogue = dialogueService.getLastBycustomerIdAndUserId(Long.valueOf(customerId), Integer.valueOf(userId));
+        	dialogue.setScoreType(scoreType);
+        	dialogue.setScoreRemark(remark);
+        	dialogueService.update(dialogue);
+        	JedisTalkDao.delDialogueInfo(customerId, userCcnId);
+        }else{
+        	DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,userCcnId);
+            dInfo.setScoreType(scoreType);
+            dInfo.setScoreRemark(remark);
+            
+            JedisTalkDao.setDialogueInfo(customerId, userCcnId, dInfo);
+        }
         
 	}
 	
@@ -413,11 +432,68 @@ public class ChatCometController {
 			JedisTalkDao.remOffLineUserSet(userId);
 			
 			//撮合对话
-			//TODO
+			User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+			buildDialogue(userCcnId,user);
 		}else{
 			JedisTalkDao.addOffLineUserSet(userId);
 		}
 		
+	}
+	
+	/**
+	 * 撮合对话
+	 * @param ccnId
+	 * @param user
+	 */
+	private void buildDialogue(String ccnId,User user){
+		
+		CometEngine engine = context.getEngine();
+		if(JedisTalkDao.sizeCustomerWaitSet() > 0){
+			Integer surplusSize = 1;//剩余可分配客户名额
+			List<DictItem> list = DictMan.getDictList("d_dialog_android");
+			
+			while(surplusSize > 0 && JedisTalkDao.sizeCustomerWaitSet() > 0){
+				String customerCcnId = JedisTalkDao.popCustomerWaitSet();
+				Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
+				JedisTalkDao.delCustomerWaitSet(customerCcnId);
+				
+				logger.info("客服："+user.getId()+" ,接待通信点id： "+customerCcnId);
+				
+				//接待设置：两方面
+				JedisTalkDao.addCcnReceiveList(ccnId, customerCcnId);
+				JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
+				
+				//修改对话缓存
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
+				JedisTalkDao.delDialogueInfo(customerId, null);
+				dInfo.setUserCcnId(ccnId);
+				dInfo.setUserId(user.getId());
+				dInfo.setDeptId(user.getDeptId());
+				dInfo.setCardName(user.getCardName());
+				dInfo.setWaitTime(waitTime);
+				JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+				
+				//通知客更新后台列表
+		        CometConnection userCcn = engine.getConnection(ccnId);
+		        CometConnection customerCcn = engine.getConnection(customerCcnId);
+		        
+				//通知数据
+		        Message message = new Message(ccnId, user.getCardName(), "", "", customerCcnId);
+				NoticeData nd = new NoticeData(Constant.ON_OPEN, message);
+		        engine.sendTo(Constant.CHANNEL, userCcn, nd); 
+		        engine.sendTo(Constant.CHANNEL, customerCcn, nd); 
+		        
+		        surplusSize = JedisTalkDao.getLastReceiveCount(user.getId().toString());
+		        
+		        if(CollectionUtils.isNotEmpty(list)){
+		        	for(DictItem dictItem : list){
+		        		JoinListener.talkToCustomer(engine,ccnId,customerCcnId,dictItem.getItemName());
+		        	}
+		        }
+			}
+			
+		}
 	}
 	
 }

@@ -91,7 +91,7 @@ public class JoinListener extends ConnectListener {
 					
 					//修改对话缓存
 					String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId,null);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
 					JedisTalkDao.delDialogueInfo(customerId, null);
 					dInfo.setUserCcnId(ccnId);
 					dInfo.setUserId(user.getId());
@@ -144,7 +144,7 @@ public class JoinListener extends ConnectListener {
 				//对不起，客服不在线，请留言
 				if(CollectionUtils.isEmpty(onlineUserIds)){
 					JedisTalkDao.addCustomerWaitSet(ccnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
@@ -158,7 +158,7 @@ public class JoinListener extends ConnectListener {
 				//对不起，客服正忙，请留言
 				if(StringUtils.isBlank(allocateCnnId)){
 					JedisTalkDao.addCustomerWaitSet(ccnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
@@ -171,7 +171,7 @@ public class JoinListener extends ConnectListener {
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
 				
-				DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
+				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
 				JedisTalkDao.delDialogueInfo(customerId, null);
 				
 				logger.info("客户："+customerId+" 通信点id： "+ccnId+"被接待，客服通信点id："+allocateCnnId);
@@ -222,9 +222,9 @@ public class JoinListener extends ConnectListener {
 	 * @param cusCId
 	 * @param message
 	 */
-	private void talkToCustomer(CometEngine engine,String userCId, String cusCId,String message) {
+	public static void talkToCustomer(CometEngine engine,String userCId, String cusCId,String message) {
 
-		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
+//		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
 		//参数检查
 		if(StringUtils.isBlank(userCId) || StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
 			

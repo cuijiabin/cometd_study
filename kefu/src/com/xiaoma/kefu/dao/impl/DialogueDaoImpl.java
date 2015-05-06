@@ -47,4 +47,16 @@ public class DialogueDaoImpl extends BaseDaoImpl<Dialogue> implements DialogueDa
 	    return query.executeUpdate();  
 	}
 
+	@Override
+	public Dialogue getLastBycustomerIdAndUserId(Long customerId, Integer userId) {
+		Session session = getSession();
+	    String hql = "from Dialogue d where d.customerId =:customerId and d.userId =:userId order by d.endDate desc";
+		Query query = session.createQuery(hql);
+		query.setLong("customerId", customerId);
+		query.setInteger("userId", userId);
+		query.setMaxResults(1);
+		
+		return (Dialogue) query.uniqueResult();
+	}
+
 }

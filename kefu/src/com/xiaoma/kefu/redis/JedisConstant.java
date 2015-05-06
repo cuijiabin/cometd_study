@@ -73,6 +73,11 @@ public class JedisConstant {
 	 * 对话信息
 	 */
 	public static final String DIALOGUE_INFO = "dialogue_info:";
+	
+	/**
+	 * 添加缓存还是数据库
+	 */
+	public static final String DIALOGUE_SCORE = "dialogue_score:";
 
 	/**
 	 * 缓存客服信息
@@ -170,6 +175,12 @@ public class JedisConstant {
 
 		return DIALOGUE_LIST + uccnId + CCN_ID + cccnId;
 	}
+	
+	public static String getLastsKey(String customerId, String userCcnId) {
+
+		return DIALOGUE_SCORE + customerId + CCN_ID + userCcnId;
+	}
+	
 
 	public static String getUccnIdFromDialogueListKey(String dialogueListKey) {
 

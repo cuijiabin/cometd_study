@@ -139,7 +139,7 @@ public class SaveDialogueThread implements Runnable{
 		Integer firstTime = resultMap.get("firstTime");
 		
 		Long customerId = customer.getId();
-		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId.toString(),uccnId);
+		DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId.toString(),uccnId);
 		Dialogue dialogue = new Dialogue();
 		
 		dialogue.setUserId(dInfo.getUserId()); //客服ID
@@ -156,8 +156,13 @@ public class SaveDialogueThread implements Runnable{
 		dialogue.setWaitTime(dInfo.getWaitTime());// 等待时长（秒）--收集
 		dialogue.setFirstTime(firstTime);// 机器人与客服时间间隔（秒）--统计
 		dialogue.setIsTalk(isTalk);// 是否有客户的说话记录（0，无 1，有）--统计
-		dialogue.setScoreType(dInfo.getScoreType());// 评分类型 --收集
-		dialogue.setScoreRemark(dInfo.getScoreRemark());// 评分备注 --收集
+		
+		if(dInfo.getScoreType() == null){
+			JedisTalkDao.setDialogueLasts(customerId.toString(), uccnId);
+		}else{
+			dialogue.setScoreType(dInfo.getScoreType());// 评分类型 --收集
+			dialogue.setScoreRemark(dInfo.getScoreRemark());// 评分备注 --收集
+		}
 		
 		dialogue.setIp(dInfo.getIp());// ip地址
 		dialogue.setIpInfo(dInfo.getIpInfo());// ip分析（省市县运营商）

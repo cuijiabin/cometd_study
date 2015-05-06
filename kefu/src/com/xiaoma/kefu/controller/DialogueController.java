@@ -266,7 +266,7 @@ public class DialogueController {
 		
 		logger.info("url : customerChat.action customerId: "+id +" ,isNew : "+isNew);
 		//添加临时对话信息
-		DialogueInfo dInfo = JedisTalkDao.getDialogueScore(id.toString(),null);
+		DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(id.toString(),null);
 		Log.info("get dInfo: "+ dInfo);
 		
 		if(dInfo == null){
