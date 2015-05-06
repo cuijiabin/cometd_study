@@ -239,9 +239,9 @@
 			console.log("对话结束类型："+data.obj);
 			var str = "";
 			if(data.obj == 1){
-				 str = '<div class="msg-offline"><span class="alert alert-block">您结束了与客服对话！</span></div>';
+				 str = '<div class="r-offline"><span class="alert alert-block">您结束了与客服对话！</span></div>';
 			}else{
-				 str = '<div class="msg-offline"><span class="alert alert-block">客服结束了与您的对话！</span></div>';
+				 str = '<div class="r-offline"><span class="alert alert-block">客服结束了与您的对话！</span></div>';
 			}
 			logbox.innerHTML += str;
 			moveScroll();

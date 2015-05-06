@@ -28,6 +28,11 @@ public class AppInit implements ServletContextListener {
 
 	/**
 	 * 初始化默认通道
+	 * 
+	 * 1.进入时监听 JoinListener
+	 * 2.断开时监听 LeftListener
+	 * 3.清理与设置缓存
+	 * 4.保存对话信息线程启动
 	 */
 
 	public void contextInitialized(ServletContextEvent arg0) {

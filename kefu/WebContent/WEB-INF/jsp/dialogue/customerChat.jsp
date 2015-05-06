@@ -43,8 +43,16 @@
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
 	                            <c:forEach var="dialogue" items="${dialogueList}">
-	                              <p class="r-visitor">${dialogue.customerId}&nbsp;${dialogue.createDate}</p>
-	                              <p class="r-visitor-txt">${dialogue.content}</p>
+	                             <c:choose>
+							         <c:when test="${dialogue.dialogueType == 1}">
+							           <p class="r-manager">我<fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
+							           <p class="r-manager-txt">${dialogue.content }</p>
+							        </c:when>
+							         <c:otherwise>
+							            <p class="r-visitor">${dialogue.cardName } <fmt:formatDate value="${dialogue.createDate}" type="time" /></p>
+							            <p class="r-visitor-txt">${dialogue.content }</p>
+							        </c:otherwise>
+							     </c:choose>
 	                            </c:forEach>
 	                            <div class="r-history"><h3>历史记录</h3></div>
 	                        </c:if>
@@ -62,7 +70,6 @@
                                 </div>
                                 <div class="u-input f-cb">
                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
-<!--                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea> -->
                                     <div class="u-send">
                                         <div class="btn-group">
                                             <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -167,8 +174,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
-<!-- <script language="javascript" for="window" event="onload">  -->
-<script type="text/javascript">
+<script language="javascript" for="window" event="onload"> 
+
 			console.log("init");
 			// 引擎事件绑定
 			JS.Engine.on({
@@ -330,7 +337,7 @@
 			
 			var content ='<table>'
                 +'<tr>'
-                +'<td class="f-txtr tdbg">评分：<input type="radio" name="scoreType" value="1"/>非常好'
+                +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
                 +'<input type="radio" name="scoreType" value="2"/>好'
                 +'<input type="radio" name="scoreType" value="3"/>一般'
                 +'<input type="radio" name="scoreType" value="4"/>差'
@@ -385,7 +392,6 @@
 				sendMessage(message);
 				return false;
 			}
-            
 		}
 		// 发送聊天信息动作
 		function sendMessage(message) {

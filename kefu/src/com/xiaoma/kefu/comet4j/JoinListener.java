@@ -16,6 +16,7 @@ import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
 
 import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Customer;
@@ -25,19 +26,21 @@ import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
-import com.xiaoma.kefu.service.UserService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.TimeHelper;
 
 /**
- * @description JoinListener
+ * 进入长连接监听
  * @author cuijiabin
+ * 1.判断类型（客服、客户）
+ * 2.加入redis对话信息
+ * 3.撮合对话
+ * 4.通知后台
  */
 public class JoinListener extends ConnectListener {
 
 
-	private UserService userService = (UserService) SpringContextUtil.getBean("userService");
 	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
 	
 	private Logger logger = Logger.getLogger(JoinListener.class);
@@ -50,19 +53,18 @@ public class JoinListener extends ConnectListener {
 		//根据referer 判断是否为客户
 		String referer = request.getHeader("referer");
 		logger.info("JoinListener referer: "+referer);
+		
 		boolean isCustomer = StringUtils.isBlank(referer) ? false : referer.contains("customerChat.action");
 		
 		HttpSession session = request.getSession();
-
 		User user = (User) session.getAttribute("user");
 
 		
-		// 连接点
+		// 当前连接点
 		String ccnId = conn.getId();
-		
 		CometEngine engine = (CometEngine) anEvent.getTarget();
 
-		// 优先使用userId
+		// 根据session与referer判断是客户还是客服进入连接
 		if (user != null && !isCustomer) {
 			String userId = user.getId().toString();
 			// 添加至当前用户通信点
@@ -83,9 +85,8 @@ public class JoinListener extends ConnectListener {
 					
 					logger.info("客服："+userId+" ,接待通信点id： "+customerCcnId);
 					
+					//接待设置：两方面
 					JedisTalkDao.addCcnReceiveList(ccnId, customerCcnId);
-					
-					//设置被谁接待
 					JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
 					
 					//修改对话缓存
@@ -100,35 +101,25 @@ public class JoinListener extends ConnectListener {
 					JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 					
 					//通知客更新后台列表
-			        CometConnection ccn = engine.getConnection(ccnId);
-			        CometConnection myCcn = engine.getConnection(customerCcnId);
+			        CometConnection userCcn = engine.getConnection(ccnId);
+			        CometConnection customerCcn = engine.getConnection(customerCcnId);
 			        
 					//通知数据
-					NoticeData nd = new NoticeData(Constant.ON_OPEN, null);
-			        engine.sendTo(Constant.CHANNEL, ccn, nd); 
+			        Message message = new Message(ccnId, user.getCardName(), "", "", customerCcnId);
+					NoticeData nd = new NoticeData(Constant.ON_OPEN, message);
+			        engine.sendTo(Constant.CHANNEL, userCcn, nd); 
+			        engine.sendTo(Constant.CHANNEL, customerCcn, nd); 
 			        
-			        Message message = new Message(ccnId, user.getCardName(), "", "", ccnId);
-			        
-			        //告知自己已经连接上
-			        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
-			        engine.sendTo(Constant.CHANNEL, myCcn, myNd); 
-			        
-			        surplusSize = JedisTalkDao.getMaxReceiveCount(user.getId().toString()) - JedisTalkDao.getReceiveCount(user.getId().toString());
+			        surplusSize = JedisTalkDao.getLastReceiveCount(user.getId().toString());
 			        
 			        if(CollectionUtils.isNotEmpty(list)){
 			        	for(DictItem dictItem : list){
 			        		talkToCustomer(engine,ccnId,customerCcnId,dictItem.getItemName());
-			    			try {
-			    				Thread.sleep(1000L);
-			    			} catch (Exception ex) {
-			    				ex.printStackTrace();
-			    			}
 			        	}
 			        }
 				}
 				
 			}
-			
 			
 		} else {
 			try {
@@ -142,98 +133,79 @@ public class JoinListener extends ConnectListener {
 
 				logger.info("客户："+customerId+" ,进入对话系统;");
 				
-				CometConnection myCcn = engine.getConnection(ccnId);
-				
-				//获取在线客服列表
-				List<String> onLineUserIds = JedisTalkDao.getOnlineUserIds();
-				if(CollectionUtils.isEmpty(onLineUserIds)){
-					//对不起，客服不在线，请留言
-					JedisTalkDao.addCustomerWaitSet(ccnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
-					dInfo.setIsWait(1);
-					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
-					logger.info("客户："+customerId+" ,进入等待队列！");
-					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
-					
-					return true;
-				}
-
+				CometConnection customerCcn = engine.getConnection(ccnId);
 				Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
 				if(customer == null){
 					return true;
 				}
 				Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
 				List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
+				
+				//对不起，客服不在线，请留言
 				if(CollectionUtils.isEmpty(onlineUserIds)){
-					//对不起，客服不在线，请留言
 					JedisTalkDao.addCustomerWaitSet(ccnId);
 					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
-					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.NO_USER, null)); 
+					engine.sendTo(Constant.CHANNEL, customerCcn, new NoticeData(Constant.NO_USER, null)); 
 					return true;
 				}
+				
 				// 分配客服
 				String allocateCnnId = JedisTalkDao.allocateCcnIdByStyleId(onlineUserIds,styleId);
+				
+				//对不起，客服正忙，请留言
 				if(StringUtils.isBlank(allocateCnnId)){
-					//对不起，客服正忙，请留言
 					JedisTalkDao.addCustomerWaitSet(ccnId);
 					DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
-					engine.sendTo(Constant.CHANNEL, myCcn, new NoticeData(Constant.USER_BUSY, null)); 
+					engine.sendTo(Constant.CHANNEL, customerCcn, new NoticeData(Constant.USER_BUSY, null)); 
 					
 					return true;
 				}
 				
+				//设置接待
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
+				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
+				
 				DialogueInfo dInfo = JedisTalkDao.getDialogueScore(customerId, null);
 				JedisTalkDao.delDialogueInfo(customerId, null);
 				
-				
-				//设置被谁接待
-				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
 				logger.info("客户："+customerId+" 通信点id： "+ccnId+"被接待，客服通信点id："+allocateCnnId);
 				
 				//通知客更新后台列表
-		        CometConnection ccn = engine.getConnection(allocateCnnId);
+		        CometConnection userCcn = engine.getConnection(allocateCnnId);
 		        
 				//通知数据
-				NoticeData nd = new NoticeData(Constant.ON_OPEN, null);
-		        engine.sendTo(Constant.CHANNEL, ccn, nd); 
-		        
 		        String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, allocateCnnId);
-		        User allocateUser = userService.getUserById(Integer.valueOf(uId));
+		        User allocateUser = (User) CacheMan.getObject(CacheName.SUSER, uId);
 		        Message message = new Message(allocateCnnId, allocateUser.getCardName(), "", "", ccnId);
+				NoticeData nd = new NoticeData(Constant.ON_OPEN, message);
+				
+				//通知连接
+		        engine.sendTo(Constant.CHANNEL, userCcn, nd); 
+		        engine.sendTo(Constant.CHANNEL, customerCcn, nd);
 		        
+		        //保存对话信息
 		        dInfo.setUserCcnId(allocateCnnId);
 				dInfo.setUserId(allocateUser.getId());
 				dInfo.setDeptId(allocateUser.getDeptId());
 				dInfo.setCardName(allocateUser.getCardName());
 				JedisTalkDao.setDialogueInfo(customerId, allocateCnnId, dInfo);
 		        
-		        //告知自己已经连接上
-		       
-		        NoticeData myNd = new NoticeData(Constant.ON_OPEN, message);
-		        engine.sendTo(Constant.CHANNEL, myCcn, myNd);
-		        
 		        List<DictItem> list = DictMan.getDictList("d_dialog_android");
 		        if(CollectionUtils.isNotEmpty(list)){
 		        	for(DictItem dictItem : list){
 		        		talkToCustomer(engine,allocateCnnId,ccnId,dictItem.getItemName());
-
-		    			try {
-		    				Thread.sleep(1000L);
-		    			} catch (Exception ex) {
-		    				ex.printStackTrace();
-		    			}
 		        	}
 		        }
 				
 		        
 			} catch (Exception e) {
+				logger.warn("客户进入对话系统失败！");
 				e.printStackTrace();
 			}
 
@@ -243,6 +215,13 @@ public class JoinListener extends ConnectListener {
 		return true;
 	}
 	
+	/**
+	 * 自动与客户对话
+	 * @param engine
+	 * @param userCId
+	 * @param cusCId
+	 * @param message
+	 */
 	private void talkToCustomer(CometEngine engine,String userCId, String cusCId,String message) {
 
 		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
@@ -268,7 +247,7 @@ public class JoinListener extends ConnectListener {
 		dialogueDetail.setUserId(uId);
 		dialogueDetail.setCustomerId(cId);
 		
-		User user = userService.getUserById(uId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
 		
 		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
@@ -283,10 +262,10 @@ public class JoinListener extends ConnectListener {
 		NoticeData cnd = new NoticeData(Constant.ON_MESSAGE, cmessage);
 
 		CometConnection userCcn = engine.getConnection(userCId);
-		CometConnection cusCcn = engine.getConnection(cusCId);
+		CometConnection customerCcn = engine.getConnection(cusCId);
 
 		engine.sendTo(Constant.CHANNEL, userCcn, und);
-		engine.sendTo(Constant.CHANNEL, cusCcn, cnd);
+		engine.sendTo(Constant.CHANNEL, customerCcn, cnd);
 
 		return;
 
