@@ -322,8 +322,14 @@ public class DialogueController {
 		//获取客服部人员列表
 		model.addAttribute("userList",userService.getResultDept(1));
 		// 留言框生成规则 ---------------结束
+		
+		//判断是pc还是手机
+//		if(dInfo != null && dInfo.getDeviceType() == 2){
+//			return "/dialogue/customerPhoneChat";
+//		}
 
 		return "/dialogue/customerChat";
+		
 	}
 	
 	/**
@@ -349,7 +355,7 @@ public class DialogueController {
 		if (user == null)
 			return "login";
 		String json = messageService.findAllUserMessage(user.getId());
-		Role role = roleService.getRoleById(user.getId());
+		Role role = roleService.getRoleById(user.getRoleId());
 		model.addAttribute(CacheName.USER, user);
 		model.addAttribute("role", role);
 		model.addAttribute("json", json);

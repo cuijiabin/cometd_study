@@ -38,6 +38,7 @@
                         
                         <input type="hidden" id=isForbidden value="${isForbidden }"/>
                         <input type="hidden" id="currentCustomerId" value="${customer.id }"/>
+                        <input type="hidden" id="currentUserCcnId"/>
                         <div class="m-dialog">
                             <div class="u-record r-sms-visitor" id="logbox">
                             <c:if test="${dialogueList != null}">
@@ -242,6 +243,7 @@
 				console.log(str);
 				logbox.innerHTML += str.join('');
 				moveScroll();
+				$("#advisory").click();
 			}
 			
 		// 用户上线通知(**)
@@ -251,7 +253,9 @@
 			name = name.HTMLEncode();
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			$("#currentUserCcnId").val(message.id);
+			$("#currentUserCcnId").val(message.who);
+			
+			$("#advisory").click();
 			
 		}
 		
@@ -293,6 +297,7 @@
 			
 			var param = "ccnId="+ccnId+'&type='+1+'&endCcnId='+endCcnId;
 			JS.AJAX.post('/chat/endDialogue.action', param, function() {
+				JS.Engine.stop();
 			});
 		}
 		// 对话结束提示！(**)
