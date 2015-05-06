@@ -13,6 +13,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/jsplugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
 </head>
 <body>
@@ -40,7 +41,6 @@
     	dels="f_perclass_del";
     }
  %>
-<div style="margin:50px " >
 <div class="g-cnt">
 	<input type="hidden" readonly="readonly" name="typeId" id="typeId" value="${typeId}" />
 	<input type="hidden" readonly="readonly" name="userId" id="userId" value="${userId }"/>
@@ -76,12 +76,11 @@
 		</div>
 	</div>
 </div>
-</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">

@@ -327,14 +327,14 @@
 			
 			var content ='<table>'
                 +'<tr>'
-                +'<td>评分：<input type="radio" name="scoreType" value="1"/>非常好'
+                +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
                 +'<input type="radio" name="scoreType" value="2"/>好'
                 +'<input type="radio" name="scoreType" value="3"/>一般'
                 +'<input type="radio" name="scoreType" value="4"/>差'
                 +'<input type="radio" name="scoreType" value="5"/>非常差</td>'
                 +'</tr>'
                 +'<tr>'
-                +'<td>备注：<input id="scoreRemark" type="textarea"/></td>'
+                +'<td>备注：<textarea id="scoreRemark"/></td>'
                 +'</tr>'
                 +'</table>';
                 
