@@ -65,7 +65,7 @@
 <!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
                                         <li><img src="/img/icon_04.png" alt="" /></li>
                                         <li><img src="/img/icon_05.png" alt="" /></li>
-                                        <a class="f-fr" href="javascript:socreUserNotice()">客服评分</a>
+                                        <a class="f-fr" href="javascript:socreUserNotice()" id="kefupingfen">客服评分</a>
                                     </ul>
                                 </div>
                                 <div class="u-input f-cb">
@@ -77,8 +77,8 @@
                                             <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu f-txtl">
-                                                <li><a href="#"><label><input type="radio" name="radio_name" checked>Enter 发送</label></a></li>
-                                                <li><a href="#"><label><input type="radio" name="radio_name">Ctrl + Enter 发送</label></a></li>
+                                                <li><a href="#"><label><input type="radio" name="radio_name" checked />Enter 发送</label></a></li>
+                                                <li><a href="#"><label><input type="radio" name="radio_name" />Ctrl + Enter 发送</label></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -261,7 +261,7 @@
 			name = name.HTMLEncode();
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			$("#currentUserCcnId").val(message.who);
+			$("#currentUserCcnId").val(message.id);
 			
 			$("#advisory").click();
 			
@@ -305,7 +305,7 @@
 			
 			var param = "ccnId="+ccnId+'&type='+1+'&endCcnId='+endCcnId;
 			JS.AJAX.post('/chat/endDialogue.action', param, function() {
-				JS.Engine.stop();
+				
 			});
 		}
 		// 对话结束提示！(**)
@@ -323,11 +323,12 @@
 			$("#guanbiduihua").hide();
 			
 		    //弹出评分对话框
+		    socreUserNotice();
 		}
 		
 		// 客服评分弹出窗
 		function socreUserNotice(){
-			
+			$("#kefupingfen").hide();
 			var content ='<table>'
                 +'<tr>'
                 +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
@@ -380,53 +381,14 @@
 		// 回车事件
 		function onSendBoxEnter(event) {
 
-// 			console.log("回车发送！");
-// 			if (event.keyCode == 13) {
-// 				var message = inputbox.value;
-// 				sendMessage(message);
-// 				return false;
-// 			}
-
-
-//            var obj = document.getElementsByName("radio_name");
-//            if(obj[0].checked && event.keyCode == 13 && !event.ctrlKey){
-//         	   alert("huiche");
-//         	   alert(event.ctrlKey);
-//         	   var message = inputbox.value;
-//         	   sendMessage(message);
-//         	   return false;
-//            }
-//            if (obj[1].checked && event.ctrlKey && event.keyCode == 13)  {  
-//                alert("发送");  
-//                var message = inputbox.value;
-//         	   sendMessage(message);
-//         	   return false;
-//            } 
-        var ev = window.event || e;
-		var code = ev.keyCode || ev.which;
-		alert(code);
-		var obj = document.getElementsByName("radio_name");
-		if(obj[0].checked && event.keyCode == 13  ){
-			   alert("huiche");
-			 
-			   var message = inputbox.value;
-			   sendMessage(message);
-			   return false;
-
-			console.log("回车发送！");
+ 			console.log("回车发送！");
 			if (event.keyCode == 13) {
-				var message = inputbox.value;
-				sendMessage(message);
+ 				var message = inputbox.value;
+ 				sendMessage(message);
 				return false;
+ 			}
+		}
 
-		if (obj[1].checked && event.keyCode ==10 )  {  
-		    alert("发送");  
-		    var message = inputbox.value;
-			   sendMessage(message);
-			   return false;
-		} 
-		        
-      }
 		// 发送聊天信息动作
 		function sendMessage(message) {
 			if (!JS.Engine.running)
