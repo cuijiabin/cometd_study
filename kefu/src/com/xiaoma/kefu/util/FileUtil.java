@@ -157,7 +157,7 @@ public class FileUtil {
 				Date date = sdf.parse(strDate);
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
-				basePath += "/"+calendar.get(Calendar.YEAR) + "/" +calendar.get(Calendar.MONTH);
+				basePath += "/"+calendar.get(Calendar.YEAR) + "/" +(calendar.get(Calendar.MONTH)+1);
 			} catch (ParseException e) {
 				
 			}
