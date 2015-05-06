@@ -378,7 +378,7 @@
 			inputbox.focus();
 		}
 		// 回车事件
-		function onSendBoxEnter(e) {
+		function onSendBoxEnter(event) {
 			console.log("回车发送！");
 			if (event.keyCode == 13) {
 				var message = inputbox.value;
