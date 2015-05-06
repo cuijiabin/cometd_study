@@ -172,7 +172,101 @@ public class ClientStyleService {
 		}
 		update(clientStyle);
 	}
-
-
+	
+	/**
+	 * 创建风格的时候, 初始化 访客端界面
+	* @param styleId
+	* @Author: wangxingfei
+	* @Date: 2015年5月6日
+	 */
+	public void initClientStyle(Integer styleId) {
+		ClientStyle clientStyle = new ClientStyle();
+		clientStyle.setStyleId(styleId);
+		clientStyle.setIsYsAd(1);
+		clientStyle.setIsYxAd(1);
+		try{
+			initClientPic(clientStyle);//初始化广告图
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("初始化图标图片失败!");
+		}
+		
+		create(clientStyle);
+	}
+	
+	/**
+	 * 初始化广告图片
+	* @param clientStyle
+	 * @throws IOException 
+	* @Author: wangxingfei
+	* @Date: 2015年5月6日
+	 */
+	private void initClientPic(ClientStyle clientStyle) throws IOException {
+		//复制文件
+		String sourcePath = null;
+		String targetPath = null;
+		
+		//右上广告图
+		sourcePath = FileUtil.getWebContentPath() + "/" + SysConst.TEMPLATE_PATH
+				+ "/" + SysConst.PIC_TEMPLATE_CLIENT_YS;
+		String temp = FileUtil.getStyleRootPath(clientStyle.getStyleId())
+				+ "/" + StylePicName.访问端右上.getCode();
+		targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+		
+		logger.info("initClientPic.sourcePath1="+sourcePath);
+		BufferedImage image = ImageIO.read(new File(sourcePath));  
+		//相对路径
+		clientStyle.setYsAd(FileUtil.getStyleSavePath(clientStyle.getStyleId())
+				+ "/" + StylePicName.访问端右上.getCode()+ SysConst.MIN_EXTENSION);
+		FileUtil.copyFile(sourcePath, targetPath);
+		
+		//缩略图默认宽高
+		Integer minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+		Integer minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+		
+		if(minWidth > image.getWidth()){
+			minWidth = image.getWidth();
+		}
+		if(minHeight > image.getHeight()){
+			minHeight = image.getHeight();
+		}
+		
+        //生成缩略图
+        Thumbnails.of(targetPath)//原始路径
+        	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+        	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+		
+        
+        //右下广告图
+        sourcePath = FileUtil.getWebContentPath() + "/" + SysConst.TEMPLATE_PATH
+				+ "/" + SysConst.PIC_TEMPLATE_CLIENT_YX;
+        temp = FileUtil.getStyleRootPath(clientStyle.getStyleId())
+				+ "/" + StylePicName.访问端右下.getCode();
+		targetPath = temp + SysConst.MIN_EXTENSION; //目前都使用 png
+		
+		logger.info("initClientPic.sourcePath2="+sourcePath);
+		image = ImageIO.read(new File(sourcePath));  
+		//相对路径
+		clientStyle.setYxAd(FileUtil.getStyleSavePath(clientStyle.getStyleId())
+				+ "/" + StylePicName.访问端右下.getCode()+ SysConst.MIN_EXTENSION);
+		FileUtil.copyFile(sourcePath, targetPath);
+		
+		//缩略图默认宽高
+		minWidth = Integer.valueOf(DictMan.getDictItem("d_min_pic", "width").getItemName());
+		minHeight = Integer.valueOf(DictMan.getDictItem("d_min_pic", "height").getItemName());
+		
+		if(minWidth > image.getWidth()){
+			minWidth = image.getWidth();
+		}
+		if(minHeight > image.getHeight()){
+			minHeight = image.getHeight();
+		}
+		
+        //生成缩略图
+        Thumbnails.of(targetPath)//原始路径
+        	.size(minWidth, minHeight)	//要压缩到的尺寸size(宽度, 高度) 原始图片小于则不变
+        	.toFile(temp+SysConst.MIN_PIC_SUFFIX+SysConst.MIN_EXTENSION);//压缩后的路径
+		
+	}
 
 }

@@ -60,6 +60,16 @@ public class SysConst {
 	public static final String JS_DIV_TEMPLATE = "template.js";
 	
 	/**
+	 * 初始化图片	访客端界面 右上广告图
+	 */
+	public static final String PIC_TEMPLATE_CLIENT_YS = "clientYs.png";
+	
+	/**
+	 * 初始化图片	访客端界面 右下广告图
+	 */
+	public static final String PIC_TEMPLATE_CLIENT_YX = "clientYx.png";
+	
+	/**
 	 * 初始化图片	图标PC版
 	 */
 	public static final String PIC_TEMPLATE_PC_SERVICE = "pcServiceIcon.png";

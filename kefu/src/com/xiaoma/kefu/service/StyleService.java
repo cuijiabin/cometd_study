@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.xiaoma.kefu.dao.StyleDao;
 import com.xiaoma.kefu.model.AllotRule;
-import com.xiaoma.kefu.model.ClientStyle;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.util.FileUtil;
 import com.xiaoma.kefu.util.PageBean;
@@ -109,9 +108,7 @@ public class StyleService {
 		Integer styleId = style.getId();
 		
 		//访问端界面
-		ClientStyle clientStyle = new ClientStyle();
-		clientStyle.setStyleId(styleId);
-		clientStyleService.create(clientStyle);
+		clientStyleService.initClientStyle(styleId);
 		
 		//客服图标PC
 		serviceIconService.initServiceIcon(styleId,DeviceType.PC);
@@ -128,6 +125,9 @@ public class StyleService {
 		//分配机制
 		AllotRule allotRule = new AllotRule();
 		allotRule.setStyleId(styleId);
+		allotRule.setFirstRule(1);
+		allotRule.setSecondRule(1);
+		allotRule.setThirdRule(1);
 		allotRuleService.create(allotRule);
 		
 		//创建js文件
