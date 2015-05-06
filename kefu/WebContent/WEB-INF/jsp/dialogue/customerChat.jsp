@@ -174,8 +174,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
-<script language="javascript" for="window" event="onload"> 
-
+<!-- <script language="javascript" for="window" event="onload">  -->
+<script type="text/javascript">
 			console.log("init");
 			// 引擎事件绑定
 			JS.Engine.on({
@@ -380,15 +380,16 @@
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
-
- 			console.log("回车发送！");
-			if (event.keyCode == 13) {
- 				var message = inputbox.value;
- 				sendMessage(message);
-				return false;
- 			}
-		}
-
+             var obj = document.getElementsByName("radio_name");
+             if(event.keyCode == 13 || event.keyCode == 10){
+            	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
+            		   var message = inputbox.value;
+                  	   sendMessage(message);
+                  	   return false;
+            	   }
+             }
+      }
+	
 		// 发送聊天信息动作
 		function sendMessage(message) {
 			if (!JS.Engine.running)
