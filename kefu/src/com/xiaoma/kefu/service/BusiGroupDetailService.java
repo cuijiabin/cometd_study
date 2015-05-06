@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.BusiGroupDetailDao;
 import com.xiaoma.kefu.model.BusiGroupDetail;
 
@@ -94,6 +96,11 @@ public class BusiGroupDetailService {
 				detail.setId(Integer.valueOf(ss[0]));
 				detail.setIsReception(Integer.valueOf(ss[1]));
 				busiGroupDetailDaoDaoImpl.updateIsRece(detail);
+			}
+			if(strs.length>0){
+				String[] st = strs[0].split(":");
+				BusiGroupDetail bgdTemp = busiGroupDetailDaoDaoImpl.findById(BusiGroupDetail.class, Integer.valueOf(st[0]));
+				CacheMan.remove(CacheName.ONLINE_USER_STYLEID, bgdTemp.getStyleId());
 			}
 		}
 	}

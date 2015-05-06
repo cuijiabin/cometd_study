@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.MessageRecords;
+import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
+import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.MapEntity;
@@ -49,6 +51,8 @@ public class CustomerController {
 	private DialogueService dialogueService;// 对话信息
 	@Autowired
 	private MessageRecordsService messageRecordsService;// 留言信息
+	@Autowired
+	private StyleService styleService;
 	
 	/**
 	 * 获取客户详细信息
@@ -268,10 +272,13 @@ public class CustomerController {
 					.valueOf(customerId));
 			Dialogue dialogue = dialogueService.findById(Long
 					.valueOf(dialogueId));
+			Style style = styleService.get(dialogue.getStyleId());
+			model.addAttribute("styleName", style!=null?style.getName():"");
 			model.addAttribute("customer", customer);
 			model.addAttribute("dialogue", dialogue);
 			return "/customer/editCus";
 		} catch (Exception e) {
+			logger.error("editCus",e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
@@ -329,11 +336,13 @@ public class CustomerController {
 					.valueOf(customerId));
 			MessageRecords msg = messageRecordsService.findById(Integer
 					.valueOf(msgId));
+			Style style = styleService.get(msg.getStyleId());
+			model.addAttribute("styleName", style!=null?style.getName():"");
 			model.addAttribute("customer", customer);
 			model.addAttribute("dialogue", msg);// 和聊天记录用一个
 			return "/customer/editCus";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("editCus4Msg",e);
 			model.addAttribute("error", "对不起出错了");
 			return "error500";
 		}
