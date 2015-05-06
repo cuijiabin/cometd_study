@@ -253,14 +253,19 @@
 			name = name.HTMLEncode();
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			$("#currentUserCcnId").val(message.who);
+			$("#currentUserCcnId").val(message.id);
 			
+			//alert($("#currentUserCcnId").val());
 			$("#advisory").click();
 			
 		}
 		
 		function switchCustomer(data){
-			//alert("后台用户切换！");
+			
+			var user = data.obj;
+			var html='与'+user.cardName+'对话中...';
+			console.log(html);
+			$("#dialogueTitle").html(html);
 		}
 		
 		// 用户下线通知(**)

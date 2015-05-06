@@ -273,6 +273,7 @@
 			$("#dialugueCustomerInfo").show();
 			changeTitle(customerId,ccnId);
 		}else{
+			logbox.innerHTML = '';
 			$("#customerInfo").hide();
 			$("#dialugueCustomerInfo").hide();
 			$("#contentTitle").html("欢迎使用客服系统，与客服系统连接成功");
