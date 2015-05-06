@@ -1,6 +1,7 @@
 package com.xiaoma.kefu.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +56,14 @@ public class ServiceIconController {
 			String result = "/style/service/editPC";
 			ServiceIcon serviceIcon;
 			String onUrl,offUrl;
-			if(deviceTypeId==1){
+			if(deviceTypeId==DeviceType.PC.getCode()){
 				serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.PC);
-				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC在线);
-				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC离线);
+				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC在线)+"?"+new Random().nextInt();
+				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标PC离线)+"?"+new Random().nextInt();
 			}else{
 				serviceIcon = serviceIconService.getByStyleId(styleId,DeviceType.移动);
-				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动在线);
-				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动离线);
+				onUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动在线)+"?"+new Random().nextInt();
+				offUrl = styleService.getMinPicPath(styleId, StylePicName.客服图标移动离线)+"?"+new Random().nextInt();
 				result = "/style/service/editYD";
 			}
 			List<DictItem> dict = DictMan.getDictList("d_display_model");//显示方式

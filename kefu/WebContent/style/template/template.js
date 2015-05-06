@@ -1,4 +1,5 @@
 
+var isPc = IsPC();
 //是否PC
 function IsPC() {
     var userAgentInfo = navigator.userAgent;
@@ -15,31 +16,27 @@ function IsPC() {
     return flag;
 }
 
-var isPc = IsPC();
+//set refer
+var oldRefer = getCookie("KF_refer");
+if(oldRefer==''){
+	setCookie("KF_refer", document.referrer);
+}
 
-$(function() {
-	
-	//set refer
-	var oldRefer = getCookie("KF_refer");
-	if(oldRefer==''){
-		setCookie("KF_refer", document.referrer);
+//set landing page
+var oldLanding = getCookie("KF_landingPage");
+if(oldLanding==''){
+	var local = window.location.href;
+	var end = local.indexOf('?');
+	if(end!=-1){
+		local = local.substring(0, local.indexOf('?'));
 	}
-	
-	//set landing page
-	var oldLanding = getCookie("KF_landingPage");
-	if(oldLanding==''){
-		var local = window.location.href;
-		var end = local.indexOf('?');
-		if(end!=-1){
-			local = local.substring(0, local.indexOf('?'));
-		}
-		setCookie("KF_landingPage", local);
-	}
-	
-	//load div
-	addDialogueDiv();
-	addIconDiv();
-})
+	setCookie("KF_landingPage", local);
+}
+
+//load div
+addDialogueDiv();
+addIconDiv();
+
 
 //设置cookies
 function setCookie(name, value) {
