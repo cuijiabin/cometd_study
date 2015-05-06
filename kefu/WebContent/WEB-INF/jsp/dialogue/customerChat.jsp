@@ -62,7 +62,6 @@
                                 </div>
                                 <div class="u-input f-cb">
                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
-<!--                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea> -->
                                     <div class="u-send">
                                         <div class="btn-group">
                                             <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -70,8 +69,8 @@
                                             <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu f-txtl">
-                                                <li><a href="#"><label><input type="radio" name="2" checked>Enter 发送</label></a></li>
-                                                <li><a href="#"><label><input type="radio" name="2">Ctrl + Enter 发送</label></a></li>
+                                                <li><a href="#"><label><input type="radio" name="radio_name" checked>Enter 发送</label></a></li>
+                                                <li><a href="#"><label><input type="radio" name="radio_name">Ctrl + Enter 发送</label></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -184,6 +183,7 @@
 					logbox.innerHTML += str.join('');
 					findWaitList(0);//获取等待列表
 					$("#guanbiduihua").hide();
+					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -204,9 +204,6 @@
 						break;
 					case 'no_user': 
 						noUser(data);// 客服不在
-						break;
-					case 'user_busy': 
-						userBusy(data);// 客服正忙
 						break;
 					default:
 					}
@@ -247,7 +244,6 @@
 				logbox.innerHTML += str.join('');
 				moveScroll();
 				$("#advisory").click();
-				$("#guanbiduihua").show();
 			}
 			
 		// 用户上线通知(**)
@@ -257,19 +253,14 @@
 			name = name.HTMLEncode();
 			var html='与'+name+'对话中...';
 			$("#dialogueTitle").html(html);
-			$("#currentUserCcnId").val(message.id);
+			$("#currentUserCcnId").val(message.who);
 			
-			$("#guanbiduihua").show();
 			$("#advisory").click();
 			
 		}
 		
 		function switchCustomer(data){
-			
-			var user = data.obj;
-			var html='与'+user.cardName+'对话中...';
-			console.log(html);
-			$("#dialogueTitle").html(html);
+			//alert("后台用户切换！");
 		}
 		
 		// 用户下线通知(**)
@@ -294,6 +285,7 @@
 		function userBusy(data){
 			var str = '<div class="r-offline"><span class="alert alert-info">客服正忙，请您耐心等待</span></div>';
 			logbox.innerHTML += str;
+			//$("#leaveMessage").click();
 			$("#guanbiduihua").hide();
 		}
 		
@@ -379,14 +371,47 @@
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
-			console.log("回车发送！");
-			if (event.keyCode == 13) {
-				var message = inputbox.value;
-				sendMessage(message);
-				return false;
-			}
-            
+// 			console.log("回车发送！");
+// 			if (event.keyCode == 13) {
+// 				var message = inputbox.value;
+// 				sendMessage(message);
+// 				return false;
+// 			}
+
+
+//            var obj = document.getElementsByName("radio_name");
+//            if(obj[0].checked && event.keyCode == 13 && !event.ctrlKey){
+//         	   alert("huiche");
+//         	   alert(event.ctrlKey);
+//         	   var message = inputbox.value;
+//         	   sendMessage(message);
+//         	   return false;
+//            }
+//            if (obj[1].checked && event.ctrlKey && event.keyCode == 13)  {  
+//                alert("发送");  
+//                var message = inputbox.value;
+//         	   sendMessage(message);
+//         	   return false;
+//            } 
+        var ev = window.event || e;
+		var code = ev.keyCode || ev.which;
+		alert(code);
+		var obj = document.getElementsByName("radio_name");
+		if(obj[0].checked && event.keyCode == 13  ){
+			   alert("huiche");
+			 
+			   var message = inputbox.value;
+			   sendMessage(message);
+			   return false;
 		}
+		if (obj[1].checked && event.keyCode ==10 )  {  
+		    alert("发送");  
+		    var message = inputbox.value;
+			   sendMessage(message);
+			   return false;
+		} 
+		        
+      }
 		// 发送聊天信息动作
 		function sendMessage(message) {
 			if (!JS.Engine.running)
