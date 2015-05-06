@@ -24,7 +24,7 @@
         <li><i>&gt;</i>权限配置</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 <h4>角色： ${role.name}</h4><input type="hidden" id="roleId" name="roleId" value="${role.id}"/><input type="hidden" id="deptId" name="deptId" value="${deptId}"/>
 <input type="hidden" id="strings" name="strings" value="${strs}"/>
     	<!-- 表格有边框 -->
@@ -66,7 +66,15 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
 <script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
 var api = frameElement.api,W=api.opener;
 var zTree;
 var demoIframe;

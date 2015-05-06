@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -23,7 +24,7 @@
         <li><i>&gt;</i>快捷键</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 	<table class="table table-bordered m-table" style="width: 350px">
 		<tr>
 			<td class="f-txtr tdbg" width="150px">客户端截图热键:</td> <td class="f-txtl">Shift+Alt+<input type="text" id="picKey" name="picKey" style="width: 20px" value="${key.picKey}" ></td>
@@ -50,7 +51,15 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
 var api = frameElement.api,W=api.opener;
 function saveKey(){
 	   url="/function/saveKeyboard.action";

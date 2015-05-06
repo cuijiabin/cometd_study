@@ -17,8 +17,8 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
-<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 <link href="/jsplugin/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
         <li><i>&gt;</i>提醒方式</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 <div class="g-cnt" style="width: 1000px"> 
     <div class="f-padd10">
     <form action="/function/saveRemind.action" enctype="multipart/form-data" method="post" id="fform">
@@ -112,14 +112,13 @@
 <script type="text/javascript" src="/jsplugin/uploadify/jquery.uploadify.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <script type="text/javascript">
-var api = frameElement.api,W=api.opener;
-// 自定义滚动条--左右布局右侧
+//自定义滚动条--左右布局右侧
 (function($){
 	$(window).load(function(){
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-
+var api = frameElement.api,W=api.opener;
 function saveRemind(){
 	var lsound=$("#lsound").val();
 	if(lsound!=''){

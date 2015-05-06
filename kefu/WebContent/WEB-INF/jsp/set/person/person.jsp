@@ -11,6 +11,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -23,7 +24,7 @@
         <li><i>&gt;</i>个人信息</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 <table class="table table-bordered m-table" style="width: 360px">
       <tr>
       <td class="f-txtr tdbg" width="150px">工号：</td><td class="f-txtl">${user.loginName}</td>
@@ -47,7 +48,15 @@
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
+//自定义滚动条--左右布局右侧
+(function($){
+	$(window).load(function(){
+		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
+	});
+})(jQuery);
 function repass(){
 	var d = $.dialog({id:'pass',title:"重置密码",content:'url:/user/password.action',lock:true, width:	460,height: 280,});
 }
@@ -55,6 +64,7 @@ function repass(){
 function callback(){
 	$.dialog({id:'pass'}).close();
 }
+
 </script>
 </body>
 </html>
