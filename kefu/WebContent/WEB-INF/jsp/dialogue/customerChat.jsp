@@ -62,6 +62,7 @@
                                 </div>
                                 <div class="u-input f-cb">
                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea>
+<!--                                     <textarea class="u-txtarea" id="inputbox" onchange="javascript:changeTxt(this);" onkeypress="return onSendBoxEnter(event);"></textarea> -->
                                     <div class="u-send">
                                         <div class="btn-group">
                                             <a class="btn btn-primary" href="javascript:sendMessage(inputbox.value);">发送</a>
@@ -166,8 +167,8 @@
 <script type="text/javascript" src="/js/comet4j.js"></script>
 <script type="text/javascript" src="/jsplugin/exp/exp.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
-<script language="javascript" for="window" event="onload"> 
-
+<!-- <script language="javascript" for="window" event="onload">  -->
+<script type="text/javascript">
 			console.log("init");
 			// 引擎事件绑定
 			JS.Engine.on({
@@ -322,7 +323,7 @@
 			
 			var content ='<table>'
                 +'<tr>'
-                +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
+                +'<td class="f-txtr tdbg">评分：<input type="radio" name="scoreType" value="1"/>非常好'
                 +'<input type="radio" name="scoreType" value="2"/>好'
                 +'<input type="radio" name="scoreType" value="3"/>一般'
                 +'<input type="radio" name="scoreType" value="4"/>差'
@@ -370,13 +371,14 @@
 			inputbox.focus();
 		}
 		// 回车事件
-		function onSendBoxEnter(event) {
+		function onSendBoxEnter(e) {
 			console.log("回车发送！");
 			if (event.keyCode == 13) {
 				var message = inputbox.value;
 				sendMessage(message);
 				return false;
 			}
+            
 		}
 		// 发送聊天信息动作
 		function sendMessage(message) {
