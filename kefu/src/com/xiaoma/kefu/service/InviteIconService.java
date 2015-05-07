@@ -158,7 +158,7 @@ public class InviteIconService {
 					+ "/" + SysConst.PIC_TEMPLATE_YD_INVITE;
 			BufferedImage image = ImageIO.read(new File(sourcePath));  
         	ele.setHeight(image.getHeight());
-        	ele.setWidth(30);//手机默认宽度30%
+        	ele.setWidth(80);//手机默认宽度80%
 		}
 		//绝对路径
 		String targetPath = FileUtil.getStyleRootPath(styleId) + "/" + ele.getId()

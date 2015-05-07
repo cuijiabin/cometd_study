@@ -25,7 +25,7 @@
 				<td class="f-txtl"> 
 					宽<input class="c-wd50" type="text" id="width" name="width" value="${inviteElement.width }" maxlength="4" />%
 					高 <input class="c-wd50" type="text" id="height" name="height" value="${inviteElement.height }" maxlength="4" />px
-					<span class="help-inline c-clred">注：如为空,则宽为30%,高为背景图高度</span>
+					<span class="help-inline c-clred">注：如为空,则宽为80%,高为背景图高度</span>
 				</td>
 			</tr>
 			<tr>
