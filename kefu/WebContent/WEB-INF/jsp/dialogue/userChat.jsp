@@ -365,9 +365,9 @@
 		var who = data.who;
 		var str = "";
 		if(who == "1"){
-			str = [ '<p class="r-manager">',name,'&nbsp;', t,'</p><p class="r-manager-txt">',text,'</p>' ];
+			str = [ '<p class="r-manager">',name,'&nbsp;', t,'</p><p class="r-manager-txt">',$.expBlock.textFormat(text),'</p>' ];
 		}else if(who == "2"){
-			str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',text,'</p>' ];
+			str = [ '<p class="r-visitor">',name,'&nbsp;', t,'</p><p class="r-visitor-txt">',$.expBlock.textFormat(text),'</p>' ];
 		}
 		console.log(str);
 		$("#D"+id).append(str.join(''));

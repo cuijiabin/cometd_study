@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
-import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
