@@ -68,7 +68,7 @@ public class DictMan {
 			addListCache(CacheName.DICTLIST,table, list);
 			return list;
 		} catch (Exception ex) {
-			log.error(ex.getMessage());
+			log.error(ex.getMessage(),ex);
 			return null;
 		} 
 	}
@@ -82,7 +82,7 @@ public class DictMan {
 				list = getDictList(CacheName.DICTLIST,table);
 			return list;
 		} catch (Exception ex) {
-			log.error(ex.getMessage());
+			log.error(ex.getMessage(),ex);
 			return null;
 		}
 	}

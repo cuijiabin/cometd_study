@@ -82,7 +82,7 @@ public class JedisDao {
 			jedis = pool.getResource();
 			return jedis;
 		} catch (Exception e) {
-			log.error("JedisDao::getJedis:" + e.getMessage());
+			log.error("JedisDao::getJedis:" + e.getMessage(),e);
 			jedis = null;
 		}
 		return jedis;
@@ -103,7 +103,7 @@ public class JedisDao {
 
 			return result;
 		} catch (Exception e) {
-			log.error("JedisDao::setKV:" + e.getMessage());
+			log.error("JedisDao::setKV:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -125,7 +125,7 @@ public class JedisDao {
 			jedis.expire(key, seconds);
 
 		} catch (Exception e) {
-			log.error("JedisDao::setKVT:" + e.getMessage());
+			log.error("JedisDao::setKVT:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -141,7 +141,7 @@ public class JedisDao {
 			jedis.set(bKey, bObj);
 
 		} catch (Exception e) {
-			log.error("JedisDao::setKO:" + e.getMessage());
+			log.error("JedisDao::setKO:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -160,7 +160,7 @@ public class JedisDao {
 			}
 
 		} catch (Exception e) {
-			log.error("JedisDao::setKList:" + e.getMessage());
+			log.error("JedisDao::setKList:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -185,7 +185,7 @@ public class JedisDao {
 			return list;
 
 		} catch (Exception e) {
-			log.error("JedisDao::getKList:" + e.getMessage());
+			log.error("JedisDao::getKList:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -200,7 +200,7 @@ public class JedisDao {
 			jedis.expire(key, seconds);
 
 		} catch (Exception e) {
-			log.error("JedisDao::setKOT:" + e.getMessage());
+			log.error("JedisDao::setKOT:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -213,7 +213,7 @@ public class JedisDao {
 			String value = jedis.get(key);
 			return value;
 		} catch (Exception e) {
-			log.error("JedisDao::getValue:" + e.getMessage());
+			log.error("JedisDao::getValue:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -231,7 +231,7 @@ public class JedisDao {
 			return obj;
 
 		} catch (Exception e) {
-			log.error("JedisDao::getObject:" + e.getMessage());
+			log.error("JedisDao::getObject:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -245,7 +245,7 @@ public class JedisDao {
 			jedis.del(key);
 
 		} catch (Exception e) {
-			log.error("JedisDao::remove:" + e.getMessage());
+			log.error("JedisDao::remove:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -261,7 +261,7 @@ public class JedisDao {
 			jedis.flushAll();
 
 		} catch (Exception e) {
-			log.error("JedisDao::flushAll:" + e.getMessage());
+			log.error("JedisDao::flushAll:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -279,7 +279,7 @@ public class JedisDao {
 			jedis = getJedis();
 			return jedis.zrange(key, 0, -1);
 		} catch (Exception e) {
-			log.error("JedisDao::zrangeAll:" + e.getMessage());
+			log.error("JedisDao::zrangeAll:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -299,7 +299,7 @@ public class JedisDao {
 			Long id = jedis.zadd(key, System.currentTimeMillis(), member);
 			return (id >= 0);
 		} catch (Exception e) {
-			log.error("JedisDao::zaddTimestamp:" + e.getMessage());
+			log.error("JedisDao::zaddTimestamp:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -312,7 +312,7 @@ public class JedisDao {
 			Long id = jedis.zrem(key, member);
 			return (id >= 0);
 		} catch (Exception e) {
-			log.error("JedisDao::zrem:" + e.getMessage());
+			log.error("JedisDao::zrem:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -330,7 +330,7 @@ public class JedisDao {
 			Long size = jedis.zcard(key);
 			return size.intValue();
 		} catch (Exception e) {
-			log.error("JedisDao::zcard:" + e.getMessage());
+			log.error("JedisDao::zcard:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -347,7 +347,7 @@ public class JedisDao {
 			}
 			return socre.longValue();
 		} catch (Exception e) {
-			log.error("JedisDao::zscore:" + e.getMessage());
+			log.error("JedisDao::zscore:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -364,7 +364,7 @@ public class JedisDao {
 			jedis = getJedis();
 			return jedis.lrange(key, 0, -1);
 		} catch (Exception e) {
-			log.error("JedisDao::lrangeAll:" + e.getMessage());
+			log.error("JedisDao::lrangeAll:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -377,7 +377,7 @@ public class JedisDao {
 			Long id = jedis.rpush(key, member);
 			return (id >= 0);
 		} catch (Exception e) {
-			log.error("JedisDao::rpush:" + e.getMessage());
+			log.error("JedisDao::rpush:" + e.getMessage(),e);
 		} finally {
 			pool.returnResource(jedis);
 		}

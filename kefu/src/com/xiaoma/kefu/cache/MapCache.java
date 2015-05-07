@@ -30,7 +30,7 @@ public class MapCache {
 			} else
 				return instance;
 		} catch (Exception e) {
-			log.error("DictCache::getInstance:" + e.getMessage());
+			log.error("DictCache::getInstance:" + e.getMessage(),e);
 			instance = null;
 		}
 		return instance;
