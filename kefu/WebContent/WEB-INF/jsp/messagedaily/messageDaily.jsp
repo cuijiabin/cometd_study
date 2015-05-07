@@ -84,7 +84,7 @@
 // var id =  1;   //设置树节点ID默认为1
 // var title = '公共常用语分类设置';
 // var sortId= 1;
-// var pId= 0;
+var pId= 0;
 // var status=1;
 // var typeId=1;
 
@@ -129,7 +129,8 @@
       }
     
        //不让在pId=0的节点（初级节点）下添加常用语
-       if("${messageType.pId}"==0){
+       var p = pId;
+       if(p==0){
     		$.dialog.alert("不能在该节点下添加常用语  ！");
     	   return false;
        }

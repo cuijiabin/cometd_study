@@ -91,7 +91,7 @@
 	});
 })(jQuery);
 // //以下参数设置的是默认值
-// 	var id =  1;   //设置树节点ID默认为1
+	var id;   //设置树节点ID默认为1
 // var title = '公共常用语分类设置';
 // var sortId= 1;
 // var pId= 0;
