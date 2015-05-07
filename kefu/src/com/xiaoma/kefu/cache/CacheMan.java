@@ -67,8 +67,11 @@ public class CacheMan {
 			List<Integer> list = JedisDao.getKList(key,Integer.class);
 			if (CollectionUtils.isEmpty(list)) {
 				list = (List<Integer>) CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
-				if (CollectionUtils.isNotEmpty(list))
-					JedisDao.setKList(key, list);
+				if (CollectionUtils.isNotEmpty(list)){
+					for(Integer id : list){
+						JedisDao.rpush(key, id.toString());
+					}
+				}
 			}
 			Set<Integer> userIds = new HashSet<Integer>(list);
 			List<String> ids = JedisTalkDao.getSwitchList();
@@ -83,6 +86,7 @@ public class CacheMan {
 			return null;
 		}
 	}
+
 
 	// 设置缓存对象（永久缓存），包括新增、修改功能；param1:缓存前缀，param2:对应的id，param3:要缓存的值
 	public static Object add(String cacheName, Object value, Object obj) {

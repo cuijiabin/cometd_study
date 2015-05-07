@@ -336,7 +336,6 @@ public class DialogueController {
 			//model.addAttribute("clientStyle",clientStyleService.getByStyleId(styleId));
 			
 			//获取客服部人员列表
-			
 			model.addAttribute("userList",userService.getResultDept(Integer.parseInt(DictMan.getDictItem("d_sys_param", 17).getItemName())));
 			return "/dialogue/customerChat";
 		}
