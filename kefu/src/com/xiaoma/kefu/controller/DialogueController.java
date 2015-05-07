@@ -323,7 +323,7 @@ public class DialogueController {
 		// 留言框生成规则 ---------------结束
 		
 		//判断是pc还是手机
-		if(true){
+		if(isPhone){
 			return "/dialogue/customerPhoneChat";
 		}else{
 			// 留言框生成规则 --------------开始
