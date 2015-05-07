@@ -400,11 +400,11 @@ public class DialogueService {
 	 * @param customer
 	 * @return
 	 */
-	public String allocateCcnIdByCustomer(Customer customer){
+	public String allocateCcnIdByCustomer(Long customerId,Integer styleId){
 		
 		try {
 			//如果当前风格下没有客服，直接返回。
-			List<Integer> userIds = CacheMan.getOnlineUserIdsByStyleId(customer.getStyleId());
+			List<Integer> userIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
 			if (CollectionUtils.isEmpty(userIds)) {
 				return null;
 			}
@@ -425,7 +425,7 @@ public class DialogueService {
 				return userList.get(0).getId()+"";
 			}
 			//如果有客服，获取风格规则
-			AllotRule allotRule = allotRuleService.getByStyleId(customer.getStyleId());
+			AllotRule allotRule = allotRuleService.getByStyleId(styleId);
 			//如果没规则，分配当前可接通数最大的一个
 			if(allotRule == null){
 				Integer max = 0;
@@ -443,7 +443,7 @@ public class DialogueService {
 			//如果有规则,先判断第一个规则
 			if(allotRule.getFirstRule() != null && allotRule.getFirstRule()==1){
 				//获取客户的对话记录，如果有，则获取对应的客服，判断客服是否在当前等待中。如果该客服需等待，则不返回。
-				List<Dialogue> list = findDialogByCustomerId(customer.getId());
+				List<Dialogue> list = findDialogByCustomerId(customerId);
 				if(list != null && list.size()>0){
 					Dialogue d = list.get(0);
 					if (userIds.contains(d.getUserId())) {

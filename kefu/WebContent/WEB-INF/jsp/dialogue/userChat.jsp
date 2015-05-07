@@ -371,7 +371,9 @@
 		}
 		console.log(str);
 		$("#D"+id).append(str.join(''));
-		switchDialogueBox(id);
+		if(id == $("#currentCcnId").val()){
+			switchDialogueBox(id)
+		}
 		moveScroll();
 	}
 	//切换对话框窗口 (**)

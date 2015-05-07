@@ -212,6 +212,8 @@ public class DialogueController {
 			String btnCode, String landingPage,String consultPage)throws Exception {
 
 		logger.info("customerChat.action param refer："+refer+" ,styleId: "+styleId+" ,btnCode: "+btnCode+" ,landingPage: "+landingPage+" ,consultPage: "+consultPage);
+		styleId = (styleId == null) ? 1 : styleId;
+		
 		String customerId = CookieUtil.getCustomerIdFromCookie(request);
 
 		Long id = null;
@@ -245,7 +247,6 @@ public class DialogueController {
 			newCus.setStyleId(styleId);
 			
 			//风格id设置默认值
-			styleId = (styleId == null) ? 1 : styleId;
 			Style style = styleService.get(styleId);
 			if(style != null) newCus.setStyleName(style.getName());
 			

@@ -27,6 +27,7 @@ import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.CustomerService;
+import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.TimeHelper;
@@ -44,6 +45,7 @@ public class JoinListener extends ConnectListener {
 
 	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
 	private BusiGroupDetailService busiGroupDetailService = (BusiGroupDetailService) SpringContextUtil.getBean("busiGroupDetailService");
+	private DialogueService dialogueService = (DialogueService) SpringContextUtil.getBean("dialogueService");
 	
 	private Logger logger = Logger.getLogger(JoinListener.class);
 
@@ -164,7 +166,8 @@ public class JoinListener extends ConnectListener {
 				}
 				
 				// 分配客服
-				String allocateCnnId = JedisTalkDao.allocateCcnIdByStyleId(onlineUserIds,styleId);
+				String allocateUserId = dialogueService.allocateCcnIdByCustomer(Long.valueOf(customerId), styleId);
+				String allocateCnnId = (CollectionUtils.isEmpty(JedisTalkDao.getUserCcnList(allocateUserId))) ? null : JedisTalkDao.getUserCcnList(allocateUserId).get(0);
 				
 				//对不起，客服正忙，请留言
 				if(StringUtils.isBlank(allocateCnnId)){
@@ -177,6 +180,7 @@ public class JoinListener extends ConnectListener {
 					
 					return true;
 				}
+				
 				
 				//设置接待
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
@@ -191,7 +195,7 @@ public class JoinListener extends ConnectListener {
 		        
 				//通知数据
 		        String uId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, allocateCnnId);
-		        User allocateUser = (User) CacheMan.getObject(CacheName.SUSER, uId);
+		        User allocateUser = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(uId));
 		        Message message = new Message(allocateCnnId, allocateUser.getCardName(), "", "", ccnId);
 				NoticeData nd = new NoticeData(Constant.ON_OPEN, message);
 				
@@ -256,7 +260,7 @@ public class JoinListener extends ConnectListener {
 		dialogueDetail.setUserId(uId);
 		dialogueDetail.setCustomerId(cId);
 		
-		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, uId);
 		
 		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);

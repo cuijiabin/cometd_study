@@ -103,7 +103,7 @@ public class ChatCometController {
 		dialogueDetail.setUserId(uId);
 		dialogueDetail.setCustomerId(cId);
 		
-		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, uId);
 		
 		String strMessage = JsonUtil.toJson(dialogueDetail);
 		JedisTalkDao.addDialogueList(userCId, cusCId, strMessage);
@@ -217,7 +217,7 @@ public class ChatCometController {
 			return ;
 		}
 		
-		User toUser = (User) CacheMan.getObject(CacheName.SUSER, toUserId);
+		User toUser = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(toUserId));
 		
 		//保存转接记录到数据库
 		DialogueSwitch dialogueSwitch = new DialogueSwitch();
@@ -303,7 +303,7 @@ public class ChatCometController {
 	        
 	        //撮合对话
 	        String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
-			User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+			User user = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(userId));
 			buildDialogue(ccnId,user);
 			 
 		}else if(JedisConstant.CUSTOMER_TYPE == type){
@@ -346,7 +346,7 @@ public class ChatCometController {
 		Integer userId = Integer.valueOf(uId);
 		
 		Customer customer  = customerService.getCustomerById(customerId);
-		User user = (User) CacheMan.getObject(CacheName.SUSER, uId);
+		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
 		
 		Date startDate = new Date(System.currentTimeMillis());
 		Date endDate = TimeHelper.addHour(startDate, 8);
@@ -442,7 +442,7 @@ public class ChatCometController {
 			JedisTalkDao.remOffLineUserSet(userId);
 			
 			//撮合对话
-			User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+			User user = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(userId));
 			buildDialogue(userCcnId,user);
 		}else{
 			JedisTalkDao.addOffLineUserSet(userId);

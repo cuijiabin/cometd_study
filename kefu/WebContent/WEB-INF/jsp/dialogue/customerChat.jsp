@@ -332,18 +332,21 @@
 		// 客服评分弹出窗
 		function socreUserNotice(){
 			$("#kefupingfen").hide();
-			var content ='<table>'
+			var content ='<table class="table table-bordered m-table c-wdat">'
                 +'<tr>'
-                +'<td class="f-txtl">评分：<input type="radio" name="scoreType" value="1"/>非常好'
-                +'<input type="radio" name="scoreType" value="2"/>好'
-                +'<input type="radio" name="scoreType" value="3"/>一般'
-                +'<input type="radio" name="scoreType" value="4"/>差'
-                +'<input type="radio" name="scoreType" value="5"/>非常差</td>'
+                +'<td class="f-txtr tdbg">评分：</td>'
+                +'<td class="f-txtl u-subsec"><label><input type="radio" name="scoreType" value="1"/>非常好</label>'
+                +'<label><input type="radio" name="scoreType" value="2"/>好</label>'
+                +'<label><input type="radio" name="scoreType" value="3"/>一般</label>'
+                +'<label><input type="radio" name="scoreType" value="4"/>差</label>'
+                +'<label><input type="radio" name="scoreType" value="5"/>非常差</label></td>'
                 +'</tr>'
                 +'<tr>'
-                +'<td>备注：<textarea id="scoreRemark"/></td>'
+                +'<td class="f-txtr tdbg">备注：</td>'
+                +'<td class="f-txtl"><textarea style="width:270px;height:60px;resize:none;" id="scoreRemark"/></td>'
                 +'</tr>'
                 +'</table>';
+
                 
 			$.dialog({
 			    id: 'socreUserNotice',
