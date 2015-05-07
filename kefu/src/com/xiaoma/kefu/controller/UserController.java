@@ -528,6 +528,17 @@ public class UserController {
 		model.addAttribute("result", Ajax.toJson(0, "清除成功!"));
 		return "resultjson";
 	}
+	/**
+	 * 缓存清除
+	 * 
+	 * @param name
+	 *            表名
+	 */
+	@RequestMapping(value = "error.action")
+	public String error(Model model, String name) {
+		model.addAttribute("message","错误信息展示一下！");
+		return "error";
+	}
 
 	/**
 	 * 个人信息展示
