@@ -57,6 +57,7 @@ public class BlacklistController {
 			else
 				return "customer/blackList";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			return "/error500";
 		}
 	}
@@ -69,12 +70,17 @@ public class BlacklistController {
     @RequestMapping(value = "new.action",method=RequestMethod.GET)
     public String toSave(Model model,Blacklist blacklist) {
     	
-    	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
-        Date sub = DateUtils.addHours(now, 8);//设置失效时间为8个小时
-	    String	endDate = sdf.format(sub);  //失效时间
-        model.addAttribute("endDate", endDate);
-        return "customer/addBlacklist";
+    	try {
+			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date now = new Date();
+			Date sub = DateUtils.addHours(now, 8);//设置失效时间为8个小时
+			String	endDate = sdf.format(sub);  //失效时间
+			model.addAttribute("endDate", endDate);
+			return "customer/addBlacklist";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "/error500";
+		}
       }
 
 	/**
@@ -114,6 +120,7 @@ public class BlacklistController {
 			  }
 		   } catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
+			logger.error(e.getMessage(),e);
 		 }
 		return "resultjson";
 	}
@@ -160,6 +167,7 @@ public class BlacklistController {
 			}
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			logger.error(e.getMessage(),e);
 		}
 
 		return "resultjson";
@@ -183,7 +191,7 @@ public class BlacklistController {
 		model.addAttribute("message", message);
 		model.addAttribute("code", code);
 
-		return "iews/message";
+		return "XX";
 
 	}
 	/**
@@ -202,7 +210,7 @@ public class BlacklistController {
 				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 			}
 		} catch (Exception e) {
-		
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
 		}
 		return "resultjson";
@@ -224,6 +232,7 @@ public class BlacklistController {
 			return "/customer/editBlacklist";
 		} catch (Exception e) {
 			model.addAttribute("error", "对不起出错了");
+			logger.error(e.getMessage(),e);
 			return "error500";
 		}
 

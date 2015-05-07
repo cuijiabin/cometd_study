@@ -62,10 +62,8 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "info.action", method = RequestMethod.GET)
 	public String getCustomerInfo(Model model, Long customerId) {
-		
 		try {
 			if(customerId == null){
-				
 			}
 			Customer customer = customerService.getCustomerById(customerId);
 			
@@ -73,8 +71,8 @@ public class CustomerController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			model.addAttribute("error", "对不起出错了");
-			return "error500";
 		}
 		return "resultjson";
 	}
@@ -106,6 +104,7 @@ public class CustomerController {
 			model.addAttribute("result",JsonUtil.toJson(customer));
 			
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";
@@ -134,8 +133,8 @@ public class CustomerController {
 			}else {
 				return "customer/customerList";
 			}
-			
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			return "/error500";
 		}
 	}
@@ -197,11 +196,11 @@ public class CustomerController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 
 		return "resultjson";
-
 	}
 
 	/**
@@ -229,7 +228,7 @@ public class CustomerController {
 		} catch (Exception e) {
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
-		return "iews/message";
+		return "XX";
 
 	}
 
@@ -313,6 +312,7 @@ public class CustomerController {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";

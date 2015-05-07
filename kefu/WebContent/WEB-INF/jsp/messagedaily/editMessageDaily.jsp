@@ -27,7 +27,7 @@
            </tr>
            <tr>
                 <td class="f-txtr tdbg">内容</td>
-                <td class="f-txtl"><textarea id="content" >${message.content }</textarea></td>
+                <td class="f-txtl"><textarea id="content" maxlength="200">${message.content }</textarea></td>
             </tr>
             <tr>
               <td class="f-txtr tdbg">展示</td>

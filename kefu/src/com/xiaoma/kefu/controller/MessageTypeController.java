@@ -87,18 +87,23 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(HttpSession session,Model model, Integer treeId, Integer typeId) {
-		User user = (User) session.getAttribute(CacheName.USER);
-		if (user == null)
-			return "login";
-		 Integer userId = user.getId();
-		Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId,userId);
-		if (sortId==null) {
-			sortId =0;
+		try {
+			User user = (User) session.getAttribute(CacheName.USER);
+			if (user == null)
+				return "login";
+			 Integer userId = user.getId();
+			Integer sortId =  messageTypeService.getChildCount(treeId == null?0:treeId,typeId,userId);
+			if (sortId==null) {
+				sortId =0;
+			}
+			model.addAttribute("treeId", treeId);
+			model.addAttribute("typeId", typeId);
+			model.addAttribute("sortId", sortId+1);
+			return "messagetype/addMessageType";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
 		}
-		model.addAttribute("treeId", treeId);
-		model.addAttribute("typeId", typeId);
-		model.addAttribute("sortId", sortId+1);
-		return "messagetype/addMessageType";
 	}
 
 	/**
@@ -135,6 +140,7 @@ public class MessageTypeController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 		return "resultjson";
@@ -147,12 +153,17 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "toUpdate.action",method=RequestMethod.GET)
     public String toUpdate(Model model,Integer treeId) {
-		if(treeId == null)
-			treeId = 1;
-    	MessageType messageType = messageTypeService.getMessageTypeById(treeId); 
-    	 model.addAttribute("messageType", messageType);
-	   
-        return "messagetype/editMessageType";
+		try {
+			if(treeId == null)
+				treeId = 1;
+			MessageType messageType = messageTypeService.getMessageTypeById(treeId); 
+			 model.addAttribute("messageType", messageType);
+   
+			return "messagetype/editMessageType";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
+		}
      }
 
 	/**
@@ -192,6 +203,7 @@ public class MessageTypeController {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";
@@ -231,13 +243,19 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "delete.action", method = RequestMethod.GET)
 	public String delet(Model model, Integer treeId) {
-		boolean isSuccess = messageTypeService.deleteMessageTypeById(treeId);
-		if (isSuccess) {
-			model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
-		} else {
-			model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+		try {
+			boolean isSuccess = messageTypeService.deleteMessageTypeById(treeId);
+			if (isSuccess) {
+				model.addAttribute("result", Ajax.JSONResult(0, "删除成功!"));
+			} else {
+				model.addAttribute("result", Ajax.JSONResult(1, "删除失败!"));
+			}
+			return "resultjson";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "resultjson";
 		}
-		return "resultjson";
+		
 	}
 
 	/**
@@ -248,9 +266,14 @@ public class MessageTypeController {
 	 */
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
 	public String messageTypeDetail(Model model, Integer id) {
-		MessageType messageType = messageTypeService.getMessageTypeById(id);
-		model.addAttribute("messageType", messageType);
-		return "messagetype/messageTypeDetail";
+		try {
+			MessageType messageType = messageTypeService.getMessageTypeById(id);
+			model.addAttribute("messageType", messageType);
+			return "messagetype/messageTypeDetail";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
+		}
 	}
 	/**
 	 * 条件查询
@@ -258,9 +281,14 @@ public class MessageTypeController {
 	@RequestMapping(value = "search.action",method = RequestMethod.GET)
 	public String search(Model model,Integer typeId,String title,Integer userId){
 	
-		MessageType messageType = messageTypeService.getResultBySearch(typeId,title,userId);
-		model.addAttribute("messageType", messageType);
-		return "messagetype/messageTypeDetail";
+		try {
+			MessageType messageType = messageTypeService.getResultBySearch(typeId,title,userId);
+			model.addAttribute("messageType", messageType);
+			return "messagetype/messageTypeDetail";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
+		}
 	}
 	 
 	/***
@@ -297,6 +325,7 @@ public class MessageTypeController {
 			model.addAttribute("messageType",mType);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return "error500";
 		}
 		return "messagetype/messageTree";
 	}

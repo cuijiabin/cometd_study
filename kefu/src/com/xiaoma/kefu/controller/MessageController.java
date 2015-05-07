@@ -81,6 +81,7 @@ public class MessageController {
 		    model.addAttribute("userId", userId);
 			return "messagedaily/messageDaily";
 		} else {
+			
 			return "/error500";
 		}
 	}
@@ -104,6 +105,7 @@ public class MessageController {
 			else
 				return "messagedaily/messageDailyList";
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			e.printStackTrace();
 			return "/error500";
 		}
@@ -138,14 +140,19 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "new.action", method = RequestMethod.GET)
 	public String toSave(Model model, Integer treeId,Integer typeId) {
-		Integer numId =  messageService.maxId();
-		if (numId==null) {
-			numId =0;
+		try {
+			Integer numId =  messageService.maxId();
+			if (numId==null) {
+				numId =0;
+			}
+			model.addAttribute("numId", numId+1);
+			model.addAttribute("treeId", treeId);
+			model.addAttribute("typeId", typeId);
+			return "messagedaily/addMessageDaily";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
 		}
-		model.addAttribute("numId", numId+1);
-		model.addAttribute("treeId", treeId);
-		model.addAttribute("typeId", typeId);
-		return "messagedaily/addMessageDaily";
 	}
 	
 	/**
@@ -181,6 +188,7 @@ public class MessageController {
 				model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "添加失败!"));
 		}
 		return "resultjson";
@@ -193,9 +201,14 @@ public class MessageController {
 	 */
 	@RequestMapping(value = "toUpdate.action",method=RequestMethod.GET)
     public String toUpdate(Model model,Integer messageDailyId) {
-    	Message message = messageService.getMessageById(messageDailyId); 
-    	 model.addAttribute("message", message);
-        return "messagedaily/editMessageDaily";
+    	try {
+			Message message = messageService.getMessageById(messageDailyId); 
+			 model.addAttribute("message", message);
+			return "messagedaily/editMessageDaily";
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return "error500";
+		}
      }
 
 	/**
@@ -232,6 +245,7 @@ public class MessageController {
 				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
 		}
 		return "resultjson";
