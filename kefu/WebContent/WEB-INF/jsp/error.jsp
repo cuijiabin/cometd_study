@@ -3,7 +3,6 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<meta name="author" content="dobao">
 <title>客服信息管理系统</title>
 <link rel="icon" href="favicon.ico">
 <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
