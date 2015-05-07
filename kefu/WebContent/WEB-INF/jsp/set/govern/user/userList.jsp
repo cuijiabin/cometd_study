@@ -7,6 +7,7 @@
 <script type="text/javascript" src="/jsplugin/kkpager/src/kkpager.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
 <link rel="stylesheet" type="text/css" href="/jsplugin/kkpager/src/kkpager.css" />
+<input type="hidden" name="status" id="status" value="${status}"/>
 <table class="table table-bordered table-striped table-hover m-table">
     <thead>
         <tr>
@@ -24,7 +25,7 @@
     <tbody>
         <c:forEach var="user" items="${pageBean.objList}">
         <tr>
-            <td><input type="checkbox" id="id" name="id" value="${user.id}"/></td>
+            <td><input type="checkbox" id="userId" name="userId" value="${user.id}"/></td>
             <td>${user.loginName}</td>
             <td>${user.userName}</td>
             <td>${user.roleName}</td>
@@ -39,3 +40,14 @@
     </tbody>
 </table>
 <jsp:include page="../../../page.jsp"></jsp:include>
+<c:if test="${status==1}"> <button class="btn btn-primary btn-small" id="leaves" onclick="userLeave(2)">员工离职</button>  
+  <select id="dept" name="dept" onchange="changeDept()">
+      <option value="0">转移部门</option>
+      <c:forEach items="${deptList}" var="dept">
+     		 <option value="${dept.id}">转移至${dept.name}</option>
+      </c:forEach>
+  </select>
+  </c:if>
+  <c:if test="${status==2}">
+  <button class="btn btn-primary btn-small" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
+  </c:if>

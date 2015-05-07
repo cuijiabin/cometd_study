@@ -189,7 +189,7 @@ public class UserController {
 	 */
 
 	@RequestMapping(value = "find.action", method = RequestMethod.GET)
-	public String queryAll(MapEntity conditions, Model model,
+	public String find(MapEntity conditions, Model model,
 			@ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
 			List<Department> list = deptService.findDept();

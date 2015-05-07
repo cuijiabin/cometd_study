@@ -88,6 +88,7 @@ var setting = {
 		}
 	},
 	callback: {
+       
 		beforeClick: function(treeId, treeNode) {
 			var zTree = $.fn.zTree.getZTreeObj("tree");
 			if (treeNode.isParent) {
@@ -146,10 +147,10 @@ function saveFunc(){
 		data:data,
 		dataType:"json",
 		success:function(data) {
-			alert(data.msg);
+			$.dialog.alert(data.msg);
 		},
 		error : function(data) {
-			alert("出现错误,请重试！");
+			$.dialog.alert("出现错误,请重试！");
 		}
 	});
 	

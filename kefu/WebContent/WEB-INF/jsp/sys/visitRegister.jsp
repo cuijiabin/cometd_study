@@ -74,8 +74,8 @@ function update(){
 	   	check += $(this).val() + ",";    
 	  });
 	var data = {
-			"message":$("#message").attr("checked")=="checked"?1:0,
-			"dialog":$("#dialog").attr("checked")=="checked"?1:0,
+			"message":$("#message").prop("checked")=="checked"?1:0,
+			"dialog":$("#dialog").prop("checked")=="checked"?1:0,
 			"info": info,
 			"check": check
 	};

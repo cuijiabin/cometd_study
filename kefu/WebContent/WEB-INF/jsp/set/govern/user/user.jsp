@@ -26,24 +26,15 @@
 
 <!-- 表格有边框 -->
 <div class="g-cnt">
-<a href="/user/find.action?map[status]=1&map[id]=1" style="font-size:18px">在职员工</a> <a href="/user/find.action?map[status]=2&map[id]=1"style="font-size:18px">离职员工</a>
-<button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
-
+<div class="m-query f-mar10">
+	<button class="btn btn-primary" type="button" onclick="javascript:changeUserType('1');"> 在职员工  </button>
+	<button class="btn btn-primary" type="button" onclick="javascript:changeUserType('2')"> 离职员工  </button>
+	<button style="float:right;margin-right:5px;" onclick="javascript:addUser()" class="btn btn-primary btn-small" >添加工号</button>
+</div>
 <div id="table_data" style="margin-top: 10px">
 	<jsp:include page="userList.jsp"></jsp:include>
 </div>
- <c:if test="${status==1}"> <button class="btn btn-primary btn-small" id="leaves" onclick="userLeave(2)">员工离职</button>  
-  <select id="dept" name="dept" onchange="changeDept()">
-      <option value="0">转移部门</option>
-      <c:forEach items="${deptList}" var="dept">
-     		 <option value="${dept.id}">转移至${dept.name}</option>
-      </c:forEach>
-  </select>
-  </c:if>
-  <c:if test="${status==2}">
-  <button class="btn btn-primary btn-small" onclick="userLeave(1)">员工复职</button> <button class="btn" onclick="deleteAll()">删除</button>
-  </c:if>
-  </div>
+</div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
@@ -58,9 +49,12 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-var api = frameElement.api,W=api.opener;
+function changeUserType(typeId){
+	$("#status").val(typeId);
+	find(1);
+}
 function find(currentPage){
-	var url="/user/find.action?map[status]=1";
+	var url="/user/find.action?map[status]="+$("#status").val();
 	var data = {
 			"currentPage":currentPage,
 			"pageRecorders" : $("#pageRecorders").val(),
@@ -74,10 +68,10 @@ function find(currentPage){
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "html",
 	    success: function (data) {
-	       W.$("#table_data").html(data);
+	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	    	W.$.dialog.alert(msg);
+	    	$.dialog.alert(msg);
 	    }
 	});
 }
@@ -108,11 +102,12 @@ function deptUser(dId){
 }
 
 function userLeave(status){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
+	var ids =[]; 
+	$('input[name="userId"]:checked').each(function(){ 
+		ids.push($(this).val()); 
+	}); 
 	if(ids==""||ids==null||ids==0){
-		W.$.dialog.alert("请选择人员!");
+		$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -121,20 +116,22 @@ function userLeave(status){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			W.$.dialog.alert(data.msg);
-			location.reload();
+			$.dialog.alert(data.msg,function(){
+				find(1);
+    		});		
 		},
 		error : function(data) {
-			W.$.dialog.alert("出现错误,请重试！");
+			$.dialog.alert("出现错误,请重试！");
 		}
 	});
 	
 }
 
 function deleteAll(){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
+	var ids =[]; 
+	$('input[name="userId"]:checked').each(function(){ 
+		ids.push($(this).val()); 
+	});
 	if(ids==""||ids==null||ids==0){
 		$.dialog.alert("请选择人员!");
 		return;
@@ -145,25 +142,27 @@ function deleteAll(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			W.$.dialog.alert(data.msg);
-			location.reload();
+			$.dialog.alert(data.msg,function(){
+				find(1);
+    		});		
 		},
 		error : function(data) {
-			W.$.dialog.alert("出现错误,请重试！");
+			$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }
 function changeDept(){
-	var ids= $(":checkbox[checked='checked']").map(function(){
-		return $(this).val();
-	}).get();
+	var ids =[]; 
+	$('input[name="userId"]:checked').each(function(){ 
+		ids.push($(this).val()); 
+	});
 	var deptId=$("#dept option:selected").val()
 	if(deptId==0){
-		W.$.dialog.alert("请选择转移部门");
+		$.dialog.alert("请选择转移部门");
 		return;
 	}
 	if(ids==""||ids==null||ids==0){
-		W.$.dialog.alert("请选择人员!");
+		$.dialog.alert("请选择人员!");
 		return;
 	}
 	$.ajax({
@@ -172,11 +171,13 @@ function changeDept(){
 		data:"ids="+ids,
 		dataType:"json",
 		success:function(data) {
-			W.$.dialog.alert(data.msg);
-			find();
+			$.dialog.alert(data.msg,function(){
+				find(1);
+    		});		
+			
 		},
 		error : function(data) {
-			W.$.dialog.alert("出现错误,请重试！");
+			$.dialog.alert("出现错误,请重试！");
 		}
 	});
 }
@@ -188,10 +189,10 @@ function callback(){
 function checkAll() {
 	var value=$('[name=all]:checked').val();
 	if(value==0){
-          $("input:checkbox").attr("checked","true");
+          $("input:checkbox").prop("checked",true);
 	}else{
 		  $("input:checkbox").each(function(){
-		        this.checked=false;
+		        $(this).prop("checked",false);
 		   });
 	}
 }

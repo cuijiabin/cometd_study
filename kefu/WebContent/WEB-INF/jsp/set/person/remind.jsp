@@ -169,8 +169,8 @@ function saveRemind(){
 
 
 function removecheck(){
-    $(":checkbox[checked='checked']").attr("checked",false);
-    $(":radio[checked='checked']").attr("checked",false);
+    $(":checkbox[checked='checked']").prop("checked",false);
+    $(":radio[checked='checked']").prop("checked",false);
 }
 
 </script>

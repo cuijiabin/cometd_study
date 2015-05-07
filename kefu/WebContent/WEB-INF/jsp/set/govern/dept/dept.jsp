@@ -27,7 +27,9 @@
 
 <!-- 表格有边框 -->
 <div class="g-cnt">
+<div class="m-query f-mar10">
 <div style="width: 100%;height: 30px"><button style="float:right;margin-right:5px;" onclick="javascript:addDept()" class="btn btn-primary btn-small" >添加部门</button></div>
+</div>
 <div id="table_data" style="margin-top: 3px">
 	<jsp:include page="deptList.jsp"></jsp:include>
 </div>
@@ -64,7 +66,7 @@ function find(currentPage){
 	       $("#table_data").html(data);
 	    },
 	    error: function (msg) {
-	    	W.$.dialog.alert("出现错误,请重试!");
+	    	$.dialog.alert("出现错误,请重试!");
 	    }
 	});
 }
@@ -95,11 +97,12 @@ function deleteDept(id){
 		data : {"id":id},
 		dataType : "json",
 		success : function(data) {
-			W.$.dialog.alert(data.msg);
-			location.reload();
+			$.dialog.alert(data.msg,function(){
+				location.reload();
+    		});
 		},
 		error : function(msg) {
-			W.$.dialog.alert("出现错误,请重试!");
+			$.dialog.alert("出现错误,请重试!");
 		}
 	});
 	}
