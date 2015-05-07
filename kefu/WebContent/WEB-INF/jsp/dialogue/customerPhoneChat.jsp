@@ -62,15 +62,15 @@
 <div class="m-mob-score">
     <p>请为客服人员评分：</p>
     <ul>
-        <li><span class="icon-star icon-star-0"></span>很满意<i class="icon-check"></i></li>
-        <li class="selected"><span class="icon-star icon-star-1"></span>较好<i class="icon-check"></i></li>
-        <li><span class="icon-star icon-star-2"></span>一般<i class="icon-check"></i></li>
-        <li><span class="icon-star icon-star-3"></span>较差<i class="icon-check"></i></li>
-        <li><span class="icon-star icon-star-4"></span>恶劣<i class="icon-check"></i></li>
+        <li id="1"><span class="icon-star icon-star-0"></span>很满意<i class="icon-check"></i></li>
+        <li id="2"  class="selected"><span class="icon-star icon-star-1"></span>较好<i class="icon-check"></i></li>
+        <li id="3"><span class="icon-star icon-star-2"></span>一般<i class="icon-check"></i></li>
+        <li id="4"><span class="icon-star icon-star-3"></span>较差<i class="icon-check"></i></li>
+        <li id="5"><span class="icon-star icon-star-4"></span>恶劣<i class="icon-check"></i></li>
     </ul>
     <div class="m-mob-btn">
         <a class="m-mob-btnNo" href="#">取消</a>
-        <a class="m-mob-btnOk" href="#">确定</a>
+        <a class="m-mob-btnOk" href="javascript:socreDialogue();">确定</a>
     </div>
 </div>
 <div class="masker"></div>
@@ -80,10 +80,11 @@
     <div class="m-mob-message">
         <form autocomplete="off">
             <p>对不起，当前客服人员不在线，请留下您的问题和联系方式，客服会在上线后第一时间回复您！</p>
-            <input class="tbox" type="text" placeholder="联系电话或手机号码（必填）" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+            <input name="phone" id="phone"  class="tbox" type="text" placeholder="联系电话或手机号码（必填）" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
             <p>请留言：</p>
-            <textarea class="abox" placeholder="我有问题想要咨询，请与我联系！"></textarea>
-            <p class="m-mob-btn"><a href="#" class="m-mob-btnOk">提交留言</a></p>
+            <textarea name="content" id="content" class="abox" placeholder="我有问题想要咨询，请与我联系！"></textarea>
+            <div>留言提交成功!</div>
+            <p class="m-mob-btn"><a href="javascript:addMessage();" class="m-mob-btnOk">提交留言</a></p>
         </form>
         <small>Powered by <a href="http://www.xiaoma.com/">XiaoMa</a></small>
     </div>
@@ -372,6 +373,40 @@
 					break;
 			}
 		});
+		
+		function addMessage(){
+			var data = {
+					   "customerId":$("#currentCustomerId").val(),
+						"phone": $("#phone").val(),
+						"messageContent": $("#content").val()
+					};
+			 $.ajax({
+		    		type : "post",
+		    		url : "/messageRecords/phoneAdd.action",
+		    		data : data,
+		    		dataType : "json",
+		    		async:false,
+		    		success : function(data) {
+		    			if (data.result == 0) {
+		    				alert('留言成功!');
+		    				$("#content").val('');
+		    			} else {
+		    				alert(data.msg);
+		    			}
+		    		},
+		    		error : function(msg) {
+		    			alert(data.msg);
+		    		}
+		    	});
+		}
+		//向后台提交评分
+		function socreDialogue(){
+			var param = "customerCcnId="+$("#currentCustomerId").val()+'&userCcnId='+$("#currentUserCcnId").val()+'&scoreType='+$(".selected").attr("id");
+			JS.AJAX.post('/chat/socreDialogue.action', param, function() {
+				$(".m-mob-score").removeClass("m-mob-scoreOn");
+				alert("多谢评价！");
+			});
+		}
 </script> 
 <script type="text/javascript">
 

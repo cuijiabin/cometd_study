@@ -319,25 +319,27 @@ public class DialogueController {
 		model.addAttribute("isForbidden", isForbidden);
 		
 		
-		// 留言框生成规则 --------------开始
-		model.addAttribute("replyWay",dialogueService.findReplyWayList());
-		model.addAttribute("replyType",dialogueService.findMessageObject());
-		model.addAttribute("infoList",dialogueService.findInfoList());
-		model.addAttribute("checkInfo",DictMan.getDictItem("d_sys_param", 8));
 		
-		//广告显示
-		//model.addAttribute("clientStyle",clientStyleService.getByStyleId(styleId));
-		
-		//获取客服部人员列表
-		model.addAttribute("userList",userService.getResultDept(Integer.parseInt(DictMan.getDictItem("d_sys_param", 17).getItemName())));
 		// 留言框生成规则 ---------------结束
 		
 		//判断是pc还是手机
-		if(isPhone){
+		if(true){
 			return "/dialogue/customerPhoneChat";
+		}else{
+			// 留言框生成规则 --------------开始
+			model.addAttribute("replyWay",dialogueService.findReplyWayList());
+			model.addAttribute("replyType",dialogueService.findMessageObject());
+			model.addAttribute("infoList",dialogueService.findInfoList());
+			model.addAttribute("checkInfo",DictMan.getDictItem("d_sys_param", 8));
+			
+			//广告显示
+			//model.addAttribute("clientStyle",clientStyleService.getByStyleId(styleId));
+			
+			//获取客服部人员列表
+			
+			model.addAttribute("userList",userService.getResultDept(Integer.parseInt(DictMan.getDictItem("d_sys_param", 17).getItemName())));
+			return "/dialogue/customerChat";
 		}
-
-		return "/dialogue/customerChat";
 		
 	}
 	

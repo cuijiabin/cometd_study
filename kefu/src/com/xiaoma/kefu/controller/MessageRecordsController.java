@@ -113,5 +113,48 @@ public class MessageRecordsController {
 		}
 		return "resultjson";
 	}
+	/**
+	 * 添加留言详情
+	 * @Description: TODO
+	 * @param model
+	 * @param mr
+	 * @return
+	 * @Author: hanyu
+	 * @Date: 2015年4月21日
+	 */
+	@RequestMapping(value = "phoneAdd.action", method = RequestMethod.POST)
+	public String phoneAdd(HttpServletRequest request,Model model,@ModelAttribute("mr")MessageRecords mr) {
+		try {
+			if(mr == null ||mr.getCustomerId()==null || StringHelper.isEmpty(mr.getMessageContent()) || 
+					 StringHelper.isEmpty(mr.getPhone())){
+				model.addAttribute("result", Ajax.JSONResult(1, "数据不完整,请刷新后重新填写!"));
+				return "resultjson";
+			}
+			Customer customer = customerService.getCustomerById(mr.getCustomerId());
+			if(customer == null){
+				model.addAttribute("result", Ajax.JSONResult(1, "数据不完整,请刷新后重新填写!"));
+				return "resultjson";
+			}
+			mr.setCreateDate(new Date());
+			mr.setCustomerName(customer.getCustomerName());
+			mr.setStatus(1);
+			mr.setIp(customer.getIp());
+			mr.setIpInfo(customer.getIpInfo());
+			mr.setFirstLandingPage(customer.getFirstLandingPage());
+			mr.setIsDel(0);
+			DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customer.getId().toString(),null);
+			if(dInfo != null){
+				mr.setKeywords(dInfo.getKeywords());
+				mr.setConsultPage(dInfo.getConsultPage());
+			}
+			messageRecordsService.add(mr);
+//			model.addAttribute("msg", msg);
+			model.addAttribute("result", Ajax.JSONResult(0, "操作完成!"));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("result", Ajax.JSONResult(1, "留言保存失败，请刷新重试!"));
+		}
+		return "resultjson";
+	}
 	
 }
