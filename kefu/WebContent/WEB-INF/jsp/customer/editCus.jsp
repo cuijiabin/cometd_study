@@ -91,7 +91,7 @@ $('#btn_save').on('click',function(){
 	 	success: function (data) {
 	    	if(data.result==0){
 	    		W.$.dialog.alert('操作成功!',function(){
-	    			W.editCallback();
+	    			W.editCallback(data.customer.customerName);
 	    		});
 	    	}else{
 	    		W.$.dialog.alert(data.msg);

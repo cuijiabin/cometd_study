@@ -289,24 +289,25 @@
 		
 		$("#"+ccnId).removeClass().addClass("on");
 		switchDialogueBox(ccnId);
-		showCustomerInfo(customerId);
+		showCustomerInfo(customerId,ccnId);
 	}
 	
 	// 获取客户信息 (**)
-	function showCustomerInfo(customerId){
+	function showCustomerInfo(customerId,ccnId){
 		$.ajax({
 		    type: "get",
-		    url: "/customer/info.action",
-		    data: {"customerId":customerId},
+		    url: "/customer/getCustomerInfo.action",
+		    data: {"customerId":customerId,"currentCcnId":ccnId},
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
 		    success: function (data) {
-		    	var customerName = (data.customerName == null || data.customerName.length == 0) ? "--" : data.customerName;
+		    	var customer = data.customer;
+		    	var diaInfo = data.diaInfo;
 		    	$("#showDid").html(customerId);
-		    	$("#showDpage").html(data.firstVisitSource);
-		    	$("#showname").html(customerName);
-				$("#showDipInfo").html(data.ipInfo);
-				$("#showipInfo").html(data.ipInfo);
+		    	$("#showDpage").html(diaInfo.consultPage);
+		    	$("#showname").html(customer.customerName);
+				$("#showDipInfo").html(diaInfo.ipInfo);
+				$("#showipInfo").html(diaInfo.ipInfo);
 		    },
 		    error: function (msg) {
 		        console.log("showCustomerInfo Error");
@@ -417,83 +418,24 @@
 		
 	}
 	
-	//添加访客信息 (**) 不是很全
+	//添加访客信息 
 	function addCustomerInfo(){
-		
 		var customerId = $("#currentCustomerId").val();
-		$.ajax({
-		    type: "get",
-		    url: "/customer/info.action",
-		    data: {"customerId":customerId},
-		    contentType: "application/json; charset=utf-8",
-		    dataType: "json",
-		    success: function (data) {
-		    	var content ='<table>'
-		    		  +'<tr><td>风格：'+data.styleId+'</td></tr>'
-		    		  +'<tr><td>网站关键词：'+data.id+'</td></tr>'
-		    		  +'<tr><td>咨询页面：'+data.firstVisitSource+'</td></tr>'
-	                  +'<tr><td>客服编号：'+data.id+'</td></tr>'
-	                  +'<tr><td>姓名：<input type="text" name="customerName" value="'+data.customerName+'" /></td></tr>'
-	                  +'<tr><td>手机：<input type="text" name="phone" value="'+data.phone+'" /></td></tr>'
-	                  +'<tr><td>邮箱：<input type="text" name="email" value="'+data.email+'" /></td></tr>'
-	                  +'<tr><td>备注：<input type="textarea" name="remark" rows="3" cols="20" value="'+data.remark+'" /></td></tr>'
-	                  +'<tr><td><input type="hidden" name="customerId" value="'+data.id+'" /></td></tr>'
-	                  +'</table>';
-	
-				var d = $.dialog({
-				    id: 'addCustomerInfo',
-				    title:"修改客户姓名",
-				    content:content,
-				    button: [
-				        {
-				            name: '确定',
-				            callback: function () {
-				            	updateCustomer();
-				            },
-				            focus: true
-				        },
-				        {
-				            name: '取消',
-				            callback: function () {
-				            }
-				        }
-				    ]
-				});
-		    },
-		    error: function (msg) {
-		        alert("获取用户信息出错！");
-		    }
-		});
-		
-		
-	}
-	
-	function updateCustomer(){
-		
-		var url="/customer/upName.action";
-		var customerId = $("table input[name ='customerId']").val();
-		var data = {
-				"customerId":customerId,
-				"customerName":$("table input[name ='customerName']").val(),
-				"phone":$("table input[name ='phone']").val(),
-				"email":$("table input[name ='email']").val(),
-				"remark":$("table input[name ='remark']").val(),
-		};
-		$.ajax({
-		    type: "get",
-		    url: url,
-		    data: data,
-		    contentType: "application/json; charset=utf-8",
-		    dataType: "json",
-		    success: function (data) {
-		    	showCustomerInfo(customerId);
-		    	$.dialog.alert("修改成功");
-		    },
-		    error: function (msg) {
-		    	$.dialog.alert("修改失败");
-		    }
+		var currentCcnId = $("#currentCcnId").val();
+		$.dialog({content:'url:/customer/editCus4Dia.action?customerId='+customerId+'&currentCcnId='+currentCcnId,
+			id: 'editCus',
+			width: 400,height: 500,
+			title:'添加访客信息'
 		});
 	}
+	
+	//创建客户回调 ,更新 访客信息 中的  名称
+	function editCallback(customerName){
+// 		alert('editCallback');
+    	$("#showname").html( (customerName == null || customerName.length == 0) ? "--" : customerName);
+		$.dialog({id:'editCus'}).close();
+	}
+	
 	
 	
 	// 移动滚动条

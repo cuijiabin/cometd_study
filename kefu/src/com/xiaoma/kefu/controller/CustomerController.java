@@ -5,7 +5,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,17 +24,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xiaoma.kefu.comet4j.DialogueInfo;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.MessageRecords;
 import com.xiaoma.kefu.model.Style;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.MessageRecordsService;
 import com.xiaoma.kefu.service.StyleService;
 import com.xiaoma.kefu.util.Ajax;
-import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 
@@ -55,61 +59,64 @@ public class CustomerController {
 	private StyleService styleService;
 	
 	/**
-	 * 获取客户详细信息
-	 * @param model
-	 * @param customerId
-	 * @return
+	 * 编辑用户信息页面(用于 对话中 添加 )
+	* @param model
+	* @param customerId	客户id
+	* @param currentCcnId	连接id
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月7日
 	 */
-	@RequestMapping(value = "info.action", method = RequestMethod.GET)
-	public String getCustomerInfo(Model model, Long customerId) {
+	@RequestMapping(value = "editCus4Dia.action", method = RequestMethod.GET)
+	public String editCus4Dia(Model model, String customerId, String currentCcnId) {
 		try {
-			if(customerId == null){
+			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+			DialogueInfo diaInfo = JedisTalkDao.getDialogueInfo(customerId, currentCcnId);
+			if(diaInfo.getStyleId()!=null){//目前有时候 styleid会为空
+				Style style = styleService.get(diaInfo.getStyleId());
+				model.addAttribute("styleName", style!=null?style.getName():"");
 			}
-			Customer customer = customerService.getCustomerById(customerId);
-			
-			model.addAttribute("result",JsonUtil.toJson(customer));
-			
+			model.addAttribute("customer", customer);
+			model.addAttribute("dialogue", diaInfo);//对话临时信息
+			return "/customer/editCus";
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage(),e);
+			logger.error("editCus4Dia",e);
 			model.addAttribute("error", "对不起出错了");
+			return "/error";
 		}
-		return "resultjson";
 	}
 	
 	/**
-	 * 修改客户名称
-	 * @param model
-	 * @param customerId
-	 * @param customerName
-	 * @return
+	 * 获取访客信息, 用于 对话框中展示
+	* @param customerId
+	* @param currentCcnId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月7日
 	 */
-	@RequestMapping(value = "upName.action", method = RequestMethod.GET)
-	public String updateCustomerName(Model model, Long customerId, String customerName, String phone, String email,String remark) {
+	@RequestMapping(value = "getCustomerInfo.action", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getCustomerInfo(String customerId,String currentCcnId) {
 		
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			Customer customer = customerService.getCustomerById(customerId);
-			
-			customer.setCustomerName(customerName);
-			customer.setPhone(phone);
-			customer.setEmail(email);
-			customer.setRemark(remark);
-			
-			boolean isSuccess = customerService.updateCustomer(customer);
-			if (isSuccess) {
-				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
-			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+			if(StringUtils.isBlank(customer.getCustomerName())){
+				customer.setCustomerName("--");
 			}
-			model.addAttribute("result",JsonUtil.toJson(customer));
-			
+			DialogueInfo diaInfo = JedisTalkDao.getDialogueInfo(customerId, currentCcnId);
+//			diaInfo.setConsultPage(customer.getId().toString());
+			result.put("result", 0);
+			result.put("customer", customer);
+			result.put("diaInfo", diaInfo);
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			logger.error("updateCus", e);
+			result.put("result", 1);
+			result.put("msg", "获取失败!");
 		}
-		return "resultjson";
+		return result;
 	}
-
+	
 	/**
 	 * 查询所有、条件查询
 	 * 
@@ -294,7 +301,9 @@ public class CustomerController {
 	 * @Date: 2015年4月12日
 	 */
 	@RequestMapping(value = "updateCus.action", method = RequestMethod.POST)
-	public String updateCus(Model model, Customer customer) {
+	@ResponseBody
+	public Map<String, Object> updateCus(Model model, Customer customer) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
 			Customer toUpdate = customerService.getCustomerById(customer
@@ -307,15 +316,19 @@ public class CustomerController {
 			toUpdate.setRemark(customer.getRemark());
 			boolean isSuccess = customerService.updateCustomer(toUpdate);
 			if (isSuccess) {
-				model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
+				result.put("result", 0);
+				result.put("customer", toUpdate);
 			} else {
-				model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+				result.put("result", 1);
+				result.put("msg", "修改失败!");
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-			model.addAttribute("result", Ajax.JSONResult(1, "修改失败!"));
+			logger.error("updateCus", e);
+			result.put("result", 1);
+			result.put("msg", "修改失败!");
 		}
-		return "resultjson";
+//		return "resultjson";
+		return result;
 	}
 
 	/**
