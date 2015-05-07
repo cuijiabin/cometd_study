@@ -102,7 +102,7 @@
 	                                    </button>
 	                                    
 	                                    <ul class="dropdown-menu f-txtl">
-	                                        <li><a><label><input type="radio" name="radio_name" checked value="1">Enter 发送</label></a></li>
+	                                         <li><a><label><input type="radio" name="radio_name" checked value="1">Enter 发送</label></a></li>
 	                                        <li><a><label><input type="radio" name="radio_name" value="2">Ctrl + Enter 发送</label></a></li>
 	                                    </ul>
 	                                </div>
@@ -218,7 +218,7 @@
 					updateCustomerList();//转接给其他客服
 					break;
 				case 'on_switch_to':
-					onSwitchToNotice();//被客服转接
+					updateCustomerList();//被客服转接
 					break;
 				case 'on_open': 
 					updateCustomerList();//上线 发送更新用户列表请求
@@ -331,7 +331,7 @@
 	}
 	// 回车事件 ctrl键暂时不太管用(**)
 	function onSendBoxEnter(event) {
-		var obj = document.getElementsByName("radio_name");
+	    var obj = document.getElementsByName("radio_name");
         if(event.keyCode == 13 || event.keyCode == 10){
        	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
        		   var message = inputbox.value;
@@ -503,13 +503,15 @@
 	//客服转接对话框(**)
 	function switchCustomer(){
 		var customerId = $("#currentCustomerId").val();
-		
+		if (!JS.Engine.running)
+			return;
+		var userCcnId = JS.Engine.getId();
 		if(customerId == null || customerId.length ==0){
 			$.dialog.alert("没有选中客户");
 		}else{
 			$.ajax({
 			    type: "get",
-			    url: "/dialogue/switchList.action?customerId="+customerId,
+			    url: "/dialogue/switchList.action?customerId="+customerId+"&userCcnId="+userCcnId,
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "html",
 			    success: function (content) {
@@ -643,10 +645,6 @@
 	
 	//被转接通知
 	function onSwitchToNotice(){
-		var str = ['<div class="r-offline"><span class="alert alert-info">',
-		           '2015-01-02 10:53:04','<br>',
-		           'CC','将编号',
-		           '李同学','的对话转接给您<br>','</span></div>'];
 		logbox.innerHTML += str.join('');
 		updateCustomerList();
 	}
@@ -753,7 +751,7 @@
 		
 	});
 	// 客服端访客对话框架-手风琴菜单
-jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
+   jQuery(".m-sidemenu").slide({titCell:"h3", targetCell:".m-sidemenu-cnt", defaultIndex:0, effect:"slideDown", delayTime:300, trigger:"click"});
 </script>
 </body>
 </html>

@@ -134,17 +134,14 @@ public class JoinListener extends ConnectListener {
 				logger.info("客户："+customerId+" ,进入对话系统;");
 				
 				CometConnection customerCcn = engine.getConnection(ccnId);
-				Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
-				if(customer == null){
-					return true;
-				}
-				Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
+				
+				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
+				Integer styleId = (dInfo.getStyleId() == null) ? 1 : dInfo.getStyleId();
 				List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
 				
 				//对不起，客服不在线，请留言
 				if(CollectionUtils.isEmpty(onlineUserIds)){
 					JedisTalkDao.addCustomerWaitSet(ccnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
@@ -158,7 +155,7 @@ public class JoinListener extends ConnectListener {
 				//对不起，客服正忙，请留言
 				if(StringUtils.isBlank(allocateCnnId)){
 					JedisTalkDao.addCustomerWaitSet(ccnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
+					
 					dInfo.setIsWait(1);
 					JedisTalkDao.setDialogueInfo(customerId, null, dInfo);
 					logger.info("客户："+customerId+" ,进入等待队列！");
@@ -171,7 +168,6 @@ public class JoinListener extends ConnectListener {
 				JedisTalkDao.addCcnReceiveList(allocateCnnId, ccnId);
 				JedisTalkDao.setCcnPassiveId(ccnId, allocateCnnId);
 				
-				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, null);
 				JedisTalkDao.delDialogueInfo(customerId, null);
 				
 				logger.info("客户："+customerId+" 通信点id： "+ccnId+"被接待，客服通信点id："+allocateCnnId);

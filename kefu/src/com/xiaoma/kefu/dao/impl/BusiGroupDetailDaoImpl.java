@@ -110,7 +110,7 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 			return null;
 		}
 		Session session = getSession();
-		String sql = "select userId From busi_group_detail b WHERE b.styleId = "+styleId;
+		String sql = "select userId From busi_group_detail b WHERE b.styleId = "+styleId +" and b.isReception = 1";
 		
 		SQLQuery query = session.createSQLQuery(sql);
 		

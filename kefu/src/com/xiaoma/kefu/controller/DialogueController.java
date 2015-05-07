@@ -88,12 +88,14 @@ public class DialogueController {
 	 * @return
 	 */
 	@RequestMapping(value = "switchList.action", method = RequestMethod.GET)
-	public String switchList(HttpServletRequest request, HttpServletResponse response,HttpSession session, Model model, Long customerId) {
+	public String switchList(HttpServletRequest request, HttpServletResponse response,HttpSession session, Model model, Long customerId,String userCcnId) {
 
 		User user = (User) session.getAttribute(CacheName.USER);
 		
-		Customer customer = customerService.getCustomerById(customerId);
-		Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
+		DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId.toString(), userCcnId);
+		Integer styleId = (dInfo.getStyleId() == null) ? 1 : dInfo.getStyleId();
+//		Customer customer = customerService.getCustomerById(customerId);
+//		Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
 		List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
 		List<Integer> userIds = new ArrayList<Integer>();
 		for(Integer strId : onlineUserIds){
