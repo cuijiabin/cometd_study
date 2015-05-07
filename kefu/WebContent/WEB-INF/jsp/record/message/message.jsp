@@ -93,9 +93,9 @@ function find(currentPage){
 //全选/全不选
 function checkedAll(){
 	if(($("#titleCheckbox").is(":checked"))){
-		$("#table_data :checkbox").attr("checked", true);  
+		$("#table_data :checkbox").prop("checked", true);  
 	}else{
-		$("#table_data :checkbox").attr("checked", false);
+		$("#table_data :checkbox").prop("checked", false);
 	}
 }
 
