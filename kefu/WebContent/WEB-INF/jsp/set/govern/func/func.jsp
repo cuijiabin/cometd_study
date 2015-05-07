@@ -12,7 +12,6 @@
 <link href="/css/bootstrap.google.v2.3.2.css" rel="stylesheet" type="text/css">
 <link href="/css/app.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/jsplugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-<link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="m-crumb">
@@ -24,7 +23,7 @@
         <li><i>&gt;</i>权限配置</li>
     </ul>
 </div>
-<div style="margin:50px">
+<div class="g-cnt">
 <h4>角色： ${role.name}</h4><input type="hidden" id="roleId" name="roleId" value="${role.id}"/><input type="hidden" id="deptId" name="deptId" value="${deptId}"/>
 <input type="hidden" id="strings" name="strings" value="${strs}"/>
     	<!-- 表格有边框 -->
@@ -42,19 +41,16 @@
                         </ul>
                     </td>
                     <td>
-                    <div class="g-cnt">
+                    
                     <table class="table table-bordered m-table c-wdat f-mar0">
 							<tr>
 								<td width=260px align=left valign=top>
 									<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
 								</td>
-								<TD width=0px align=left valign=top></td>
 							</tr>
 					</table>
 					<c:if test="${status==3}"><button class="btn btn-primary btn-small" onclick="saveFunc()">保存</button></c:if>
-					</div>
                     </td>
-                    <td><src href="/tree.jsp"/></td>
                 </tr>
             </tbody>
         </table>
@@ -73,11 +69,7 @@ var setting = {
 	view:{
 		dblClickExpand: false,
 		showLine: false,
-		selectedMulti: false,
-		open:true
-	},
-	async:{
-		enable:false,
+		selectedMulti: false
 	},
 	check:{
 		enable: true,
@@ -101,7 +93,7 @@ var setting = {
 			if (treeNode.isParent) {
 				zTree.expandNode(treeNode);
 				return false;
-			} 
+			}
 		}
 	}
 };
@@ -125,7 +117,6 @@ $(document).ready(function(){
 	demoIframe = $("#testIframe");
 	demoIframe.bind("load", loadReady);
 	var zTree = $.fn.zTree.getZTreeObj("tree");
-	zTree.expandAll(true);
 });
 
 function loadReady() {
