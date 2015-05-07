@@ -30,7 +30,7 @@
     
     <div class="f-padd10">
     	<!-- 表格有边框 -->
-    	<form id="mainForm" enctype="multipart/form-data" method="post" >
+    	<form id="mainForm" enctype="multipart/form-data" method="post" target="mess">
     		<input type="hidden" id="id" name="id" value="${clientStyle.id }"/>
     		<input type="hidden" id="styleId" name="styleId" value="${clientStyle.styleId }" />
 	        <table class="table table-bordered m-table c-wdat">
@@ -100,11 +100,13 @@
         </div>
     </div>
 </div>
+<iframe name="mess" id="mess"></iframe>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="/jsplugin/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+<script type="text/javascript"	src="/jsplugin/form/jquery-form.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript">
 // 自定义滚动条--左右布局右侧
@@ -137,8 +139,23 @@ $('#btn_save').on('click',function(){
 	    }
 	}
 	
-	var path = "/clientStyle/save.action";  
-    $('#mainForm').attr("action", path).submit();
+// 	var path = "/clientStyle/save.action";  
+//     $('#mainForm').attr("action", path).submit();
+	  $("#mainForm").ajaxSubmit({
+	        type:'post',
+	        url:'/clientStyle/save.action',
+	        dataType : 'json',
+	        success:function(data){
+	    
+		    		$.dialog.alert(data.msg,function(){
+		    			location.reload();
+		    		});
+	        },
+	        error: function(XMLHttpRequest, textStatus, errorThrown) {
+	        	$.dialog.alert('error');	
+	        }
+	    });
+
 });
 
 //等待列表

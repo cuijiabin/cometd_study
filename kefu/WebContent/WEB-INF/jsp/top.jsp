@@ -17,7 +17,7 @@
 	<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
     <ul class="u-admin f-fr">
 
-        <li><a href="#"><i class="icon-user"></i>欢迎 ${sessionScope.user.loginName}</a></li>
+        <li><a href="#"><i class="icon-user"></i>欢迎 ${sessionScope.user.userName}</a></li>
         <li><a href="javascript:window.location='/user/main.action?typeId=2';"><i class="icon-home"></i>首页</a></li>
        <%HttpSession session1 = request.getSession(); User user = (User)session1.getAttribute("user"); Integer userId = user.getId();%>
        <% if(CheckCodeUtil.isCheckFunc(userId,"f_dialog_pt")) {%>

@@ -18,7 +18,7 @@
 	<div class="g-head fixed">
 		<a class="logo f-fl" href="#"><img src="/img/logo.png" height="42" alt="" /></a>
 	    <ul class="u-admin f-fr">
-	        <li><a href="#"><i class="icon-user"></i>欢迎 ${user.loginName}</a>
+	        <li><a href="#"><i class="icon-user"></i>欢迎 ${user.userName}</a>
 	        	<select class="c-wdat">
 	                 <option selected="selected">在线</option>
 	                 <option value="离线">离线</option>
@@ -171,7 +171,7 @@
 	        <div class="g-mn3 f-fr">
 	            <div class="g-mn3c">
 	                <ul class="f-cb">
-	                    <li><span>工号：${user.cardName}</span></li>
+	                    <li><span>工号：${user.loginName}</span></li>
 	                    <li><i>|</i><span>身份：${role.name}</span></li>
 	                </ul>
 	            </div>
