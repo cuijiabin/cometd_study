@@ -158,7 +158,7 @@ public class MessageTypeDaoImpl extends BaseDaoImpl<MessageType> implements Mess
 	public List<MessageType> findAllByParam(Integer typeId,Integer userId){
 		try {
 			Session session = getSession();
-			String sql = "from MessageType a where a.typeId="+typeId;
+			String sql = "from MessageType a where a.status=1 a.typeId="+typeId;
 			if(typeId == 2){
 				sql += " and a.userId="+userId;
 			}
