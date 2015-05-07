@@ -176,6 +176,13 @@
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
 <!-- <script language="javascript" for="window" event="onload">  -->
 <script type="text/javascript">
+            //历史记录表情处理
+			$(".r-visitor-txt").each(function() {
+				 $(this).html($.expBlock.textFormat($(this).html()));
+			});
+			$(".r-manager-txt").each(function() {
+			 $(this).html($.expBlock.textFormat($(this).html()));
+			});
 			console.log("init");
 			// 引擎事件绑定
 			JS.Engine.on({
@@ -322,7 +329,7 @@
 			}
 			logbox.innerHTML += str;
 			moveScroll();
-			
+			$("#dialogueTitle").html("对话结束");
 			$("#guanbiduihua").hide();
 			
 		    //弹出评分对话框
@@ -336,7 +343,7 @@
                 +'<tr>'
                 +'<td class="f-txtr tdbg">评分：</td>'
                 +'<td class="f-txtl u-subsec"><label><input type="radio" name="scoreType" value="1"/>非常好</label>'
-                +'<label><input type="radio" name="scoreType" value="2"/>好</label>'
+                +'<label><input type="radio" name="scoreType" value="2" checked />好</label>'
                 +'<label><input type="radio" name="scoreType" value="3"/>一般</label>'
                 +'<label><input type="radio" name="scoreType" value="4"/>差</label>'
                 +'<label><input type="radio" name="scoreType" value="5"/>非常差</label></td>'

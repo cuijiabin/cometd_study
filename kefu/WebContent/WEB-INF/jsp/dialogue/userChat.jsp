@@ -406,14 +406,30 @@
 	//结束对话(**)
 	function endDialogue(customerCnnId){
 		customerCnnId = customerCnnId.replace("\"","").replace("\"","");
-		alert("确定结束对话？");
-		var ccnId = JS.Engine.getId();
-		var param = "ccnId="+ccnId+'&type='+2+'&endCcnId='+customerCnnId;
-		JS.AJAX.post('/chat/endDialogue.action', param, function() {
-			logbox.innerHTML = '';
-			$("#"+customerCnnId).remove();
-			setDefaultInfo();
-			
+		var d = $.dialog({
+		    id: 'endDialogueId',
+		    content : '确定当前结束对话？',
+		    button: [
+		        {
+		            name: '确定',
+		            callback: function () {
+		            	var ccnId = JS.Engine.getId();
+		        		var param = "ccnId="+ccnId+'&type='+2+'&endCcnId='+customerCnnId;
+		        		JS.AJAX.post('/chat/endDialogue.action', param, function() {
+		        			logbox.innerHTML = '';
+		        			$("#"+customerCnnId).remove();
+		        			setDefaultInfo();
+		        			
+		        		});
+		            },
+		            focus: true
+		        },
+		        {
+		            name: '取消',
+		            callback: function () {
+		            }
+		        }
+		    ]
 		});
 		
 	}
