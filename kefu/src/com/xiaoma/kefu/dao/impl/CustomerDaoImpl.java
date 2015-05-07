@@ -63,7 +63,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 			}	
 			    String phone = conditions.get("phone").trim();
 			if(StringHelper.isNotEmpty(phone)){
-				hql += " and a.phone = "+phone+" " ;
+				hql += " and a.phone like '"+"%"+phone+"%"+"'" ;
 			}
 			   String styleName =  conditions.get("styleName").trim();
 			if(StringHelper.isNotEmpty(styleName)){
@@ -129,7 +129,7 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements
 			}	
 			    String phone = conditions.get("phone").trim();
 			if(StringHelper.isNotEmpty(phone)){
-				hql += " and a.phone = "+phone+" " ;
+				hql += " and a.phone like '"+"%"+phone+"%"+"'" ;
 			}
 			   String styleName =  conditions.get("styleName").trim();
 			if(StringHelper.isNotEmpty(styleName)){

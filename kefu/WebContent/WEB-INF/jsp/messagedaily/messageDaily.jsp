@@ -127,6 +127,13 @@
     	$.dialog.alert("没有找到有效的节点 ！");
    	   return false;
       }
+    
+       //不让在pId=0的节点（初级节点）下添加常用语
+       if("${messageType.pId}"==0){
+    		$.dialog.alert("不能在该节点下添加常用语  ！");
+    	   return false;
+       }
+ 	  
      //检查是否有子节点
 	 if(checkChild()){
 		    $.dialog.alert("请在子节点下添加常用语 ！");
@@ -220,6 +227,7 @@
 function changeTabal(){
 	var url="/messageDaily/find.action";
 	var data = {
+			"userId": $("#userId").val(),
 			"id": $("#messageDaily").val(),
 			"typeId":$("#typeId").val()
 	};

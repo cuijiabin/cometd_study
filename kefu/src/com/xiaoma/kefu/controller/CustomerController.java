@@ -133,7 +133,6 @@ public class CustomerController {
 			model.addAttribute("list", list);
 			model.addAttribute("pageBean", pageBean);
 			
-			
 			if (conditions == null || conditions.getMap() == null
 					|| conditions.getMap().get("typeId") == null){
 				return "customer/customer";
