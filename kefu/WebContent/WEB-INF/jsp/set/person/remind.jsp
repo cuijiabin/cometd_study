@@ -107,7 +107,6 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
-<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/js/app.js"></script>
 <script type="text/javascript" src="/jsplugin/uploadify/jquery.uploadify.min.js"></script>
 <script type="text/javascript" src="/jsplugin/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
@@ -118,19 +117,19 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-var api = frameElement.api,W=api.opener;
+
 function saveRemind(){
 	var lsound=$("#lsound").val();
 	if(lsound!=''){
 		extStart=lsound.lastIndexOf(".");
 	    ext=lsound.substring(extStart,lsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	W.$.dialog.alert("上线提醒请选格式为mp3,wav的音效文件");
+	    	$.dialog.alert("上线提醒请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	   var obj_file = document.getElementById("lsound");
 	    if(obj_file.files[0].size>204800){
-	    	W.$.dialog.alert("上线提醒的文件过大，请按要求操作");
+	    	$.dialog.alert("上线提醒的文件过大，请按要求操作");
 	    	return;
 	    }
 	    
@@ -140,12 +139,12 @@ function saveRemind(){
 		extStart=jsound.lastIndexOf(".");
 	    ext=jsound.substring(extStart,jsound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	W.$.dialog.alert("建立对话请选格式为mp3,wav的音效文件");
+	    	$.dialog.alert("建立对话请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	    var obj_file = document.getElementById("jsound");
 	    if(obj_file.files[0].size>204800){
-	    	W.$.dialog.alert("建立对话的文件过大，请按要求操作");
+	    	$.dialog.alert("建立对话的文件过大，请按要求操作");
 	    	return;
 	    }
 	}
@@ -154,12 +153,12 @@ function saveRemind(){
 		extStart=resound.lastIndexOf(".");
 	    ext=resound.substring(extStart,resound.length).toUpperCase();
 	    if(ext!=".MP3"&&ext!=".WAV"){
-	    	W.$.dialog.alert("收到信息请选格式为mp3,wav的音效文件");
+	    	$.dialog.alert("收到信息请选格式为mp3,wav的音效文件");
 	    	return;
 	    }
 	    var obj_file = document.getElementById("resound");
 	    if(obj_file.files[0].size>204800){
-	    	W.$.dialog.alert("收到信息的文件过大，请按要求操作");
+	    	$.dialog.alert("收到信息的文件过大，请按要求操作");
 	    	return;
 	    }
 	}

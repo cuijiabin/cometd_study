@@ -76,10 +76,10 @@ function saveKey(){
 			data : data,
 			dataType : "json",
 			success : function(data) {
-				W.$.dialog.alert(data.msg);
+				$.dialog.alert(data.msg);
 			},
 			error : function(msg) {
-				W.$.dialog.alert("出现错误,请重试!");
+				$.dialog.alert("出现错误,请重试!");
 			}
 		});
 }
