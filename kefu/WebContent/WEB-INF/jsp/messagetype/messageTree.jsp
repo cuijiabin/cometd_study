@@ -34,14 +34,7 @@ var zTree;
 			}
 		},
 		callback: {
-		    onClick:zTreeOnClick,
-			beforeClick: function(treeId, treeNode) {
-				var zTree = $.fn.zTree.getZTreeObj("tree");
-				if (treeNode.isParent) {
-					zTree.expandNode(treeNode);
-					return false;
-				} 
-			}
+		    onClick:zTreeOnClick
 		}
 	};
 
