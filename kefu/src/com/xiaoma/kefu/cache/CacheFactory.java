@@ -67,7 +67,7 @@ public class CacheFactory {
 			}else if(cacheName.equals(CacheName.SUSER)){
 				UserService userService = (UserService)SpringContextUtil
 						.getBean("userService");
-				obj=userService.getUserById(Integer.valueOf((String) key));
+				obj=userService.getUserById(Integer.valueOf(String.valueOf(key)));
 			}
 		}
 		return obj;
