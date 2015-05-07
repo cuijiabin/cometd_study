@@ -215,10 +215,10 @@
 					updateCustomerList();//结束对话
 					break;
 				case 'on_switch_from':
-					updateCustomerList();//转接给其他客服
+					onSwitchFromNotice(data.obj);//转接给其他客服
 					break;
 				case 'on_switch_to':
-					updateCustomerList();//被客服转接
+					onSwitchToNotice(data.obj);//被客服转接
 					break;
 				case 'on_open': 
 					updateCustomerList();//上线 发送更新用户列表请求
@@ -379,6 +379,11 @@
 	}
 	//切换对话框窗口 (**)
 	function switchDialogueBox(ccnId){
+		if ($("#D"+ccnId).length <= 0){ 
+			logbox.innerHTML = '';
+			return;
+		}
+			
 		logbox.innerHTML = $("#D"+ccnId).html();
 		$("#currentCcnId").val(ccnId);
 	}
@@ -447,7 +452,6 @@
 	
 	//创建客户回调 ,更新 访客信息 中的  名称
 	function editCallback(customerName){
-// 		alert('editCallback');
     	$("#showname").html( (customerName == null || customerName.length == 0) ? "--" : customerName);
 		$.dialog({id:'editCus'}).close();
 	}
@@ -515,6 +519,9 @@
 	function realSwitchCustomer(remark,toUserId){
 		if (!JS.Engine.running)
 			return;
+		if(toUserId =='' || toUserId == undefined){
+			alert("被转接客服不得为空！");
+		}
 		remark = remark.trim();
 		if (!remark){
 			alert("转接备注不得为空！");
@@ -526,7 +533,8 @@
 		var customerCcnId = $("#currentCcnId").val();
 		var param = "ccnId="+ccnId+'&customerId='+customerId+'&customerCcnId='+customerCcnId+'&remark='+remark+'&toUserId='+toUserId;
 		JS.AJAX.post('/chat/switchDialogue.action', param, function() {
-			alert("客户转接成功！");
+			$("#"+customerCcnId).remove();
+			setDefaultInfo();
 		});
 	}
 	
@@ -604,9 +612,17 @@
 	}
 	
 	//被转接通知
-	function onSwitchToNotice(){
-		logbox.innerHTML += str.join('');
-		updateCustomerList();
+	function onSwitchToNotice(data){
+		var content= '<p class="alert alert-success">'+data.transtime+'</p></br>'
+		             +'<p class="alert alert-success">'+data.name+'将编号为：'+data.id+'的对话转接给您！</p>';
+        $.dialog.tips(content,2,updateCustomerList());
+	}
+	
+	//主动转接通知
+	function onSwitchFromNotice(data){
+		var content= '<p class="alert alert-success">'+data.transtime+'</p></br>'
+		             +'<p class="alert alert-success">您已成功将编号为：'+data.id+'的对话转接给'+data.who+'！</p>';
+        $.dialog.tips(content,2,updateCustomerList());
 	}
 	
 	

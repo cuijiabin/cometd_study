@@ -206,7 +206,7 @@
 						onMessage(data);// 收到聊天消息
 						break;
 					case 'on_switch_customer': 
-						switchCustomer(data); //客服切换
+						switchCustomer(data.obj); //客服切换
 						break;
 					case 'on_open': 
 						onOpen(data); // 上线
@@ -275,10 +275,10 @@
 		}
 		
 		function switchCustomer(data){
-			var user = data.obj;
-			var html='与'+user.cardName+'对话中...';
-			console.log(html);
+			var html='与'+data.who+'对话中...';
 			$("#dialogueTitle").html(html);
+			var str = '<div class="r-offline"><span class="alert alert-success">'+data.transtime+'您已被转接与'+data.who+'通话</span></div>';
+			logbox.innerHTML += str;
 		}
 		
 		// 用户下线通知(**)

@@ -215,7 +215,9 @@ public class ChatCometController {
 			logger.warn("客服转接参数有误，请检查！");
 			return ;
 		}
+		String messageTime = TimeHelper.convertMillisecondToStr(System.currentTimeMillis(), TimeHelper.OTHER_PATTERN);
 		
+		User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
 		User toUser = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(toUserId));
 		
 		//保存转接记录到数据库
@@ -251,9 +253,10 @@ public class ChatCometController {
 		CometConnection toUserCcn = engine.getConnection(toCcnId);
 		CometConnection customerCcn = engine.getConnection(customerCcnId);
 		
-		NoticeData uud = new NoticeData(Constant.ON_SWITCH_FROM, null);
-		NoticeData tud = new NoticeData(Constant.ON_SWITCH_TO, null);
-		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, toUser);
+		Message message = new Message(customerId.toString(), user.getCardName(), null, messageTime, toUser.getCardName());
+		NoticeData uud = new NoticeData(Constant.ON_SWITCH_FROM, message);
+		NoticeData tud = new NoticeData(Constant.ON_SWITCH_TO, message);
+		NoticeData cud = new NoticeData(Constant.ON_SWITCH_CUSTOMER, message);
 		
 		engine.sendTo(Constant.CHANNEL, userCcn, uud);
 		engine.sendTo(Constant.CHANNEL, toUserCcn, tud);
