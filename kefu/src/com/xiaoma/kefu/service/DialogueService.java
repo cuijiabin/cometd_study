@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,15 +25,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiaoma.kefu.cache.CacheFactory;
 import com.xiaoma.kefu.cache.CacheMan;
+import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.cache.CacheUtil;
 import com.xiaoma.kefu.dao.DialogueDao;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.AllotRule;
 import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DictItem;
+import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisDao;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.util.FileUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.database.DataBase;
 import com.xiaoma.kefu.util.database.DataSet;
 
@@ -400,9 +408,22 @@ public class DialogueService {
 			if (CollectionUtils.isEmpty(userIds)) {
 				return null;
 			}
+			
 			//如果所有客服都满员，需要直接进入等待队列。返回空。
-			
-			
+			List<User> userList = null;
+			for(Integer userId : userIds){
+				int count = JedisTalkDao.getLastReceiveCount(userId+"");
+				if(count > 0){
+					if(userList == null)
+						userList = new ArrayList<User>();
+					userList.add((User)CacheMan.getObject(CacheName.SUSER, userId));
+				}
+			}
+			if(userList == null || userList.size() < 1)
+				return null;
+			if(userList.size() == 1){
+				return userList.get(0).getId()+"";
+			}
 			//如果有客服，获取风格规则
 			AllotRule allotRule = allotRuleService.getByStyleId(customer.getStyleId());
 			//如果没规则，分配当前可接通数最大的一个
@@ -411,9 +432,7 @@ public class DialogueService {
 				String allocateUserId = null;
 				for (Integer id : userIds) {
 					String userId = id.toString();
-					Integer result = JedisTalkDao.getMaxReceiveCount(userId)
-							- JedisTalkDao.getReceiveCount(userId);
-					
+					Integer result = JedisTalkDao.getLastReceiveCount(userId+"");
 					if (result > max) {
 						max = result;
 						allocateUserId = userId;
@@ -433,9 +452,29 @@ public class DialogueService {
 				}
 			}
 			//如果第一个不满足,判断第二个
-			if(allotRule.getSecondRule() != null && allotRule.getSecondRule()==1){
-				//
+			if(allotRule.getSecondRule() != null ){
+				if(allotRule.getSecondRule() == 2){
+					int max = 0;
+					User user = null;
+					for(User u : userList){
+						if (u.getListenLevel()>max)
+							user = u;
+					}
+					return user.getId()+"";
+				}else{
+					int min = 0;
+					User user = null;
+					for(User u : userList){
+						int count = JedisTalkDao.getReceiveCount(u.getId()+"");
+						if (count<min)
+							user = u;
+					}
+					return user.getId()+"";
+				}
 			}
+			
+			//第三种规则 暂时到第二级就筛选出人了。
+			
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -443,5 +482,23 @@ public class DialogueService {
 		return null;
 		
 	}
-
+	public List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
+		try {
+			List<Integer> list = (List<Integer>)CacheMan.getObject(CacheName.ONLINE_USER_STYLEID, styleId);
+			if (CollectionUtils.isEmpty(list)) {
+				return null;
+			}
+			Set<Integer> userIds = new HashSet<Integer>(list);
+			List<String> ids = JedisTalkDao.getSwitchList();
+			Set<Integer> onUserIds = JsonUtil.convertString2IntegerSet(ids);
+			if(CollectionUtils.isEmpty(onUserIds)){
+				return null;
+			}
+			onUserIds.retainAll(userIds);
+			return new ArrayList<Integer>(onUserIds);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return null;
+		}
+	}
 }
