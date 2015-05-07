@@ -198,7 +198,6 @@
 					logbox.innerHTML += str.join('');
 					findWaitList(0);//获取等待列表
 					$("#guanbiduihua").hide();
-					$("#guanbiduihua").hide();
 				},
 				dialogue : function(data, engine) {
 					switch (data.type) {
@@ -271,6 +270,7 @@
 			$("#currentUserCcnId").val(message.id);
 			
 			$("#advisory").click();
+			$("#guanbiduihua").show();
 			
 		}
 		
@@ -332,13 +332,17 @@
 			$("#dialogueTitle").html("对话结束");
 			$("#guanbiduihua").hide();
 			
-		    //弹出评分对话框
-		    socreUserNotice();
+			if($("#kefupingfen").is(":visible")){
+				//弹出评分对话框
+			    socreUserNotice();
+			}
+			
+		    
 		}
 		
 		// 客服评分弹出窗
 		function socreUserNotice(){
-			$("#kefupingfen").hide();
+			
 			var content ='<table class="table table-bordered m-table c-wdat">'
                 +'<tr>'
                 +'<td class="f-txtr tdbg">评分：</td>'
@@ -383,6 +387,7 @@
 			var param = "customerCcnId="+customerCcnId+'&userCcnId='+userCcnId+'&scoreType='+scoreType+'&remark='+remark;
 			JS.AJAX.post('/chat/socreDialogue.action', param, function() {
 				alert("多谢评价！");
+				$("#kefupingfen").hide();
 			});
 		}
 		
