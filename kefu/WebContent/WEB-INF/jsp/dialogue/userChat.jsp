@@ -289,15 +289,17 @@
 		
 		$("#"+ccnId).removeClass().addClass("on");
 		switchDialogueBox(ccnId);
-		showCustomerInfo(customerId,ccnId);
+		
+		showCustomerInfo(customerId);
 	}
 	
 	// 获取客户信息 (**)
-	function showCustomerInfo(customerId,ccnId){
+	function showCustomerInfo(customerId){
+		//ccnId = JS.Engine.getId();
 		$.ajax({
 		    type: "get",
 		    url: "/customer/getCustomerInfo.action",
-		    data: {"customerId":customerId,"currentCcnId":ccnId},
+		    data: {"customerId":customerId,"currentCcnId":JS.Engine.getId()},
 		    contentType: "application/json; charset=utf-8",
 		    dataType: "json",
 		    success: function (data) {
