@@ -21,7 +21,7 @@
         <div class="m-chat-hdc f-cb c-bg">
             <div class="u-teach f-fl">
                 <img src="/img/pic_02.png" alt="" />
-                <p>艾丽娅老师 <span>托福口语</span></p>
+                <p> <span></span></p>
             </div>
         </div>
     </div>
@@ -62,9 +62,9 @@
                                     <ul class="u-operatebar-btn">
                                         <li><a class="exp-block-trigger" href="javascript:;"><img src="/img/icon_01.png" alt="" /></a></li>
 <!--                                         <li><img src="/img/icon_02.png" alt="" /></li> -->
-<!--                                         <li><img src="/img/icon_03.png" alt="" /></li> -->
+<!--                                         <li><img src="/img/icon_03.png" alt="" /></li> 
                                         <li><img src="/img/icon_04.png" alt="" /></li>
-                                        <li><img src="/img/icon_05.png" alt="" /></li>
+                                        <li><img src="/img/icon_05.png" alt="" /></li>-->
                                         <a class="f-fr" href="javascript:socreUserNotice()" id="kefupingfen">客服评分</a>
                                     </ul>
                                 </div>
@@ -219,6 +219,10 @@
 					case 'no_user': 
 						noUser(data);// 客服不在
 						break;
+					case 'user_busy': 
+						userBusy(data);// 客服不在
+						break;	
+						
 					default:
 					}
 				}
