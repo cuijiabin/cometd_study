@@ -60,7 +60,6 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-var api = frameElement.api,W=api.opener;
 function saveKey(){
 	   url="/function/saveKeyboard.action";
 	   data = {

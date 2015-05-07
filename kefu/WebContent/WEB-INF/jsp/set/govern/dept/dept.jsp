@@ -47,7 +47,6 @@
 		$(".g-cnt").mCustomScrollbar({theme:"minimal-dark"});
 	});
 })(jQuery);
-var api = frameElement.api,W=api.opener;
 function find(currentPage){
 	var url="/dept/list.action";
 	var data = {
