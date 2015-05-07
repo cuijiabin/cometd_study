@@ -103,12 +103,20 @@ public class ChatRecordFieldService {
 			String[] strs = date.split(",");
 			for(int i=0;i<strs.length;i++){
 				String[] temp = strs[i].split(":");
-				ChatRecordField crf = hm.get(temp[0]);
+				ChatRecordField template = hm.get(temp[0]);
+				ChatRecordField crf = new ChatRecordField();
+				
+				//使用模板信息
+				crf.setCode(template.getCode());
+				crf.setIsDefault(template.getIsDefault());
+				crf.setName(template.getName());
+				crf.setSortId(template.getSortId());
+				
+				//设置信息
 				crf.setUserId(userId);
 				crf.setIsDisplay(Integer.valueOf(temp[1]));
 				crf.setCreateDate(new Date());
 				crf.setUpdateDate(null);
-				crf.setId(null);
 				chatRecordFieldDaoImpl.add(crf);
 			}
 		}

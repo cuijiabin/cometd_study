@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.ChatRecordField;
+import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.service.ChatRecordFieldService;
 import com.xiaoma.kefu.util.Ajax;
 
@@ -45,8 +47,8 @@ public class ChatRecordFieldController {
 	public String saveRecord(HttpSession session,Model model,@RequestParam("data") String data){
 		try {
 			//获取当前用户id
-			Integer userId = 1;
-			chatRecordFieldService.saveRecord(userId,data);
+			User user = (User) session.getAttribute(CacheName.USER);
+			chatRecordFieldService.saveRecord(user.getId(),data);
 			
 			model.addAttribute("result", Ajax.JSONResult(0, "修改成功!"));
 		} catch (Exception e) {

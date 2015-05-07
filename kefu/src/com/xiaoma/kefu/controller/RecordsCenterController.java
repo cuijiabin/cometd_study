@@ -32,6 +32,7 @@ import com.xiaoma.kefu.model.Customer;
 import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.Dialogue;
 import com.xiaoma.kefu.model.DialogueDetail;
+import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.Style;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.model.WaitList;
@@ -891,9 +892,19 @@ public class RecordsCenterController {
 						}
 					}
 				}else if(key.equals("openType")){//开始方式
-					hm.put(key, DictMan.getDictItem("d_open_type", ds.getRow(i).getString("openType")).getItemName());
+					DictItem di = DictMan.getDictItem("d_close_type", ds.getRow(i).getString("openType"));
+					if(di!=null){
+						hm.put(key, di.getItemName());
+					}else{
+						hm.put(key, "");
+					}
 				}else if(key.equals("closeType")){//结束方式
-					hm.put(key, DictMan.getDictItem("d_close_type", ds.getRow(i).getString("closeType")).getItemName());
+					DictItem di = DictMan.getDictItem("d_close_type", ds.getRow(i).getString("closeType"));
+					if(di!=null){
+						hm.put(key, di.getItemName());
+					}else{
+						hm.put(key, "");
+					}
 				}else if(key.equals("waitListId")){//考试项目
 					hm.put(key, "");
 					String temp = ds.getRow(i).getString("waitListId");
