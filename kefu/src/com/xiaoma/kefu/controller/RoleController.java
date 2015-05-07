@@ -38,37 +38,8 @@ public class RoleController {
 	@Autowired
 	private DepartmentService deptService;
 
-	// /**
-	// * 角色查询
-	// * @param model
-	// * @param condition
-	// * @param currentPage
-	// * @param pageRecorders
-	// * @return
-	// */
-	// @RequestMapping(value = "list.action", method = RequestMethod.GET)
-	// public String queryAll(Model model, String loginName, String phone,
-	// Integer currentPage, Integer pageRecorders) {
-	// try{
-	// currentPage = (currentPage == null) ? 1 : currentPage;
-	// pageRecorders = (pageRecorders == null) ? 10 : pageRecorders;
-	// PageBean<Role> pageBean = roleService.getResult(currentPage,
-	// pageRecorders);
-	// System.out.println(pageBean.getObjList());
-	// model.addAttribute("list", pageBean.getObjList());
-	// model.addAttribute("pageBean", pageBean);
-	// System.out.println(pageBean.getObjList());
-	// System.out.println(pageBean);
-	// return "/set/govern/roleList";
-	// }catch(Exception e){
-	// logger.error(e.getMessage());
-	// model.addAttribute("error","出错了,请刷新页面重试！");
-	// return "/views/error500";
-	// }
-	// }
-
 	/**
-	 * 查询
+	 * 查询角色列表
 	 * 
 	 * @param conditions
 	 * @param pageBean
@@ -114,7 +85,6 @@ public class RoleController {
 	/**
 	 * 添加
 	 */
-
 	@RequestMapping(value = "save.action", method = RequestMethod.GET)
 	public String save(Model model, Role role) {
 		try {

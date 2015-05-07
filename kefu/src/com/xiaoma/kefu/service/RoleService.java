@@ -97,12 +97,12 @@ public class RoleService {
 	 * @param toUpdateRole
 	 * @return
 	 */
-
 	public Integer updateRole(Role role) {
 	         role.setCreateDate(new Date());
 	         role.setIsDel(0);
 			  return roleDaoImpl.update(role); 
 	}
+	
 	/**
 	 * 假删除
 	 * @param id
@@ -117,13 +117,21 @@ public class RoleService {
 		}
 		return 3;
 	}
-
+	
+   /**
+    * 检查角色是否存在
+    * @param role
+    * @return
+    */
 	public Integer checkRole(Role role) {
 		
 		return roleDaoImpl.checkRole(role);
 	}
-
-	@SuppressWarnings("unchecked")
+	
+    /**
+     * 查询出所有角色
+     * @return
+     */
 	public List<Role> findRole() {
 		
 		return (List<Role>) roleDaoImpl.findRole();

@@ -47,32 +47,7 @@ public class UserService {
 	}
 
 	/**
-	 * 查询所有用户
-	 * 
-	 * @param map
-	 * @param pageBean
-	 * @return
-	 */
-	// public PageBean<User> getResult(Integer currentPage,Integer
-	// pageRecorders){
-	//
-	// Integer totalCount = userDaoImpl.getAllUserCount();
-	// PageBean<User> result = new PageBean<User>();
-	//
-	// result.setCurrentPage(currentPage);
-	// result.setPageRecorders(pageRecorders);
-	// result.setTotalRows(totalCount);
-	//
-	// Integer start = result.getStartRow();
-	//
-	// List<User> list =userDaoImpl.getUsertOrderById(start,pageRecorders);
-	// result.setObjList(list);
-	//
-	// return result;
-	// }
-
-	/**
-	 * 条件查询
+	 * 条件查询用户
 	 */
 	public PageBean<User> getResultByuserNameOrPhone(Integer currentPage,
 			Integer pageRecorders, String userName, String phone) {
@@ -114,7 +89,6 @@ public class UserService {
 		Integer totalCount = userDaoImpl.checkUser(user);
 
 		return totalCount;
-
 	}
 
 	/**
@@ -126,12 +100,12 @@ public class UserService {
 		user.setOnLineStatus(2);
 		user.setStatus(1);
 		user.setIsLock(0);
-		Integer succ=(Integer) userDaoImpl.add(user);
-		List<Department> dlist =deptDao.getDeptById(user.getDeptId());
+		Integer succ = (Integer) userDaoImpl.add(user);
+		List<Department> dlist = deptDao.getDeptById(user.getDeptId());
 		Department dept = dlist.get(0);
-		dept.setUserCount(dept.getUserCount()+1);
+		dept.setUserCount(dept.getUserCount() + 1);
 		deptDao.update(dept);
-		 return succ;
+		return succ;
 	}
 
 	/**
@@ -139,11 +113,7 @@ public class UserService {
 	 */
 	public User getUserById(Integer id) {
 
-		// User user = (User) JedisDao.getObject(JedisConstant.USER_INFO+id);
-		// if(user == null){
 		User user = userDaoImpl.findById(User.class, id);
-		// JedisDao.setKO(JedisConstant.USER_INFO+id, user);
-		// }
 		return user;
 	}
 
@@ -156,13 +126,13 @@ public class UserService {
 			throws UnsupportedEncodingException {
 		User toUpdateUser = userDaoImpl.findById(User.class, user.getId());
 
-		 if (StringHelper.isNotEmpty(pass) && !pass.equals("1")) {
+		if (StringHelper.isNotEmpty(pass) && !pass.equals("1")) {
 			String password = new String(DigestUtils.md5Hex(pass
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
-		} else if(StringHelper.isNotEmpty(pass) && pass.equals("1")){
-			     toUpdateUser.setIsLock(1);
-		}else if(StringHelper.isNotEmpty(user.getPassword())){
+		} else if (StringHelper.isNotEmpty(pass) && pass.equals("1")) {
+			toUpdateUser.setIsLock(1);
+		} else if (StringHelper.isNotEmpty(user.getPassword())) {
 			String password = new String(DigestUtils.md5Hex(user.getPassword()
 					.getBytes("UTF-8")));
 			toUpdateUser.setPassword(password);
@@ -170,14 +140,15 @@ public class UserService {
 		}
 		toUpdateUser.setLoginName(user.getLoginName());
 		toUpdateUser.setCardName(user.getCardName());
-		if(toUpdateUser.getDeptId()!=user.getDeptId()){
-			List<Department> dlist =deptDao.getDeptById(toUpdateUser.getDeptId());
+		if (toUpdateUser.getDeptId() != user.getDeptId()) {
+			List<Department> dlist = deptDao.getDeptById(toUpdateUser
+					.getDeptId());
 			Department dept = dlist.get(0);
-			dept.setUserCount(dept.getUserCount()-1);
+			dept.setUserCount(dept.getUserCount() - 1);
 			deptDao.update(dept);
-			List<Department> dlist1 =deptDao.getDeptById(user.getDeptId());
+			List<Department> dlist1 = deptDao.getDeptById(user.getDeptId());
 			Department dept1 = dlist1.get(0);
-			dept1.setUserCount(dept1.getUserCount()+1);
+			dept1.setUserCount(dept1.getUserCount() + 1);
 			deptDao.update(dept1);
 			toUpdateUser.setDeptId(user.getDeptId());
 		}
@@ -189,14 +160,15 @@ public class UserService {
 		toUpdateUser.setMaxListen(user.getMaxListen());
 		toUpdateUser.setCreateDate(user.getCreateDate());
 		Integer succ = userDaoImpl.update(toUpdateUser);
-		
-		if(user.getMaxListen() != null){
-			JedisTalkDao.setMaxReceiveCount(user.getId().toString(), user.getMaxListen());
+
+		if (user.getMaxListen() != null) {
+			JedisTalkDao.setMaxReceiveCount(user.getId().toString(),
+					user.getMaxListen());
 		}
-	   CacheMan.remove(CacheName.USERFUNCTION, user.getId());
-	   CacheMan.remove(CacheName.SUSER, user.getId());
+		CacheMan.remove(CacheName.USERFUNCTION, user.getId());
+		CacheMan.remove(CacheName.SUSER, user.getId());
 		return succ;
-		
+
 	}
 
 	/**
@@ -229,7 +201,12 @@ public class UserService {
 		}
 	}
 
-	// 员工离职
+	/**
+	 * 员工离职支持多选处理
+	 * @param ids
+	 * @param status
+	 * @return
+	 */
 	public Integer leaveUser(String ids, Integer status) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String time = sdf.format(new Date());
@@ -243,16 +220,16 @@ public class UserService {
 						Integer.parseInt(str));
 				leup.setStatus(status);
 				leup.setEndDate(time);
-				List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
+				List<Department> dlist = deptDao.getDeptById(leup.getDeptId());
 				Department dept = dlist.get(0);
-				if(status==2){
-				    dept.setUserCount(dept.getUserCount()-1);
-				    busiGroupDetailService.deleteByUserId(leup.getId());
-				}else{
-					dept.setUserCount(dept.getUserCount()+1);
+				if (status == 2) {
+					dept.setUserCount(dept.getUserCount() - 1);
+					busiGroupDetailService.deleteByUserId(leup.getId());
+				} else {
+					dept.setUserCount(dept.getUserCount() + 1);
 				}
 				deptDao.update(dept);
-			  val = userDaoImpl.update(leup);
+				val = userDaoImpl.update(leup);
 				CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
 				CacheMan.remove(CacheName.SUSER, leup.getId());
 			}
@@ -265,13 +242,13 @@ public class UserService {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
 			leup.setStatus(status);
 			leup.setEndDate(time);
-			List<Department> dlist =deptDao.getDeptById(leup.getDeptId());
+			List<Department> dlist = deptDao.getDeptById(leup.getDeptId());
 			Department dept = dlist.get(0);
-			if(status==2){
-			    dept.setUserCount(dept.getUserCount()-1);
-			    busiGroupDetailService.deleteByUserId(leup.getId());
-			}else{
-				dept.setUserCount(dept.getUserCount()+1);
+			if (status == 2) {
+				dept.setUserCount(dept.getUserCount() - 1);
+				busiGroupDetailService.deleteByUserId(leup.getId());
+			} else {
+				dept.setUserCount(dept.getUserCount() + 1);
 			}
 			deptDao.update(dept);
 			Integer succ = userDaoImpl.update(leup);
@@ -285,42 +262,48 @@ public class UserService {
 		}
 	}
 
-	// 员工转换部门
+	/**
+	 * 员工转换部门
+	 * @param ids
+	 * @param deptId
+	 * @return
+	 */
 	public Integer tradeUser(String ids, Integer deptId) {
 		if (ids.length() > 2) {
 			String[] array = ids.split(",");
-			Integer succ=0;
+			Integer succ = 0;
 			for (String str : array) {
 				if (Integer.parseInt(str) == 0)
 					continue;
-				User leup = userDaoImpl.findById(User.class,Integer.parseInt(str));
-				List<Department> dlist1 =deptDao.getDeptById(leup.getDeptId());
+				User leup = userDaoImpl.findById(User.class,
+						Integer.parseInt(str));
+				List<Department> dlist1 = deptDao.getDeptById(leup.getDeptId());
 				Department dept1 = dlist1.get(0);
-				dept1.setUserCount(dept1.getUserCount()-1);
+				dept1.setUserCount(dept1.getUserCount() - 1);
 				deptDao.update(dept1);
-				List<Department> dlist =deptDao.getDeptById(deptId);
+				List<Department> dlist = deptDao.getDeptById(deptId);
 				Department dept = dlist.get(0);
-				dept.setUserCount(dept.getUserCount()+1);
+				dept.setUserCount(dept.getUserCount() + 1);
 				deptDao.update(dept);
 				leup.setDeptId(deptId);
 				leup.setDeptName(dept.getName());
-			    succ = userDaoImpl.update(leup);
+				succ = userDaoImpl.update(leup);
 				CacheMan.remove(CacheName.USERFUNCTION, leup.getId());
 				CacheMan.remove(CacheName.SUSER, leup.getId());
 			}
-			if(succ==1){
+			if (succ == 1) {
 				return succ;
 			}
 			return 0;
 		} else {
 			User leup = userDaoImpl.findById(User.class, Integer.parseInt(ids));
-			List<Department> dlist1 =deptDao.getDeptById(leup.getDeptId());
+			List<Department> dlist1 = deptDao.getDeptById(leup.getDeptId());
 			Department dept1 = dlist1.get(0);
-			dept1.setUserCount(dept1.getUserCount()-1);
+			dept1.setUserCount(dept1.getUserCount() - 1);
 			deptDao.update(dept1);
-			List<Department> dlist =deptDao.getDeptById(deptId);
+			List<Department> dlist = deptDao.getDeptById(deptId);
 			Department dept = dlist.get(0);
-			dept.setUserCount(dept.getUserCount()+1);
+			dept.setUserCount(dept.getUserCount() + 1);
 			deptDao.update(dept);
 			leup.setDeptId(deptId);
 			leup.setDeptName(dept.getName());
@@ -330,49 +313,57 @@ public class UserService {
 		}
 	}
 
-	// 通过部门查询员工
+	/**
+	 * 通过部门查询员工
+	 * @param deptId
+	 * @return
+	 */
 	public List<User> getResultDept(Integer deptId) {
 
 		List<User> list = userDaoImpl.getUsertByDeptId(deptId);
 		return list;
 	}
-	
+
 	/**
 	 * 根据id列表批量获取用户
 	 * @param ids
 	 * @return
 	 */
-	public List<User> getUsersByIds(List<Integer> ids){
+	public List<User> getUsersByIds(List<Integer> ids) {
 		List<Serializable> userIds = JsonUtil.convertInteger2Serializable(ids);
-		if(CollectionUtils.isEmpty(userIds)){
+		if (CollectionUtils.isEmpty(userIds)) {
 			return null;
 		}
 		return userDaoImpl.findByIds(User.class, userIds);
 	}
-	
+
 	/**
 	 * 获取全部用户
 	 * @return
 	 */
-	public List<User> getAll(){
-		
+	public List<User> getAll() {
+
 		return userDaoImpl.findAll(User.class);
-		
+
 	}
-	
+
 	/**
 	 * 判断用户是否 有 roleName 这个角色
-	* @param user	用户
-	* @param roleName	角色名称
-	* @return
-	* @Author: wangxingfei
-	* @Date: 2015年5月4日
+	 * 
+	 * @param user
+	 *            用户
+	 * @param roleName
+	 *            角色名称
+	 * @return
+	 * @Author: wangxingfei
+	 * @Date: 2015年5月4日
 	 */
-	public boolean hasThisRole(User user,RoleName roleName){
+	public boolean hasThisRole(User user, RoleName roleName) {
 		boolean falg = false;
-		if(user!=null && user.getRoleId()!=null){
-			String zhuguanId = DictMan.getDictItem("d_role_id", roleName.toString()).getItemName();
-			if(user.getRoleId().equals(Integer.valueOf(zhuguanId))){
+		if (user != null && user.getRoleId() != null) {
+			String zhuguanId = DictMan.getDictItem("d_role_id",
+					roleName.toString()).getItemName();
+			if (user.getRoleId().equals(Integer.valueOf(zhuguanId))) {
 				falg = true;
 			}
 		}

@@ -63,7 +63,7 @@ public class UserController {
 
 	/**
 	 * User login
-	 * 
+	 * 用户登录，密码验证，错误四次锁定
 	 * @param name
 	 * @param password
 	 * @param session
@@ -128,14 +128,7 @@ public class UserController {
 		}
 	}
 
-	// session.setAttribute("user", user);
-	// model.addAttribute("result", Ajax.JSONResult(0, "登录成功!"));
-	// Thread thread = new AddLoginLogThread(user.getId(),
-	// CookieUtil.getIpAddr(request));
-	// if (thread != null)
-	// thread.start();
-	// password = new String(
-	// DigestUtils.md5Hex(password.getBytes("UTF-8")));
+
 	/**
 	 * 进入主页的树列表展示
 	 * 
@@ -143,11 +136,11 @@ public class UserController {
 	 * @param password
 	 * @param session
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String main(HttpSession session, Model model, Integer typeId) {
 	try{
-		User user = (User) session.getAttribute(CacheName.USER);
+		User user = (User) session.getAttribute(CacheName.USER);		
 		if (user == null)
 			return "login";
 		String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION,
@@ -188,7 +181,7 @@ public class UserController {
 	}
 
 	/**
-	 * 查询
+	 * 查询员工的列表
 	 * 
 	 * @param conditions
 	 * @param pageBean
@@ -218,7 +211,6 @@ public class UserController {
 	/**
 	 * 跳转到添加页面
 	 */
-
 	@RequestMapping(value = "add.action", method = RequestMethod.GET)
 	public String changadd(Model model, User user) {
 		try {
@@ -238,7 +230,6 @@ public class UserController {
 	/**
 	 * 添加到数据库
 	 */
-
 	@RequestMapping(value = "save.action", method = RequestMethod.POST)
 	public String addUser(Model model, @ModelAttribute("user") User user) {
 		try {
@@ -506,23 +497,7 @@ public class UserController {
 		}
 		return "resultjson";
 	}
-
-	@RequestMapping(value = "checkMsg.action", method = RequestMethod.GET)
-	public String checkMsg(Model model, String ln, Integer uId, String phone,
-			String msg) throws UnsupportedEncodingException {
-		try {
-			if (StringHelper.isEmpty(phone) || StringHelper.isEmpty(msg)) {
-				model.addAttribute("result", Ajax.toJson(1, "缺少参数，请重新提交！"));
-				return "resultjson";
-			}
-			model.addAttribute("result", Ajax.toJson(0, "手机号码校验成功！"));
-		} catch (Exception ex) {
-			logger.error(ex.getMessage());
-			model.addAttribute("result", Ajax.toJson(1, "查询出错啦，请刷新后重试！"));
-		}
-		return "resultjson";
-	}
-
+	
 	/**
 	 * 退出系统
 	 * 
