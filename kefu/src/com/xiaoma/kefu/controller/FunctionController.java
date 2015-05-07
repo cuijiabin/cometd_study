@@ -1,7 +1,9 @@
 package com.xiaoma.kefu.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
@@ -188,7 +190,7 @@ public class FunctionController {
 		try {
 			User user = (User) session.getAttribute("user");
 			if(user==null)
-				return "login";
+			return "login";
 			RemindType remind = funcService.findRemindByUserId(user.getId());
 			model.addAttribute("remind",remind);
 	        return "/set/person/remind";
@@ -206,7 +208,7 @@ public class FunctionController {
 	 */
 	@RequestMapping(value = "saveRemind.action", method = RequestMethod.POST)
 	public String saveRemind(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
-			MultipartFile lsound,MultipartFile jsound,MultipartFile resound) {
+			MultipartFile lsound,MultipartFile jsound,MultipartFile resound, HttpServletResponse response) {
 		try {
 		        User user = (User) session.getAttribute("user");
 		        if(user==null)
@@ -226,13 +228,15 @@ public class FunctionController {
 		    		String url=funcService.saveFile(resound,user,name);
 		    		remindType.setReceiveUrl(url);
 		    	}
+		    	PrintWriter out = response.getWriter();
 			    Integer isSuccess = funcService.saveRemind(remindType,user);
-				if (isSuccess != 0) {
-					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
-				} else {
-					model.addAttribute("result", Ajax.JSONResult(1, "保存失败!"));
-				}		
-			return "redirect:/function/remind.action";
+			    if(isSuccess!=0){
+			    	out.printf("<script>alert('保存成功')</script>");
+			       }else{
+			    	   out.printf("<script>alert('保存失败');</script>");  
+			       }
+			  
+			return null;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", "出错了,请刷新页面重试！");

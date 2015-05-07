@@ -12,7 +12,7 @@
 
 <body>
 <div class="m-error m-error-500">
-	<p class="lead"><strong>${message }</strong></p>
+	<p class="lead"><strong>${message }${error }</strong></p>
 	<a class="btn btn-large btn-primary" href="/" target="_top">回到首页</a>
 	<!-- <a class="btn btn-large" href="#" target="_blank">反馈这个问题给工程师</a> -->
 </div>

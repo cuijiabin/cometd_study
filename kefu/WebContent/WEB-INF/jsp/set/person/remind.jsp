@@ -35,16 +35,16 @@
 <div class="g-cnt">
 <div class="g-cnt" style="width: 1000px"> 
     <div class="f-padd10">
-    <form action="/function/saveRemind.action" enctype="multipart/form-data" method="post" id="fform">
+    <form action="/function/saveRemind.action" enctype="multipart/form-data" method="post" id="fform" target="ifrome1">
     	<div class="m-tit">
             <h3>访客上线提醒</h3>
         </div>
         <div class="f-padd20">
         	<label><input  type ="checkbox" id="lsoundEffect" name="lsoundEffect" value="1" <c:if test='${remind.lsoundEffect==1}'>checked</c:if>/> 播音效</label>
             <div style="padding-left:30px;line-height:30px;">
-                <label><input type ="radio" id="lineEffect" name="lineEffect"  value="1" checked="checked" <c:if test='${remind.lineEffect==1}'>checked</c:if>/> 默认音效</label>
+                <label><input type ="radio" id="lineEffect1" name="lineEffect"  value="1" checked="checked" <c:if test='${remind.lineEffect==1}'>checked</c:if>/> 默认音效</label>
                 <p class="u-subsec f-fl">
-                    <label><input type ="radio" id="lineEffect" name="lineEffect"  value="2" <c:if test='${remind.lineEffect==2}'>checked</c:if>/> 自定义</label>
+                    <label><input type ="radio" id="lineEffect2" name="lineEffect"  value="2" <c:if test='${remind.lineEffect==2}'>checked</c:if>/> 自定义</label>
                 </p>
                 <p class="u-upload f-fl">
                     <button class="btn" type="button">上传文件</button>
@@ -61,9 +61,9 @@
         <div class="f-padd20">
         	<label><input  type ="checkbox" id="jsoundEffect" name="jsoundEffect" value="1" <c:if test='${remind.jsoundEffect==1}'>checked</c:if>/> 播音效</label>
             <div style="padding-left:30px;line-height:30px;">
-                <label><input  type ="radio" id="createEffect" name="createEffect" value="1"  checked="checked" <c:if test='${remind.createEffect==1}'>checked</c:if>/> 默认音效</label>
+                <label><input  type ="radio" id="createEffect1" name="createEffect" value="1"  checked="checked" <c:if test='${remind.createEffect==1}'>checked</c:if>/> 默认音效</label>
                 <p class="u-subsec f-fl">
-                    <label><input  type ="radio" id="createEffect" name="createEffect" value="2" <c:if test='${remind.createEffect==2}'>checked</c:if>/> 自定义</label>
+                    <label><input  type ="radio" id="createEffect2" name="createEffect" value="2" <c:if test='${remind.createEffect==2}'>checked</c:if>/> 自定义</label>
                 </p>
                 <p class="u-upload f-fl">
                     <button class="btn" type="button">上传文件</button>
@@ -78,9 +78,9 @@
         <div class="f-padd20">
         	<label><input  type ="checkbox" id="reSoundEffect" name="reSoundEffect" value="1" <c:if test='${remind.reSoundEffect==1}'>checked</c:if>/>播音效</label>
             <div style="padding-left:30px;line-height:30px;">
-                <label><input  type ="radio" id="receiveEffect" name="receiveEffect" value="1" checked="checked" <c:if test='${remind.receiveEffect==1}'>checked</c:if>/> 默认音效</label>
+                <label><input  type ="radio" id="receiveEffect1" name="receiveEffect" value="1" checked="checked" <c:if test='${remind.receiveEffect==1}'>checked</c:if>/> 默认音效</label>
                 <p class="u-subsec f-fl">
-                    <label><input  type ="radio" id="receiveEffect" name="receiveEffect" value="2" <c:if test='${remind.receiveEffect==2}'>checked</c:if>/>自定义</label>
+                    <label><input  type ="radio" id="receiveEffect2" name="receiveEffect" value="2" <c:if test='${remind.receiveEffect==2}'>checked</c:if>/>自定义</label>
                 </p>
                 <p class="u-upload f-fl">
                 
@@ -92,8 +92,8 @@
             <div class="clear"></div>
         	<label><input  type ="checkbox" id="upHint" name="upHint" value="1" <c:if test='${remind.upHint==1}'>checked</c:if>/> 弹出提示</label>
             <div style="padding-left:30px;line-height:30px;">
-                <label><input  type ="radio" id="upWdInform" name="upWdInform" value="1"  checked="checked"<c:if test='${remind.upWdInform==1}'>checked</c:if>/> 弹出窗口</label>
-                <label><input  type ="radio" id="upWdInform" name="upWdInform" value="2" <c:if test='${remind.upWdInform==2}'>checked</c:if>/> 弹出通知</label>
+                <label><input  type ="radio" id="upfrom1" name="upWdInform" value="1"  checked="checked"<c:if test='${remind.upWdInform==1}'>checked</c:if>/> 弹出窗口</label>
+                <label><input  type ="radio" id="upform2" name="upWdInform" value="2" <c:if test='${remind.upWdInform==2}'>checked</c:if>/> 弹出通知</label>
             </div>
         </div>
         </form>
@@ -104,6 +104,7 @@
     </div>
 </div>
 </div>
+<iframe name="ifrome1" id="ifrome1"></iframe>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -170,6 +171,10 @@ function saveRemind(){
 function removecheck(){
     $(":checkbox[checked='checked']").prop("checked",false);
     $(":radio[checked='checked']").prop("checked",false);
+    $("#lineEffect1").prop("checked",true);
+    $("#createEffect1").prop("checked",true);
+    $("#receiveEffect1").prop("checked",true);
+    $("#upfrom1").prop("checked",true);
 }
 
 </script>
