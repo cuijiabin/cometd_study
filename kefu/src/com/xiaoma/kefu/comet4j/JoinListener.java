@@ -77,7 +77,7 @@ public class JoinListener extends ConnectListener {
 			JedisTalkDao.addCcnList( JedisConstant.USER_TYPE, ccnId);
 			logger.info("客服："+userId+" ,进入对话系统; 通信点id： "+ccnId);
 			
-			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuserId(user.getId());
+			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuser(user);
 			if(CollectionUtils.isEmpty(styleIds)){
 				return true;
 			}

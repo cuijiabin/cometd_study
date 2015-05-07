@@ -71,9 +71,9 @@ public class ChatRecordFieldController {
 	@RequestMapping(value = "edit.action", method = RequestMethod.GET)
 	public String edit(HttpSession session,Model model){
 		//获取当前用户id
-		Integer userId = 1;
+		User user = (User) session.getAttribute(CacheName.USER);
 		
-		List<ChatRecordField> list = chatRecordFieldService.findByUserId(userId);
+		List<ChatRecordField> list = chatRecordFieldService.findByUserId(user.getId());
 		if(list==null || list.size()==0){
 			//如果没有配置过,则取默认的
 			list = chatRecordFieldService.findByUserId(1);

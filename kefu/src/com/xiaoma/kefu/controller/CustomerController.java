@@ -101,7 +101,7 @@ public class CustomerController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
-			if(StringUtils.isBlank(customer.getCustomerName())){
+			if(customer!=null && StringUtils.isBlank(customer.getCustomerName())){
 				customer.setCustomerName("--");
 			}
 			DialogueInfo diaInfo = JedisTalkDao.getDialogueInfo(customerId, currentCcnId);

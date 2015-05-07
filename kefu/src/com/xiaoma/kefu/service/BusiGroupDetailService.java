@@ -1,5 +1,6 @@
 package com.xiaoma.kefu.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.BusiGroupDetailDao;
 import com.xiaoma.kefu.model.BusiGroupDetail;
+import com.xiaoma.kefu.model.User;
 
 /**
  **********************************
@@ -130,11 +132,28 @@ public class BusiGroupDetailService {
 
 	/**
 	 * 根据风格id获取userId列表
+	 * 如果分流中是部门,则取出部门下所有在职人员
 	 * @param styleId
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Integer> findUserIdsByStyleId(Integer styleId){
-		return busiGroupDetailDaoDaoImpl.findUserIdsByStyleId(styleId);
+		List<BusiGroupDetail> list = busiGroupDetailDaoDaoImpl.findByStyleId(styleId);
+		List<Integer> userIdList = new ArrayList<Integer>();
+		for(BusiGroupDetail detail : list){
+			//如果是勾选的
+			if(detail.getIsReception()!=null && detail.getIsReception() == 1){
+				if(detail.getUserType()==1){//如果是用户
+					userIdList.add(detail.getUserId());
+				}else if(detail.getUserType()==2){//如果是部门
+					List<User> tempList = (List<User>) CacheMan.getList(CacheName.DEPT_USER_ON_LIST, detail.getUserId(), User.class);
+					for(User user : tempList){
+						userIdList.add(user.getId());
+					}
+				}
+			}
+		}
+		return userIdList;
 	}
 	
 	/**
@@ -142,8 +161,7 @@ public class BusiGroupDetailService {
 	 * @param userId
 	 * @return
 	 */
-	public List<Integer> getStyleIdsByuserId(Integer userId){
-		
-		return busiGroupDetailDaoDaoImpl.getStyleIdsByuserId(userId);
+	public List<Integer> getStyleIdsByuser(User user){
+		return busiGroupDetailDaoDaoImpl.getStyleIdsByuser(user.getId(),user.getDeptId());
 	}
 }

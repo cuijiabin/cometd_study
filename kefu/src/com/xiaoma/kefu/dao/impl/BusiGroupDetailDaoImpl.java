@@ -103,31 +103,39 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 	}
 
 	
+	/**
+	 * 根据风格id,获取 分组明细
+	* @param styleId
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月7日
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Integer> findUserIdsByStyleId(Integer styleId) {
-		if(null == styleId){
-			return null;
-		}
+	public List<BusiGroupDetail> findByStyleId(Integer styleId){
 		Session session = getSession();
-		String sql = "select userId From busi_group_detail b WHERE b.styleId = "+styleId +" and b.isReception = 1";
-		
-		SQLQuery query = session.createSQLQuery(sql);
-		
-		
-		
-		return ((List<Integer>)query.list());
+		String hql = "from BusiGroupDetail t where t.styleId = :styleId ";
+		Query query = session.createQuery(hql);
+		query.setInteger("styleId",styleId);
+		return	query.list();
 	}
+	
 
+	/**
+	 * 根据用户id,用户部门id,获取有效风格id列表
+	 * @param userId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Integer> getStyleIdsByuserId(Integer userId) {
-		if(null == userId){
+	public List<Integer> getStyleIdsByuser(Integer userId,Integer deptId){
+		if(null == userId || deptId == null){
 			return null;
 		}
 		Session session = getSession();
-		String sql = "select styleId From busi_group_detail b WHERE b.userId = "+userId +" and b.isReception = 1";
-		
+		String sql = " select styleId from busi_group_detail t where t.userId = " + userId + " and userType = 1 and isReception = 1 "
+				+ " union all  "
+				+ " select styleId from busi_group_detail t where t.userId = " + deptId + " and userType = 2 and isReception =1  " ;
 		SQLQuery query = session.createSQLQuery(sql);
 		
 		return ((List<Integer>)query.list());

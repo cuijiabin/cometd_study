@@ -56,4 +56,7 @@ public class CacheName {
 	//根据风格id获取客服
 	public static final String ONLINE_USER_STYLEID ="online_user_styleid";
 	
+	//部门下人员列表(在职)
+	public static final String DEPT_USER_ON_LIST = "dept_user_on_list";
+	
 }

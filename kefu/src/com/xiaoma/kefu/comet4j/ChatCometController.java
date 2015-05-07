@@ -463,7 +463,7 @@ public class ChatCometController {
 		if(JedisTalkDao.sizeCustomerWaitSet() > 0){
 			Integer surplusSize = 1;//剩余可分配客户名额
 			List<DictItem> list = DictMan.getDictList("d_dialog_android");
-			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuserId(user.getId());
+			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuser(user);
 			if(CollectionUtils.isEmpty(styleIds)){
 				return ;
 			}
