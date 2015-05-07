@@ -67,4 +67,11 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	 * @return
 	 */
 	public List<Integer> findUserIdsByStyleId(Integer styleId);
+	
+	/**
+	 * 根据用户id获取有效风格id列表
+	 * @param userId
+	 * @return
+	 */
+	public List<Integer> getStyleIdsByuserId(Integer userId);
 }

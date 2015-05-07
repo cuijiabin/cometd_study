@@ -118,6 +118,20 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 		
 		return ((List<Integer>)query.list());
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> getStyleIdsByuserId(Integer userId) {
+		if(null == userId){
+			return null;
+		}
+		Session session = getSession();
+		String sql = "select styleId From busi_group_detail b WHERE b.userId = "+userId +" and b.isReception = 1";
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		
+		return ((List<Integer>)query.list());
+	}
 	
 
 }

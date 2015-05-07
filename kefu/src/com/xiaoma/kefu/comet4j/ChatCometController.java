@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
+import com.xiaoma.kefu.common.SpringContextUtil;
 import com.xiaoma.kefu.dict.DictMan;
 import com.xiaoma.kefu.model.Blacklist;
 import com.xiaoma.kefu.model.Customer;
@@ -31,6 +32,7 @@ import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.BlacklistService;
+import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.service.DialogueService;
 import com.xiaoma.kefu.service.DialogueSwitchService;
@@ -56,6 +58,9 @@ public class ChatCometController {
 	
 	@Autowired
 	private DialogueService dialogueService;
+	
+	@Autowired
+	private BusiGroupDetailService busiGroupDetailService;
 	
 	private Logger logger = Logger.getLogger(ChatCometController.class);
 
@@ -295,6 +300,11 @@ public class ChatCometController {
 		    //保存会话
 	        String key = JedisConstant.getDialogueListKey(ccnId,endCcnId);
 	        JedisTalkDao.lpushSaveDialogue(key);
+	        
+	        //撮合对话
+	        String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+			User user = (User) CacheMan.getObject(CacheName.SUSER, userId);
+			buildDialogue(ccnId,user);
 			 
 		}else if(JedisConstant.CUSTOMER_TYPE == type){
 			JedisTalkDao.remCcnReceiveList(endCcnId, ccnId);
@@ -451,9 +461,23 @@ public class ChatCometController {
 		if(JedisTalkDao.sizeCustomerWaitSet() > 0){
 			Integer surplusSize = 1;//剩余可分配客户名额
 			List<DictItem> list = DictMan.getDictList("d_dialog_android");
+			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuserId(user.getId());
+			if(CollectionUtils.isEmpty(styleIds)){
+				return ;
+			}
 			
 			while(surplusSize > 0 && JedisTalkDao.sizeCustomerWaitSet() > 0){
 				String customerCcnId = JedisTalkDao.popCustomerWaitSet();
+				
+				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
+				Integer styleId = (dInfo.getStyleId() == null) ? 1 : dInfo.getStyleId();
+				
+				//如果风格相同则分配对话
+				if(!styleIds.contains(styleId)){
+					continue;
+				}
+				
 				Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
 				JedisTalkDao.delCustomerWaitSet(customerCcnId);
 				
@@ -464,8 +488,6 @@ public class ChatCometController {
 				JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
 				
 				//修改对话缓存
-				String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
-				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
 				JedisTalkDao.delDialogueInfo(customerId, null);
 				dInfo.setUserCcnId(ccnId);
 				dInfo.setUserId(user.getId());

@@ -19,7 +19,7 @@ import com.xiaoma.kefu.model.BusiGroupDetail;
 * @createdAt: 2015年4月7日上午9:21:23
 **********************************
  */
-@Service
+@Service("busiGroupDetailService")
 public class BusiGroupDetailService {
 	
 	@Autowired
@@ -135,5 +135,15 @@ public class BusiGroupDetailService {
 	 */
 	public List<Integer> findUserIdsByStyleId(Integer styleId){
 		return busiGroupDetailDaoDaoImpl.findUserIdsByStyleId(styleId);
+	}
+	
+	/**
+	 * 根据用户id获取有效风格列表
+	 * @param userId
+	 * @return
+	 */
+	public List<Integer> getStyleIdsByuserId(Integer userId){
+		
+		return busiGroupDetailDaoDaoImpl.getStyleIdsByuserId(userId);
 	}
 }

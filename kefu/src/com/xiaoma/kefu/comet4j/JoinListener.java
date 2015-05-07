@@ -25,6 +25,7 @@ import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.JedisConstant;
 import com.xiaoma.kefu.redis.JedisTalkDao;
+import com.xiaoma.kefu.service.BusiGroupDetailService;
 import com.xiaoma.kefu.service.CustomerService;
 import com.xiaoma.kefu.util.CookieUtil;
 import com.xiaoma.kefu.util.JsonUtil;
@@ -42,6 +43,7 @@ public class JoinListener extends ConnectListener {
 
 
 	private CustomerService customerService = (CustomerService) SpringContextUtil.getBean("customerService");
+	private BusiGroupDetailService busiGroupDetailService = (BusiGroupDetailService) SpringContextUtil.getBean("busiGroupDetailService");
 	
 	private Logger logger = Logger.getLogger(JoinListener.class);
 
@@ -73,6 +75,11 @@ public class JoinListener extends ConnectListener {
 			JedisTalkDao.addCcnList( JedisConstant.USER_TYPE, ccnId);
 			logger.info("客服："+userId+" ,进入对话系统; 通信点id： "+ccnId);
 			
+			List<Integer> styleIds = busiGroupDetailService.getStyleIdsByuserId(user.getId());
+			if(CollectionUtils.isEmpty(styleIds)){
+				return true;
+			}
+			
 			//为客服分配客户
 			if(JedisTalkDao.sizeCustomerWaitSet() > 0){
 				Integer surplusSize = 1;//剩余可分配客户名额
@@ -80,6 +87,15 @@ public class JoinListener extends ConnectListener {
 				
 				while(surplusSize > 0 && JedisTalkDao.sizeCustomerWaitSet() > 0){
 					String customerCcnId = JedisTalkDao.popCustomerWaitSet();
+					String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
+					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
+					Integer styleId = (dInfo.getStyleId() == null) ? 1 : dInfo.getStyleId();
+					
+					//如果风格相同则分配对话
+					if(!styleIds.contains(styleId)){
+						continue;
+					}
+					
 					Integer waitTime = JedisTalkDao.getCustomerWaitTime(customerCcnId);
 					JedisTalkDao.delCustomerWaitSet(customerCcnId);
 					
@@ -90,8 +106,6 @@ public class JoinListener extends ConnectListener {
 					JedisTalkDao.setCcnPassiveId(customerCcnId, ccnId);
 					
 					//修改对话缓存
-					String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, customerCcnId);
-					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,null);
 					JedisTalkDao.delDialogueInfo(customerId, null);
 					dInfo.setUserCcnId(ccnId);
 					dInfo.setUserId(user.getId());
@@ -220,7 +234,6 @@ public class JoinListener extends ConnectListener {
 	 */
 	public static void talkToCustomer(CometEngine engine,String userCId, String cusCId,String message) {
 
-//		logger.info("send message to customer info: userCId: "+userCId+" ,cusCId: "+cusCId+" ,message: "+message);
 		//参数检查
 		if(StringUtils.isBlank(userCId) || StringUtils.isBlank(cusCId) || StringUtils.isBlank(message)){
 			
