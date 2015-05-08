@@ -332,17 +332,21 @@
 			inputbox.value = '';
 		});
 	}
-	// 回车事件 ctrl键暂时不太管用(**)
+	// 回车事件
 	function onSendBoxEnter(event) {
-	    var obj = document.getElementsByName("radio_name");
+        var obj = document.getElementsByName("radio_name");
         if(event.keyCode == 13 || event.keyCode == 10){
        	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
        		   var message = inputbox.value;
              	   sendMessage(message);
              	   return false;
        	   }
+       	   if(obj[0].checked && event.ctrlKey)  {
+       		inputbox.value = inputbox.value + '\n';
+   		   }
         }
-	}
+  }
+
 	
 	// 用户聊天通知(**)
 	function onMessage(data) {

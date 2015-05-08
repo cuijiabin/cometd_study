@@ -432,6 +432,7 @@ public class JedisTalkDao {
 			userCcnId = (StringUtils.isBlank(userCcnId)) ? "-1" : userCcnId;
 			String value = JsonUtil.toJson(dInfo);
 			Long result = jedis.hset(keyStr, userCcnId, value);
+			jedis.expire(keyStr, 12*60*60);
 			if (result == null) {
 				return false;
 			}
@@ -496,6 +497,7 @@ public class JedisTalkDao {
 				dInfo.setUserCcnId(userCcnId);
 				
 				jedis.hset(key, userCcnId, JsonUtil.toJson(dInfo));
+				jedis.expire(key, 12*60*60);
 				return dInfo;
 			}
 			DialogueInfo dInfo = (DialogueInfo) JsonUtil.getObjFromJson(value,DialogueInfo.class);

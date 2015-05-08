@@ -64,7 +64,8 @@ public class CacheMan {
 	public static List<Integer> getOnlineUserIdsByStyleId(Integer styleId) {
 		try {
 			String key = CacheUtil.getCacheName(CacheName.ONLINE_USER_STYLEID, styleId);
-			List<Integer> list = JedisDao.getKList(key,Integer.class);
+			List<String> strlist = JedisDao.lrangeAll(key);
+			List<Integer> list = JsonUtil.convertString2Integer(strlist);
 			if (CollectionUtils.isEmpty(list)) {
 				list = (List<Integer>) CacheFactory.factory(CacheName.ONLINE_USER_STYLEID, styleId);
 				if (CollectionUtils.isNotEmpty(list)){

@@ -321,6 +321,11 @@ public class ChatCometController {
 	        String key = JedisConstant.getDialogueListKey(endCcnId,ccnId);
 	        JedisTalkDao.lpushSaveDialogue(key);
 	        
+	        //撮合对话
+	        String userId = JedisTalkDao.getCnnUserId(JedisConstant.USER_TYPE, endCcnId);
+			User user = (User) CacheMan.getObject(CacheName.SUSER, Integer.valueOf(userId));
+			buildDialogue(endCcnId,user);
+	        
 		}
 		
 		engine.sendTo(Constant.CHANNEL, ccn, nd);
