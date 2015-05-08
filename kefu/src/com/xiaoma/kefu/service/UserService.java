@@ -165,6 +165,7 @@ public class UserService {
 			JedisTalkDao.setMaxReceiveCount(user.getId().toString(),
 					user.getMaxListen());
 		}
+		busiGroupDetailService.updateUserCardName(user);
 		CacheMan.remove(CacheName.USERFUNCTION, user.getId());
 		CacheMan.remove(CacheName.SUSER, user.getId());
 		return succ;

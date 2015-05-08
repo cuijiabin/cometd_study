@@ -216,7 +216,7 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value = "update.action", method = RequestMethod.GET)
-	public String updateUser(Model model, Department dept) {
+	public String update(Model model, Department dept) {
 		System.out.println(dept.getName());
 		try {
 			Integer isSuccess = deptService.updateDept(dept);

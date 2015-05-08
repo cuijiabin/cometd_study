@@ -107,6 +107,7 @@ public class DepartmentService {
 	public Integer updateDept(Department dept) {
 		Department dep=deptDaoImpl.findById(Department.class, dept.getId());
         dep.setName(dept.getName());
+        busiGroupDetailService.updateDeptName(dep);
 	    return deptDaoImpl.update(dep); 
 	}
 	/**
