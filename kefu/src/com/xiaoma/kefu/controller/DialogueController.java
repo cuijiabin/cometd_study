@@ -92,10 +92,11 @@ public class DialogueController {
 
 		User user = (User) session.getAttribute(CacheName.USER);
 		
+		if(!JedisTalkDao.isUser(userCcnId)){
+	    	 logger.error("传入的不是用户连接点 userCcnId："+userCcnId);
+	    }
 		DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId.toString(), userCcnId);
 		Integer styleId = (dInfo.getStyleId() == null) ? 1 : dInfo.getStyleId();
-//		Customer customer = customerService.getCustomerById(customerId);
-//		Integer styleId = (customer.getStyleId() == null) ? 1 : customer.getStyleId();
 		List<Integer> onlineUserIds = CacheMan.getOnlineUserIdsByStyleId(styleId);
 		List<Integer> userIds = new ArrayList<Integer>();
 		for(Integer strId : onlineUserIds){
@@ -304,7 +305,7 @@ public class DialogueController {
 			
 		}
 		
-		JedisTalkDao.setDialogueInfo(id.toString(), "-1", dInfo);
+		JedisTalkDao.setDialogueInfo(id.toString(), null, dInfo);
 
 		// cookie操作
 		Cookie cookie = CookieUtil.genCookieByCustomerId(id.toString());

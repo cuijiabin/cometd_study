@@ -295,8 +295,12 @@ public class ChatCometController {
 		     JedisTalkDao.delCcnPassiveId(endCcnId);
 		     
 		     String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, endCcnId);
+		     
+		     if(!JedisTalkDao.isUser(ccnId)){
+		    	 logger.error("传入的不是用户连接点 ccnId："+ccnId);
+		     }
 		     DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,ccnId);
-		     dInfo.setCloseType(type);
+		     dInfo.setCloseType(3);
 		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 		     
 		    //保存会话
@@ -313,9 +317,13 @@ public class ChatCometController {
 		    JedisTalkDao.delCcnPassiveId(ccnId);
 		    
 		    String customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, ccnId);
+		    
+		     if(!JedisTalkDao.isUser(endCcnId)){
+		    	 logger.error("传入的不是用户连接点 endCcnId："+endCcnId);
+		     }
 		     DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,endCcnId);
-		     dInfo.setCloseType(type);
-		     JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+		     dInfo.setCloseType(1);
+		     JedisTalkDao.setDialogueInfo(customerId, endCcnId, dInfo);
 		    
 		    //保存会话
 	        String key = JedisConstant.getDialogueListKey(endCcnId,ccnId);
@@ -424,6 +432,10 @@ public class ChatCometController {
         	dialogueService.update(dialogue);
         	JedisTalkDao.delDialogueInfo(customerId, userCcnId);
         }else{
+        	
+        	if(!JedisTalkDao.isUser(userCcnId)){
+		    	 logger.error("传入的不是用户连接点 userCcnId："+userCcnId);
+		     }
         	DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,userCcnId);
             dInfo.setScoreType(scoreType);
             dInfo.setScoreRemark(remark);
@@ -501,6 +513,10 @@ public class ChatCometController {
 				dInfo.setDeptId(user.getDeptId());
 				dInfo.setCardName(user.getCardName());
 				dInfo.setWaitTime(waitTime);
+				
+				if(!JedisTalkDao.isUser(ccnId)){
+			    	 logger.error("传入的不是用户连接点 ccnId："+ccnId);
+			     }
 				JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 				
 				//通知客更新后台列表

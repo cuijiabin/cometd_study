@@ -71,6 +71,10 @@ public class CustomerController {
 	public String editCus4Dia(Model model, String customerId, String currentCcnId) {
 		try {
 			Customer customer = customerService.getCustomerById(Long.valueOf(customerId));
+			
+			if(!JedisTalkDao.isUser(currentCcnId)){
+		    	 logger.error("传入的不是用户连接点 currentCcnId："+currentCcnId);
+		     }
 			DialogueInfo diaInfo = JedisTalkDao.getDialogueInfo(customerId, currentCcnId);
 			if(diaInfo.getStyleId()!=null){//目前有时候 styleid会为空
 				Style style = styleService.get(diaInfo.getStyleId());
@@ -104,6 +108,10 @@ public class CustomerController {
 			if(customer!=null && StringUtils.isBlank(customer.getCustomerName())){
 				customer.setCustomerName("--");
 			}
+			
+			if(!JedisTalkDao.isUser(currentCcnId)){
+		    	 logger.error("传入的不是用户连接点 currentCcnId："+currentCcnId);
+		    }
 			DialogueInfo diaInfo = JedisTalkDao.getDialogueInfo(customerId, currentCcnId);
 //			diaInfo.setConsultPage(customer.getId().toString());
 			result.put("result", 0);

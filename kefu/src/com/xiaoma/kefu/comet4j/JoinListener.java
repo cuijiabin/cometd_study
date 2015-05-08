@@ -114,6 +114,10 @@ public class JoinListener extends ConnectListener {
 					dInfo.setDeptId(user.getDeptId());
 					dInfo.setCardName(user.getCardName());
 					dInfo.setWaitTime(waitTime);
+					
+					if(!JedisTalkDao.isUser(ccnId)){
+				    	 logger.error("传入的不是用户连接点 ccnId："+ccnId);
+				     }
 					JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
 					
 					//通知客更新后台列表
@@ -208,6 +212,10 @@ public class JoinListener extends ConnectListener {
 				dInfo.setUserId(allocateUser.getId());
 				dInfo.setDeptId(allocateUser.getDeptId());
 				dInfo.setCardName(allocateUser.getCardName());
+				
+				if(!JedisTalkDao.isUser(allocateCnnId)){
+			    	 logger.error("传入的不是用户连接点 allocateCnnId："+allocateCnnId);
+			     }
 				JedisTalkDao.setDialogueInfo(customerId, allocateCnnId, dInfo);
 		        
 		        List<DictItem> list = DictMan.getDictList("d_dialog_android");

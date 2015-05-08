@@ -448,8 +448,7 @@
 	//添加访客信息 
 	function addCustomerInfo(){
 		var customerId = $("#currentCustomerId").val();
-		var currentCcnId = $("#currentCcnId").val();
-		$.dialog({content:'url:/customer/editCus4Dia.action?customerId='+customerId+'&currentCcnId='+currentCcnId,
+		$.dialog({content:'url:/customer/editCus4Dia.action?customerId='+customerId+'&currentCcnId='+JS.Engine.getId(),
 			id: 'editCus',
 			width: 400,height: 500,
 			title:'添加访客信息'

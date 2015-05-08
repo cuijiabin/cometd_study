@@ -139,6 +139,9 @@ public class SaveDialogueThread implements Runnable{
 		Integer firstTime = resultMap.get("firstTime");
 		
 		Long customerId = customer.getId();
+		if(!JedisTalkDao.isUser(uccnId)){
+	    	 logger.error("传入的不是用户连接点 uccnId："+uccnId);
+	    }
 		DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId.toString(),uccnId);
 		Dialogue dialogue = new Dialogue();
 		

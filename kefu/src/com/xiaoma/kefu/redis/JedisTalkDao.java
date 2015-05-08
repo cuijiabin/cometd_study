@@ -711,5 +711,15 @@ public class JedisTalkDao {
 	public static void main(String[] args) {
 		
 	}
+	
+	/**
+	 * 判断连接点是否为客服
+	 * @param ccnId
+	 * @return
+	 */
+	public static Boolean isUser(String ccnId){
+		String userId = getCnnUserId(JedisConstant.USER_TYPE, ccnId);
+		return StringUtils.isNotBlank(userId);
+	}
 
 }

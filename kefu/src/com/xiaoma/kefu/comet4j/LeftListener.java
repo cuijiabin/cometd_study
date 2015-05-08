@@ -48,11 +48,14 @@ public class LeftListener extends DropListener {
 				JedisTalkDao.remCcnReceiveList(toUserCcnId, ccnId);
 
 				// 保存关闭方式
+				if(!JedisTalkDao.isUser(toUserCcnId)){
+			    	 logger.error("传入的不是用户连接点 toUserCcnId："+toUserCcnId);
+			     }
 				DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId,
 						toUserCcnId);
 				if (dInfo.getCloseType() == null) {
-					dInfo.setCloseType(1);
-					JedisTalkDao.setDialogueInfo(customerId, ccnId, dInfo);
+					dInfo.setCloseType(2);
+					JedisTalkDao.setDialogueInfo(customerId, toUserCcnId, dInfo);
 				}
 
 				// 保存会话
@@ -87,6 +90,10 @@ public class LeftListener extends DropListener {
 				for (String rCnnId : receiveCnnIds) {
 
 					customerId = JedisTalkDao.getCnnUserId(JedisConstant.CUSTOMER_TYPE, rCnnId);
+					
+					if(!JedisTalkDao.isUser(ccnId)){
+				    	 logger.error("传入的不是用户连接点 ccnId："+ccnId);
+				     }
 					DialogueInfo dInfo = JedisTalkDao.getDialogueInfo(customerId, ccnId);
 					if (dInfo != null && dInfo.getCloseType() == null) {
 						dInfo.setCloseType(2);
