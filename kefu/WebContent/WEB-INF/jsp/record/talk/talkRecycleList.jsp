@@ -42,7 +42,7 @@
 									</td>
 								</c:when>
 								<c:otherwise> 
-									<td>${mapItem.value}</td>
+									<td title="${mapItem.value}">${mapItem.value}</td>
 								</c:otherwise>
 							</c:choose>
 						</c:if> 

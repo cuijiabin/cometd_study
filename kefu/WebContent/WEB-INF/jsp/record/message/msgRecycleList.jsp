@@ -43,7 +43,7 @@
 					</c:choose>
 				</td>
 	            <td>${contentMap.ipInfo}</td>
-	            <td>${contentMap.consultPage}</td>
+	            <td title="${contentMap.consultPage}">${contentMap.consultPage}</td>
 	            <td>${contentMap.keywords}</td>
 	            <td>${contentMap.createDate}</td>
 			</tr>
