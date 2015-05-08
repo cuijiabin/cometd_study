@@ -30,6 +30,16 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   
+	<!--session setter -->  
+	<listener>
+		<description>session 监听</description>
+		<listener-class>com.xiaoma.kefu.common.SessionListener</listener-class>
+	</listener>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+  
   <!--Comet4J容器侦听 -->
 	<listener>
 		<description>Comet4J容器侦听</description>
