@@ -53,7 +53,7 @@ public class FunctionController {
 	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
 	public String tree(Model model, Integer id,HttpSession session) {
 		try {
-			User user=(User) session.getAttribute("user");
+			User user=(User) session.getAttribute(CacheName.USER);
 			if(user==null)
 				return"login";
 			if (id != null) {
@@ -142,7 +142,7 @@ public class FunctionController {
 	@RequestMapping(value = "key.action", method = RequestMethod.GET)
 	public String key(Model model,HttpSession session) {
 		try {
-			User user = (User) session.getAttribute("user");
+			User user = (User) session.getAttribute(CacheName.USER);
 			if(user==null)
 				return "login";
 			Keyboard key = funcService.findkeyById(user.getId());
@@ -166,7 +166,7 @@ public class FunctionController {
 	@RequestMapping(value = "saveKeyboard.action", method = RequestMethod.GET)
 	public String savekey(Model model,Keyboard keyboard,HttpSession session) {
 		try {
-			    User user = (User) session.getAttribute("user");
+			    User user = (User) session.getAttribute(CacheName.USER);
 				Integer isSuccess = funcService.savekey(keyboard,user);
 				if (isSuccess != 0) {
 					model.addAttribute("result", Ajax.JSONResult(0, "保存成功!"));
@@ -189,7 +189,7 @@ public class FunctionController {
 	@RequestMapping(value = "remind.action", method = RequestMethod.GET)
 	public String remind(Model model,HttpSession session) {
 		try {
-			User user = (User) session.getAttribute("user");
+			User user = (User) session.getAttribute(CacheName.USER);
 			if(user==null)
 			return "login";
 			RemindType remind = funcService.findRemindByUserId(user.getId());
@@ -211,7 +211,7 @@ public class FunctionController {
 	public String saveRemind(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
 			MultipartFile lsound,MultipartFile jsound,MultipartFile resound, HttpServletResponse response) {
 		try {
-		        User user = (User) session.getAttribute("user");
+		        User user = (User) session.getAttribute(CacheName.USER);
 		        if(user==null)
 		    	return "login";
 		    	if(!lsound.isEmpty()){
@@ -258,7 +258,7 @@ public class FunctionController {
 	public String savefile(Model model, @ModelAttribute("remindType")RemindType remindType,HttpSession session,
 			MultipartFile lsound,MultipartFile jsound,MultipartFile resound) {
 		try {
-		        User user = (User) session.getAttribute("user");
+		        User user = (User) session.getAttribute(CacheName.USER);
 		        if(user==null)
 		    	return "login";
 		    	if(!lsound.isEmpty()){

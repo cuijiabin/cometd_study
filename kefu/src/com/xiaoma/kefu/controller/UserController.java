@@ -90,7 +90,7 @@ public class UserController {
 						if (user.getIsLock() == 0) {
 							String password1 = new String(DigestUtils.md5Hex(password.getBytes("UTF-8")));
 							if (password1.equals(user.getPassword())) {
-								session.setAttribute("user", user);
+								session.setAttribute(CacheName.USER, user);
 								user.setOnLineStatus(1);
 								CacheMan.update(CacheName.SUSER, user.getId(),user);
 								User user2 = (User) CacheMan.getObject(CacheName.SUSER,user.getId());
@@ -426,7 +426,7 @@ public class UserController {
 	public String updateUser(Model model, HttpSession session, String password,
 			String oldpass) {
 		try {
-			User user = (User) session.getAttribute("user");
+			User user = (User) session.getAttribute(CacheName.USER);
 			if (user == null)
 				return "login";
 			if (password != null) {
@@ -517,10 +517,10 @@ public class UserController {
 	 */
 	@RequestMapping(value = "exit.action")
 	public String exit(HttpSession session, Model model) {
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute(CacheName.USER);
 		user.setOnLineStatus(2);
 		CacheMan.update(CacheName.SUSER, user.getId(),user);
-		session.removeAttribute("user");
+		session.removeAttribute(CacheName.USER);
 		return "login";
 	}
 
@@ -562,7 +562,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "person.action")
 	public String person(HttpSession session, Model model) {
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute(CacheName.USER);
 		if(user==null)
 	    return "login";
 		model.addAttribute("user", user);

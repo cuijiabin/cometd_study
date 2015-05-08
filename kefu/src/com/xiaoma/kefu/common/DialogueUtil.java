@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.model.User;
 import com.xiaoma.kefu.redis.SystemConfiguration;
 import com.xiaoma.kefu.util.CookieUtil;
@@ -42,7 +43,7 @@ public class DialogueUtil {
 		}
 
 		if (DialogueUniqueTag.USER_TYPE == type) {
-			User user = (User) session.getAttribute("user");
+			User user = (User) session.getAttribute(CacheName.USER);
 
 			if (null == user) {
 				return null;
@@ -102,7 +103,7 @@ public class DialogueUtil {
 		}
 
 		if (DialogueUniqueTag.USER_TYPE == type) {
-			User user = (User) session.getAttribute("user");
+			User user = (User) session.getAttribute(CacheName.USER);
 
 			if (null == user) {
 				

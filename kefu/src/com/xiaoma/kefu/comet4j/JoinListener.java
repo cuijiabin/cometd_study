@@ -61,7 +61,7 @@ public class JoinListener extends ConnectListener {
 		boolean isCustomer = StringUtils.isBlank(referer) ? false : referer.contains("customerChat.action");
 		
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute(CacheName.USER);
 
 		
 		// 当前连接点
