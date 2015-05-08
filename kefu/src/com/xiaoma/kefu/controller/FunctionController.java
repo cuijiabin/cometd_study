@@ -49,7 +49,7 @@ public class FunctionController {
 	private DepartmentService deptService;
 
 	// 查询各个级别的树
-	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
+	@SuppressWarnings({ "static-access", "unchecked" })
 	@RequestMapping(value = "tree.action", method = RequestMethod.GET)
 	public String tree(Model model, Integer id,HttpSession session) {
 		try {
@@ -59,9 +59,10 @@ public class FunctionController {
 			if (id != null) {
 				List<Function> list = (List<Function>) CacheMan.getList(CacheName.FUNCTIONTREEBYID, id,Function.class);
 				String codes = (String) CacheMan.getObject(CacheName.USERFUNCTION, user.getId());
+				Function func=list.get(0);
+				func.setUrl(null);
 				List<Function> newList =funcService.checkFuncOne(list, codes);
 				JSONArray json = new JSONArray().fromObject(newList);
-				System.out.println(json);
 				model.addAttribute("json", json.toString());
 				return "left";
 			} else {

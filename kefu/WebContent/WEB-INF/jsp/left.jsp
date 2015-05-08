@@ -3,6 +3,8 @@
 <!doctype html>
 <html lang="zh-cn">
 <head>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsplugin/ztree/js/jquery.ztree.core-3.5.js"></script>
  <SCRIPT >
 var zTree;
 	var demoIframe;
@@ -75,7 +77,6 @@ var zTree;
 		<TD width=260px align=left valign=top style="BORDER-RIGHT: #999999 1px dashed">
 			<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
 		</TD>
-		<TD width=770px align=left valign=top></TD>
 	</TR>
 </TABLE>  
 </body>
