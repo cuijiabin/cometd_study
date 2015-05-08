@@ -77,8 +77,9 @@ function addDept(id){
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data) {
-				W.$.dialog.alert(data.msg);
+				W.$.dialog.alert(data.msg,function(){
 					W.callback();
+				});	
 			},
 			error : function(msg) {
 				W.$.dialog.alert("出现错误,请重试!");

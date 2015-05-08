@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import com.xiaoma.kefu.model.DictItem;
 import com.xiaoma.kefu.model.Function;
 import com.xiaoma.kefu.model.Role;
 import com.xiaoma.kefu.model.User;
+import com.xiaoma.kefu.redis.JedisTalkDao;
 import com.xiaoma.kefu.service.DepartmentService;
 import com.xiaoma.kefu.service.FunctionService;
 import com.xiaoma.kefu.service.RoleService;
@@ -34,6 +36,7 @@ import com.xiaoma.kefu.thread.AddLoginLogThread;
 import com.xiaoma.kefu.util.Ajax;
 import com.xiaoma.kefu.util.CheckCodeUtil;
 import com.xiaoma.kefu.util.CookieUtil;
+import com.xiaoma.kefu.util.JsonUtil;
 import com.xiaoma.kefu.util.MapEntity;
 import com.xiaoma.kefu.util.PageBean;
 import com.xiaoma.kefu.util.StringHelper;
@@ -192,8 +195,22 @@ public class UserController {
 	public String find(MapEntity conditions, Model model,
 			@ModelAttribute("pageBean") PageBean<User> pageBean) {
 		try {
+			
+			List<String> strList = JedisTalkDao.getSwitchList();
+			List<Integer> onLineUserIds = JsonUtil.convertString2Integer(strList);
+			
 			List<Department> list = deptService.findDept();
 			userService.getResult(conditions.getMap(), pageBean);
+			List<User> users = pageBean.getObjList();
+			if(CollectionUtils.isNotEmpty(onLineUserIds) && CollectionUtils.isNotEmpty(users)){
+				for(User user :users){
+					if(onLineUserIds.contains(user.getId())){
+						user.setOnLineStatus(1);
+					}
+				}
+			}
+			pageBean.setObjList(users);
+			
 			model.addAttribute("deptList", list);
 			model.addAttribute("status", conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null

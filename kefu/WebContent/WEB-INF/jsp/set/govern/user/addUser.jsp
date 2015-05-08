@@ -111,8 +111,9 @@ function saveUser(id){
 		data : data,
 		dataType : "json",
 		success : function(data) {
-			W.$.dialog.alert(data.msg);
+			W.$.dialog.alert(data.msg,function(){
 				W.callback();
+			});	
 		},
 		error : function(msg) {
 
