@@ -402,14 +402,17 @@
 		}
 		// 回车事件
 		function onSendBoxEnter(event) {
-             var obj = document.getElementsByName("radio_name");
-             if(event.keyCode == 13 || event.keyCode == 10){
-            	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
-            		   var message = inputbox.value;
-                  	   sendMessage(message);
-                  	   return false;
-            	   }
-             }
+            var obj = document.getElementsByName("radio_name");
+            if(event.keyCode == 13 || event.keyCode == 10){
+           	   if((event.ctrlKey && obj[1].checked) || (!event.ctrlKey && obj[0].checked)){
+           		   var message = inputbox.value;
+                 	   sendMessage(message);
+                 	   return false;
+           	   }
+           	   if(obj[0].checked && event.ctrlKey)  {
+           		document.getElementById("inputbox").value = document.getElementById("inputbox").value + '\n';
+       		   }
+            }
       }
 	
 		// 发送聊天信息动作
