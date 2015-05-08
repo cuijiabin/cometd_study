@@ -12,6 +12,7 @@ import com.xiaoma.kefu.cache.CacheMan;
 import com.xiaoma.kefu.cache.CacheName;
 import com.xiaoma.kefu.dao.BusiGroupDetailDao;
 import com.xiaoma.kefu.model.BusiGroupDetail;
+import com.xiaoma.kefu.model.Department;
 import com.xiaoma.kefu.model.User;
 
 /**
@@ -164,4 +165,43 @@ public class BusiGroupDetailService {
 	public List<Integer> getStyleIdsByuser(User user){
 		return busiGroupDetailDaoDaoImpl.getStyleIdsByuser(user.getId(),user.getDeptId());
 	}
+	
+	/**
+	 * 更新工号名称,  用于工号更新后,业务分组更新冗余字段
+	* @param user
+	* @return	受影响数量
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	public Integer updateUserCardName(User user){
+		Integer resultNum = 0; 
+		List<BusiGroupDetail> list = busiGroupDetailDaoDaoImpl.findByUserId(user.getId(),1);
+		if(list!=null && list.size()>0){
+			//如果有记录,并且名称变更
+			if(user.getCardName()!=null && list.get(0).getCardName()!=null && !user.getCardName().equals(list.get(0).getCardName())){
+				resultNum = busiGroupDetailDaoDaoImpl.updateCardName(user.getId(),user.getCardName(),1);
+			}
+		}
+		return resultNum;
+	}
+	
+	/**
+	 * 更新部门名称,	用于部门名称更新后,业务分组更新冗余字段
+	* @param dept
+	* @return	受影响数量
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	public Integer updateDeptName(Department dept){
+		Integer resultNum = 0; 
+		List<BusiGroupDetail> list = busiGroupDetailDaoDaoImpl.findByUserId(dept.getId(),2);
+		if(list!=null && list.size()>0){
+			//如果有记录,并且名称变更
+			if(dept.getName()!=null && list.get(0).getCardName()!=null && !dept.getName().equals(list.get(0).getCardName())){
+				resultNum = busiGroupDetailDaoDaoImpl.updateCardName(dept.getId(),dept.getName(),2);
+			}
+		}
+		return resultNum;
+	}
+	
 }

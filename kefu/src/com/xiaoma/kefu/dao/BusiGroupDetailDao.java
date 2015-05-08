@@ -76,4 +76,25 @@ public interface BusiGroupDetailDao extends BaseDao<BusiGroupDetail>{
 	* @Date: 2015年5月7日
 	 */
 	public List<BusiGroupDetail> findByStyleId(Integer styleId);
+
+	/**
+	 * 根据用户id,用户类型 获取 分组明细 列表
+	* @param userId
+	* @param userType
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	public List<BusiGroupDetail> findByUserId(Integer userId,Integer userType);
+	
+	/**
+	 * 更新 工号
+	* @param userId	要更新的 userId
+	* @param cardName	新的工号
+	* @param userType	类型
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	public Integer updateCardName(Integer userId, String cardName, Integer userType);
 }

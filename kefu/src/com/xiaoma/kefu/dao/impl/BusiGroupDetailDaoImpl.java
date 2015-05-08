@@ -141,5 +141,49 @@ public class BusiGroupDetailDaoImpl extends BaseDaoImpl<BusiGroupDetail> impleme
 		return ((List<Integer>)query.list());
 	}
 	
+	/**
+	 * 根据用户id,用户类型 获取 分组明细 列表
+	* @param userId
+	* @param userType
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BusiGroupDetail> findByUserId(Integer userId,Integer userType){
+		if(userId == null || userType == null ){
+			return null;
+		}
+		Session session = getSession();
+		String hql = "from BusiGroupDetail t where t.userId = :userId and t.userType = :userType  ";
+		Query query = session.createQuery(hql);
+		query.setInteger("userId", userId);
+		query.setInteger("userType", userType);
+		return query.list();
+	}
+	
+	/**
+	 * 更新 工号
+	* @param userId	要更新的 userId
+	* @param cardName	新的工号
+	* @param userType	类型
+	* @return
+	* @Author: wangxingfei
+	* @Date: 2015年5月8日
+	 */
+	@Override
+	public Integer updateCardName(Integer userId, String cardName, Integer userType){
+		Integer num = 0;
+		if(userId == null || userType == null ){
+			return num;
+		}
+		Session session = getSession();
+		String hql = "update BusiGroupDetail t set t.cardName = :cardName where t.userId = :userId and t.userType = :userType ";
+		Query query = session.createQuery(hql);
+	    query.setString("cardName", cardName);
+		query.setInteger("userId", userId);
+		query.setInteger("userType", userType);
+	    return query.executeUpdate();  
+	}
 
 }

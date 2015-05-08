@@ -256,7 +256,7 @@ public class SysConst {
 	 * 邀请框中 第一个元素(外框) 的模板 ,注意没有结束标签,要自己加
 	 */
 	public static final String DIV_TEMPLATE_ELE_FIRST =
-			" <div id=\\\"w-kfbox-cnt\\\" style=\\\"position:relative;${width};${height};background-image:url(${backgroundImg});background-repeat:no-repeat;z-index:${index};overflow:hidden;\\\" ${onclick} > " ;
+			" <div id=\\\"w-kfbox-cnt\\\" style=\\\"position:relative;${width};${height};background-image:url(${backgroundImg});background-repeat:no-repeat;z-index:${index};cursor:pointer;overflow:hidden;\\\" ${onclick} > " ;
 			
 	/**
 	 * 邀请框中 除第一个元素外,其他元素的模板
