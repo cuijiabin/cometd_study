@@ -91,6 +91,10 @@ public class UserController {
 							String password1 = new String(DigestUtils.md5Hex(password.getBytes("UTF-8")));
 							if (password1.equals(user.getPassword())) {
 								session.setAttribute("user", user);
+								user.setOnLineStatus(1);
+								CacheMan.update(CacheName.SUSER, user.getId(),user);
+								User user2 = (User) CacheMan.getObject(CacheName.SUSER,user.getId());
+								System.out.println(user2);
 								model.addAttribute("result",Ajax.JSONResult(0, "登录成功!"));
 								Thread thread = new AddLoginLogThread(user.getId(),CookieUtil.getIpAddr(request));
 								if (thread != null)
@@ -198,19 +202,8 @@ public class UserController {
 			
 			List<String> strList = JedisTalkDao.getSwitchList();
 			List<Integer> onLineUserIds = JsonUtil.convertString2Integer(strList);
-			
 			List<Department> list = deptService.findDept();
 			userService.getResult(conditions.getMap(), pageBean);
-			List<User> users = pageBean.getObjList();
-			if(CollectionUtils.isNotEmpty(onLineUserIds) && CollectionUtils.isNotEmpty(users)){
-				for(User user :users){
-					if(onLineUserIds.contains(user.getId())){
-						user.setOnLineStatus(1);
-					}
-				}
-			}
-			pageBean.setObjList(users);
-			
 			model.addAttribute("deptList", list);
 			model.addAttribute("status", conditions.getMap().get("status"));
 			if (conditions == null || conditions.getMap() == null
@@ -524,6 +517,9 @@ public class UserController {
 	 */
 	@RequestMapping(value = "exit.action")
 	public String exit(HttpSession session, Model model) {
+		User user = (User) session.getAttribute("user");
+		user.setOnLineStatus(2);
+		CacheMan.update(CacheName.SUSER, user.getId(),user);
 		session.removeAttribute("user");
 		return "login";
 	}

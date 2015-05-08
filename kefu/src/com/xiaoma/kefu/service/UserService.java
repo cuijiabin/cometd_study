@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,9 +78,19 @@ public class UserService {
 	 * @param pageBean
 	 * @return
 	 */
+	@SuppressWarnings({ "unchecked" })
 	public void getResult(Map<String, String> conditions,
 			PageBean<User> pageBean) {
 		userDaoImpl.findByCondition(conditions, pageBean);
+		List<User> list=pageBean.getObjList();
+		if(CollectionUtils.isNotEmpty(list)){
+		List<User> newList= new ArrayList();
+		for (User user : list) {
+			User us = (User) CacheMan.getObject(CacheName.SUSER, user.getId());
+			newList.add(us);
+		}
+		pageBean.setObjList(newList);
+		}
 	}
 
 	/**

@@ -17,7 +17,7 @@
     <div class="g-mn">
     	<div class="g-mn-cnt">
             <div class="content" style="position:relative;overflow:hidden">
-                <iframe name="right" id="rightMain" src="/iframe7.html" frameborder="false" scrolling="auto" style="border:none; margin-bottom:30px" width="100%" height="auto" allowtransparency="true"></iframe>
+                <iframe name="right" id="rightMain" src="" frameborder="false" scrolling="auto" style="border:none; margin-bottom:30px" width="100%" height="auto" allowtransparency="true"></iframe>
             </div>
         </div>
     </div>
